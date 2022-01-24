@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 using namespace std;
 
 #include "Map.cpp"
@@ -6,21 +7,25 @@ using namespace std;
 int mapMain() {
     cout << endl;
 
-    string quebecEdges[] = { "ON", "NV", "NL&L", "NB" };
-    Territory quebec = Territory("QC", 4, quebecEdges, "Owen", 200);
-    string ontarioEdges[] = { "MT", "NV", "QC"};
-    Territory ontario = Territory("ON", 3, ontarioEdges, "Owen", 100);
+    Territory qc = Territory("Quebec", "Eastern Canada", "Owen", 100);
+    Territory on = Territory("Ontario", "Eastern Canada", "Owen", 200);
+    Territory bc = Territory("British Columbia", "Western Canada", "Owen", 300);
 
-    cout << quebec << endl;
-    cout << ontario << endl;
+    cout << qc << endl;
+    cout << on << endl;
+    cout << bc << endl;
 
-    Territory terrs[] = { quebec, ontario };
-    Continent canada = Continent("CA", 2, terrs);
+    Map ca = Map("Canada");
+    ca.addTerritory(qc);
+    ca.addTerritory(on);
+    ca.addTerritory(bc);
+    ca.addEdge(Edge{qc, on});
+    //ca.territories.front().continent = "Prairies";
 
-    cout << canada << endl;
+    cout << ca << endl;
+    cout << ca.validate() << endl;
 
     // TODO create a Map for each supplied .map file using Maploader
-
     // TODO use validate() for each Map
 
     return 0;
