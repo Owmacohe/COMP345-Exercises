@@ -2,94 +2,92 @@
 
 Territory::Territory() {
     name = "";
-    edgeSize = 0;
-    edges = NULL;
-    armies = 0;
+    continent = "";
     owner = "";
+    armies = 0;
 }
 
-Territory::Territory(string pName, int pEdgeSize, string *pEdges, string pOwner, int pArmies) {
-    name = pName;
-
-    edgeSize = pEdgeSize;
-    edges = new string[edgeSize];
-
-    for (int i = 0; i < edgeSize; i++) {
-        edges[i] = pEdges[i];
-    }
-
-    owner = pOwner;
-    armies = pArmies;
+Territory::Territory(string n, string c, string o, int a) {
+    name = n;
+    continent = c;
+    owner = o;
+    armies = a;
 }
 
-Territory::~Territory() {
-    delete edges;
-    edges = NULL;
-}
-
-std::ostream& operator<<(std::ostream &strm, const Territory &territory) {
-    string tempEdges = "";
-
-    for (int i = 0; i < territory.edgeSize; i++) {
-        tempEdges += " " + territory.edges[i];
-    }
-
+std::ostream& operator<<(std::ostream &strm, const Territory &t) {
     return strm <<
-        "Territory( Name: " << territory.name <<
-        ", Edges:" << tempEdges <<
-        ", Owner: " << territory.owner <<
-        ", Armies: " << territory.armies << " )";
+        "TERRITORY: " << t.name <<
+        "\n    Continent: " << t.continent <<
+        "\n    Owner: " << t.owner <<
+        "\n    Armies: " << t.armies;
 }
 
-Continent::Continent() {
-    name = "";
-    nodeSize = 0;
-    nodes = NULL;
-}
+bool doesContain(list<string> l, string s) {
+    bool found = false;
 
-Continent::Continent(string pName, int pNodeSize, Territory *pNodes) {
-    name = pName;
-
-    nodeSize = pNodeSize;
-    nodes = new Territory[nodeSize];
-
-    for (int i = 0; i < nodeSize; i++) {
-        nodes[i] = pNodes[i];
-    }
-}
-
-Continent::~Continent() {
-    delete nodes;
-    nodes = NULL;
-}
-
-/*
-void Continent::addNode(Territory node) {
-    nodeSize++;
-    Territory *tempNodes = new Territory[nodeSize];
-
-    for (int i = 0; i < nodeSize; i++) {
-        if (i < nodeSize - 1) {
-            tempNodes[i] = nodes[i];
-        }
-        else {
-            tempNodes[i] = node;
+    for (string i : l) {
+        if (i == s) {
+            found = true;
         }
     }
 
-    nodes = tempNodes;
-    delete tempNodes;
+    return found;
 }
-*/
 
-std::ostream& operator<<(std::ostream &strm, const Continent &continent) {
-    string tempNodes = "";
+Map::Map(string n) {
+    name = n;
+    territories = {};
+    edges = {};
+}
 
-    for (int i = 0; i < continent.nodeSize; i++) {
-        tempNodes += " " + continent.nodes[i].name;
+void Map::addTerritory(Territory t) {
+    territories.push_back(t);
+
+    if (!doesContain(continents, t.continent)) {
+        continents.push_back(t.continent);
+    }
+}
+
+void Map::addEdge(Edge e) {
+    edges.push_back(e);
+}
+
+bool Map::validate() {
+    bool valid = true;
+
+    // TODO verify that it is a connected graph
+    // TODO verify that continents are connected subgraphs
+
+    // Verifying that each Territory belongs to only one continent
+    for (Territory k : territories) {
+        if (!doesContain(continents, k.continent)) {
+            valid = false;
+        }
+    }
+
+    return valid;
+}
+
+std::ostream& operator<<(std::ostream &strm, const Map &m) {
+    string c = "";
+    string t = "";
+    string e = "";
+
+    for (string i : m.continents) {
+        c += i + ", ";
+    }
+
+    for (Territory j : m.territories) {
+        t += j.name + ", ";
+    }
+
+    for (Edge k : m.edges) {
+        e += k.a.name + " and " + k.b.name + ", ";
     }
 
     return strm <<
-        "Continent( Name: " << continent.name <<
-        ", Territories:" << tempNodes << " )";
+        "MAP: " << m.name <<
+        "\n    Continents: " << c <<
+        "\n    Territories: " << t <<
+        "\n    Edges: " << e;
 }
