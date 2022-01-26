@@ -1,7 +1,5 @@
-#include <iostream>
 
-int main() {
-	std::cout << "Test" << std::endl;
+int OrderMain() {
 
 		return 0;
 }
