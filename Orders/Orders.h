@@ -5,11 +5,15 @@
 using namespace std;
 
 class OrdersList {
+	// VECTOR OF ORDER POINTERS????? *************
 	public: 
-		std::vector<Order> playerOrderList; // Vector is similar to an ArrayList fro Java. Non contiguous memory cells. Access with index.
+		std::vector<Order> playerOrderList; // Vector is similar to an ArrayList from Java. Non contiguous memory cells. Access with index.
 
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	OrdersList();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~OrdersList();
 
 	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 	void remove(int i);
@@ -19,12 +23,14 @@ class OrdersList {
 
 	// stream insertion operator that outputs the Order List's vector
 	friend std::ostream& operator<<(ostream& description, Order order);
-
 };
 
 class Order {
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Order();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Order();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Order order);
@@ -37,8 +43,11 @@ class Order {
 };
 
 class Deploy : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Deploy();
+
+		// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Deploy();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Deploy deploy);
@@ -51,8 +60,11 @@ class Deploy : public Order{
 };
 
 class Advance : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Advance();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Advance();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Advance advance);
@@ -65,8 +77,11 @@ class Advance : public Order{
 };
 
 class Bomb : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Bomb();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Bomb();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Bomb bomb);
@@ -79,8 +94,11 @@ class Bomb : public Order{
 };
 
 class Blockade : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Blockade();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Blockade();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Blockade blockade);
@@ -93,8 +111,11 @@ class Blockade : public Order{
 };
 
 class Airlift : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Airlift();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Airlift();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Airlift airflit);
@@ -107,8 +128,11 @@ class Airlift : public Order{
 };
 
 class Negotiate : public Order{
-	// Default Constructor
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Negotiate();
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~Negotiate();
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Negotiate negotiate);
