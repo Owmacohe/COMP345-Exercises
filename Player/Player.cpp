@@ -57,11 +57,11 @@ std::ostream& operator<<(std::ostream& strm, const Player& p) {
 
     for (Territory j : p.territories) {
         t += j.name + ", ";
-    }
+    };
 
     for (Orders i : p.orders) {
         o += i.name + ", ";
-    }
+    };
 
     return strm <<
         "PLAYER: " << p.name << 
