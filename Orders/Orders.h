@@ -33,7 +33,6 @@ class OrdersList {
 	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 	void move(int i, int j);
 
-
 };
 
 class Order {
