@@ -24,6 +24,9 @@ class OrdersList {
 	// stream insertion operator that outputs the Order List's vector
 	friend std::ostream& operator<<(ostream& description, OrdersList ordersList);
 
+	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
+	void add(Order order);
+
 	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 	void remove(int i);
 
