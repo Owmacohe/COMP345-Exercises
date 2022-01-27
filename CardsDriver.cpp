@@ -33,5 +33,6 @@ cout <<"\n------------------------------------------------" << endl;
 for (int i=0; i<playerHand.hand.size();i++) {
     playerHand.hand.at(i)->play();
 }
+cout << endl;
 
 }
