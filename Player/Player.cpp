@@ -1,13 +1,18 @@
+
 #include "Player.h"
+
+#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Map/Map.cpp"
+#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Orders/Orders.cpp"
+//#include  "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Cards/Cards.cpp"
 
 Player::Player() {
     name = "";
-    //territories = ;
+    territories = list<Territory>;
     //hand = ;
-    //orders = ;
+    orders = new OrdersList();
 }
 
-Player::Player(string n, list<Territory> t, Card h, list<Order> o) {
+Player::Player(string n, list<Territory> t, Cards h, OrdersList o) {
     name = n;
     territories = t;
     hand = h;
@@ -15,14 +20,15 @@ Player::Player(string n, list<Territory> t, Card h, list<Order> o) {
 }
 
 list<Territory> Player::toDefend() {
-   //players territories
+   //list of orders or territories but the rubric says both i think territories
 }
 
 list<Territory> Player::toAttack() {
-    //get all territories on map and return ones not players
+    //list of orders or territories but the rubric says both i think territories
 }
 
 int Player::issueOrder() {
+    //create new order and add to OrderList
     return 0;
 }
 
@@ -30,13 +36,13 @@ int Player::setName(string n) {
     name = n;
 }
 int Player::setTerritory(Territory t) {
-    territories = t; //deep copy the list
+    //deep copy the list
 }
 int Player::setHand(Cards h) {
     //copy constructor for cards ?
 }
-int Player::setOrder(Orders o) {
-    orders = o; //deep copy the list
+int Player::setOrder(OrderList o) {
+    orders = o;
 }
 string Player::getName() {
     return name;
@@ -47,25 +53,19 @@ list<Territory> getTerritory() {
 Cards getHand() {
     return hand;
 }
-list<Order> getOrder() {
+OrdersList getOrder() {
     return orders;
 }
 
 std::ostream& operator<<(std::ostream& strm, const Player& p) {
     string t = "";
-    string o = "";
 
     for (Territory j : p.territories) {
-        t += j.name + ", ";
-    };
-
-    for (Orders i : p.orders) {
-        o += i.name + ", ";
+        t += j.getName() + ", ";
     };
 
     return strm <<
         "PLAYER: " << p.name << 
         "\n    Territories: " << t <<
-        "\n    Hand: " << p.hand << // Card should include its own print so hopefully this would be alright
-        "\n    Orders: " << o;
+        "\n    Hand: " << p.hand; // Card should include its own print so hopefully this would be alright
 }
