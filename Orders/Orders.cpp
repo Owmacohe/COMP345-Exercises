@@ -2,44 +2,18 @@
 using namespace std;
 
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
-	OrdersList::OrdersList(){
-		std::vector<Order>* playerOrderList = new vector<Order>;
-	};
+	Order::Order(){validated = false;};
 
 	// Copy Constructor ************* 
-	OrdersList::OrdersList(OrdersList& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
-	OrdersList::~OrdersList(){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void OrdersList:: operator = (const OrdersList &D){};
-
-	// stream insertion operator that outputs the Order List's vector SYNTAX ERROR< WILL RECHECK AFTER FRIEND COURSE 
-	//OrdersList::friend std::ostream& operator<<(ostream& description, OrdersList ordersList){};
-
-	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order 
-	void OrdersList::add(Order order){};
-
-	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
-	void OrdersList::remove(int i){};
-
-	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
-	void OrdersList::move(int i, int j){};
-
-
-
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
-	Order::Order(){};
-
-	// Copy Constructor ************* 
-	Order::Order(Order& original){};
+	Order::Order(Order& original){validated = original.validated;}
 
 	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Order::~Order(){};
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Order::operator = (const Order &D){};
+	Order Order::operator = (const Order &D){
+		this->validated = D.validated;
+	};
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	//friend std::ostream& operator<<(ostream& description, Order order){};
@@ -49,7 +23,6 @@ using namespace std;
 
 	bool Order::execute(){};
 	//Implementation next assignment
-
 
 
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
@@ -88,7 +61,7 @@ using namespace std;
 	void Advance::operator = (const Advance &D){};
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	Advance::friend std::ostream& operator<<(ostream& description, Advance advance){};
+	//Advance::friend std::ostream& operator<<(ostream& description, Advance advance){};
 
 	bool Advance::validate(){};
 	//Implementation next assignment
@@ -120,7 +93,6 @@ using namespace std;
 	//Implementation next assignment
 
 
-
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Blockade::Blockade(){};
 
@@ -142,48 +114,98 @@ using namespace std;
 	bool Blockade::execute(){};
 	//Implementation next assignment
 
-class Airlift : public Order{
+
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
-	Airlift();
+	Airlift::Airlift(){};
 
 	// Copy Constructor ************* 
-	Airlift(Airlift& original);
+	Airlift::Airlift(Airlift& original){};
 
 	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
-	~Airlift();
+	Airlift::~Airlift(){};
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void operator = (const Airlift &D);
+	void Airlift::operator = (const Airlift &D){};
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	friend std::ostream& operator<<(ostream& description, Airlift airflit);
+	//friend std::ostream& operator<<(ostream& description, Airlift airflit);
 
-	bool validate();
+	bool Airlift::validate(){};
 	//Implementation next assignment
 
-	bool execute();
+	bool Airlift::execute(){};
 	//Implementation next assignment
-};
 
-class Negotiate : public Order{
+
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
-	Negotiate();
+	Negotiate::Negotiate(){};
 
 	// Copy Constructor ************* 
-	Negotiate(Negotiate& original);
+	Negotiate::Negotiate(Negotiate& original){};
 
 	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
-	~Negotiate();
+	Negotiate::~Negotiate(){};
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void operator = (const Negotiate &D);
+	void Negotiate::operator = (const Negotiate &D){};
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	friend std::ostream& operator<<(ostream& description, Negotiate negotiate);
+	//friend std::ostream& operator<<(ostream& description, Negotiate negotiate);
 
-	bool validate();
+	bool Negotiate::validate(){};
 	//Implementation next assignment
 
-	bool execute();
+	bool Negotiate::execute(){};
 	//Implementation next assignment
-};
+
+
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+	OrdersList::OrdersList(){
+		std::vector<Order*> playerOrderList;
+	};
+
+	// Copy Constructor ************* 
+	OrdersList::OrdersList(OrdersList &original){
+		for(auto i=original.playerOrderList.cbegin(); i<= original.playerOrderList.cend(); ++i){
+			this->playerOrderList.push_back(original.playerOrderList[i]);
+		}
+		playerOrderList = original.playerOrderList;
+	};
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	OrdersList::~OrdersList(){
+		// Iterate through all pointed orders and delete each of them *************
+
+		// then delete the vector
+		this->playerOrderList.clear();
+	};
+
+	// Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
+	OrdersList& OrdersList:: operator = (const OrdersList &originalOrderList){
+		this->playerOrderList = originalOrderList.playerOrderList;
+	};
+
+	// stream insertion operator that outputs the Order List's vector 
+	ostream& operator<<(ostream& description, OrdersList ordersList){
+		int a = 1;
+		description << "Order List:\n"; 
+		for (auto i= ordersList.playerOrderList.cbegin(); i<= ordersList.playerOrderList.cend(); ++i){
+			cout << a << " : " << ordersList.playerOrderList[i] << endl;
+			a++;
+		}
+		return description;
+	}
+
+	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order 
+	void OrdersList::addOrder(Order order){};
+
+	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
+	void OrdersList::remove(int i){
+		// Order* j = playerOrderList.begin() + i;
+		// this->playerOrderList.delete(j);
+	};
+
+	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
+	void OrdersList::move(int i, int j){};
+
+

@@ -4,39 +4,12 @@
 #include <iostream>
 using namespace std;
 
-class OrdersList {
-	// POINTER TO VECTOR which contains Order object (also pointers) *************
-	public: 
-		std::vector<Order>* playerOrderList; // Vector is similar to an ArrayList from Java. Non contiguous memory cells. Access with index.
-
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
-	OrdersList();
-
-	// Copy Constructor ************* 
-	OrdersList(OrdersList& original);
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
-	~OrdersList();
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void operator = (const OrdersList &D);
-
-	// stream insertion operator that outputs the Order List's vector
-	friend std::ostream& operator<<(ostream& description, OrdersList ordersList);
-
-	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
-	void add(Order order);
-
-	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
-	void remove(int i);
-
-	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
-	void move(int i, int j);
-
-};
 
 class Order {
+	public:
+	bool validated;
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+	public:
 	Order();
 
 	// Copy Constructor ************* 
@@ -46,7 +19,7 @@ class Order {
 	~Order();
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void operator = (const Order &D);
+	Order operator = (const Order &D);
 
 	// stream insertion operator that output strings description of order and effect of the order if correctly executed
 	friend std::ostream& operator<<(ostream& description, Order order);
@@ -56,6 +29,7 @@ class Order {
 
 	bool execute();
 	//Implementation next assignment
+
 };
 
 class Deploy : public Order{
@@ -194,4 +168,36 @@ class Negotiate : public Order{
 
 	bool execute();
 	//Implementation next assignment
+};
+
+class OrdersList {
+	//VECTOR which contains Order object (pointers) *************
+	public: 
+		std::vector<Order*> playerOrderList; // Vector is similar to an ArrayList from Java. Non contiguous memory cells. Access with index.
+
+	public:
+	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+	OrdersList();
+
+	// Copy Constructor ************* 
+	OrdersList(OrdersList &original);
+
+	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	~OrdersList();
+
+	// Assignment Operator overloading, will have the same behavior as the copy constructor
+	OrdersList& operator = (const OrdersList &originalOrderList);
+
+	// stream insertion operator that outputs the Order List's vector
+	friend std::ostream& operator<<(ostream& description, OrdersList ordersList);
+
+	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
+	void addOrder(Order order);
+
+	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
+	void remove(int i);
+
+	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
+	void move(int i, int j);
+
 };
