@@ -1,5 +1,10 @@
 #include "Map.h"
+#include <iostream>
+#include <iostream>
+#include <string>
+using namespace std;
 
+/*
 bool doesContain(vector<string> v, string s) {
     bool found = false;
 
@@ -28,6 +33,7 @@ bool doesContain(vector<Edge> v, Territory t1, Territory t2) {
 
     return found;
 }
+*/
 
 Territory::Territory() {
     name = "";
@@ -41,6 +47,21 @@ Territory::Territory(string n, string c, string o, int a) {
     continent = c;
     owner = o;
     armies = a;
+}
+
+/*
+Territory::Territory(const Territory &t) {
+    Territory temp = t;
+
+    name = temp.getName();
+    continent = temp.getContinent();
+    owner = temp.getOwner();
+    armies = temp.getArmies();
+}
+*/
+
+Territory::~Territory() {
+    cout << name << " destroyed" << endl;
 }
 
 string Territory::getName() { return name; }
@@ -65,54 +86,131 @@ std::ostream& operator<<(std::ostream &strm, const Territory &t) {
 
 Map::Map() {
     name = "";
-    territories = vector<Territory>();
-    edges = vector<Edge>();
+    continentsLength = 0;
+    continents = new string[continentsLength];
+    territoriesLength = 0;
+    territories = new Territory[territoriesLength];
+    edgesLength = 0;
+    edges = new Edge[edgesLength];
 }
 
 Map::Map(string n) {
     name = n;
-    territories = vector<Territory>();
-    edges = vector<Edge>();
+    continentsLength = 0;
+    continents = new string[continentsLength];
+    territoriesLength = 0;
+    territories = new Territory[territoriesLength];
+    edgesLength = 0;
+    edges = new Edge[edgesLength];
+}
+
+/*
+Map::Map(const Map &m) {
+    Map temp = m;
+
+    name = temp.getName();
+    setContinents(temp.getContinents(), temp.continentsLength);
+    setTerritories(temp.getTerritories(), temp.territoriesLength);
+    setEdges(temp.getEdges(), temp.edgesLength);
+}
+*/
+
+Map::~Map() {
+    delete[] continents;
+    continents = NULL;
+
+    delete[] territories;
+    territories = NULL;
+
+    delete[] edges;
+    edges = NULL;
+
+    cout << endl << name << " destroyed" << endl;
 }
 
 string Map::getName() { return name; }
-vector<string>& Map::getContinents() { return continents; }
-vector<Territory>& Map::getTerritories() { return territories; }
-vector<Edge>& Map::getEdges() { return edges; }
+string *Map::getContinents() { return continents; }
+Territory *Map::getTerritories() { return territories; }
+Edge *Map::getEdges() { return edges; }
 
 void Map::setName(string n) { name = n; }
-void Map::setContinents(vector<string> c) {
-    continents = vector<string>();
+void Map::setContinents(string *c, int l) {
+    delete[] continents;
+    continents = new string[l];
 
-    for (string i : c) {
-        continents.push_back(i);
-    }
+    copy(c, c + l, continents);
+
+    continentsLength = l;
 }
-void Map::setTerritories(vector<Territory> t) {
-    territories = vector<Territory>();
+void Map::setTerritories(Territory *t, int l) {
+    delete[] territories;
+    territories = new Territory[l];
 
-    for (Territory i : t) {
-        territories.push_back(i);
-    }
+    copy(t, t + l, territories);
+
+    territoriesLength = l;
 }
-void Map::setEdges(vector<Edge> e) {
-    edges = vector<Edge>();
+void Map::setEdges(Edge *e, int l) {
+    delete[] edges;
+    edges = new Edge[l];
 
-    for (Edge i : e) {
-        edges.push_back(i);
+    copy(e, e + l, edges);
+
+    edgesLength = l;
+}
+
+void Map::addContinent(string c) {
+    string *temp = new string[continentsLength];
+    copy(continents, continents + continentsLength, temp);
+
+    delete[] continents;
+    continents = new string[continentsLength + 1];
+
+    for (int i = 0; i < continentsLength; i++) {
+        continents[i] = temp[i];
     }
+
+    continents[continentsLength] = c;
+
+    delete[] temp;
+
+    continentsLength++;
 }
 
 void Map::addTerritory(Territory t) {
-    territories.push_back(t);
+    Territory *temp = new Territory[territoriesLength];
+    copy(territories, territories + territoriesLength, temp);
 
-    if (!doesContain(continents, t.getContinent())) {
-        continents.push_back(t.getContinent());
+    delete[] territories;
+    territories = new Territory[territoriesLength + 1];
+
+    for (int i = 0; i < territoriesLength; i++) {
+        territories[i] = temp[i];
     }
+
+    territories[territoriesLength] = t;
+
+    delete[] temp;
+
+    territoriesLength++;
 }
 
 void Map::addEdge(Edge e) {
-    edges.push_back(e);
+    Edge *temp = new Edge[edgesLength];
+    copy(edges, edges + edgesLength, temp);
+
+    delete[] edges;
+    edges = new Edge[edgesLength + 1];
+
+    for (int i = 0; i < edgesLength; i++) {
+        edges[i] = temp[i];
+    }
+
+    edges[edgesLength] = e;
+
+    delete[] temp;
+
+    edgesLength++;
 }
 
 bool Map::validate() {
@@ -120,13 +218,7 @@ bool Map::validate() {
 
     // TODO verify that it is a connected graph
     // TODO verify that continents are connected subgraphs
-
-    // Verifying that each Territory belongs to only one continent
-    for (Territory k : territories) {
-        if (!doesContain(continents, k.getContinent())) {
-            valid = false;
-        }
-    }
+    // TODO verify that each Territory belongs to only one continent
 
     return valid;
 }
@@ -138,16 +230,19 @@ std::ostream& operator<<(std::ostream &strm, const Map &m) {
     string t = "";
     string e = "";
 
-    for (string i : temp.getContinents()) {
-        c += i + ", ";
+    string *continents = temp.getContinents();
+    for (int i = 0; i < m.continentsLength; i++) {
+        c += continents[i] + ", ";
     }
 
-    for (Territory j : temp.getTerritories()) {
-        t += j.getName() + ", ";
+    Territory *territories = temp.getTerritories();
+    for (int j = 0; j < m.territoriesLength; j++) {
+        t += territories[j].getName() + ", ";
     }
 
-    for (Edge k : temp.getEdges()) {
-        e += k.a.getName() + " and " + k.b.getName() + ", ";
+    Edge *edges = temp.getEdges();
+    for (int k = 0; k < m.edgesLength; k++) {
+        e += edges[k].a.getName() + " and " + edges[k].b.getName() + ", ";
     }
 
     return strm <<
@@ -157,6 +252,7 @@ std::ostream& operator<<(std::ostream &strm, const Map &m) {
         "\n    Edges: " << e;
 }
 
+/*
 vector<string> stringSplit(string s, char delim) {
     vector<string> temp = vector<string>();
 
@@ -176,10 +272,12 @@ vector<string> stringSplit(string s, char delim) {
 
     return temp;
 }
+*/
 
+/*
 Map MapLoader::load(string f) {
-    // reject bad maps
-    // create Map object
+    // TODO reject bad maps
+    // TODO check and see if it's a directionless graph or not
 
     Map m = Map();
 
@@ -234,3 +332,4 @@ Map MapLoader::load(string f) {
 
     return m;
 }
+*/

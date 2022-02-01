@@ -1,8 +1,7 @@
-
 #include "Player.h"
 
-#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Map/Map.cpp"
-#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Orders/Orders.cpp"
+#include "../Map/Map.cpp"
+#include "../Orders/Orders.cpp"
 //#include  "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Cards/Cards.cpp"
 
 Player::Player() {
