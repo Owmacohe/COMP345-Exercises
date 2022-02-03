@@ -1,0 +1,3 @@
+/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/COMP345_Assignment.dir
