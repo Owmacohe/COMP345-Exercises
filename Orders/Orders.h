@@ -7,14 +7,15 @@ using namespace std;
 
 class Order {
 	public:
-	bool validated;
+	bool* validated;
 
 	public:
 	Order();  // Default Constructor
+	Order(bool* validated);  // Parameterized Constructor
 	Order(Order& original); // Copy Constructor
 	~Order(); // Default Destructor
 
-	Order operator = (const Order &D); // Assignment Operator 
+	Order& operator = (const Order& D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Order& order); // stream insertion operator 
 
 	bool validate(); //Implementation next assignment
@@ -28,7 +29,7 @@ class Deploy : public Order{
 	Deploy(Deploy& original); // Copy Constructor
 	~Deploy(); // Default Destructor
 
-	void operator = (const Deploy &D); 	// Assignment Operator 
+	Deploy& operator = (const Deploy& D); 	// Assignment Operator 
 	friend ostream& operator<<(ostream& os, const Deploy& deploy); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -42,7 +43,7 @@ class Advance : public Order{
 	Advance(Advance& original); // Copy Constructor
 	~Advance(); // Default Destructor 
 	
-	void operator = (const Advance &D); // Assignment Operator 
+	Advance& operator = (const Advance& D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Advance& advance); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -54,7 +55,7 @@ class Bomb : public Order{
 	Bomb(Bomb& original); // Copy Constructor
 	~Bomb(); // Default Destructor 
 
-	void operator = (const Bomb &D); // Assignment Operator 
+	Bomb& operator = (const Bomb& D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Bomb& bomb); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -66,7 +67,7 @@ class Blockade : public Order{
 	Blockade(Blockade& original); // Copy Constructor
 	~Blockade(); // Default Destructor 
 
-	void operator = (const Blockade &D); // Assignment Operator 
+	Blockade& operator = (const Blockade& D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Blockade& blockade); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -78,7 +79,7 @@ class Airlift : public Order{
 	Airlift(Airlift& original); // Copy Constructor
 	~Airlift(); // Default Destructor 
 	
-	void operator = (const Airlift &D); // Assignment Operator 
+	Airlift& operator = (const Airlift &D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Airlift& airflit); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -90,7 +91,7 @@ class Negotiate : public Order{
 	Negotiate(Negotiate& original); // Copy Constructor
 	~Negotiate(); // Default Destructor 
 
-	void operator = (const Negotiate& D); // Assignment Operator
+	Negotiate& operator = (const Negotiate& D); // Assignment Operator
 	friend ostream& operator<<(ostream& os, Negotiate& negotiate); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -102,7 +103,7 @@ class Reinforcement : public Order{
 	Reinforcement(Reinforcement& original); // Copy Constructor
 	~Reinforcement(); // Default Destructor 
 
-	void operator = (const Reinforcement& D); // Assignment Operator
+	Reinforcement& operator = (const Reinforcement& D); // Assignment Operator
 	friend ostream& operator<<(ostream& os, Reinforcement& reinforcement); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
@@ -114,7 +115,7 @@ class Diplomacy : public Order{
 	Diplomacy(Diplomacy& original); // Copy Constructor
 	~Diplomacy(); // Default Destructor 
 
-	void operator = (const Diplomacy& D); // Assignment Operator
+	Diplomacy& operator = (const Diplomacy& D); // Assignment Operator
 	friend ostream& operator<<(ostream& description, Diplomacy& diplomacy); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
