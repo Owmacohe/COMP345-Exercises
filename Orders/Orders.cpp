@@ -150,12 +150,12 @@ using namespace std;
 
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+	// Default Constructor
 	OrdersList::OrdersList(){
 		std::vector<Order*> playerOrderList;
 	};
 
-	// Copy Constructor ************* 
+	// Copy Constructor 
 	OrdersList::OrdersList(OrdersList &original){
 		for(auto i=original.playerOrderList.cbegin(); i<= original.playerOrderList.cend(); ++i){
 			this->playerOrderList.push_back(original.playerOrderList[i]);
