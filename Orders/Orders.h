@@ -7,13 +7,20 @@ using namespace std;
 
 class Order {
 	public:
-	bool* validated;
+	bool validated;
+	string description;
 
 	public:
 	Order();  // Default Constructor
-	Order(bool* validated);  // Parameterized Constructor
-	Order(Order& original); // Copy Constructor
+	Order(bool v, string s);  // Parameterized Constructor
+	Order(Order& o); // Copy Constructor
 	~Order(); // Default Destructor
+	
+	// Accessors
+	string getDescription(); bool getValidated();
+
+	// Mutators
+	void setDescription(string d); void setValidated(bool v);
 
 	Order& operator = (const Order& D); // Assignment Operator 
 	friend ostream& operator<<(ostream& os, Order& order); // stream insertion operator 
