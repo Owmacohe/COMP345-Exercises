@@ -1,163 +1,96 @@
 #include "Orders.h"
 using namespace std;
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Order::Order(){validated = false;};
 
-	// Copy Constructor ************* 
-	Order::Order(Order& original){validated = original.validated;}
+	Order::Order(Order& original){
+		validated = original.validated;}
 
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Order::~Order(){};
 
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	Order Order::operator = (const Order &D){
-		this->validated = D.validated;
+	Order Order::operator = (const Order& order){
+		this->validated = order.validated;
 	};
 
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//friend std::ostream& operator<<(ostream& description, Order order){};
+	ostream& operator<<(ostream& os, Order& order){};
 
-	bool Order::validate(){};
-	//Implementation next assignment
-
-	bool Order::execute(){};
-	//Implementation next assignment
+	bool Order::validate(){}; 	//Implementation next assignment
+	bool Order::execute(){}; 	//Implementation next assignment
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+
 	Deploy::Deploy(){};
-
-	// Copy Constructor ************* 
 	Deploy::Deploy(Deploy& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Deploy::~Deploy(){};
-
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//Deploy::friend std::ostream& operator<<(ostream& description, Deploy deploy){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Deploy::operator = (const Deploy &D){};
-
-	bool Deploy::validate(){};
-	//Implementation next assignment
-
-	bool Deploy::execute(){};
-	//Implementation next assignment, will include the destructor of the Order
+	void Deploy::operator = (const Deploy& deploy){};
+ 	ostream& operator<<(ostream& os, Deploy& deploy){};
+	bool Deploy::validate(){}; //Implementation next assignment
+	bool Deploy::execute(){}; //Implementation next assignment
 
 
-
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Advance::Advance(){};
-
-	// Copy Constructor ************* 
 	Advance::Advance(Advance& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Advance::~Advance(){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Advance::operator = (const Advance &D){};
-
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//Advance::friend std::ostream& operator<<(ostream& description, Advance advance){};
-
-	bool Advance::validate(){};
-	//Implementation next assignment
-
-	bool Advance::execute(){};
-	//Implementation next assignment
+	void Advance::operator = (const Advance& advance){};
+	ostream& operator<<(ostream& os, Advance& advance){};
+	bool Advance::validate(){}; //Implementation next assignment
+	bool Advance::execute(){}; //Implementation next assignment
 
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+
 	Bomb::Bomb(){};
-
-	// Copy Constructor ************* 
 	Bomb::Bomb(Bomb& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Bomb::~Bomb(){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Bomb::operator = (const Bomb &D){};
-
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//Bomb::friend std::ostream& operator<<(ostream& description, Bomb bomb){};
-
-	bool Bomb::validate(){};
-	//Implementation next assignment
-
-	bool Bomb::execute(){};
-	//Implementation next assignment
+	void Bomb::operator = (const Bomb& bomb){};
+	ostream& operator<<(ostream& os, Bomb& bomb){};
+	bool Bomb::validate(){}; //Implementation next assignment
+	bool Bomb::execute(){}; //Implementation next assignment
+	
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Blockade::Blockade(){};
-
-	// Copy Constructor ************* 
 	Blockade::Blockade(Blockade& original){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Blockade::operator = (const Blockade &D){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Blockade::~Blockade(){};
-
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//Blockade::friend std::ostream& operator<<(ostream& description, Blockade blockade){};
-
-	bool Blockade::validate(){};
-	//Implementation next assignment
-
-	bool Blockade::execute(){};
-	//Implementation next assignment
+	void Blockade::operator = (const Blockade& blockade){};
+	ostream& operator<<(ostream& os, Blockade& blockade){};
+	bool Blockade::validate(){}; //Implementation next assignment
+	bool Blockade::execute(){}; //Implementation next assignment
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
+
 	Airlift::Airlift(){};
-
-	// Copy Constructor ************* 
 	Airlift::Airlift(Airlift& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Airlift::~Airlift(){};
-
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Airlift::operator = (const Airlift &D){};
-
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//friend std::ostream& operator<<(ostream& description, Airlift airflit);
-
-	bool Airlift::validate(){};
-	//Implementation next assignment
-
-	bool Airlift::execute(){};
-	//Implementation next assignment
+	void Airlift::operator = (const Airlift& airlift){};
+	ostream& operator<<(ostream& os, Airlift& airflit);
+	bool Airlift::validate(){}; //Implementation next assignment
+	bool Airlift::execute(){}; //Implementation next assignment
 
 
-	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	Negotiate::Negotiate(){};
-
-	// Copy Constructor ************* 
 	Negotiate::Negotiate(Negotiate& original){};
-
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
 	Negotiate::~Negotiate(){};
+	void Negotiate::operator = (const Negotiate &negotiate){};
+	ostream& operator<<(ostream& os, Negotiate& negotiate);
+	bool Negotiate::validate(){}; //Implementation next assignment
+	bool Negotiate::execute(){}; //Implementation next assignment
 
-	// Assignment Operator overloading, will have the same behavior as the copy constructor
-	void Negotiate::operator = (const Negotiate &D){};
+	Diplomacy::Diplomacy(){};
+	Diplomacy::Diplomacy(Diplomacy& original){};
+	Diplomacy::~Diplomacy(){};
+	void Diplomacy::operator = (const Diplomacy &diplomacy){};
+	ostream& operator<<(ostream& os, Diplomacy& diplomacy);
+	bool Diplomacy::validate(){}; //Implementation next assignment
+	bool Diplomacy::execute(){}; //Implementation next assignment
 
-	// stream insertion operator that output strings description of order and effect of the order if correctly executed
-	//friend std::ostream& operator<<(ostream& description, Negotiate negotiate);
-
-	bool Negotiate::validate(){};
-	//Implementation next assignment
-
-	bool Negotiate::execute(){};
-	//Implementation next assignment
-
+		Reinforcement::Reinforcement(){};
+	Reinforcement::Reinforcement(Reinforcement& original){};
+	Reinforcement::~Reinforcement(){};
+	void Reinforcement::operator = (const Reinforcement& reinforcement){};
+	ostream& operator<<(ostream& os, Reinforcement& reinforcement);
+	bool Reinforcement::validate(){}; //Implementation next assignment
+	bool Reinforcement::execute(){}; //Implementation next assignment
 
 	// Default Constructor ************* HAVE TO ADD MEMORY ALLOCATION
 	OrdersList::OrdersList(){
@@ -186,14 +119,14 @@ using namespace std;
 	};
 
 	// stream insertion operator that outputs the Order List's vector 
-	ostream& operator<<(ostream& description, OrdersList ordersList){
+	ostream& operator<<(ostream& os, OrdersList ordersList){
 		int a = 1;
-		description << "Order List:\n"; 
+		os << "Order List:\n"; 
 		for (auto i= ordersList.playerOrderList.cbegin(); i<= ordersList.playerOrderList.cend(); ++i){
 			cout << a << " : " << ordersList.playerOrderList[i] << endl;
 			a++;
 		}
-		return description;
+		return os;
 	}
 
 	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order 
