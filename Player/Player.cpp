@@ -2,27 +2,38 @@
 
 #include "../Map/Map.cpp"
 #include "../Orders/Orders.cpp"
-//#include  "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Cards/Cards.cpp"
+#include  "../Cards.cpp"
 
 Player::Player() {
     name = "";
-    territories = list<Territory>;
-    //hand = ;
-    orders = new OrdersList();
+    vector<Territory> territories;
+    Hand hand;
+    OrdersList orders;
 }
 
-Player::Player(string n, list<Territory> t, Cards h, OrdersList o) {
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) {
     name = n;
     territories = t;
     hand = h;
     orders = o;
 }
 
-list<Territory> Player::toDefend() {
-   //list of orders or territories but the rubric says both i think territories
+Player::Player(Player& p) {
+    //copy
 }
 
-list<Territory> Player::toAttack() {
+Player::~Player() {
+    cout << name << " player destroyed" << endl;
+}
+
+vector<Territory*> Player::toDefend() {
+   //list of orders or territories but the rubric says both i think territories
+   Map* m = new Map();
+   m = NULL;
+   delete m;
+}
+
+vector<Territory*> Player::toAttack() {
     //list of orders or territories but the rubric says both i think territories
 }
 
@@ -31,40 +42,20 @@ int Player::issueOrder() {
     return 0;
 }
 
-int Player::setName(string n) {
-    name = n;
+// Mutators and Accessors
+void Player::setName(string n) { name = n; }
+void Player::setTerritory(vector<Territory*> t) {
+    for (Territory* i : t) {
+        territories.push_back(i);
+    }
 }
-int Player::setTerritory(Territory t) {
-    //deep copy the list
-}
-int Player::setHand(Cards h) {
-    //copy constructor for cards ?
-}
-int Player::setOrder(OrderList o) {
-    orders = o;
-}
-string Player::getName() {
-    return name;
-}
-list<Territory> getTerritory() {
-    return territories;
-}
-Cards getHand() {
-    return hand;
-}
-OrdersList getOrder() {
-    return orders;
-}
+void Player::setHand(Hand* h) { hand = h; }
+void Player::setOrder(OrdersList* o) { orders = o; }
 
-std::ostream& operator<<(std::ostream& strm, const Player& p) {
-    string t = "";
+string Player::getName() { return name; }
+vector<Territory*> Player::getTerritory() { return territories; }
+Hand* Player::getHand() { return hand; }
+OrdersList* Player::getOrder() { return orders; }
+// End of Mutators and Accessors
 
-    for (Territory j : p.territories) {
-        t += j.getName() + ", ";
-    };
-
-    return strm <<
-        "PLAYER: " << p.name << 
-        "\n    Territories: " << t <<
-        "\n    Hand: " << p.hand; // Card should include its own print so hopefully this would be alright
-}
+// NEED TO ADD : std::ostream& operator<<(std::ostream& strm, const Player& p)
