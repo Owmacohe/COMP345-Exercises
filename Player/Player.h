@@ -8,8 +8,8 @@ public:
 
     ~Player(); // Destructor
 
-    vector<Territory> toDefend(); // Territories for player to defend
-    vector<Territory> toAttack(); // Territories for player to attack
+    vector<Territory*> toDefend(); // Territories for player to defend
+    vector<Territory*> toAttack(); // Territories for player to attack
 
     int issueOrder(); //  Create order and adds order to players order list
 
