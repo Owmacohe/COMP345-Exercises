@@ -1,16 +1,15 @@
 #include "Orders.h"
 using namespace std;
 
-	Order::Order(){validated = false;};
+	Order::Order(){validated = false;}  // Default Constructor
 
-	Order::Order(Order& original){
-		validated = original.validated;}
+	Order::Order(bool* v) {validated = v;}  // Parameterized Constructor
 
-	Order::~Order(){};
+	Order::Order(Order& original){validated = original.validated;} // Copy Constructor
 
-	Order Order::operator = (const Order& order){
-		this->validated = order.validated;
-	};
+	Order::~Order(){delete validated;} // Default Destructor TODO not sure if no memory leak
+
+	Order& Order::operator = (const Order& order){this->validated = new bool(order.validated);}
 
 	ostream& operator<<(ostream& os, Order& order){};
 
@@ -18,11 +17,10 @@ using namespace std;
 	bool Order::execute(){}; 	//Implementation next assignment
 
 
-
 	Deploy::Deploy(){};
 	Deploy::Deploy(Deploy& original){};
 	Deploy::~Deploy(){};
-	void Deploy::operator = (const Deploy& deploy){};
+	Deploy& Deploy::operator = (const Deploy& deploy){};
  	ostream& operator<<(ostream& os, Deploy& deploy){};
 	bool Deploy::validate(){}; //Implementation next assignment
 	bool Deploy::execute(){}; //Implementation next assignment
@@ -80,7 +78,7 @@ using namespace std;
 	Diplomacy::Diplomacy(Diplomacy& original){};
 	Diplomacy::~Diplomacy(){};
 	void Diplomacy::operator = (const Diplomacy &diplomacy){};
-	ostream& operator<<(ostream& os, Diplomacy& diplomacy);
+	ostream& operator<<(ostream& os, Diplomacy& negotiate);
 	bool Diplomacy::validate(){}; //Implementation next assignment
 	bool Diplomacy::execute(){}; //Implementation next assignment
 
