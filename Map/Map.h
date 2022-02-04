@@ -2,6 +2,8 @@
 
 class Territory {
     public:
+        // TODO re-implement copy constructor
+
         Territory(); // Default constructor
         Territory(string, string, string, int); // Parameterized constructor
         //Territory(const Territory &t); // Copy constructor
@@ -28,6 +30,8 @@ struct Edge {
 
 class Map {
     public:
+        // TODO re-implement copy constructor
+        
         Map(); // Default constructor
         Map(string); // Parameterized constructor
         //Map(const Map &m); // Copy constructor
