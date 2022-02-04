@@ -1,15 +1,11 @@
 #include "Map.h"
-#include <iostream>
-#include <iostream>
-#include <string>
-using namespace std;
+//#include "../Player.h"
 
-/*
-bool doesContain(vector<string> v, string s) {
+bool doesContain(string* arr, int size, string s) {
     bool found = false;
 
-    for (string i : v) {
-        if (i == s) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == s) {
             found = true;
         }
     }
@@ -17,12 +13,12 @@ bool doesContain(vector<string> v, string s) {
     return found;
 }
 
-bool doesContain(vector<Edge> v, Territory t1, Territory t2) {
+bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
     bool found = false;
 
-    for (Edge i : v) {
-        string n1 = i.a.getName();
-        string n2 = i.b.getName();
+    for (int i = 0; i < size; i++) {
+        string n1 = arr[i].a.getName();
+        string n2 = arr[i].b.getName();
         string n3 = t1.getName();
         string n4 = t2.getName();
 
@@ -33,7 +29,44 @@ bool doesContain(vector<Edge> v, Territory t1, Territory t2) {
 
     return found;
 }
-*/
+
+string *stringSplit(string s, char delim) {
+    int indexChecker = 0;
+    int splitLength = 1;
+    string *result = new string[splitLength];
+    string temp;
+
+    for (char i : s) {
+        if (i != delim) {
+            temp += i;
+        }
+
+        if (i == delim || indexChecker == s.length() - 1) {
+            string *tempResult = new string[splitLength + 1];
+            copy(result, result + splitLength, tempResult);
+
+            delete[] result;
+            result = new string[splitLength + 1];
+
+            for (int j = 0; j < splitLength; j++) {
+                result[j] = tempResult[j];
+            }
+
+            result[splitLength] = temp;
+
+            delete[] tempResult;
+
+            splitLength++;
+            temp = "";
+        }
+
+        indexChecker++;
+    }
+
+    result[0] = to_string(splitLength - 1);
+
+    return result;
+}
 
 Territory::Territory() {
     name = "";
@@ -60,9 +93,7 @@ Territory::Territory(const Territory &t) {
 }
 */
 
-Territory::~Territory() {
-    cout << name << " destroyed" << endl;
-}
+Territory::~Territory() { /* nothing to delete */ }
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
@@ -124,8 +155,6 @@ Map::~Map() {
 
     delete[] edges;
     edges = NULL;
-
-    cout << endl << name << " destroyed" << endl;
 }
 
 string Map::getName() { return name; }
@@ -218,7 +247,14 @@ bool Map::validate() {
 
     // TODO verify that it is a connected graph
     // TODO verify that continents are connected subgraphs
-    // TODO verify that each Territory belongs to only one continent
+
+    // Verifying that each Territory belongs to only one continent
+    for (int k = 0; k < territoriesLength; k++) {
+        if (!doesContain(continents, continentsLength, territories[k].getContinent())) {
+            valid = false;
+            break;
+        }
+    }
 
     return valid;
 }
@@ -247,50 +283,27 @@ std::ostream& operator<<(std::ostream &strm, const Map &m) {
 
     return strm <<
         "MAP: " << temp.getName() <<
-        "\n    Continents: " << c <<
-        "\n    Territories: " << t <<
-        "\n    Edges: " << e;
+        "\n    Continents: " << c.substr(0, c.length() - 2) <<
+        "\n    Territories: " << t.substr(0, t.length() - 2) <<
+        "\n    Edges: " << e.substr(0, e.length() - 2);
 }
 
-/*
-vector<string> stringSplit(string s, char delim) {
-    vector<string> temp = vector<string>();
-
-    string phrase = "";
-
-    for (char i : s) {
-        if (i != delim) {
-            phrase += i;
-        }
-        else {
-            temp.push_back(phrase);
-            phrase = "";
-        }
-    }
-
-    temp.push_back(phrase);
-
-    return temp;
-}
-*/
-
-/*
 Map MapLoader::load(string f) {
     // TODO reject bad maps
-    // TODO check and see if it's a directionless graph or not
-
-    Map m = Map();
 
     ifstream input(f);
     string line;
     int section = 0;
 
     getline(input, line);
-    string mapName = stringSplit(line, ' ')[2];
-    m.setName(mapName.substr(0, mapName.length() - 4));
+    string *nameSplit = stringSplit(line, ' ');
+    string mapName = nameSplit[3];
+    delete[] nameSplit;
+    Map m = Map(mapName.substr(0, mapName.length() - 4));
 
     while (!input.eof()) {
         getline(input, line);
+        string *lineSplit = stringSplit(line, ' ');
 
         if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
             section++;
@@ -298,27 +311,25 @@ Map MapLoader::load(string f) {
         else {
             if (line != "") {
                 if (section == 1) {
-                    m.getContinents().push_back(stringSplit(line, ' ')[0]);
+                    m.addContinent(lineSplit[1]);
                 }
                 else if (section == 2) {
-                    vector<string> temp = stringSplit(line, ' ');
-
                     m.addTerritory(Territory(
-                        temp[1],
-                        m.getContinents()[stoi(temp[2]) - 1],
+                        lineSplit[2],
+                        m.getContinents()[stoi(lineSplit[3]) - 1],
                         "",
-                        stoi(temp[3])));
+                        stoi(lineSplit[4])));
                 }
                 else if (section == 3) {
-                    vector<string> temp = stringSplit(line, ' ');
+                    int len = stoi(lineSplit[0]);
 
-                    for (string i : temp) {
-                        for (string j : temp) {
-                            Territory t1 = m.getTerritories()[stoi(i) - 1];
-                            Territory t2 = m.getTerritories()[stoi(j) - 1];
-                            vector<Edge> tempEdges = m.getEdges();
+                    for (int i = 1; i <= len; i++) {
+                        for (int j = 1; j <= len; j++) {
+                            Territory t1 = m.getTerritories()[stoi(lineSplit[i]) - 1];
+                            Territory t2 = m.getTerritories()[stoi(lineSplit[j]) - 1];
+                            Edge *tempEdges = m.getEdges();
 
-                            if (i != j && !doesContain(tempEdges, t1, t2) && !doesContain(tempEdges, t2, t1)) {
+                            if (i != j && !doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
                                 m.addEdge(Edge{t1, t2});
                             }
                         }
@@ -326,10 +337,11 @@ Map MapLoader::load(string f) {
                 }
             }
         }
+
+        delete[] lineSplit;
     }
 
     input.close();
 
     return m;
 }
-*/
