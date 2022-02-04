@@ -1,27 +1,43 @@
 #include "Orders.h"
 using namespace std;
 
-	Order::Order(){validated = false;}  // Default Constructor
+	Order::Order(){validated = false; description = "";}  // Default Constructor
 
-	Order::Order(bool* v) {validated = v;}  // Parameterized Constructor
+	Order::Order(bool v, string s): validated(v), description(s){};  // Parameterized Constructor
 
-	Order::Order(Order& original){validated = original.validated;} // Copy Constructor
+	Order::Order(Order& original){validated = original.validated; description = original.description;} // Copy Constructor
 
-	Order::~Order(){delete validated;} // Default Destructor TODO not sure if no memory leak
+	Order::~Order(){} // Default Destructor TODO not sure if no memory leak
 
-	Order& Order::operator = (const Order& order){this->validated = new bool(order.validated);}
+	// Accessors
+	string Order::getDescription(){return description;}
+	bool Order::getValidated(){return validated;}
 
-	ostream& operator<<(ostream& os, Order& order){};
+	// Mutators
+	void Order::setDescription(string d){this->description = d;}
+	void Order::setValidated(bool v){this->validated = v;}
+
+	Order& Order::operator = (const Order& order){this->validated = new bool(order.validated); this->description = new string(order.description);}
+
+	ostream& operator<<(ostream& os, Order& order){
+		os << order.description << " validation: " << order.validated << endl;
+		return os;
+	};
 
 	bool Order::validate(){}; 	//Implementation next assignment
 	bool Order::execute(){}; 	//Implementation next assignment
 
 
-	Deploy::Deploy(){};
-	Deploy::Deploy(Deploy& original){};
-	Deploy::~Deploy(){};
+	Deploy::Deploy(){}; // Default Constructor
+
+	Deploy::Deploy(Deploy& original) : Order(original){};  // Copy Constructor
+
+	Deploy::~Deploy(){delete validated;} // Default Destructor TODO not sure if no memory leak
+
 	Deploy& Deploy::operator = (const Deploy& deploy){};
+
  	ostream& operator<<(ostream& os, Deploy& deploy){};
+
 	bool Deploy::validate(){}; //Implementation next assignment
 	bool Deploy::execute(){}; //Implementation next assignment
 

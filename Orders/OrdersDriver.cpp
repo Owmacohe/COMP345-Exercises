@@ -3,10 +3,10 @@ using namespace std;
 int OrderMain() {
 
 //Create OrderList object
-OrdersList player1 = new OrdersList();
+OrdersList player1 = OrdersList();
 
 // Create one of each Order
-OrdersList.addOrder(new Deploy());
+OrdersList.addOrder(Deploy());
 
 
 //Deploy
@@ -22,3 +22,7 @@ OrdersList.addOrder(new Deploy());
 //Delete orders lists and orders to free memory
 		return 0;
 }
+
+// int Main() {
+// 	OrderMain();
+// }
