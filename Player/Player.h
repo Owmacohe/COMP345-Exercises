@@ -4,14 +4,14 @@ class Player {
 public:
     Player(); // Default constructor
     Player(string, vector<Territory*>, Hand*, OrdersList*); // Parameterized constructor
-    Player(Player& p); // Copy constructor
+    Player(const Player &p); // Copy constructor
 
     ~Player(); // Destructor
 
     vector<Territory*> toDefend(); // Territories for player to defend
     vector<Territory*> toAttack(); // Territories for player to attack
 
-    int issueOrder(); //  Create order and adds order to players order list
+    void issueOrder(); //  Create order and adds order to players order list
 
     // Accessors
     void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o);

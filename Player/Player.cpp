@@ -2,44 +2,49 @@
 
 #include "../Map/Map.cpp"
 #include "../Orders/Orders.cpp"
-#include  "../Cards.cpp"
+#include  "../Cards/Cards.cpp"
 
 Player::Player() {
-    name = "";
+    name = "empty player";
     territories = vector<Territory*>();
     hand = new Hand();
     orders = new OrdersList();
 }
 
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) {
-    name = n;
-    territories = t;
-    hand = h;
-    orders = o;
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n), territories(t), hand(h), orders(o) {
+// Intentionally empty
 }
 
-Player::Player(Player& p) {
-    //copy
+Player::Player(const Player &p) {
+    name = p.name;
+    //this->territories = 
+    this->hand = new Hand(*(p.hand));
+    this->orders = new OrdersList(*(p.orders));
 }
 
 Player::~Player() {
+    for (Territory* i : territories) {
+        delete i;
+        i = NULL;
+    }
+    delete hand;
+    hand = NULL;
+    delete orders;
+    orders = NULL;
+
     cout << name << " player destroyed" << endl;
 }
 
 vector<Territory*> Player::toDefend() {
-   //list of orders or territories but the rubric says both i think territories
-   Map* m = new Map();
-   m = NULL;
-   delete m;
+// TODO
 }
 
 vector<Territory*> Player::toAttack() {
-    //list of orders or territories but the rubric says both i think territories
+// TODO
 }
 
-int Player::issueOrder() {
-    //create new order and add to OrderList
-    return 0;
+void Player::issueOrder() {
+    orders->addOrder(Order());
 }
 
 // Mutators and Accessors
@@ -58,4 +63,17 @@ Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
 // End of Mutators and Accessors
 
-// NEED TO ADD : std::ostream& operator<<(std::ostream& strm, const Player& p)
+std::ostream& operator<<(std::ostream &strm, const Player &p) {
+    Player player = p;
+
+    string t = "";
+        for (Territory* i : player.getTerritory()) {
+        t += i->getName() +", ";
+    }
+
+    return strm <<
+        "PLAYER: " << player.getName() <<
+        "\n    Territories: " << t;
+}
+
+// TODO assignment operator
