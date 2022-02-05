@@ -17,7 +17,9 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n)
 
 Player::Player(const Player &p) {
     name = p.name;
-    //this->territories = 
+    for (Territory* i : p.territories) {
+        this->territories.push_back(new Territory(*i));
+    } // Goes through copying vector of territory pointers, creates new pointers based on value and pushes to copied vector
     this->hand = new Hand(*(p.hand));
     this->orders = new OrdersList(*(p.orders));
 }
@@ -35,12 +37,17 @@ Player::~Player() {
     cout << name << " player destroyed" << endl;
 }
 
+//For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
 vector<Territory*> Player::toDefend() {
-// TODO
+// TODO 
+//have to check if territories have surrounding enemies
+return territories;
 }
 
 vector<Territory*> Player::toAttack() {
 // TODO
+//have to check if territories have surrounding enemies
+return territories;
 }
 
 void Player::issueOrder() {
