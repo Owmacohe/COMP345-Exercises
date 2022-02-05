@@ -17,7 +17,9 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n)
 
 Player::Player(const Player &p) {
     name = p.name;
-    //this->territories = 
+    for(Territory* i : p.territories) {
+        this->territories.push_back(new Territory(*i));
+    } // Goes through copying vector of territory pointers, creates new pointers based on value and pushes to copied vector
     this->hand = new Hand(*(p.hand));
     this->orders = new OrdersList(*(p.orders));
 }
