@@ -1,4 +1,6 @@
 #include "Orders.h"
+#include <vector>
+#include <iostream>
 using namespace std;
 	
 	Order::Order(){this->validated = false; this->description = "";}  // Default Constructor
@@ -151,52 +153,72 @@ using namespace std;
 
 
 	// Default Constructor
-	OrdersList::OrdersList(){
-		std::vector<Order*> playerOrderList;
-	};
+	OrdersList::OrdersList(){vector<Order*> playerOrderList;};
 
 	// Copy Constructor 
-	OrdersList::OrdersList(OrdersList &original){
-		for(auto i=original.playerOrderList.cbegin(); i<= original.playerOrderList.cend(); ++i){
-			this->playerOrderList.push_back(original.playerOrderList[i]);
+	OrdersList::OrdersList(OrdersList& original){
+		for(auto i=original.playerOrderList.cbegin(); i!= original.playerOrderList.cend(); ++i){
+			this->playerOrderList.push_back(new Order(i)); // Dereference i?
 		}
 		playerOrderList = original.playerOrderList;
 	};
 
-	// Default Destructor ************* HAVE TO ADD MEMORY DE-ALLOCATION
+	// Default Destructor 
 	OrdersList::~OrdersList(){
-		// Iterate through all pointed orders and delete each of them *************
-
+		// Iterate through all pointed orders and delete the content in heap of each
+	for (auto i= this->playerOrderList.cbegin(); i != this->playerOrderList.cend(); ++i){
+			i&&.delete();  // Dereference i?
+		}
 		// then delete the vector
 		this->playerOrderList.clear();
 	};
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
-	OrdersList& OrdersList:: operator = (const OrdersList &originalOrderList){
-		this->playerOrderList = originalOrderList.playerOrderList;
+	OrdersList OrdersList::operator = (const OrdersList& original){
+		//COPY FORM COPE CONSTRUCTOR METHOD
 	};
 
 	// stream insertion operator that outputs the Order List's vector 
 	ostream& operator<<(ostream& os, OrdersList ordersList){
 		int a = 1;
-		os << "Order List:\n"; 
-		for (auto i= ordersList.playerOrderList.cbegin(); i<= ordersList.playerOrderList.cend(); ++i){
-			cout << a << " : " << ordersList.playerOrderList[i] << endl;
+		os << "Orders List:\n [" ; 
+		for (auto i= ordersList.playerOrderList.cbegin(); i != ordersList.playerOrderList.cend(); ++i){
+			cout << a << " : " << *i << "\n";
 			a++;
 		}
+		cout << "]"<< endl;
 		return os;
 	}
 
 	// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order 
-	void OrdersList::addOrder(Order order){};
+	void OrdersList::addOrder(Order order){
+		playerOrderList.push_back(new Order(order));}
+
+	void OrdersList::addOrder(Order* order){
+		playerOrderList.push_back(order);}
+
+	void OrdersList::addOrder(string orderString){
+		Order* orderObject;
+		// CONDITIONAL
+
+	playerOrderList.push_back(orderObject);}
 
 	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 	void OrdersList::remove(int i){
-		// Order* j = playerOrderList.begin() + i;
-		// this->playerOrderList.delete(j);
+		//* j = this->playerOrderList.begin() + i;
+		//this->playerOrderList.erase(j);
 	};
 
 	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
-	void OrdersList::move(int i, int j){};
+	void OrdersList::move(int i, int j){
+		Order* swap1 = this->playerOrderList[i];
+		Order* swap2 = this->playerOrderList[j];
+		Order* swap3;
+
+		swap3 = swap1;
+		swap1 = swap2;
+		swap2 = swap3;
+		// Did not use new, once out of scope, pointer swap3 is delete
+	};
 
 

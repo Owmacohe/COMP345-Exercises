@@ -30,7 +30,7 @@ class Order {
 };
 
 class Deploy : public Order{
-	
+	public:
 	Deploy(); // Default Constructor
 	Deploy(bool v, string s);  // Parameterized Constructor
 	Deploy(Deploy& original); // Copy Constructor
@@ -48,7 +48,7 @@ class Deploy : public Order{
 
 
 class Advance : public Order{
-	
+	public:
 	Advance(); // Default Constructor
 	Advance(bool v, string s);  // Parameterized Constructor
 	Advance(Advance& original); // Copy Constructor
@@ -65,6 +65,7 @@ class Advance : public Order{
 };
 
 class Bomb : public Order{
+	public:
 	Bomb(); // Default Constructor
 	Bomb(bool v, string s);  // Parameterized Constructor
 	Bomb(Bomb& original); // Copy Constructor
@@ -81,6 +82,7 @@ class Bomb : public Order{
 };
 
 class Blockade : public Order{
+	public:
 	Blockade();  // Default Constructor
 	Blockade(bool v, string s);  // Parameterized Constructor
 	Blockade(Blockade& original); // Copy Constructor
@@ -97,6 +99,7 @@ class Blockade : public Order{
 };
 
 class Airlift : public Order{
+	public:
 	Airlift();  // Default Constructor
 	Airlift(bool v, string s);  // Parameterized Constructor
 	Airlift(Airlift& original); // Copy Constructor
@@ -113,6 +116,7 @@ class Airlift : public Order{
 };
 
 class Negotiate : public Order{
+	public:
 	Negotiate();  // Default Constructor
 	Negotiate(bool v, string s);  // Parameterized Constructor
 	Negotiate(Negotiate& original); // Copy Constructor
@@ -129,6 +133,7 @@ class Negotiate : public Order{
 };
 
 class Reinforcement : public Order{
+	public:
 	Reinforcement();  // Default Constructor
 	Reinforcement(bool v, string s);  // Parameterized Constructor
 	Reinforcement(Reinforcement& original); // Copy Constructor
@@ -145,6 +150,7 @@ class Reinforcement : public Order{
 };
 
 class Diplomacy : public Order{
+	public:
 	Diplomacy();  // Default Constructor
 	Diplomacy(bool v, string s);  // Parameterized Constructor
 	Diplomacy(Diplomacy& original); // Copy Constructor
@@ -175,10 +181,12 @@ class OrdersList {
 	string getOrderList(); bool getAllOrdersValidated(); // Accessors
 	void setOrderList(vector<Order*> vo); void setAllOrdersValidated(bool v); // Mutators
 
-	OrdersList& operator = (const OrdersList& original); // Assignment Operator
+	OrdersList operator = (const OrdersList& original); // Assignment Operator
 	friend ostream& operator<<(ostream& os, OrdersList& ordersList); // stream insertion operator
 	
 	void addOrder(Order order); // Add Method used to add an order of the OrderList.
+	void addOrder(Order* order); // Add Method used to add an order of the OrderList.
+	void addOrder(string order); // Add Method used to add an order of the OrderList.
 	void remove(int i); // Remove Method used to remove an order of the OrderList.
 	void move(int i, int j); // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 

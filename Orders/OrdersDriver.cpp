@@ -3,13 +3,14 @@ using namespace std;
 int OrderMain() {
 
 //Create OrderList object
-OrdersList player1 = OrdersList();
-
-// Create one of each Order
-OrdersList.addOrder(Deploy());
-
+OrdersList player1List = OrdersList();
 
 //Deploy
+Deploy *deploy1 = new Deploy;
+cout << deploy1;
+player1List.addOrder(deploy1);
+cout << player1List;
+
 // Advance
 // Bomb
 // Blockade
@@ -20,6 +21,7 @@ OrdersList.addOrder(Deploy());
 //Remove
 
 //Delete orders lists and orders to free memory
+
 		return 0;
 }
 
