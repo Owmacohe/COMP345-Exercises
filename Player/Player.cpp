@@ -2,7 +2,7 @@
 
 #include "../Map/Map.cpp"
 #include "../Orders/Orders.cpp"
-#include  "../Cards/Cards.cpp"
+#include "../Cards/Cards.cpp"
 
 Player::Player() {
     name = "empty player";

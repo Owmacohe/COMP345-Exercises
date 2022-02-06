@@ -1,5 +1,5 @@
 #include "Map.h"
-//#include "../Player.h"
+#include "../Player.h"
 
 bool doesContain(string* arr, int size, string s) {
     bool found = false;
@@ -71,47 +71,38 @@ string *stringSplit(string s, char delim) {
 Territory::Territory() {
     name = "";
     continent = "";
-    owner = "";
+    owner;
     armies = 0;
 }
 
-Territory::Territory(string n, string c, string o, int a) {
-    name = n;
-    continent = c;
-    owner = o;
-    armies = a;
-}
+Territory::Territory(string n, string c, Player o, int a) : name(n), continent(c), owner(o), armies(a) { /* left blank */ }
 
-/*
 Territory::Territory(const Territory &t) {
-    Territory temp = t;
-
-    name = temp.getName();
-    continent = temp.getContinent();
-    owner = temp.getOwner();
-    armies = temp.getArmies();
+    name = t.name;
+    continent = t.continent;
+    owner = Player(t.owner);
+    armies = t.armies;
 }
-*/
 
 Territory::~Territory() { /* nothing to delete */ }
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
-string Territory::getOwner() { return owner; }
+Player Territory::getOwner() { return owner; }
 int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(string o) { owner = o; }
+void Territory::setOwner(Player o) { owner = Player(o); }
 void Territory::setArmies(int a) { armies = a; }
 
 std::ostream& operator<<(std::ostream &strm, const Territory &t) {
-    Territory temp = t;
+    Territory temp = Territory(t);
 
     return strm <<
         "TERRITORY: " << temp.getName() <<
         "\n    Continent: " << temp.getContinent() <<
-        "\n    Owner: " << temp.getOwner() <<
+        "\n    Owner: " << temp.getOwner().getName() <<
         "\n    Armies: " << temp.getArmies();
 }
 
@@ -125,8 +116,7 @@ Map::Map() {
     edges = new Edge[edgesLength];
 }
 
-Map::Map(string n) {
-    name = n;
+Map::Map(string n) : name(n) {
     continentsLength = 0;
     continents = new string[continentsLength];
     territoriesLength = 0;
@@ -135,16 +125,12 @@ Map::Map(string n) {
     edges = new Edge[edgesLength];
 }
 
-/*
 Map::Map(const Map &m) {
-    Map temp = m;
-
-    name = temp.getName();
-    setContinents(temp.getContinents(), temp.continentsLength);
-    setTerritories(temp.getTerritories(), temp.territoriesLength);
-    setEdges(temp.getEdges(), temp.edgesLength);
+    name = m.name;
+    setContinents(m.continents, m.continentsLength);
+    setTerritories(m.territories, m.territoriesLength);
+    setEdges(m.edges, m.edgesLength);
 }
-*/
 
 Map::~Map() {
     delete[] continents;
@@ -260,7 +246,7 @@ bool Map::validate() {
 }
 
 std::ostream& operator<<(std::ostream &strm, const Map &m) {
-    Map temp = m;
+    Map temp = Map(m);
 
     string c = "";
     string t = "";
@@ -317,7 +303,7 @@ Map MapLoader::load(string f) {
                     m.addTerritory(Territory(
                         lineSplit[2],
                         m.getContinents()[stoi(lineSplit[3]) - 1],
-                        "",
+                        Player(),
                         stoi(lineSplit[4])));
                 }
                 else if (section == 3) {
