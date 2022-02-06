@@ -10,10 +10,8 @@ int mapMain() {
 
     MapLoader loader;
     Map europe = loader.load("europe.map");
-    //Map canada = loader.load("canada.map");
     cout << europe << endl;
     //cout << europe.validate() << endl;
-    //cout << canada << endl;
 
     // TODO use validate() for each Map
 
