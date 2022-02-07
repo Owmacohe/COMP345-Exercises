@@ -158,7 +158,7 @@ using namespace std;
 	// Copy Constructor 
 	OrdersList::OrdersList(OrdersList& original){
 		for(auto i=original.playerOrderList.cbegin(); i!= original.playerOrderList.cend(); ++i){
-			this->playerOrderList.push_back(new Order(i)); // Dereference i?
+		//	this->playerOrderList.push_back(new Order(i)); // Dereference i? TODO
 		}
 		playerOrderList = original.playerOrderList;
 	};
@@ -167,7 +167,7 @@ using namespace std;
 	OrdersList::~OrdersList(){
 		// Iterate through all pointed orders and delete the content in heap of each
 	for (auto i= this->playerOrderList.cbegin(); i != this->playerOrderList.cend(); ++i){
-			i&&.delete();  // Dereference i?
+			//TODO DELETE ORDERS OBJETC IN HEAP
 		}
 		// then delete the vector
 		this->playerOrderList.clear();
@@ -175,7 +175,12 @@ using namespace std;
 
 	// Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
 	OrdersList OrdersList::operator = (const OrdersList& original){
-		//COPY FORM COPE CONSTRUCTOR METHOD
+		
+		OrdersList deepcopy;
+		for(auto i=original.playerOrderList.cbegin(); i!= original.playerOrderList.cend(); ++i){
+			//deepcopy.playerOrderList.push_back(new Order(i)); // TODO ERROR??
+		}
+
 	};
 
 	// stream insertion operator that outputs the Order List's vector 
@@ -200,13 +205,21 @@ using namespace std;
 	void OrdersList::addOrder(string orderString){
 		Order* orderObject;
 		// CONDITIONAL
+		if (orderString == "deploy") {orderObject = new Deploy();}
+		else if (orderString == "advance") {orderObject = new Advance();}
+		else if (orderString == "bomb") {orderObject = new Bomb();}
+		else if (orderString == "blockade") {orderObject = new Blockade();}
+		else if (orderString == "airlift") {orderObject = new Airlift();}
+		else if (orderString == "negotiate") {orderObject = new Negotiate();}
+		else if (orderString == "diplomacy") {orderObject = new Diplomacy();}
+		else cout << "wrong Order/Card type" << endl;
 
 	playerOrderList.push_back(orderObject);}
 
 	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 	void OrdersList::remove(int i){
-		//* j = this->playerOrderList.begin() + i;
-		//this->playerOrderList.erase(j);
+		this->playerOrderList[i];
+		// TODO
 	};
 
 	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
@@ -218,7 +231,7 @@ using namespace std;
 		swap3 = swap1;
 		swap1 = swap2;
 		swap2 = swap3;
-		// Did not use new, once out of scope, pointer swap3 is delete
+		// Did not use new, once out of scope, pointer swap3 is delete, no memory leak
 	};
 
 
