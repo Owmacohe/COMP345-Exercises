@@ -157,18 +157,18 @@ using namespace std;
 
 	// Copy Constructor 
 	OrdersList::OrdersList(OrdersList& original){
-		for(auto i=original.playerOrderList.cbegin(); i!= original.playerOrderList.cend(); ++i){
-		//	this->playerOrderList.push_back(new Order(i)); // Dereference i? TODO
+		for(int i= 0; i <= original.playerOrderList.size(); ++i){
+			this->playerOrderList.push_back(new Order(*original.playerOrderList[i]));
 		}
-		playerOrderList = original.playerOrderList;
-	};
+	}
 
 	// Default Destructor 
 	OrdersList::~OrdersList(){
 		// Iterate through all pointed orders and delete the content in heap of each
-	for (auto i= this->playerOrderList.cbegin(); i != this->playerOrderList.cend(); ++i){
-			//TODO DELETE ORDERS OBJETC IN HEAP
-		}
+		for(int i= 0; i <= this->playerOrderList.size(); ++i){
+					delete(this->playerOrderList[i]);
+					this->playerOrderList[i] = NULL;
+				}
 		// then delete the vector
 		this->playerOrderList.clear();
 	};
@@ -177,10 +177,10 @@ using namespace std;
 	OrdersList OrdersList::operator = (const OrdersList& original){
 		
 		OrdersList deepcopy;
-		for(auto i=original.playerOrderList.cbegin(); i!= original.playerOrderList.cend(); ++i){
-			//deepcopy.playerOrderList.push_back(new Order(i)); // TODO ERROR??
+		for(int i= 0; i <= original.playerOrderList.size(); ++i){
+			deepcopy.playerOrderList.push_back(new Order(*original.playerOrderList[i]));
 		}
-
+		return deepcopy;
 	};
 
 	// stream insertion operator that outputs the Order List's vector 
@@ -218,10 +218,10 @@ using namespace std;
 
 	// Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 	void OrdersList::remove(int i){
-		this->playerOrderList[i];
-		// TODO
-	};
-
+		int j = 0;
+				this->playerOrderList.erase( this->playerOrderList.begin() + i);
+	}
+	
 	// Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 	void OrdersList::move(int i, int j){
 		Order* swap1 = this->playerOrderList[i];
@@ -231,7 +231,7 @@ using namespace std;
 		swap3 = swap1;
 		swap1 = swap2;
 		swap2 = swap3;
-		// Did not use new, once out of scope, pointer swap3 is delete, no memory leak
+		// Did not use new, once out of scope, pointer swap3 is deleted, no memory leak
 	};
 
 
