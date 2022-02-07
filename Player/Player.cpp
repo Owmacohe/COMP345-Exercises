@@ -41,12 +41,14 @@ Player::~Player() {
 vector<Territory*> Player::toDefend() {
 // TODO 
 //have to check if territories have surrounding enemies
+//for now just returns vector list of the players territories
 return territories;
 }
 
 vector<Territory*> Player::toAttack() {
 // TODO
 //have to check if territories have surrounding enemies
+//for now returns vector list of territories that arent players
 return territories;
 }
 
