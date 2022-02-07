@@ -4,6 +4,7 @@ int OrderMain() {
 
 //Create OrderList object
 OrdersList player1List = OrdersList();
+cout << player1List;
 
 //Deploy
 Deploy *deploy1 = new Deploy;
@@ -41,6 +42,15 @@ cout << "Adding to the OrdersList, Order: "<< negotiate1;
 player1List.addOrder(negotiate1);
 cout << player1List;
 
+
+//Create through copy constructor object
+OrdersList player1List2 = OrdersList(player1List);
+cout << player1List2;
+
+//Create through assignment operator object
+OrdersList player1List3 = player1List;
+cout << player1List3;
+
 //Move()
 cout << "List before the switch" <<endl;
 cout << player1List;
@@ -59,6 +69,15 @@ cout << player1List;
 player1List.~OrdersList();
 cout << player1List;
 
+// Check the deep copies
+cout << "Original, now modified list" << endl;
+cout << player1List;
+
+cout << "Copy through the copy constructor" << endl;
+cout << player1List2;
+
+cout << "Copy through the assignment operator" << endl;
+cout << player1List3;
 		return 0;
 }
 
