@@ -1,8 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include "Cards.h"
-#include <cstdlib> /* srand rand */ // Generate random number library
 
 // #include "OrderList.h" // Link the play() method
 

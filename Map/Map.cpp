@@ -1,5 +1,5 @@
 #include "Map.h"
-#include "../Player.h"
+#include "../Player/Player.h"
 
 bool doesContain(string* arr, int size, string s) {
     bool found = false;
@@ -69,31 +69,44 @@ string *stringSplit(string s, char delim) {
 }
 
 Territory::Territory() {
+    cout << "Territory defualt" << endl;
+
     name = "";
     continent = "";
-    owner;
+    owner = new Player;
     armies = 0;
 }
 
-Territory::Territory(string n, string c, Player o, int a) : name(n), continent(c), owner(o), armies(a) { /* left blank */ }
-
-Territory::Territory(const Territory &t) {
-    name = t.name;
-    continent = t.continent;
-    owner = Player(t.owner);
-    armies = t.armies;
+Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
+    cout << "Territory param" << endl;
+    owner = new Player(*o);
 }
 
-Territory::~Territory() { /* nothing to delete */ }
+Territory::Territory(const Territory &t) {
+    cout << "Territory copy" << endl;
+
+    name = t.name;
+    continent = t.continent;
+    armies = t.armies;
+    owner = new Player(*(t.owner));
+}
+
+Territory::~Territory() {
+    delete owner;
+    owner = NULL;
+}
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
-Player Territory::getOwner() { return owner; }
+Player *Territory::getOwner() { return owner; }
 int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(Player o) { owner = Player(o); }
+void Territory::setOwner(Player *o) {
+    delete owner;
+    owner = new Player(*o);
+}
 void Territory::setArmies(int a) { armies = a; }
 
 std::ostream& operator<<(std::ostream &strm, const Territory &t) {
@@ -102,7 +115,7 @@ std::ostream& operator<<(std::ostream &strm, const Territory &t) {
     return strm <<
         "TERRITORY: " << temp.getName() <<
         "\n    Continent: " << temp.getContinent() <<
-        "\n    Owner: " << temp.getOwner().getName() <<
+        "\n    Owner: " << temp.getOwner()->getName() <<
         "\n    Armies: " << temp.getArmies();
 }
 
@@ -303,7 +316,7 @@ Map MapLoader::load(string f) {
                     m.addTerritory(Territory(
                         lineSplit[2],
                         m.getContinents()[stoi(lineSplit[3]) - 1],
-                        Player(),
+                        new Player,
                         stoi(lineSplit[4])));
                 }
                 else if (section == 3) {

@@ -1,23 +1,25 @@
 #pragma once
 
+class Player;
+
 class Territory {
     public:
         Territory(); // Default constructor
-        Territory(string, string, Player, int); // Parameterized constructor
+        Territory(string, string, Player*, int); // Parameterized constructor
         Territory(const Territory &t); // Copy constructor
         ~Territory(); // Destructor
 
         // Accessors
         string getName(), getContinent();
-        Player getOwner();
+        Player* getOwner();
         int getArmies();
 
         // Mutators
-        void setName(string), setContinent(string), setOwner(Player), setArmies(int);
+        void setName(string), setContinent(string), setOwner(Player*), setArmies(int);
     private:
         string name; // Name of the Territory
         string continent; // Name of the Territory's continent
-        Player owner; // Name of the owner of the Territory
+        Player* owner; // Name of the owner of the Territory
         int armies; // Number of armies that the Territory has
 };
 
