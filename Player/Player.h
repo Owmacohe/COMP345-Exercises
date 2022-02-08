@@ -1,5 +1,8 @@
 #pragma once
 
+class Hand;
+class OrdersList;
+
 class Player {
     public:
         Player(); // Default constructor

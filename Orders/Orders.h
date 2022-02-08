@@ -1,9 +1,4 @@
-
 #pragma once
-#include <vector>
-#include <iostream>
-using namespace std;
-
 
 class Order {
 	public:
@@ -21,8 +16,7 @@ class Order {
 	// Mutators
 	void setDescription(string d); void setValidated(bool v);
 
-	Order& operator = (const Order& D); // Assignment Operator 
-	friend ostream& operator<<(ostream& os, Order& order); // stream insertion operator 
+	Order& operator = (const Order& D); // Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -39,8 +33,7 @@ class Deploy : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Deploy& operator = (const Deploy& D); 	// Assignment Operator 
-	friend ostream& operator<<(ostream& os, const Deploy& deploy); // stream insertion operator  
+	Deploy& operator = (const Deploy& D); 	// Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -57,8 +50,7 @@ class Advance : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Advance& operator = (const Advance& d); // Assignment Operator 
-	friend ostream& operator<<(ostream& os, Advance& advance); // stream insertion operator  
+	Advance& operator = (const Advance& d); // Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -74,8 +66,7 @@ class Bomb : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Bomb& operator = (const Bomb& D); // Assignment Operator 
-	friend ostream& operator<<(ostream& os, Bomb& bomb); // stream insertion operator  
+	Bomb& operator = (const Bomb& D); // Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -91,8 +82,7 @@ class Blockade : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Blockade& operator = (const Blockade& D); // Assignment Operator 
-	friend ostream& operator<<(ostream& os, Blockade& blockade); // stream insertion operator  
+	Blockade& operator = (const Blockade& D); // Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -108,8 +98,7 @@ class Airlift : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Airlift& operator = (const Airlift &D); // Assignment Operator 
-	friend ostream& operator<<(ostream& os, Airlift& airflit); // stream insertion operator  
+	Airlift& operator = (const Airlift &D); // Assignment Operator
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -126,7 +115,6 @@ class Negotiate : public Order{
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
 	Negotiate& operator = (const Negotiate& D); // Assignment Operator
-	friend ostream& operator<<(ostream& os, Negotiate& negotiate); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -143,7 +131,6 @@ class Reinforcement : public Order{
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
 	Reinforcement& operator = (const Reinforcement& D); // Assignment Operator
-	friend ostream& operator<<(ostream& os, Reinforcement& reinforcement); // stream insertion operator  
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -159,8 +146,7 @@ class Diplomacy : public Order{
 	string getDescription(); bool getValidated(); // Accessors
 	void setDescription(string d); void setValidated(bool v); // Mutators
 
-	Diplomacy& operator = (const Diplomacy& D); // Assignment Operator
-	friend ostream& operator<<(ostream& description, Diplomacy& diplomacy); // stream insertion operator  
+	Diplomacy& operator = (const Diplomacy& D); // Assignment Operator 
 
 	bool validate(); //Implementation next assignment
 	bool execute(); //Implementation next assignment
@@ -182,7 +168,6 @@ class OrdersList {
 	void setOrderList(vector<Order*> vo); void setAllOrdersValidated(bool v); // Mutators
 
 	OrdersList operator = (const OrdersList& original); // Assignment Operator
-	friend ostream& operator<<(ostream& os, OrdersList& ordersList); // stream insertion operator
 	
 	void addOrder(Order order); // Add Method used to add an order of the OrderList.
 	void addOrder(Order* order); // Add Method used to add an order of the OrderList.
