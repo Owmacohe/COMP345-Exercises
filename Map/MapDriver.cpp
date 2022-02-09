@@ -10,19 +10,14 @@ int mapMain() {
     cout << endl;
 
     //MapLoader loader;
+
     //Map europe = loader.load("europe.map");
     //cout << europe << endl;
     //cout << europe.validate() << endl;
 
-    Territory t;
-
-    // TODO use validate() for each Map
-
-    return 0;
-}
-
-int main() {
-    mapMain();
+    //Map canada = loader.load("canada.map");
+    //cout << canada << endl;
+    //cout << canada.validate() << endl;
 
     return 0;
 }
