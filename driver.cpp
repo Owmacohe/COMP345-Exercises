@@ -6,14 +6,18 @@ using namespace std;
 #include "Orders/Orders.h"
 #include "Player/Player.h"
 
-//#include "Cards/CardsDriver.cpp"
-#include "GameEngine/GameEngineDriver.cpp"
 #include "Map/MapDriver.cpp"
-//#include "Orders/Orders.cpp"
-//#include "Player/Player.cpp"
+#include "GameEngine/GameEngineDriver.cpp"
+#include "Cards/CardsDriver.cpp"
+#include "Player/PlayerDriver.cpp"
+#include "Orders/OrdersDriver.cpp"
 
 int main() {
-    cout << endl;
+    mapMain();
+    gameEngineMain();
+    cardsMain();
+    playerMain();
+    ordersMain();
 
     return 0;
 }

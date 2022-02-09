@@ -1,16 +1,15 @@
-#include <iostream>
-#include <list>
-#include <vector>
-#include <string>
-
-using namespace std;
-
 #include "Player.h"
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include  "../Cards/Cards.h"
 
-int Playermain() {
+#include "Player.cpp"
+#include "../Map/Map.cpp"
+#include "../Orders/Orders.cpp"
+#include  "../Cards/Cards.cpp"
+
+int playerMain() {
+	/*
 	// create player obj
 	Hand *hand = new Hand; 
 	OrdersList *orderlist = new OrdersList;
@@ -33,6 +32,13 @@ int Playermain() {
 	vector<Territory*> defend = p1.toDefend();
 	cout << "results of .toDefend()";
 	for (Territory* i : defend) cout << i;
+
+	return 0;
+	*/
+
+	cout << endl;
+
+	cout << "Player test!" << endl;
 
 	return 0;
 }

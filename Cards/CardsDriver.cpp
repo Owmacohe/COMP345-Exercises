@@ -1,7 +1,11 @@
 #include "Cards.h"
 #include "../Orders/Orders.h"
 
-int mainCard(){
+#include "Cards.cpp"
+#include "../Orders/Orders.cpp"
+
+int cardsMain() {
+    /*
     // Number of card in Deck divisible by 5
     Deck mainDeck(10);
     Hand playerHand;
@@ -30,5 +34,12 @@ int mainCard(){
 
     cout <<"\n---------------------------------------------------------------" << endl;
     cout << mainDeck << endl;
+    return 0;
+    */
+
+    cout << endl;
+
+    cout << "Map test!" << endl;
+
     return 0;
 }

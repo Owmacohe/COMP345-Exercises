@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+using namespace std;
+
 #include <list>
 #include <vector>
 #include <string>
@@ -31,7 +33,7 @@ class Player {
         Hand* getHand();
         OrdersList* getOrder();
 
-        ostream& operator<<(ostream& os, Player& player); // Stream insertion operator
+        friend ostream& operator<<(ostream& os, Player& player); // Stream insertion operator
         
     private:
         string name; // Name of Player
