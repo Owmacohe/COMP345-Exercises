@@ -3,3 +3,6 @@
 *.idea
 *cmake-build-debug
 CMakeLists.txt
+.idea/workspace.xml
+cmake-build-debug/CMakeFiles/clion-log.txt
+cmake-build-debug/Testing/Temporary/LastTest.log
