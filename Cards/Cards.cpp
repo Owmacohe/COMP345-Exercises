@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include "Cards.h"
 #include <cstdlib> /* srand rand */ // Generate random number library
 
