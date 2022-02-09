@@ -1,26 +1,25 @@
 #pragma once
 
+class Player;
+
 class Territory {
     public:
-        // TODO re-implement copy constructor
-
         Territory(); // Default constructor
-        Territory(string, string, string, int); // Parameterized constructor
-        //Territory(const Territory &t); // Copy constructor
+        Territory(string, string, Player*, int); // Parameterized constructor
+        Territory(const Territory &t); // Copy constructor
         ~Territory(); // Destructor
 
         // Accessors
-        string getName(), getContinent(), getOwner();
+        string getName(), getContinent();
+        Player* getOwner();
         int getArmies();
 
         // Mutators
-        void setName(string), setContinent(string), setOwner(string), setArmies(int);
+        void setName(string), setContinent(string), setOwner(Player*), setArmies(int);
     private:
-        // TODO change owner's type to Player
-        
         string name; // Name of the Territory
         string continent; // Name of the Territory's continent
-        string owner; // Name of the owner of the Territory
+        Player* owner; // Name of the owner of the Territory
         int armies; // Number of armies that the Territory has
 };
 
@@ -30,11 +29,9 @@ struct Edge {
 
 class Map {
     public:
-        // TODO re-implement copy constructor
-        
         Map(); // Default constructor
         Map(string); // Parameterized constructor
-        //Map(const Map &m); // Copy constructor
+        Map(const Map &m); // Copy constructor
         ~Map(); // Destructor
 
         // Accessors

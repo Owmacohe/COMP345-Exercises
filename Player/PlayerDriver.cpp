@@ -1,6 +1,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -29,4 +30,6 @@ int Playermain() {
 	vector<Territory*> defend = p1.toDefend();
 	cout << "results of .toDefend()";
 	for (Territory* i : defend) cout << i;
+
+	return 0;
 }
