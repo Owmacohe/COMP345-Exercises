@@ -1,6 +1,8 @@
+<<<<<<< HEAD
 #include <iostream>
+=======
+>>>>>>> main
 #include "Cards.h"
-#include <cstdlib> /* srand rand */ // Generate random number library
 
 #include "Orders.h"
 using namespace std;

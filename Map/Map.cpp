@@ -1,10 +1,11 @@
 #include "Map.h"
+#include "../Player/Player.h"
 
-bool doesContain(vector<string> v, string s) {
+bool doesContain(string* arr, int size, string s) {
     bool found = false;
 
-    for (string i : v) {
-        if (i == s) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == s) {
             found = true;
         }
     }
@@ -12,12 +13,12 @@ bool doesContain(vector<string> v, string s) {
     return found;
 }
 
-bool doesContain(vector<Edge> v, Territory t1, Territory t2) {
+bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
     bool found = false;
 
-    for (Edge i : v) {
-        string n1 = i.a.getName();
-        string n2 = i.b.getName();
+    for (int i = 0; i < size; i++) {
+        string n1 = arr[i].a.getName();
+        string n2 = arr[i].b.getName();
         string n3 = t1.getName();
         string n4 = t2.getName();
 
@@ -29,198 +30,356 @@ bool doesContain(vector<Edge> v, Territory t1, Territory t2) {
     return found;
 }
 
+string *stringSplit(string s, char delim) {
+    int indexChecker = 0;
+    int splitLength = 1;
+    string *result = new string[splitLength];
+    string temp;
+
+    for (char i : s) {
+        if (i != delim) {
+            temp += i;
+        }
+
+        if (i == delim || indexChecker == s.length() - 1) {
+            string *tempResult = new string[splitLength + 1];
+            copy(result, result + splitLength, tempResult);
+
+            delete[] result;
+            result = new string[splitLength + 1];
+
+            for (int j = 0; j < splitLength; j++) {
+                result[j] = tempResult[j];
+            }
+
+            result[splitLength] = temp;
+
+            delete[] tempResult;
+
+            splitLength++;
+            temp = "";
+        }
+
+        indexChecker++;
+    }
+
+    result[0] = to_string(splitLength - 1);
+
+    return result;
+}
+
 Territory::Territory() {
+    cout << "[Territory default constructor]" << endl;
+
     name = "";
     continent = "";
-    owner = "";
+    owner = new Player;
     armies = 0;
 }
 
-Territory::Territory(string n, string c, string o, int a) {
-    name = n;
-    continent = c;
-    owner = o;
-    armies = a;
+Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
+    cout << "[" << n << " Territory param constructor]" << endl;
+
+    owner = new Player(*o);
+}
+
+Territory::Territory(const Territory &t) {
+    cout << "[" << t.name << " Territory copy constructor]" << endl;
+
+    name = t.name;
+    continent = t.continent;
+    armies = t.armies;
+    owner = new Player(*(t.owner));
+}
+
+Territory::~Territory() {
+    cout << "[" << name << " Territory destructor]" << endl;
+
+    delete owner;
+    owner = NULL;
 }
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
-string Territory::getOwner() { return owner; }
+Player *Territory::getOwner() { return owner; }
 int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(string o) { owner = o; }
+void Territory::setOwner(Player *o) {
+    delete owner;
+    owner = new Player(*o);
+}
 void Territory::setArmies(int a) { armies = a; }
 
 std::ostream& operator<<(std::ostream &strm, const Territory &t) {
-    Territory temp = t;
+    Territory temp = Territory(t);
 
     return strm <<
         "TERRITORY: " << temp.getName() <<
         "\n    Continent: " << temp.getContinent() <<
-        "\n    Owner: " << temp.getOwner() <<
+        "\n    Owner: " << temp.getOwner()->getName() <<
         "\n    Armies: " << temp.getArmies();
 }
 
 Map::Map() {
+    cout << "[Map default constructor]" << endl;
+
     name = "";
-    territories = vector<Territory>();
-    edges = vector<Edge>();
+    continentsLength = 0;
+    continents = new string[continentsLength];
+    territoriesLength = 0;
+    territories = new Territory[territoriesLength];
+    edgesLength = 0;
+    edges = new Edge[edgesLength];
 }
 
-Map::Map(string n) {
-    name = n;
-    territories = vector<Territory>();
-    edges = vector<Edge>();
+Map::Map(string n) : name(n) {
+    cout << "[" << n << " Map param constructor]" << endl;
+
+    continentsLength = 0;
+    continents = new string[continentsLength];
+    territoriesLength = 0;
+    territories = new Territory[territoriesLength];
+    edgesLength = 0;
+    edges = new Edge[edgesLength];
+}
+
+Map::Map(const Map &m) {
+    cout << "[" << m.name << " Map copy constructor]" << endl;
+
+    name = m.name;
+    setContinents(m.continents, m.continentsLength);
+    setTerritories(m.territories, m.territoriesLength);
+    setEdges(m.edges, m.edgesLength);
+}
+
+Map::~Map() {
+    cout << "[" << name << " Map destructor]" << endl;
+
+    delete[] continents;
+    continents = NULL;
+
+    delete[] territories;
+    territories = NULL;
+
+    delete[] edges;
+    edges = NULL;
 }
 
 string Map::getName() { return name; }
-vector<string>& Map::getContinents() { return continents; }
-vector<Territory>& Map::getTerritories() { return territories; }
-vector<Edge>& Map::getEdges() { return edges; }
+string *Map::getContinents() { return continents; }
+Territory *Map::getTerritories() { return territories; }
+Edge *Map::getEdges() { return edges; }
 
 void Map::setName(string n) { name = n; }
-void Map::setContinents(vector<string> c) {
-    continents = vector<string>();
+void Map::setContinents(string *c, int l) {
+    delete[] continents;
+    continents = new string[l];
 
-    for (string i : c) {
-        continents.push_back(i);
-    }
+    copy(c, c + l, continents);
+
+    continentsLength = l;
 }
-void Map::setTerritories(vector<Territory> t) {
-    territories = vector<Territory>();
+void Map::setTerritories(Territory *t, int l) {
+    delete[] territories;
+    territories = new Territory[l];
 
-    for (Territory i : t) {
-        territories.push_back(i);
-    }
+    copy(t, t + l, territories);
+
+    territoriesLength = l;
 }
-void Map::setEdges(vector<Edge> e) {
-    edges = vector<Edge>();
+void Map::setEdges(Edge *e, int l) {
+    delete[] edges;
+    edges = new Edge[l];
 
-    for (Edge i : e) {
-        edges.push_back(i);
+    copy(e, e + l, edges);
+
+    edgesLength = l;
+}
+
+void Map::addContinent(string c) {
+    string *temp = new string[continentsLength];
+    copy(continents, continents + continentsLength, temp);
+
+    delete[] continents;
+    continents = new string[continentsLength + 1];
+
+    for (int i = 0; i < continentsLength; i++) {
+        continents[i] = temp[i];
     }
+
+    continents[continentsLength] = c;
+
+    delete[] temp;
+
+    continentsLength++;
 }
 
 void Map::addTerritory(Territory t) {
-    territories.push_back(t);
+    Territory *temp = new Territory[territoriesLength];
+    copy(territories, territories + territoriesLength, temp);
 
-    if (!doesContain(continents, t.getContinent())) {
-        continents.push_back(t.getContinent());
+    delete[] territories;
+    territories = new Territory[territoriesLength + 1];
+
+    for (int i = 0; i < territoriesLength; i++) {
+        territories[i] = temp[i];
     }
+
+    territories[territoriesLength] = t;
+
+    delete[] temp;
+
+    territoriesLength++;
 }
 
 void Map::addEdge(Edge e) {
-    edges.push_back(e);
+    Edge *temp = new Edge[edgesLength];
+    copy(edges, edges + edgesLength, temp);
+
+    delete[] edges;
+    edges = new Edge[edgesLength + 1];
+
+    for (int i = 0; i < edgesLength; i++) {
+        edges[i] = temp[i];
+    }
+
+    edges[edgesLength] = e;
+
+    delete[] temp;
+
+    edgesLength++;
+}
+
+bool validateEdge(Map m, Territory start, Territory end, Territory last) {
+    for (int i = 0; i < m.edgesLength; i++) {
+        Edge temp = m.getEdges()[i];
+
+        if (temp.a.getName() == end.getName() || temp.b.getName() == end.getName()) {
+            return true;
+        }
+        else if (temp.a.getName() == start.getName() && temp.b.getName() != last.getName()) {
+            return validateEdge(m, temp.b, end, start);
+        }
+        else if (temp.b.getName() == start.getName() && temp.a.getName() != last.getName()) {
+            return validateEdge(m, temp.a, end, start);
+        }
+    }
+
+    return false;
 }
 
 bool Map::validate() {
     bool valid = true;
+    Territory *temp = getTerritories();
 
-    // TODO verify that it is a connected graph
-    // TODO verify that continents are connected subgraphs
+    for (int i = 0; i < territoriesLength; i++) {
+        for (int j = 0; j < territoriesLength; j++) {
+            valid = validateEdge(*this, temp[i], temp[j], Territory());
 
-    // Verifying that each Territory belongs to only one continent
-    for (Territory k : territories) {
-        if (!doesContain(continents, k.getContinent())) {
+            if (temp[i].getContinent() == temp[j].getContinent()) {
+                valid = validateEdge(*this, temp[i], temp[j], Territory());
+            }
+        }
+
+        if (!doesContain(continents, continentsLength, territories[i].getContinent())) {
             valid = false;
         }
+    }
+
+
+    if (valid) {
+        cout << "Vefification succeeded!" << endl;
+    }
+    else {
+        cout << "Vefification failed!" << endl;
     }
 
     return valid;
 }
 
 std::ostream& operator<<(std::ostream &strm, const Map &m) {
-    Map temp = m;
+    Map temp = Map(m);
 
     string c = "";
     string t = "";
     string e = "";
 
-    for (string i : temp.getContinents()) {
-        c += i + ", ";
+    string *continents = temp.getContinents();
+    for (int i = 0; i < m.continentsLength; i++) {
+        c += continents[i] + ", ";
     }
 
-    for (Territory j : temp.getTerritories()) {
-        t += j.getName() + ", ";
+    Territory *territories = temp.getTerritories();
+    for (int j = 0; j < m.territoriesLength; j++) {
+        t += territories[j].getName() + ", ";
     }
 
-    for (Edge k : temp.getEdges()) {
-        e += k.a.getName() + " and " + k.b.getName() + ", ";
+    Edge *edges = temp.getEdges();
+    for (int k = 0; k < m.edgesLength; k++) {
+        e += edges[k].a.getName() + " and " + edges[k].b.getName() + ", ";
     }
 
     return strm <<
         "MAP: " << temp.getName() <<
-        "\n    Continents: " << c <<
-        "\n    Territories: " << t <<
-        "\n    Edges: " << e;
-}
-
-vector<string> stringSplit(string s, char delim) {
-    vector<string> temp = vector<string>();
-
-    string phrase = "";
-
-    for (char i : s) {
-        if (i != delim) {
-            phrase += i;
-        }
-        else {
-            temp.push_back(phrase);
-            phrase = "";
-        }
-    }
-
-    temp.push_back(phrase);
-
-    return temp;
+        "\n    Continents: " << c.substr(0, c.length() - 2) <<
+        "\n    Territories: " << t.substr(0, t.length() - 2) <<
+        "\n    Edges: " << e.substr(0, e.length() - 2);
 }
 
 Map MapLoader::load(string f) {
-    // reject bad maps
-    // create Map object
-
-    Map m = Map();
+    // TODO reject bad maps
 
     ifstream input(f);
     string line;
     int section = 0;
 
     getline(input, line);
-    string mapName = stringSplit(line, ' ')[2];
-    m.setName(mapName.substr(0, mapName.length() - 4));
+    string *nameSplit = stringSplit(line, ' ');
+    string mapName = nameSplit[3];
+    delete[] nameSplit;
+    Map m = Map(mapName.substr(0, mapName.length() - 4));
 
     while (!input.eof()) {
         getline(input, line);
+        string *lineSplit = stringSplit(line, ' ');
 
         if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
             section++;
+
+            if (line == "[continents]") {
+                cout << "Loading continents..." << endl;
+            }
+            else if (line == "[countries]") {
+                cout << "Loading territories..." << endl;
+            }
+            else if (line == "[borders]") {
+                cout << "Loading edges..." << endl;
+            }
         }
         else {
             if (line != "") {
                 if (section == 1) {
-                    m.getContinents().push_back(stringSplit(line, ' ')[0]);
+                    m.addContinent(lineSplit[1]);
                 }
                 else if (section == 2) {
-                    vector<string> temp = stringSplit(line, ' ');
-
                     m.addTerritory(Territory(
-                        temp[1],
-                        m.getContinents()[stoi(temp[2]) - 1],
-                        "",
-                        stoi(temp[3])));
+                        lineSplit[2],
+                        m.getContinents()[stoi(lineSplit[3]) - 1],
+                        new Player,
+                        0));
                 }
                 else if (section == 3) {
-                    vector<string> temp = stringSplit(line, ' ');
+                    int len = stoi(lineSplit[0]);
 
-                    for (string i : temp) {
-                        for (string j : temp) {
-                            Territory t1 = m.getTerritories()[stoi(i) - 1];
-                            Territory t2 = m.getTerritories()[stoi(j) - 1];
-                            vector<Edge> tempEdges = m.getEdges();
+                    for (int i = 1; i <= len; i++) {
+                        for (int j = 1; j <= len; j++) {
+                            Territory t1 = m.getTerritories()[stoi(lineSplit[i]) - 1];
+                            Territory t2 = m.getTerritories()[stoi(lineSplit[j]) - 1];
+                            Edge *tempEdges = m.getEdges();
 
-                            if (i != j && !doesContain(tempEdges, t1, t2) && !doesContain(tempEdges, t2, t1)) {
+                            if (i != j && !doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
                                 m.addEdge(Edge{t1, t2});
                             }
                         }
@@ -228,9 +387,13 @@ Map MapLoader::load(string f) {
                 }
             }
         }
+
+        delete[] lineSplit;
     }
 
     input.close();
+
+    cout << "Map loaded!" << endl;
 
     return m;
 }

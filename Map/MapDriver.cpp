@@ -1,6 +1,6 @@
 #include <iostream>
+#include <string>
 #include <fstream>
-#include <sstream>
 #include <vector>
 using namespace std;
 
@@ -9,14 +9,15 @@ using namespace std;
 int mapMain() {
     cout << endl;
 
-    MapLoader loader = MapLoader();
-    Map europe = loader.load("europe.map");
-    Map canada = loader.load("canada.map");
-    cout << europe << endl;
-    //cout << canada << endl;
+    //MapLoader loader;
 
-    // TODO create a Map for each supplied .map file using Maploader
-    // TODO use validate() for each Map
+    //Map europe = loader.load("europe.map");
+    //cout << europe << endl;
+    //cout << europe.validate() << endl;
+
+    //Map canada = loader.load("canada.map");
+    //cout << canada << endl;
+    //cout << canada.validate() << endl;
 
     return 0;
 }

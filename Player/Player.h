@@ -1,30 +1,32 @@
 #pragma once
 
+class Hand;
+class OrdersList;
+
 class Player {
-public:
-    string name; // Name of Player
-    list<Territory> territories; // MAYBE VECTOR INSTEAD OF LIST Player needs to own a collection of Territories ( list of territories or list of pointers to territories ) POINTER
-    Cards hand; // Player needs to have a hand ( a card hand object or pointer ? ) POINTER
-    OrdersList orders; // Player needs to have a list of orders to be created and executed at their turn POINTER
+    public:
+        Player(); // Default constructor
+        Player(string, vector<Territory*>, Hand*, OrdersList*); // Parameterized constructor
+        Player(const Player &p); // Copy constructor
 
-    Player(); // Default constructor
-    Player(string, list<Territory>, Cards, OrdersList); // Parameterized constructor
+        ~Player(); // Destructor
 
-    list<Territory> toDefend();
-    list<Territory> toAttack();
+        vector<Territory*> toDefend(); // Territories for player to defend
+        vector<Territory*> toAttack(); // Territories for player to attack
 
-    int issueOrder();
+        void issueOrder(); //  Create order and adds order to players order list
 
-    //setter and getters
-    int setName(string n);
-    int setTerritory(Territory t); //add to list
-    int setHand(Cards h);
-    int setOrder(OrdersList o);
+        // Accessors
+        void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o);
 
-    string getName();
-    list<Territory> getTerritory();
-    Cards getHand();
-    OrdersList getOrder();
-    //end setters and getters
-    
+        // Mutators
+        string getName();
+        vector<Territory*> getTerritory();
+        Hand* getHand();
+        OrdersList* getOrder();
+    private:
+        string name; // Name of Player
+        vector<Territory*> territories; // List of players territories
+        Hand* hand; // Player hand
+        OrdersList* orders; // Player list of orders
 };

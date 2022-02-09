@@ -1,7 +1,10 @@
 #pragma once
+<<<<<<< HEAD
 #include <vector>
 #include "Orders.h"
 //using namespace std;
+=======
+>>>>>>> main
 
 class Hand;
 class Card{

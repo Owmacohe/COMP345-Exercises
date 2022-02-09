@@ -1,71 +1,88 @@
+#include "../Map/Map.cpp"
+#include "../Orders/Orders.cpp"
+#include  "../Cards/Cards.cpp"
 
 #include "Player.h"
 
-#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Map/Map.cpp"
-#include "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Orders/Orders.cpp"
-//#include  "C:/Users/Gabrielle/Documents/GitHub/COMP345-Assignment1/Cards/Cards.cpp"
-
 Player::Player() {
-    name = "";
-    territories = list<Territory>;
-    //hand = ;
+    name = "empty player";
+    territories = vector<Territory*>();
+    hand = new Hand();
     orders = new OrdersList();
 }
 
-Player::Player(string n, list<Territory> t, Cards h, OrdersList o) {
-    name = n;
-    territories = t;
-    hand = h;
-    orders = o;
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n), territories(t), hand(h), orders(o) {
+// Intentionally empty
 }
 
-list<Territory> Player::toDefend() {
-   //list of orders or territories but the rubric says both i think territories
+Player::Player(const Player &p) {
+    name = p.name;
+    for (Territory* i : p.territories) {
+        this->territories.push_back(new Territory(*i));
+    } // Goes through copying vector of territory pointers, creates new pointers based on value and pushes to copied vector
+    this->hand = new Hand(*(p.hand));
+    this->orders = new OrdersList(*(p.orders));
 }
 
-list<Territory> Player::toAttack() {
-    //list of orders or territories but the rubric says both i think territories
+Player::~Player() {
+    for (Territory* i : territories) {
+        delete i;
+        i = NULL;
+    }
+    delete hand;
+    hand = NULL;
+    delete orders;
+    orders = NULL;
+
+    cout << name << " player destroyed" << endl;
 }
 
-int Player::issueOrder() {
-    //create new order and add to OrderList
-    return 0;
+//For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
+vector<Territory*> Player::toDefend() {
+// TODO next assignment
+//have to check if territories have surrounding enemies
+//for now just returns vector list of the players territories
+return territories;
 }
 
-int Player::setName(string n) {
-    name = n;
-}
-int Player::setTerritory(Territory t) {
-    //deep copy the list
-}
-int Player::setHand(Cards h) {
-    //copy constructor for cards ?
-}
-int Player::setOrder(OrderList o) {
-    orders = o;
-}
-string Player::getName() {
-    return name;
-}
-list<Territory> getTerritory() {
-    return territories;
-}
-Cards getHand() {
-    return hand;
-}
-OrdersList getOrder() {
-    return orders;
+vector<Territory*> Player::toAttack() {
+// TODO next assignment
+//have to check if territories have surrounding enemies
+//for now returns vector list of territories that arent players
+return territories;
 }
 
-std::ostream& operator<<(std::ostream& strm, const Player& p) {
+void Player::issueOrder() {
+    orders->addOrder(Order());
+}
+
+// Mutators and Accessors
+void Player::setName(string n) { name = n; }
+void Player::setTerritory(vector<Territory*> t) {
+    for (Territory* i : t) {
+        territories.push_back(i);
+    }
+}
+void Player::setHand(Hand* h) { hand = h; }
+void Player::setOrder(OrdersList* o) { orders = o; }
+
+string Player::getName() { return name; }
+vector<Territory*> Player::getTerritory() { return territories; }
+Hand* Player::getHand() { return hand; }
+OrdersList* Player::getOrder() { return orders; }
+// End of Mutators and Accessors
+
+std::ostream& operator<<(std::ostream &strm, const Player &p) {
+    Player player = p;
+
     string t = "";
-
-    for (Territory j : p.territories) {
-        t += j.getName() + ", ";
-    };
+        for (Territory* i : player.getTerritory()) {
+        t += i->getName() +", ";
+    }
 
     return strm <<
-        "PLAYER: " << p.name << 
+        "PLAYER: " << player.getName() <<
         "\n    Territories: " << t <<
-        "\n    Hand: " << p.hand; // Card should include its own print so hopefully this would be alright
+        "\n    Hand: " << player.getHand() <<
+        "\n    Orders : " << player.getOrder() ;
 }
