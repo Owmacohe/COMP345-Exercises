@@ -14,7 +14,15 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a69c3c93-f1d6-4845-90bf-c1d74f3f6017" name="Changes" comment="Testing" />
+    <list default="true" id="a69c3c93-f1d6-4845-90bf-c1d74f3f6017" name="Changes" comment="Testing">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cards/Cards.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Cards/Cards.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cards/Cards.h" beforeDir="false" afterPath="$PROJECT_DIR$/Cards/Cards.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cards/CardsDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Cards/CardsDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,6 +58,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -58,6 +67,11 @@
   </component>
   <component name="RunManager">
     <configuration name="COMP345_Assignment" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="COMP345_Assignment" TARGET_NAME="COMP345_Assignment" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="COMP345_Assignment" RUN_TARGET_NAME="COMP345_Assignment">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -73,6 +87,9 @@
       <updated>1643326755669</updated>
       <workItem from="1643326758356" duration="2524000" />
       <workItem from="1643899063387" duration="11000" />
+      <workItem from="1643932775426" duration="36000" />
+      <workItem from="1643934194209" duration="92000" />
+      <workItem from="1644374237637" duration="2907000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1643326977144</created>

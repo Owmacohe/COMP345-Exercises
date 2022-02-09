@@ -1,11 +1,9 @@
 #include <iostream>
-#include <string>
 #include <vector>
 #include "Cards.h"
 #include <cstdlib> /* srand rand */ // Generate random number library
 
-// #include "OrderList.h" // Link the play() method
-
+#include "Orders.h"
 using namespace std;
 
 /*********************************** CARD ***********************************/
@@ -28,30 +26,29 @@ string Card::getType() const {
     return type;
 }
 
-// Whenever play() is called, it creates an object of the corresponding order from Order class
-Card* Card::play() const{
-    if (type == "bomb"){
+void Card::play(/*OrdersList &ordersList*/) const{
+    //Creat Order of the corresponding type
+    if (this->type == "bomb"){
        cout << "Play Bomb card" << endl;
-       // Bomb* myBomb = new Bomb(); // Create a Bomb object and play as an order
-       // oderList.push_back(*myBomb)
-    } else if (type == "reinforcement"){
+//        Bomb myBomb(); // Create a Bomb object and play as an order
+//        ordersList.add(myBomb); // Place it in the OrdersList
+    } else if (this->type == "reinforcement"){
        cout << "Play Reinforcement card" << endl;
-       // Reinforcement* myReinforce = new Reinforcement();
-       // orderList.push_back(*myReinforce);
-    } else if (type == "blockade"){
+//        Reinforcement myReinforce();
+//        orderList.add(myReinforce);
+    } else if (this->type == "blockade"){
        cout << "Play Blockade card" << endl;
-       // Blockade* myBlockade = new Blockade();
-       // orderList.push_back(*myBlockade);
-    } else if (type == "airlift"){
+//       Blockade myBlockade();
+//       ordersList.add(myBlockade);
+    } else if (this->type == "airlift"){
        cout << "Play Airlift card" << endl;
-       // Airlift* myAirlift = new Airlift();
-       // orderList.push_back(*myAirlift);
-    } else if (type == "diplomacy"){
+//       Airlift myAirlift();
+//       ordersList.add(myAirlift);
+    } else if (this->type == "diplomacy"){
        cout << "Play Diplomacy card" << endl;
-       // Diplomacy* myDiplomacy = new Diplomacy();
-       // orderList.push_back(*myDiplomacy);
+//       Diplomacy myDiplomacy();
+//       ordersList.add(myDiplomacy);
     }
-    // play is not completed
 
 }
 
@@ -60,7 +57,6 @@ ostream& operator<<(ostream& os, const Card& c)
 {
     os << c.getType();
     return os;
-
 }
 /*********************************** DECK ***********************************/
 
@@ -111,28 +107,30 @@ Card* Deck::draw(){
 
     // Store return card in a temp var -> So as to delete its trace in deck
     // Copy constructor
-    Card * temp = new Card(*deck.at(numRandom));
+    Card * temp = deck.at(numRandom);
 
-    //    Display the type of card that is drawn
-    cout << numRandom << " ";
-    cout << *deck.at(numRandom) << endl;
+    //Display the type of card that is drawn
+    cout << numRandom << "-" << *deck.at(numRandom) << " | ";
 
     // Remove the drawn card from Deck
-    free(deck.at(numRandom)) ;  // prevent memory leak
     deck.erase(deck.begin()+numRandom);
     numCardInDeck--;
-
     return temp;
 }
 
 // Overload <<
-ostream& operator<<(ostream& os, const Deck& d)
-{
+ostream& operator<<(ostream& os, const Deck& d){
     os << "Number of card in deck: " << d.numCardInDeck << endl;
     for(int i = 0; i < d.numCardInDeck; i++){
         os << *(d.deck.at(i)) << " | ";
     }
     return os;
+}
+
+// Overload =
+Deck& Deck::operator=(const Deck& toAssign){
+    numCardInDeck = toAssign.numCardInDeck;
+    deck = toAssign.deck;
 }
 /*********************************** HAND ***********************************/
 
@@ -153,13 +151,17 @@ Hand::~Hand(){
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
 {
-    os << "Number of cards on hand: " << h.numCardInHand << endl;
+//    os << "Number of cards on hand: " << h.numCardInHand << endl;
     for(int i = 0; i < h.numCardInHand; i++){
-        os << *(h.hand.at(i)) << " | ";
+        os << i << "-" << *(h.hand.at(i)) << " | ";
     }
     return os;
 }
 
+Hand& Hand::operator=(const Hand& toAssign){
+    numCardInHand = toAssign.numCardInHand;
+    hand = toAssign.hand;
+}
 void Hand::drawCard(Deck& d){
     Card* drawnCard = d.draw();
     // Put the drawn card into Player hand
@@ -167,9 +169,21 @@ void Hand::drawCard(Deck& d){
     numCardInHand++;
 }
 
-//void Hand::playCard(Card &c) {
-//    Card* playedCard = c.play();
-//}
+
+void Hand::playCard(int i, Deck &d) {
+    // Create Order and add Order to OrderList
+    hand.at(i)->play();
+
+    // Add the played Card back to deck
+    Card* playedCard =hand.at(i);
+    d.deck.push_back(playedCard);
+    d.numCardInDeck++;
+
+    // Remove card from Hand
+    hand.erase(hand.begin()+i); // Delete the card object along with its pointer
+    numCardInHand--;
+
+}
 /*********************************** DRAFT ***********************************/
 // DRAW CARD BY INDEX
 //int Deck::genDistinctNum() {
