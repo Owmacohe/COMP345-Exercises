@@ -5,7 +5,10 @@
 
 using namespace std;
 
-#include "Player.cpp"
+#include "Player.h"
+#include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include  "../Cards/Cards.h"
 
 int Playermain() {
 	// create player obj
