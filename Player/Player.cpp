@@ -1,6 +1,6 @@
-#include "../Map/Map.cpp"
-#include "../Orders/Orders.cpp"
-#include  "../Cards/Cards.cpp"
+#include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include  "../Cards/Cards.h"
 
 #include "Player.h"
 

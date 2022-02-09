@@ -1,7 +1,13 @@
 #pragma once
 
+#include <iostream>
+#include <list>
+#include <vector>
+#include <string>
+
 class Hand;
 class OrdersList;
+class Map;
 
 class Player {
     public:
@@ -24,6 +30,9 @@ class Player {
         vector<Territory*> getTerritory();
         Hand* getHand();
         OrdersList* getOrder();
+
+        ostream& operator<<(ostream& os, Player& player); // Stream insertion operator
+        
     private:
         string name; // Name of Player
         vector<Territory*> territories; // List of players territories
