@@ -1,8 +1,13 @@
 #include "Map.h"
 #include "../Player/Player.h"
 
+#include "Map.cpp"
+#include "../Player/Player.cpp"
+
 int mapMain() {
     cout << endl;
+
+    cout << "Map test!" << endl;
 
     //MapLoader loader;
 
