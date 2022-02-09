@@ -1,7 +1,8 @@
+#include "../Map/Map.cpp"
+#include "../Orders/Orders.cpp"
+#include  "../Cards/Cards.cpp"
+
 #include "Player.h"
-#include "../Map/Map.h"
-#include "../Orders/Orders.h"
-#include "../Cards/Cards.h"
 
 Player::Player() {
     name = "empty player";
@@ -38,14 +39,14 @@ Player::~Player() {
 
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
 vector<Territory*> Player::toDefend() {
-// TODO 
+// TODO next assignment
 //have to check if territories have surrounding enemies
 //for now just returns vector list of the players territories
 return territories;
 }
 
 vector<Territory*> Player::toAttack() {
-// TODO
+// TODO next assignment
 //have to check if territories have surrounding enemies
 //for now returns vector list of territories that arent players
 return territories;
@@ -81,7 +82,7 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
 
     return strm <<
         "PLAYER: " << player.getName() <<
-        "\n    Territories: " << t;
+        "\n    Territories: " << t <<
+        "\n    Hand: " << player.getHand() <<
+        "\n    Orders : " << player.getOrder() ;
 }
-
-// TODO assignment operator
