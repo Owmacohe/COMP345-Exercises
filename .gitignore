@@ -1,5 +1,7 @@
 *.vs
 *.vscode
+*.idea
+*cmake-build-debug
 CMakeLists.txt
 .idea/workspace.xml
 cmake-build-debug/CMakeFiles/clion-log.txt
