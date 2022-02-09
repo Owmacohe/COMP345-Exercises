@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 enum State
 {
  start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
