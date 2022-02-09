@@ -252,6 +252,24 @@ void Map::addEdge(Edge e) {
     edgesLength++;
 }
 
+bool validateEdge(Map m, Territory start, Territory end, Territory last) {
+    for (int i = 0; i < m.edgesLength; i++) {
+        Edge temp = m.getEdges()[i];
+
+        if (temp.a.getName() == end.getName() || temp.b.getName() == end.getName()) {
+            return true;
+        }
+        else if (temp.a.getName() == start.getName() && temp.b.getName() != last.getName()) {
+            return validateEdge(m, temp.b, end, start);
+        }
+        else if (temp.b.getName() == start.getName() && temp.a.getName() != last.getName()) {
+            return validateEdge(m, temp.a, end, start);
+        }
+    }
+
+    return false;
+}
+
 bool Map::validate() {
     bool valid = true;
     Territory *temp = getTerritories();
@@ -279,24 +297,6 @@ bool Map::validate() {
     }
 
     return valid;
-}
-
-bool validateEdge(Map m, Territory start, Territory end, Territory last) {
-    for (int i = 0; i < m.edgesLength; i++) {
-        Edge temp = m.getEdges()[i];
-
-        if (temp.a.getName() == end.getName() || temp.b.getName() == end.getName()) {
-            return true;
-        }
-        else if (temp.a.getName() == start.getName() && temp.b.getName() != last.getName()) {
-            return validateEdge(m, temp.b, end, start);
-        }
-        else if (temp.b.getName() == start.getName() && temp.a.getName() != last.getName()) {
-            return validateEdge(m, temp.a, end, start);
-        }
-    }
-
-    return false;
 }
 
 std::ostream& operator<<(std::ostream &strm, const Map &m) {
