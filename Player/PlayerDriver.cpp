@@ -12,10 +12,10 @@ using namespace std;
 
 int Playermain() {
 	// create player obj
-	Hand *hand = new Hand(); 
-	OrdersList *orderlist = new OrdersList();
-	Territory *territory1 = new Territory();
-	Territory *territory2 = new Territory();
+	Hand *hand = new Hand; 
+	OrdersList *orderlist = new OrdersList;
+	Territory *territory1 = new Territory;
+	Territory *territory2 = new Territory;
 	vector<Territory*> territories (territory1, territory2);
 	Player p1 = Player("Player 1", territories, hand, orderlist);
 	cout << p1;
