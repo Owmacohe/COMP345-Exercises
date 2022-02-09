@@ -150,10 +150,10 @@ bool Reinforcement::execute(){return true;} //Implementation next assignment
 
 
 // Default Constructor
-OrdersList::OrdersList(){vector<Order*> playerOrderList;};
+OrdersList::OrdersList(){ vector<Order*> playerOrderList; this->playerOrderList ;}
 
 // Copy Constructor 
-OrdersList::OrdersList(OrdersList& original){
+OrdersList::OrdersList(OrdersList &original){
 	for(int i= 0; i <= original.playerOrderList.size(); ++i){
 		this->playerOrderList.push_back(new Order(*original.playerOrderList[i]));
 	}

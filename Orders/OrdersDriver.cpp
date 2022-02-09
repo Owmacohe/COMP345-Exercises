@@ -1,12 +1,10 @@
-#include <vector>
-#include <iostream>
-using namespace std;
+// From notes: a cpp file should not be included as it effectively merges two compilation units together
 
-#include "Orders.cpp"
+#include "Orders.h"
 
-int OrdersMain() {
+int main() {
 	//Create OrderList object
-	OrdersList player1List = OrdersList();
+	OrdersList player1List;
 	cout << player1List;
 
 	//Deploy
@@ -47,7 +45,8 @@ int OrdersMain() {
 
 
 	//Create through copy constructor object
-	OrdersList player1List2 = OrdersList(player1List);
+	OrdersList player1List2;
+    player1List2 = OrdersList(player1List);
 	cout << player1List2;
 
 	//Create through assignment operator object
