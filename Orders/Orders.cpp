@@ -11,13 +11,13 @@ bool Order::getValidated(){return validated;}
 void Order::setDescription(string d){this->description = d;}
 void Order::setValidated(bool v){this->validated = v;}
 
-Order& Order::operator = (const Order& order){this->validated = order.validated; this->description = order.description;}
+Order& Order::operator = (const Order& order){this->validated = order.validated; this->description = order.description; return *this;}
 ostream& operator<<(ostream& os, Order& order){
 	os << order.description << " validated: " << order.validated << endl; 
 	return os;}
 
-bool Order::validate(){}; 	//Implementation next assignment
-bool Order::execute(){}; 	//Implementation next assignment
+bool Order::validate(){ return true;} 	//Implementation next assignment
+bool Order::execute(){return true;} 	//Implementation next assignment
 
 
 Deploy::Deploy(){}; // Default Constructor
@@ -30,10 +30,10 @@ bool Deploy::getValidated(){return this->validated;}
 	// Mutators
 void Deploy::setDescription(string d){this->description = d;}
 void Deploy::setValidated(bool v){this->validated = v;}
-Deploy& Deploy::operator = (const Deploy& o){this->validated = o.validated; this->description = o.description;}
+Deploy& Deploy::operator = (const Deploy& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Deploy& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Deploy::validate(){}; //Implementation next assignment
-bool Deploy::execute(){}; //Implementation next assignment
+bool Deploy::validate(){return true;} //Implementation next assignment
+bool Deploy::execute(){return true;} //Implementation next assignment
 
 
 Advance::Advance(){}; // Default Constructor
@@ -46,10 +46,10 @@ bool Advance::getValidated(){return this->validated;}
 // Mutators
 void Advance::setDescription(string d){this->description = d;}
 void Advance::setValidated(bool v){this->validated = v;}
-Advance& Advance::operator = (const Advance& o){this->validated = o.validated; this->description = o.description;}
+Advance& Advance::operator = (const Advance& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Advance& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Advance::validate(){}; //Implementation next assignment
-bool Advance::execute(){}; //Implementation next assignment
+bool Advance::validate(){return true;} //Implementation next assignment
+bool Advance::execute(){return true;} //Implementation next assignment
 
 
 Bomb::Bomb(){}; // Default Constructor
@@ -62,10 +62,10 @@ bool Bomb::getValidated(){return this->validated;}
 // Mutators
 void Bomb::setDescription(string d){this->description = d;}
 void Bomb::setValidated(bool v){this->validated = v;}
-Bomb& Bomb::operator = (const Bomb& o){this->validated = o.validated; this->description = o.description;}
+Bomb& Bomb::operator = (const Bomb& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Bomb& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Bomb::validate(){}; //Implementation next assignment
-bool Bomb::execute(){}; //Implementation next assignment
+bool Bomb::validate(){return true;} //Implementation next assignment
+bool Bomb::execute(){return true;} //Implementation next assignment
 
 
 Blockade::Blockade(){}; // Default Constructor
@@ -78,10 +78,10 @@ bool Blockade::getValidated(){return this->validated;}
 // Mutators
 void Blockade::setDescription(string d){this->description = d;}
 void Blockade::setValidated(bool v){this->validated = v;}
-Blockade& Blockade::operator = (const Blockade& o){this->validated = o.validated; this->description = o.description;}
+Blockade& Blockade::operator = (const Blockade& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Blockade& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Blockade::validate(){}; //Implementation next assignment
-bool Blockade::execute(){}; //Implementation next assignment
+bool Blockade::validate(){return true;} //Implementation next assignment
+bool Blockade::execute(){return true;} //Implementation next assignment
 
 
 Airlift::Airlift(){}; // Default Constructor
@@ -94,10 +94,10 @@ bool Airlift::getValidated(){return this->validated;}
 // Mutators
 void Airlift::setDescription(string d){this->description = d;}
 void Airlift::setValidated(bool v){this->validated = v;}
-Airlift& Airlift::operator = (const Airlift& o){this->validated = o.validated; this->description = o.description;}
+Airlift& Airlift::operator = (const Airlift& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Airlift& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Airlift::validate(){}; //Implementation next assignment
-bool Airlift::execute(){}; //Implementation next assignment
+bool Airlift::validate(){return true;} //Implementation next assignment
+bool Airlift::execute(){return true;} //Implementation next assignment
 
 
 Negotiate::Negotiate(){}; // Default Constructor
@@ -110,10 +110,10 @@ bool Negotiate::getValidated(){return this->validated;}
 // Mutators
 void Negotiate::setDescription(string d){this->description = d;}
 void Negotiate::setValidated(bool v){this->validated = v;}
-Negotiate& Negotiate::operator = (const Negotiate& o){this->validated = o.validated; this->description = o.description;}
+Negotiate& Negotiate::operator = (const Negotiate& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Negotiate& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Negotiate::validate(){}; //Implementation next assignment
-bool Negotiate::execute(){}; //Implementation next assignment
+bool Negotiate::validate(){return true;} //Implementation next assignment
+bool Negotiate::execute(){return true;} //Implementation next assignment
 
 
 Diplomacy::Diplomacy(){}; // Default Constructor
@@ -126,10 +126,10 @@ bool Diplomacy::getValidated(){return this->validated;}
 // Mutators
 void Diplomacy::setDescription(string d){this->description = d;}
 void Diplomacy::setValidated(bool v){this->validated = v;}
-Diplomacy& Diplomacy::operator = (const Diplomacy& o){this->validated = o.validated; this->description = o.description;}
+Diplomacy& Diplomacy::operator = (const Diplomacy& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Diplomacy& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Diplomacy::validate(){}; //Implementation next assignment
-bool Diplomacy::execute(){}; //Implementation next assignment
+bool Diplomacy::validate(){return true;} //Implementation next assignment
+bool Diplomacy::execute(){return true;} //Implementation next assignment
 
 
 Reinforcement::Reinforcement(){}; // Default Constructor
@@ -142,10 +142,10 @@ bool Reinforcement::getValidated(){return this->validated;}
 // Mutators
 void Reinforcement::setDescription(string d){this->description = d;}
 void Reinforcement::setValidated(bool v){this->validated = v;}
-Reinforcement& Reinforcement::operator = (const Reinforcement& o){this->validated = o.validated; this->description = o.description;}
+Reinforcement& Reinforcement::operator = (const Reinforcement& o){this->validated = o.validated; this->description = o.description; return *this;}
 ostream& operator<<(ostream& os, Reinforcement& o){ os << o.description << " validated: " << o.validated << endl; return os;};
-bool Reinforcement::validate(){}; //Implementation next assignment
-bool Reinforcement::execute(){}; //Implementation next assignment
+bool Reinforcement::validate(){return true;} //Implementation next assignment
+bool Reinforcement::execute(){return true;} //Implementation next assignment
 
 
 
