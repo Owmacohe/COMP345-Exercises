@@ -4,7 +4,7 @@ using namespace std;
 
 #include "Orders.cpp"
 
-int main() {
+int OrdersMain() {
 	//Create OrderList object
 	OrdersList player1List = OrdersList();
 	cout << player1List;
