@@ -9,5 +9,7 @@ using namespace std;
 int main() {
     cout << endl;
 
+    Order o;
+
     return 0;
 }
