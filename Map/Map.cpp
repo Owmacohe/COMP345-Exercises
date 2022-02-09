@@ -69,7 +69,7 @@ string *stringSplit(string s, char delim) {
 }
 
 Territory::Territory() {
-    cout << "Territory defualt" << endl;
+    cout << "[Territory default constructor]" << endl;
 
     name = "";
     continent = "";
@@ -78,12 +78,13 @@ Territory::Territory() {
 }
 
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
-    cout << "Territory param" << endl;
+    cout << "[" << n << " Territory param constructor]" << endl;
+
     owner = new Player(*o);
 }
 
 Territory::Territory(const Territory &t) {
-    cout << "Territory copy" << endl;
+    cout << "[" << t.name << " Territory copy constructor]" << endl;
 
     name = t.name;
     continent = t.continent;
@@ -92,6 +93,8 @@ Territory::Territory(const Territory &t) {
 }
 
 Territory::~Territory() {
+    cout << "[" << name << " Territory destructor]" << endl;
+
     delete owner;
     owner = NULL;
 }
@@ -120,6 +123,8 @@ std::ostream& operator<<(std::ostream &strm, const Territory &t) {
 }
 
 Map::Map() {
+    cout << "[Map default constructor]" << endl;
+
     name = "";
     continentsLength = 0;
     continents = new string[continentsLength];
@@ -130,6 +135,8 @@ Map::Map() {
 }
 
 Map::Map(string n) : name(n) {
+    cout << "[" << n << " Map param constructor]" << endl;
+
     continentsLength = 0;
     continents = new string[continentsLength];
     territoriesLength = 0;
@@ -139,6 +146,8 @@ Map::Map(string n) : name(n) {
 }
 
 Map::Map(const Map &m) {
+    cout << "[" << m.name << " Map copy constructor]" << endl;
+
     name = m.name;
     setContinents(m.continents, m.continentsLength);
     setTerritories(m.territories, m.territoriesLength);
@@ -146,6 +155,8 @@ Map::Map(const Map &m) {
 }
 
 Map::~Map() {
+    cout << "[" << name << " Map destructor]" << endl;
+
     delete[] continents;
     continents = NULL;
 
@@ -243,19 +254,49 @@ void Map::addEdge(Edge e) {
 
 bool Map::validate() {
     bool valid = true;
+    Territory *temp = getTerritories();
 
-    // TODO verify that it is a connected graph
-    // TODO verify that continents are connected subgraphs
+    for (int i = 0; i < territoriesLength; i++) {
+        for (int j = 0; j < territoriesLength; j++) {
+            valid = validateEdge(*this, temp[i], temp[j], Territory());
 
-    // Verifying that each Territory belongs to only one continent
-    for (int k = 0; k < territoriesLength; k++) {
-        if (!doesContain(continents, continentsLength, territories[k].getContinent())) {
+            if (temp[i].getContinent() == temp[j].getContinent()) {
+                valid = validateEdge(*this, temp[i], temp[j], Territory());
+            }
+        }
+
+        if (!doesContain(continents, continentsLength, territories[i].getContinent())) {
             valid = false;
-            break;
         }
     }
 
+
+    if (valid) {
+        cout << "Vefification succeeded!" << endl;
+    }
+    else {
+        cout << "Vefification failed!" << endl;
+    }
+
     return valid;
+}
+
+bool validateEdge(Map m, Territory start, Territory end, Territory last) {
+    for (int i = 0; i < m.edgesLength; i++) {
+        Edge temp = m.getEdges()[i];
+
+        if (temp.a.getName() == end.getName() || temp.b.getName() == end.getName()) {
+            return true;
+        }
+        else if (temp.a.getName() == start.getName() && temp.b.getName() != last.getName()) {
+            return validateEdge(m, temp.b, end, start);
+        }
+        else if (temp.b.getName() == start.getName() && temp.a.getName() != last.getName()) {
+            return validateEdge(m, temp.a, end, start);
+        }
+    }
+
+    return false;
 }
 
 std::ostream& operator<<(std::ostream &strm, const Map &m) {
@@ -306,6 +347,16 @@ Map MapLoader::load(string f) {
 
         if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
             section++;
+
+            if (line == "[continents]") {
+                cout << "Loading continents..." << endl;
+            }
+            else if (line == "[countries]") {
+                cout << "Loading territories..." << endl;
+            }
+            else if (line == "[borders]") {
+                cout << "Loading edges..." << endl;
+            }
         }
         else {
             if (line != "") {
@@ -317,7 +368,7 @@ Map MapLoader::load(string f) {
                         lineSplit[2],
                         m.getContinents()[stoi(lineSplit[3]) - 1],
                         new Player,
-                        stoi(lineSplit[4])));
+                        0));
                 }
                 else if (section == 3) {
                     int len = stoi(lineSplit[0]);
@@ -341,6 +392,8 @@ Map MapLoader::load(string f) {
     }
 
     input.close();
+
+    cout << "Map loaded!" << endl;
 
     return m;
 }
