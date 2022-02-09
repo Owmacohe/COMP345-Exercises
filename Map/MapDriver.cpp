@@ -1,10 +1,5 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-using namespace std;
-
-#include "Map.cpp"
+#include "Map.h"
+#include "../Player/Player.h"
 
 int mapMain() {
     cout << endl;
