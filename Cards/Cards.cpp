@@ -1,9 +1,5 @@
-#include <iostream>
 #include "Cards.h"
-#include <cstdlib> /* srand rand */ // Generate random number library
-
-#include "Orders.h"
-using namespace std;
+#include "../Orders/Orders.h"
 
 /*********************************** CARD ***********************************/
 
@@ -12,9 +8,11 @@ Card::Card(){
 }
 Card::Card(string theType){
     // Convert the user input of Type to lowercase format
+    /*
     for_each (theType.begin(), theType.end(), [](char & c)
     { c = tolower(c);}
     );
+    */
     type = theType;
 }
 Card::Card(Card &anotherCard){
