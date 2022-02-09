@@ -1,9 +1,8 @@
 #pragma once
+#include <iostream>
 #include <vector>
-#include "../Orders/Orders.h"
-//using namespace std;
+using namespace std;
 
-class Hand;
 class Card{
 public:
     Card(); // Default Constructor - initialize card type to null
