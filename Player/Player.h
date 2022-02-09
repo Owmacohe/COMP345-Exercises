@@ -32,6 +32,7 @@ class Player {
         OrdersList* getOrder();
 
         ostream& operator<<(ostream& os, Player& player); // Stream insertion operator
+        
     private:
         string name; // Name of Player
         vector<Territory*> territories; // List of players territories
