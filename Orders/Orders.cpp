@@ -2,7 +2,7 @@
 	
 Order::Order(){this->validated = false; this->description = "";}  // Default Constructor
 Order::Order(bool v, string s): validated(v), description(s){};  // Parameterized Constructor
-Order::Order(Order& original){validated = original.validated; description = original.description;} // Copy Constructor
+Order::Order(const Order &original){validated = original.validated; description = original.description;} // Copy Constructor
 Order::~Order(){} // Default Destructor
 
 // Accessors & Mutators

@@ -2,10 +2,10 @@
 
 #include "Orders.h"
 
-#include "Orders.cpp"
+//#include "Orders.cpp"
 
 int ordersMain() {
-	/*
+
 	//Create OrderList object
 	OrdersList player1List;
 	cout << player1List;
@@ -83,11 +83,10 @@ int ordersMain() {
 
 	cout << "Copy through the assignment operator" << endl;
 	cout << player1List3;
-	*/
 
 	cout << endl;
 
-	cout << "Orders test!" << endl;
+	//cout << "Orders test!" << endl;
 	
 	return 0;
 }

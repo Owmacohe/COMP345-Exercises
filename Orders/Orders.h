@@ -12,7 +12,7 @@ class Order {
 	public:
 	Order();  // Default Constructor
 	Order(bool v, string s);  // Parameterized Constructor
-	Order(Order& o); // Copy Constructor
+	Order(const Order &original); // Copy Constructor
 	~Order(); // Default Destructor
 	
 	// Accessors
