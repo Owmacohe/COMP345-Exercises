@@ -1,0 +1,10 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja /Users/Amelia/Desktop/COMP345-Assignment
+CMake Error at CMakeLists.txt:8 (add_executable):
+  The target name "~/Desktop/COMP345-Assignment" is reserved or not valid for
+  certain CMake features, such as generator expressions, and may result in
+  undefined behavior.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/CMakeError.log".

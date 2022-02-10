@@ -6,10 +6,14 @@ using namespace std;
 #include "Orders/Orders.h"
 #include "Player/Player.h"
 
+//#include "Cards/CardsDriver.cpp"
+#include "GameEngine/GameEngineDriver.cpp"
+#include "Map/MapDriver.cpp"
+//#include "Orders/Orders.cpp"
+//#include "Player/Player.cpp"
+
 int main() {
     cout << endl;
-
-    Order o;
 
     return 0;
 }
