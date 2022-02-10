@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(COMP345-Exercises
+        driver.cpp
         Cards/Cards.cpp
         Cards/Cards.h
         Cards/CardsDriver.cpp
@@ -20,4 +21,5 @@ add_executable(COMP345-Exercises
         Orders/OrdersDriver.cpp
         Player/Player.cpp
         Player/Player.h
-        Player/PlayerDriver.cpp)
+        Player/PlayerDriver.cpp
+        )
