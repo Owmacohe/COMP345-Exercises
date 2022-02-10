@@ -88,8 +88,8 @@ Territory::Territory(const Territory &t) {
 
     name = t.name;
     continent = t.continent;
-    armies = t.armies;
     owner = new Player(*(t.owner));
+    armies = t.armies;
 }
 
 Territory::~Territory() {

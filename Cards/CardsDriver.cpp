@@ -33,9 +33,7 @@ int cardsMain() {
     cout << mainDeck << endl;
     return 0;
     */
-
-    cout << endl;
-
+    
     cout << "Map test!" << endl;
 
     return 0;

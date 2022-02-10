@@ -2,7 +2,7 @@
 
 #include "Orders.h"
 
-int main() {
+int ordersMain() {
 
     //Create OrderList object
     OrdersList player1List;
@@ -81,10 +81,6 @@ int main() {
 
     cout << "Copy through the assignment operator" << endl;
     cout << player1List3<< endl;
-
-    cout << endl;
-
-    //cout << "Orders test!" << endl;
 
     return 0;
 }
