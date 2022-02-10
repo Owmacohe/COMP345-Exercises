@@ -30,9 +30,7 @@ int playerMain() {
 
 	return 0;
 	*/
-
-	cout << endl;
-
+	
 	cout << "Player test!" << endl;
 
 	return 0;

@@ -2,8 +2,6 @@
 #include "../Player/Player.h"
 
 int mapMain() {
-    cout << endl;
-
     cout << "Map test!" << endl;
 
     //MapLoader loader;
@@ -11,13 +9,13 @@ int mapMain() {
     /*
     Map europe = loader.load("europe.map");
     cout << europe << endl;
-    cout << europe.validate() << endl;
+    //cout << europe.validate() << endl;
     */
 
     /*
     Map canada = loader.load("canada.map");
     cout << canada << endl;
-    cout << canada.validate() << endl;
+    //cout << canada.validate() << endl;
     */
 
     return 0;
