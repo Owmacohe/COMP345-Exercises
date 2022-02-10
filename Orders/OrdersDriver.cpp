@@ -2,8 +2,6 @@
 
 #include "Orders.h"
 
-//#include "Orders.cpp"
-
 int main() {
 
     //Create OrderList object

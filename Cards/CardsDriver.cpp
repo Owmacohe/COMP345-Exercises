@@ -1,9 +1,6 @@
 #include "Cards.h"
 #include "../Orders/Orders.h"
 
-#include "Cards.cpp"
-#include "../Orders/Orders.h"
-
 int cardsMain() {
     /*
     // Number of card in Deck divisible by 5
