@@ -3,10 +3,10 @@
 #include "../Orders/Orders.h"
 #include  "../Cards/Cards.h"
 
-#include "Player.cpp"
-#include "../Map/Map.cpp"
-#include "../Orders/Orders.cpp"
-#include  "../Cards/Cards.cpp"
+//#include "Player.cpp"
+//#include "../Map/Map.cpp"
+//#include "../Orders/Orders.cpp"
+//#include  "../Cards/Cards.cpp"
 
 int playerMain() {
 	/*
