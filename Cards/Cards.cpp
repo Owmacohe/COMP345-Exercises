@@ -93,7 +93,10 @@ Deck::Deck(int numCard) {
 Deck::Deck(Deck &anotherDeck) {
     srand(time(NULL));
     this->numCardInDeck = anotherDeck.numCardInDeck;
-    this->deck = anotherDeck.deck;
+    for ( int i=0; i<anotherDeck.numCardInDeck; i++){
+        Card* cards = new Card(*anotherDeck.deck.at(i));
+        this->deck.push_back(cards);
+    }
 }
 Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
@@ -141,7 +144,10 @@ Hand::Hand(){
 }
 Hand::Hand(Hand &anotherHand){
     this->numCardInHand = anotherHand.numCardInHand;
-    this->hand = anotherHand.hand;
+    for (int i=0; i<anotherHand.numCardInHand; i++){
+        Card* cards = new Card(*anotherHand.hand.at(i));
+        this->hand.push_back(cards);
+    }
 }
 
 Hand::~Hand(){
@@ -152,7 +158,7 @@ Hand::~Hand(){
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
 {
-//    os << "Number of cards on hand: " << h.numCardInHand << endl;
+    os << "Number of cards on hand: " << h.numCardInHand << endl;
     for(int i = 0; i < h.numCardInHand; i++){
         os << i << "-" << *(h.hand.at(i)) << " | ";
     }
