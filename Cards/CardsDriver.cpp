@@ -27,12 +27,16 @@ int cardsMain() {
     //To play a card, provide the index associated
     playerHand.playCard(4, mainDeck, mainOrderList);
     playerHand.playCard(2, mainDeck, mainOrderList);
+    playerHand.playCard(2, mainDeck,mainOrderList);
+    playerHand.playCard(1, mainDeck,mainOrderList);
+    playerHand.playCard(0, mainDeck,mainOrderList);
     cout << playerHand << endl;
 
     cout <<"\n---------------------------------------------------------------" << endl;
     cout << mainDeck << endl;
     return 0;
 }
+
 //int main(){
 //    cardsMain();
 //    return 0;
