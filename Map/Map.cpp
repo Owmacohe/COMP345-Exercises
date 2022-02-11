@@ -70,10 +70,8 @@ int Territory::getArmies() { return armies; }
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
 void Territory::setOwner(Player o) {
-    cout << "test1" << endl;
     delete owner;
     owner = new Player(o);
-    cout << "test2" << endl;
 }
 void Territory::setArmies(int a) { armies = a; }
 
