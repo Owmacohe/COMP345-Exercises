@@ -1,4 +1,8 @@
 #include "Cards.h"
+#include <iostream>
+#include <string>
+#include <cstdlib>
+using namespace std;
 #include "../Orders/Orders.h"
 
 /*********************************** CARD ***********************************/
@@ -7,44 +11,44 @@ Card::Card(){
     type = " ";
 }
 Card::Card(string theType){
-    // Convert the user input of Type to lowercase format
-    /*
-    for_each (theType.begin(), theType.end(), [](char & c)
-    { c = tolower(c);}
-    );
-    */
+//    // Convert the user input of Type to lowercase format
+//    /*
+//    for_each (theType.begin(), theType.end(), [](char & c)
+//    { c = tolower(c);}
+//    );
+//    */
     type = theType;
 }
 Card::Card(Card &anotherCard){
-    type = anotherCard.type;
+    this->type = anotherCard.type;
 }
 
 string Card::getType() const {
     return type;
 }
 
-void Card::play(/*OrdersList &ordersList*/) const{
+void Card::play(OrdersList &playerOrdersList) const{
     //Creat Order of the corresponding type
     if (this->type == "bomb"){
        cout << "Play Bomb card" << endl;
-//        Bomb myBomb(); // Create a Bomb object and play as an order
-//        ordersList.add(myBomb); // Place it in the OrdersList
+        Bomb* myBomb = new Bomb(true, "bomb"); // Create a Bomb object and play as an order
+        playerOrdersList.addOrder(myBomb); // Place it in the OrdersList
     } else if (this->type == "reinforcement"){
        cout << "Play Reinforcement card" << endl;
-//        Reinforcement myReinforce();
-//        orderList.add(myReinforce);
+        Reinforcement* myReinforcement = new Reinforcement(true, "reinforcement");
+        playerOrdersList.addOrder(myReinforcement);
     } else if (this->type == "blockade"){
        cout << "Play Blockade card" << endl;
-//       Blockade myBlockade();
-//       ordersList.add(myBlockade);
+        Blockade* myBlockade = new Blockade(true, "blockade");
+        playerOrdersList.addOrder(myBlockade);
     } else if (this->type == "airlift"){
        cout << "Play Airlift card" << endl;
-//       Airlift myAirlift();
-//       ordersList.add(myAirlift);
+       Airlift* myAirlift = new Airlift(true, "airlift");
+       playerOrdersList.addOrder(myAirlift);
     } else if (this->type == "diplomacy"){
        cout << "Play Diplomacy card" << endl;
-//       Diplomacy myDiplomacy();
-//       ordersList.add(myDiplomacy);
+       Diplomacy* myDiplomacy = new Diplomacy(true, "diplomacy");
+       playerOrdersList.addOrder(myDiplomacy);
     }
 
 }
@@ -88,8 +92,11 @@ Deck::Deck(int numCard) {
 
 Deck::Deck(Deck &anotherDeck) {
     srand(time(NULL));
-    numCardInDeck = anotherDeck.numCardInDeck;
-    deck = anotherDeck.deck;
+    this->numCardInDeck = anotherDeck.numCardInDeck;
+    for ( int i=0; i<anotherDeck.numCardInDeck; i++){
+        Card* cards = new Card(*anotherDeck.deck.at(i));
+        this->deck.push_back(cards);
+    }
 }
 Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
@@ -136,8 +143,11 @@ Hand::Hand(){
     hand = vector<Card*>();
 }
 Hand::Hand(Hand &anotherHand){
-    numCardInHand = anotherHand.numCardInHand;
-    hand = anotherHand.hand;
+    this->numCardInHand = anotherHand.numCardInHand;
+    for (int i=0; i<anotherHand.numCardInHand; i++){
+        Card* cards = new Card(*anotherHand.hand.at(i));
+        this->hand.push_back(cards);
+    }
 }
 
 Hand::~Hand(){
@@ -148,7 +158,7 @@ Hand::~Hand(){
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
 {
-//    os << "Number of cards on hand: " << h.numCardInHand << endl;
+    os << "Number of cards on hand: " << h.numCardInHand << endl;
     for(int i = 0; i < h.numCardInHand; i++){
         os << i << "-" << *(h.hand.at(i)) << " | ";
     }
@@ -167,9 +177,9 @@ void Hand::drawCard(Deck& d){
 }
 
 
-void Hand::playCard(int i, Deck &d) {
+void Hand::playCard(int i, Deck &d, OrdersList &l) {
     // Create Order and add Order to OrderList
-    hand.at(i)->play();
+    hand.at(i)->play(l);
 
     // Add the played Card back to deck
     Card* playedCard =hand.at(i);

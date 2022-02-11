@@ -1,14 +1,11 @@
 #include "Cards.h"
 #include "../Orders/Orders.h"
 
-#include "Cards.cpp"
-#include "../Orders/Orders.h"
-
 int cardsMain() {
-    /*
     // Number of card in Deck divisible by 5
     Deck mainDeck(10);
     Hand playerHand;
+    OrdersList mainOrderList;
 
     cout << "\n---------------------------Display Card in Deck---------------------------" << endl;
     cout << mainDeck << endl;
@@ -28,18 +25,15 @@ int cardsMain() {
 
     cout <<"\n---------------------------Play Card---------------------------" << endl;
     //To play a card, provide the index associated
-    playerHand.playCard(4, mainDeck);
-    playerHand.playCard(2, mainDeck);
+    playerHand.playCard(4, mainDeck, mainOrderList);
+    playerHand.playCard(2, mainDeck, mainOrderList);
     cout << playerHand << endl;
 
     cout <<"\n---------------------------------------------------------------" << endl;
     cout << mainDeck << endl;
     return 0;
-    */
-
-    cout << endl;
-
-    cout << "Map test!" << endl;
-
-    return 0;
 }
+//int main(){
+//    cardsMain();
+//    return 0;
+//}

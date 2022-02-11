@@ -1,23 +1,23 @@
 #include <iostream>
 using namespace std;
 
-#include "Cards/Cards.h"
-#include "Map/Map.h"
-#include "Orders/Orders.h"
-#include "Player/Player.h"
+#include "Cards/Cards.cpp"
+#include "Map/Map.cpp"
+#include "Orders/Orders.cpp"
+#include "Player/Player.cpp"
 
-#include "Map/MapDriver.cpp"
-#include "GameEngine/GameEngineDriver.cpp"
 #include "Cards/CardsDriver.cpp"
-#include "Player/PlayerDriver.cpp"
+#include "GameEngine/GameEngineDriver.cpp"
+#include "Map/MapDriver.cpp"
 #include "Orders/OrdersDriver.cpp"
+#include "Player/PlayerDriver.cpp"
 
 int main() {
-    mapMain();
-    gameEngineMain();
-    cardsMain();
-    playerMain();
-    ordersMain();
+    //cardsMain();
+    //gameEngineMain();
+    //mapMain();
+    //ordersMain();
+    //playerMain();
 
     return 0;
 }
