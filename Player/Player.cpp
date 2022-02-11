@@ -72,13 +72,14 @@ Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
 // End of Mutators and Accessors
 
-Player& Player::operator = (const Player& player){
-    this->name = player.name;
-    this->territories = player.territories;
-    this->hand = player.hand;
-    this->orders = player.orders;
-    return *this;
-}
+//Player& Player::operator = (const Player& player){
+    //this->name = player.name;
+    //this->territories = player.territories;
+    //this->hand = player.hand;
+    //this->orders = player.orders;
+    //return *this;
+//}
+
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
     string t = "";
         for (Territory* i : p.territories) {
