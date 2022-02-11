@@ -5,7 +5,7 @@ int cardsMain() {
     // Number of card in Deck divisible by 5
     Deck mainDeck(10);
     Hand playerHand;
-    OrdersList mainOrderList;
+    OrdersList player1List;
 
     cout << "\n---------------------------Display Card in Deck---------------------------" << endl;
     cout << mainDeck << endl;
@@ -25,15 +25,32 @@ int cardsMain() {
 
     cout <<"\n---------------------------Play Card---------------------------" << endl;
     //To play a card, provide the index associated
-    playerHand.playCard(4, mainDeck, mainOrderList);
-    playerHand.playCard(2, mainDeck, mainOrderList);
-    playerHand.playCard(2, mainDeck,mainOrderList);
-    playerHand.playCard(1, mainDeck,mainOrderList);
-    playerHand.playCard(0, mainDeck,mainOrderList);
+    playerHand.playCard(4, mainDeck, player1List);
+    playerHand.playCard(2, mainDeck, player1List);
+    playerHand.playCard(2, mainDeck,player1List);
+    playerHand.playCard(1, mainDeck,player1List);
+    playerHand.playCard(0, mainDeck,player1List);
     cout << playerHand << endl;
 
     cout <<"\n---------------------------------------------------------------" << endl;
     cout << mainDeck << endl;
+
+//  Assignemnt operator
+    Deck assignDeck = mainDeck;
+    cout << endl;
+    cout << assignDeck;
+
+    Hand assignHand = playerHand;
+    cout << endl;
+    cout << assignHand;
+// Copy constructor
+    Hand copyHand(playerHand);
+    Deck copyDeck(mainDeck);
+
+    cout << endl;
+    cout << copyHand;
+    cout << endl;
+    cout << copyDeck;
     return 0;
 }
 
