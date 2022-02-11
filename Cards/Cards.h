@@ -13,6 +13,8 @@ public:
     string getType() const;
     void play(OrdersList &ordersList) const;
     friend ostream& operator<<(ostream& os, const Card& card); // Over load << operator to print out value in Hand
+    Card& operator = (const Card& toAssign);
+
 
 private:
     string type;

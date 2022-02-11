@@ -59,6 +59,11 @@ ostream& operator<<(ostream& os, const Card& c)
     os << c.getType();
     return os;
 }
+
+Card& Card::operator=( const Card& toAssign){
+    type = toAssign.type;
+    return *this;
+}
 /*********************************** DECK ***********************************/
 
 Deck::Deck(){
@@ -132,6 +137,7 @@ ostream& operator<<(ostream& os, const Deck& d){
 Deck& Deck::operator=(const Deck& toAssign){
     numCardInDeck = toAssign.numCardInDeck;
     deck = toAssign.deck;
+    return *this;
 }
 /*********************************** HAND ***********************************/
 
@@ -162,6 +168,7 @@ ostream& operator<<(ostream& os, const Hand& h)
 Hand& Hand::operator=(const Hand& toAssign){
     numCardInHand = toAssign.numCardInHand;
     hand = toAssign.hand;
+    return *this;
 }
 void Hand::drawCard(Deck& d){
     Card* drawnCard = d.draw();
