@@ -80,16 +80,14 @@ Player& Player::operator = (const Player& player){
     return *this;
 }
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
-    Player player = p;
-
     string t = "";
-        for (Territory* i : player.getTerritory()) {
+        for (Territory* i : p.territories) {
         t += i->getName() +", ";
     }
 
     return strm <<
-        "PLAYER: " << player.getName() <<
+        "PLAYER: " << p.name <<
         "\n    Territories: " << t <<
-        "\n    Hand: " << player.getHand() <<
-        "\n    Orders : " << player.getOrder() ;
+        "\n    Hand: " << p.hand <<
+        "\n    Orders : " << p.orders;
 }
