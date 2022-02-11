@@ -17,7 +17,7 @@ int main() {
     //gameEngineMain();
     //mapMain();
     //ordersMain();
-    //playerMain();
+    playerMain();
 
     return 0;
 }

@@ -2,7 +2,7 @@
 
 #include "Orders.h"
 
-int main() {
+int ordersMain() {
 //	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
