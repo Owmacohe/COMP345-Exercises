@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "../Orders/Orders.h"
 using namespace std;
 
 class Card{
@@ -10,7 +11,7 @@ public:
     Card(Card &anotherCard);  // Copy Constructor
 
     string getType() const;
-    void play(/*OrdersList &ordersList*/) const;
+    void play(OrdersList &ordersList) const;
     friend ostream& operator<<(ostream& os, const Card& card); // Over load << operator to print out value in Hand
 
 private:
@@ -44,7 +45,7 @@ public:
     Hand& operator =(const Hand& toAssign);    // = assignment operator Overloading
 
     void drawCard(Deck &d);
-    void playCard(int i, Deck &d);
+    void playCard(int i, Deck &d, OrdersList &l);
 
     vector <Card*> hand;
     int numCardInHand;
