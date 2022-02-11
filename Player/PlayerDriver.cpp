@@ -30,6 +30,10 @@ int playerMain() {
 	cout << "results of .toDefend()";
 	for (Territory* i : defend) cout << i;
 	
+	//test copy constructor
+	//test assignment operator
+	//test delete
+
 	cout << "Player test!" << endl;
 
 	return 0;
