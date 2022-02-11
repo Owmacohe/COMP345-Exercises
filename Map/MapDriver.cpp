@@ -2,11 +2,20 @@
 #include "../Player/Player.h"
 
 int mapMain() {
+    /*
+    Player p;
+    Territory t;
+    t.setOwner(p);
+    cout << "done" << endl;
+    */
+    
     //MapLoader loader;
-
-    //Map europe = loader.load("europe.map");
+    
+    /*
+    Map europe = Map(loader.load("../Map/europe.map"));
     //cout << europe << endl;
     //cout << europe.validate() << endl;
+    */
 
     /*
     Map canada = loader.load("canada.map");

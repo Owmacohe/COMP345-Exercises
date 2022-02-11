@@ -31,7 +31,7 @@ bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
 }
 
 Territory::Territory() {
-    std::cout << "[Territory default constructor]" << endl;
+    cout << "[Territory default constructor]" << endl;
 
     name = "";
     continent = "";
@@ -39,14 +39,15 @@ Territory::Territory() {
     armies = 0;
 }
 
-Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
-    std::cout << "[" << n << " Territory param constructor]" << endl;
+Territory::Territory(string n, string c, Player o, int a) : name(n), continent(c), armies(a) {
+    cout << "[" << n << " Territory param constructor]" << endl;
 
-    owner = new Player(*o);
+    owner = new Player(o);
+    cout << owner->getName() << endl;
 }
 
 Territory::Territory(const Territory &t) {
-    std::cout << "[" << t.name << " Territory copy constructor]" << endl;
+    cout << "[" << t.name << " Territory copy constructor]" << endl;
 
     name = t.name;
     continent = t.continent;
@@ -55,7 +56,7 @@ Territory::Territory(const Territory &t) {
 }
 
 Territory::~Territory() {
-    std::cout << "[" << name << " Territory destructor]" << endl;
+    cout << "[" << name << " Territory destructor]" << endl;
 
     delete owner;
     owner = NULL;
@@ -68,9 +69,11 @@ int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(Player *o) {
+void Territory::setOwner(Player o) {
+    cout << "test1" << endl;
     delete owner;
-    owner = new Player(*o);
+    owner = new Player(o);
+    cout << "test2" << endl;
 }
 void Territory::setArmies(int a) { armies = a; }
 
@@ -83,7 +86,7 @@ ostream& operator<<(ostream &strm, const Territory &t) {
 }
 
 Map::Map() {
-    std::cout << "[Map default constructor]" << endl;
+    cout << "[Map default constructor]" << endl;
 
     name = "";
     continentsLength = 0;
@@ -95,7 +98,7 @@ Map::Map() {
 }
 
 Map::Map(string n) : name(n) {
-    std::cout << "[" << n << " Map param constructor]" << endl;
+    cout << "[" << n << " Map param constructor]" << endl;
 
     continentsLength = 0;
     continents = new string[continentsLength];
@@ -106,7 +109,7 @@ Map::Map(string n) : name(n) {
 }
 
 Map::Map(const Map &m) {
-    std::cout << "[" << m.name << " Map copy constructor]" << endl;
+    cout << "[" << m.name << " Map copy constructor]" << endl;
 
     name = m.name;
     setContinents(m.continents, m.continentsLength);
@@ -115,7 +118,7 @@ Map::Map(const Map &m) {
 }
 
 Map::~Map() {
-    std::cout << "[" << name << " Map destructor]" << endl;
+    cout << "[" << name << " Map destructor]" << endl;
 
     delete[] continents;
     continents = NULL;
@@ -250,10 +253,10 @@ bool Map::validate() {
 
 
     if (valid) {
-        std::cout << "Vefification succeeded!" << endl;
+        cout << "Vefification succeeded!" << endl;
     }
     else {
-        std::cout << "Vefification failed!" << endl;
+        cout << "Vefification failed!" << endl;
     }
 
     return valid;
@@ -331,27 +334,30 @@ Map MapLoader::load(string f) {
     string line;
     int section = 0;
 
-    getline(input, line);
+    if (!getline(input, line)) {
+        cout << "Unable to read file: " << f << endl;
+    }
+
     string *nameSplit = stringSplit(line, ' ');
     string mapName = nameSplit[3];
     delete[] nameSplit;
     Map m = Map(mapName.substr(0, mapName.length() - 4));
 
-    while (!input.eof()) {
-        getline(input, line);
+    // OLD: !input.eof()
+    while (getline(input, line)) {
         string *lineSplit = stringSplit(line, ' ');
 
         if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
             section++;
 
             if (line == "[continents]") {
-                std::cout << "Loading continents..." << endl;
+                cout << "Loading continents..." << endl;
             }
             else if (line == "[countries]") {
-                std::cout << "Loading territories..." << endl;
+                cout << "Loading territories..." << endl;
             }
             else if (line == "[borders]") {
-                std::cout << "Loading edges..." << endl;
+                cout << "Loading edges..." << endl;
             }
         }
         else {
@@ -360,10 +366,12 @@ Map MapLoader::load(string f) {
                     m.addContinent(lineSplit[1]);
                 }
                 else if (section == 2) {
+                    Player p;
+
                     m.addTerritory(Territory(
                         lineSplit[2],
                         m.getContinents()[stoi(lineSplit[3]) - 1],
-                        new Player,
+                        p,
                         0));
                 }
                 else if (section == 3) {
@@ -389,7 +397,7 @@ Map MapLoader::load(string f) {
 
     input.close();
 
-    std::cout << "Map loaded!" << endl;
+    cout << "Map loaded!" << endl;
 
     return m;
 }
