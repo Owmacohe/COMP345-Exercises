@@ -1,14 +1,18 @@
 #pragma once
+#include <vector>
 #include <iostream>
-
 using namespace std;
 
+class Player;
+class MapLoader;
+class Deck;
 
 enum State
 {
- start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
+    start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
 };
-class GameEngine(){
+
+class GameEngine {
     public:
         GameEngine() ; // constructor
         GameEngine(GameEngine &gm); //copy constructor
@@ -34,7 +38,6 @@ class GameEngine(){
         bool playAgain();
 
     private:
-
         State* s ;
         int NumberOfPlayers;
         int NumberOfTerritories;
@@ -42,14 +45,4 @@ class GameEngine(){
         bool phaseEnd;
         Deck* deck;
         vector<Player *> player_list;
-
-
-
-
-
-
-
-}
-
-
-
+};

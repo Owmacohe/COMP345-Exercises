@@ -1,9 +1,7 @@
-//// From notes: a cpp file should not be included as it effectively merges two compilation units together
-
 #include "Orders.h"
 
 int ordersMain() {
-//	Create OrderList object
+	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
 
