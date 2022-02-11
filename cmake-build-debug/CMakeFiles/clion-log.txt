@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja /Users/Amelia/Desktop/COMP345-Assignment
 CMake Error at CMakeLists.txt:8 (add_executable):
   The target name "~/Desktop/COMP345-Assignment" is reserved or not valid for
@@ -8,3 +9,9 @@ CMake Error at CMakeLists.txt:8 (add_executable):
 -- Configuring incomplete, errors occurred!
 See also "/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/CMakeOutput.log".
 See also "/Users/Amelia/Desktop/COMP345-Assignment/cmake-build-debug/CMakeFiles/CMakeError.log".
+=======
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja /Users/Amelia/Documents/COMP345-Exercises
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/Amelia/Documents/COMP345-Exercises/cmake-build-debug
+>>>>>>> Stashed changes
