@@ -29,23 +29,23 @@ void Card::play(OrdersList &playerOrdersList) const{
     //Creat Order of the corresponding type
     if (this->type == "bomb"){
        cout << "Play Bomb card" << endl;
-        Bomb* myBomb = new Bomb(true, "bomb"); // Create a Bomb object and play as an order
+        Bomb* myBomb = new Bomb(); // Create a Bomb object and play as an order
         playerOrdersList.addOrder(myBomb); // Place it in the OrdersList
     } else if (this->type == "reinforcement"){
        cout << "Play Reinforcement card" << endl;
-        Reinforcement* myReinforcement = new Reinforcement(true, "reinforcement");
+        Reinforcement* myReinforcement = new Reinforcement();
         playerOrdersList.addOrder(myReinforcement);
     } else if (this->type == "blockade"){
        cout << "Play Blockade card" << endl;
-        Blockade* myBlockade = new Blockade(true, "blockade");
+        Blockade* myBlockade = new Blockade();
         playerOrdersList.addOrder(myBlockade);
     } else if (this->type == "airlift"){
        cout << "Play Airlift card" << endl;
-       Airlift* myAirlift = new Airlift(true, "airlift");
+       Airlift* myAirlift = new Airlift();
        playerOrdersList.addOrder(myAirlift);
     } else if (this->type == "diplomacy"){
        cout << "Play Diplomacy card" << endl;
-       Diplomacy* myDiplomacy = new Diplomacy(true, "diplomacy");
+       Diplomacy* myDiplomacy = new Diplomacy();
        playerOrdersList.addOrder(myDiplomacy);
     }
 
