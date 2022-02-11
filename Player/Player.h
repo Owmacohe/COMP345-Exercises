@@ -10,6 +10,7 @@ using namespace std;
 class Hand;
 class OrdersList;
 class Map;
+class Territory;
 
 class Player {
     public:
@@ -34,7 +35,6 @@ class Player {
         OrdersList* getOrder();
 
         friend ostream& operator<<(ostream& os, const Player& player); // Stream insertion operator
-        
     private:
         string name; // Name of Player
         vector<Territory*> territories; // List of players territories
