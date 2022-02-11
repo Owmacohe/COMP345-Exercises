@@ -13,7 +13,7 @@ class Territory {
         Territory(string, string, Player*, int); // Parameterized constructor
         Territory(const Territory &t); // Copy constructor
         ~Territory(); // Destructor
-        friend ostream& operator<<(ostream &strm, Territory &t); // Stream insertion operator
+        friend ostream& operator<<(ostream &strm, const Territory &t); // Stream insertion operator
 
         // Accessors
         string getName(), getContinent();
@@ -39,7 +39,7 @@ class Map {
         Map(string); // Parameterized constructor
         Map(const Map &m); // Copy constructor
         ~Map(); // Destructor
-        friend ostream& operator<<(ostream &strm, Map &m); // Stream insertion operator
+        friend ostream& operator<<(ostream &strm, const Map &m); // Stream insertion operator
 
         // Accessors
         string getName();
