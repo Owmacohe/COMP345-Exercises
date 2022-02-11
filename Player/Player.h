@@ -34,7 +34,9 @@ class Player {
         Hand* getHand();
         OrdersList* getOrder();
 
+        //Player& operator = (const Player& player); 	// Assignment Operator
         friend ostream& operator<<(ostream& os, const Player& player); // Stream insertion operator
+
     private:
         string name; // Name of Player
         vector<Territory*> territories; // List of players territories
