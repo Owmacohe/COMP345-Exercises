@@ -4,7 +4,9 @@
 #include  "../Cards/Cards.h"
 
 int playerMain() {
-	/*
+
+	cout << "Player test!" << endl;
+	
 	// create player obj
 	Hand *hand = new Hand; 
 	OrdersList *orderlist = new OrdersList;
@@ -27,9 +29,6 @@ int playerMain() {
 	vector<Territory*> defend = p1.toDefend();
 	cout << "results of .toDefend()";
 	for (Territory* i : defend) cout << i;
-
-	return 0;
-	*/
 	
 	cout << "Player test!" << endl;
 

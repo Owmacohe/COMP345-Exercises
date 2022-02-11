@@ -10,6 +10,7 @@ using namespace std;
 class Hand;
 class OrdersList;
 class Map;
+class Territory;
 
 class Player {
     public:
@@ -33,6 +34,7 @@ class Player {
         Hand* getHand();
         OrdersList* getOrder();
 
+        Player& operator = (const Player& player); 	// Assignment Operator
         friend ostream& operator<<(ostream& os, Player& player); // Stream insertion operator
         
     private:
