@@ -10,6 +10,7 @@ using namespace std;
 class Hand;
 class OrdersList;
 class Map;
+class Territory;
 
 class Player {
     public:
