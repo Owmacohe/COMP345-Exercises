@@ -68,7 +68,7 @@ Deploy::Deploy() : Order(false, "Deploy"){};
 Deploy::Deploy(bool v, string s) : Order(v,s){};
 
 //Copy constructor
-Deploy::Deploy(Deploy& original) : Order(original){
+Deploy::Deploy(Deploy& original) : Order(){
     this->description = "Deploy Armies into a territory";
 }
 
@@ -105,8 +105,9 @@ string Deploy::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Deploy::execute(){
+    cout << "Executing Order Deploy" << endl;
     return true;
 }
 
@@ -157,7 +158,8 @@ ostream& operator<<(ostream& os, const Advance& o){
 string Advance::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Advance::execute(){
     return true;
 }
@@ -204,7 +206,8 @@ ostream& operator<<(ostream& os, const Bomb& o){
 string Bomb::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Bomb::execute(){
     return true;
 }
@@ -257,7 +260,8 @@ ostream& operator<<(ostream& os, const Blockade& o){
 string Blockade::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Blockade::execute(){
     return true;
 }
@@ -310,7 +314,7 @@ string Airlift::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Airlift::execute(){
     return true;
 }
@@ -363,6 +367,7 @@ string Negotiate::validate(){
     return (validated)? "validated" : "not validated";
 }
 
+// Complete Implementation next assignment
 bool Negotiate::execute(){
     return true;
 }
@@ -415,7 +420,7 @@ ostream& operator<<(ostream& os, const Diplomacy& o){
 string Diplomacy::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Diplomacy::execute() {
     return true;
 }
@@ -465,7 +470,7 @@ ostream& operator<<(ostream& os, const Reinforcement& o){
 string Reinforcement::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Reinforcement::execute(){
     return true;
 }
@@ -481,6 +486,8 @@ OrdersList::OrdersList(){
 OrdersList::OrdersList(OrdersList &original){
 	for(int i= 0; i <= original.playerOrderList.size(); ++i){
 		this->playerOrderList.push_back(new Order(*original.playerOrderList[i]));
+        this->playerOrderList.push_back();
+        cout << "DEBUG : for loop inside copy constructor" <<endl;
 	}
 }
 
@@ -501,6 +508,7 @@ OrdersList OrdersList::operator = (const OrdersList& original){
 	OrdersList deepcopy;
 	for(int i= 0; i <= original.playerOrderList.size(); ++i){
 		deepcopy.playerOrderList.push_back(new Order(*original.playerOrderList[i]));
+        cout << "DEBUG : for loop inside assignment operator" <<endl;
 	}
 	return deepcopy;
 }
@@ -514,7 +522,7 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
+// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order. Overloaded method to increase compatibility with other classes.
 void OrdersList::addOrder(Order order){
 	playerOrderList.push_back(new Order(order));
 }
