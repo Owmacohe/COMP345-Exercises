@@ -11,8 +11,12 @@ Player::Player() {
     orders = new OrdersList;
 }
 
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n), territories(t), hand(h), orders(o) {
-// Intentionally empty
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n) {
+    for (Territory* i : t) {
+        territories.push_back(new Territory(*i));
+    }
+    hand = new Hand(*h);
+    orders = new OrdersList(*o);
 }
 
 Player::Player(const Player &p) {
