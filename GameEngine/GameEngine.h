@@ -9,7 +9,7 @@ class Deck;
 
 enum State
 {
-    start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
+   null = 0, start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
 };
 
 class GameEngine {
@@ -17,6 +17,7 @@ class GameEngine {
         GameEngine() ; // constructor
         GameEngine(GameEngine &gm); //copy constructor
         ~GameEngine(); // destructor
+        GameEngine& operator = (const GameEngine& gm); // Assignment Operator
 
         //getters
         State getState();
@@ -24,13 +25,13 @@ class GameEngine {
         bool endOfState ();
         //setters
         void setState(State s);
+        void setNumberOfPlayers(int x);
+        void setEndOfState(bool b);
         //phases , states and commands
         void startGame();
         void loadMap();
         void validateMap();
         void addPlayer();
-        void setNumberOfPlayers(int x);
-        void setEndOfState(bool b);
         void executeOrdersPhase(Player* player);
         void issueOrdersPhase(Player* player);
         void ReinforcementPhase();
