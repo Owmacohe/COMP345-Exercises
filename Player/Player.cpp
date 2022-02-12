@@ -7,8 +7,8 @@
 Player::Player() {
     name = "empty player";
     territories = vector<Territory*>();
-    hand = new Hand();
-    orders = new OrdersList();
+    hand = new Hand;
+    orders = new OrdersList;
 }
 
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n), territories(t), hand(h), orders(o) {
