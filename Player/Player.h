@@ -34,7 +34,7 @@ class Player {
         Hand* getHand();
         OrdersList* getOrder();
 
-        //Player& operator = (const Player& player); 	// Assignment Operator
+        Player& operator = (const Player& player); 	// Assignment Operator
         friend ostream& operator<<(ostream& os, const Player& player); // Stream insertion operator
 
     private:
