@@ -1,13 +1,5 @@
-#include "../Cards/Cards.cpp"
-//#include "GameEngine.cpp"
-#include "../Map/Map.cpp"
-#include "../Orders/Orders.cpp"
-#include "../Player/Player.cpp"
+#include "GameEngine.h"
 
-#include "../Cards/CardsDriver.cpp"
-#include "../Map/MapDriver.cpp"
-#include "../Orders/OrdersDriver.cpp"
-#include "../Player/PlayerDriver.cpp"
 
 int main() {
     //cardsMain();
@@ -15,6 +7,15 @@ int main() {
     //mapMain();
     //ordersMain();
     //playerMain();
+    State * s = 0;
+    GameEngine* game = new GameEngine();
+    game->startGame();
+    *s = game->getState();
+    cout << *s << endl;
+
+
+
+
 
     return 0;
 }

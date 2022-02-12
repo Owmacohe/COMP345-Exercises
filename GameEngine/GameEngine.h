@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+
 using namespace std;
 
 class Player;
@@ -9,13 +10,13 @@ class Deck;
 
 enum State
 {
-   null = 0, start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, PLAY= 5
+   null = 0, start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, reinforcement = 5, issueorder = 6, executingorder = 7, win = 8
 };
 
 class GameEngine {
     public:
         GameEngine() ; // constructor
-        GameEngine(GameEngine &gm); //copy constructor
+        GameEngine( const GameEngine &gm); //copy constructor
         ~GameEngine(); // destructor
         GameEngine& operator = (const GameEngine& gm); // Assignment Operator
 
@@ -35,8 +36,6 @@ class GameEngine {
         void executeOrdersPhase(Player* player);
         void issueOrdersPhase(Player* player);
         void ReinforcementPhase();
-        bool isWinner();
-        bool playAgain();
 
     private:
         State* s ;
