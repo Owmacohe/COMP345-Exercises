@@ -1,19 +1,18 @@
-#include "../Cards/Cards.h"
-#include "../Orders/Orders.h"
-#include "../Map/Map.h"
-#include "../Player/Player.h"
-#include "GameEngine.h"
-
 #include "../Cards/Cards.cpp"
 #include "../Orders/Orders.cpp"
 #include "../Map/Map.cpp"
 #include "../Player/Player.cpp"
 #include "GameEngine.cpp"
 
+#include "../Cards/CardsDriver.cpp"
+#include "../Orders/OrdersDriver.cpp"
+#include "../Map/MapDriver.cpp"
+#include "../Player/PlayerDriver.cpp"
+
 int main() {
     //cardsMain();
     //gameEngineMain();
-    //mapMain();
+    mapMain();
     //ordersMain();
     //playerMain();
 
