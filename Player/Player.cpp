@@ -1,6 +1,6 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
-#include  "../Cards/Cards.h"
+#include "../Cards/Cards.h"
 
 #include "Player.h"
 
@@ -12,20 +12,25 @@ Player::Player() {
 }
 
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n) {
+    territories = vector<Territory*>();
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
     }
+    
     hand = new Hand(*h);
     orders = new OrdersList(*o);
 }
 
 Player::Player(const Player &p) {
     name = p.name;
+
+    territories = vector<Territory*>();
     for (Territory* i : p.territories) {
-        this->territories.push_back(new Territory(*i));
+        territories.push_back(new Territory(*i));
     } // Goes through copying vector of territory pointers, creates new pointers based on value and pushes to copied vector
-    this->hand = new Hand(*(p.hand));
-    this->orders = new OrdersList(*(p.orders));
+
+    hand = new Hand(*(p.hand));
+    orders = new OrdersList(*(p.orders));
 }
 
 Player::~Player() {
@@ -33,12 +38,13 @@ Player::~Player() {
         delete i;
         i = NULL;
     }
+
     delete hand;
     hand = NULL;
     delete orders;
     orders = NULL;
 
-    cout << name << " player destroyed" << endl;
+    //cout << name << " player destroyed" << endl;
 }
 
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 

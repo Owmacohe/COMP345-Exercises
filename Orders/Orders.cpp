@@ -3,8 +3,8 @@
 /****************************** Order *******************************/
 // Default Constructor
 Order::Order(){
-    this->validated = false;
-    this->description = "";
+    validated = false;
+    description = "";
 }
 
 Order::Order(bool v, string s){
@@ -32,16 +32,16 @@ bool Order::getValidated(){
 }
 
 void Order::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Order::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Order& Order::operator = (const Order& order){
-    this->validated = order.validated;
-    this->description = order.description;
+    validated = order.validated;
+    description = order.description;
     return *this;
 }
 
@@ -70,7 +70,7 @@ Deploy::Deploy(bool v, string s) : Order(v,s){};
 
 //Copy constructor
 Deploy::Deploy(Deploy& original) : Order(original){
-    this->description = "Deploy Armies into a territory";
+    description = "Deploy Armies into a territory";
 }
 
 // Default Destructor
@@ -78,22 +78,22 @@ Deploy::~Deploy(){};
 // Accessors
 
 string Deploy::getDescription(){
-    return this->description;
+    return description;
 }
 bool Deploy::getValidated(){
-    return this->validated;
+    return validated;
 }
 
 // Mutators
 void Deploy::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 void Deploy::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 Deploy& Deploy::operator = (const Deploy& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;}
 
 ostream& operator<<(ostream& os, const Deploy& o){
@@ -120,7 +120,7 @@ Advance::Advance(bool v, string s) : Order(v,s){};
 
 // Copy Constructor
 Advance::Advance(Advance& original) : Order(original){
-    this->description = "Advance Armies into a territory";
+    description = "Advance Armies into a territory";
 }
 
 // Default Destructor
@@ -128,23 +128,23 @@ Advance::~Advance(){};
 
 // Accessors
 string Advance::getDescription(){
-    return this->description;
+    return description;
 
 }
 bool Advance::getValidated(){
-    return this->validated;
+    return validated;
 }
 
 // Mutators
 void Advance::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 void Advance::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 Advance& Advance::operator = (const Advance& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;
 }
 
@@ -171,28 +171,28 @@ Bomb::Bomb(bool v, string s) : Order(v,s){};
 
 // Copy Constructor
 Bomb::Bomb(Bomb& original) : Order(original){
-    this->description = "Bomb a territory";
+    description = "Bomb a territory";
 }
 // Default Destructor
 Bomb::~Bomb(){};
 
 // Accessors
 string Bomb::getDescription(){
-    return this->description;
+    return description;
 }
 bool Bomb::getValidated(){
-    return this->validated;
+    return validated;
 }
 // Mutators
 void Bomb::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 void Bomb::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 Bomb& Bomb::operator = (const Bomb& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;
 }
 ostream& operator<<(ostream& os, const Bomb& o){
@@ -219,7 +219,7 @@ Blockade::Blockade(bool v, string s) : Order(v,s){};
 
 // Copy Constructor
 Blockade::Blockade(Blockade& original) : Order(original){
-    this->description = "Create a blockade in a territory";
+    description = "Create a blockade in a territory";
 }
 
 // Default Destructor
@@ -227,25 +227,25 @@ Blockade::~Blockade(){};
 
 // Accessors
 string Blockade::getDescription(){
-    return this->description;
+    return description;
 }
 
 bool Blockade::getValidated(){
-    return this->validated;
+    return validated;
 }
 
 // Mutators
 void Blockade::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Blockade::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Blockade& Blockade::operator = (const Blockade& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;
 }
 ostream& operator<<(ostream& os, const Blockade& o){
@@ -272,7 +272,7 @@ Airlift::Airlift(bool v, string s): Order(v,s){};
 
 // Copy Constructor
 Airlift::Airlift(Airlift& original) : Order(original){
-    this->description = "Airlift Armies into another territory";
+    description = "Airlift Armies into another territory";
 
 }
 
@@ -281,24 +281,24 @@ Airlift::~Airlift(){};
 
 // Accessors
 string Airlift::getDescription(){
-    return this->description;
+    return description;
 }
 bool Airlift::getValidated(){
-    return this->validated;
+    return validated;
 }
 
 // Mutators
 void Airlift::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Airlift::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Airlift& Airlift::operator = (const Airlift& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;}
 
 ostream& operator<<(ostream& os, const Airlift& o){
@@ -325,31 +325,31 @@ Negotiate::Negotiate(bool v, string s) : Order(v,s) {};
 
 // Copy Constructor
 Negotiate::Negotiate(Negotiate& original) : Order(original){
-    this->description = "Negotiate with another Army";
+    description = "Negotiate with another Army";
 }
 // Default Destructor
 Negotiate::~Negotiate(){};
 
 // Accessors
 string Negotiate::getDescription(){
-    return this->description;
+    return description;
 }
 
 bool Negotiate::getValidated(){
-    return this->validated;
+    return validated;
 }
 // Mutators
 void Negotiate::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Negotiate::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Negotiate& Negotiate::operator = (const Negotiate& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;
 }
 
@@ -377,7 +377,7 @@ Diplomacy::Diplomacy(bool v, string s) : Order(v,s) {} ;
 
 // Copy Constructor
 Diplomacy::Diplomacy(Diplomacy& original) : Order(original){
-    this->description = "Diplomatic convention";
+    description = "Diplomatic convention";
 }
 
 // Default Destructor
@@ -385,25 +385,25 @@ Diplomacy::~Diplomacy(){};
 
 // Accessors
 string Diplomacy::getDescription(){
-    return this->description;
+    return description;
 
 }
 bool Diplomacy::getValidated(){
-    return this->validated;
+    return validated;
 }
 
 // Mutators
 void Diplomacy::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Diplomacy::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Diplomacy& Diplomacy::operator = (const Diplomacy& o){
-    this->validated = o.validated;
-    this->description = o.description;
+    validated = o.validated;
+    description = o.description;
     return *this;}
 
 ostream& operator<<(ostream& os, const Diplomacy& o){
@@ -430,7 +430,7 @@ Reinforcement::Reinforcement(bool v, string s): Order(v,s){};
 
 // Copy Constructor
 Reinforcement::Reinforcement(Reinforcement& original) : Order(original){
-    this->description = "Send reinforcement into a territory";
+    description = "Send reinforcement into a territory";
 }
 
 // Default Destructor
@@ -438,23 +438,23 @@ Reinforcement::~Reinforcement(){};
 
 // Accessors
 string Reinforcement::getDescription(){
-    return this->description;
+    return description;
 }
 
 bool Reinforcement::getValidated(){
-    return this->validated;
+    return validated;
 }
 // Mutators
 void Reinforcement::setDescription(string d){
-    this->description = d;
+    description = d;
 }
 
 void Reinforcement::setValidated(bool v){
-    this->validated = v;
+    validated = v;
 }
 
 Reinforcement& Reinforcement::operator = (const Reinforcement& o){
-    this->validated = o.validated; this->description = o.description;
+    validated = o.validated; description = o.description;
     return *this;}
 
 ostream& operator<<(ostream& os, const Reinforcement& o){
@@ -480,20 +480,23 @@ OrdersList::OrdersList(){
 
 // Copy Constructor
 OrdersList::OrdersList(OrdersList &original){
-	for(int i= 0; i <= original.playerOrderList.size(); ++i){
-		this->playerOrderList.push_back(new Order(*original.playerOrderList[i]));
-	}
+    playerOrderList = vector<Order*>();
+    
+    for (Order* i : original.playerOrderList) {
+        playerOrderList.push_back(new Order(*i));
+    }
 }
 
 // Default Destructor
 OrdersList::~OrdersList(){
 	// Iterate through all pointed orders and delete the content in heap of each
-	for(int i= 0; i <= this->playerOrderList.size(); ++i){
-				delete(this->playerOrderList[i]);
-				this->playerOrderList[i] = NULL;
-			}
+    for (Order* i : playerOrderList) {
+        delete i;
+        i = NULL;
+    }
+    
 	// then delete the vector
-	this->playerOrderList.clear();
+	playerOrderList.clear();
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
@@ -559,9 +562,9 @@ playerOrderList.push_back(orderObject);}
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 void OrdersList::remove(int i){
 	int j = 0;
-			this->playerOrderList.erase( this->playerOrderList.begin() + i);
+			playerOrderList.erase( playerOrderList.begin() + i);
 }
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 void OrdersList::move(int i, int j){
-    swap(this->playerOrderList[i],this->playerOrderList[j]);
+    swap(playerOrderList[i],playerOrderList[j]);
 }

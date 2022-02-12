@@ -1,8 +1,4 @@
 #include "Cards.h"
-#include <iostream>
-#include <string>
-#include <cstdlib>
-using namespace std;
 #include "../Orders/Orders.h"
 
 /*********************************** CARD ***********************************/
@@ -18,7 +14,7 @@ Card::Card(string theType){
     type = theType;
 }
 Card::Card(Card &anotherCard){
-    this->type = anotherCard.type;
+    type = anotherCard.type;
 }
 
 string Card::getType() const {
@@ -27,23 +23,23 @@ string Card::getType() const {
 
 void Card::play(OrdersList &playerOrdersList) const{
     //Creat Order of the corresponding type
-    if (this->type == "bomb"){
+    if (type == "bomb"){
        cout << "Play Bomb card" << endl;
         Bomb* myBomb = new Bomb(); // Create a Bomb object and play as an order
         playerOrdersList.addOrder(myBomb); // Place it in the OrdersList
-    } else if (this->type == "reinforcement"){
+    } else if (type == "reinforcement"){
        cout << "Play Reinforcement card" << endl;
         Reinforcement* myReinforcement = new Reinforcement();
         playerOrdersList.addOrder(myReinforcement);
-    } else if (this->type == "blockade"){
+    } else if (type == "blockade"){
        cout << "Play Blockade card" << endl;
         Blockade* myBlockade = new Blockade();
         playerOrdersList.addOrder(myBlockade);
-    } else if (this->type == "airlift"){
+    } else if (type == "airlift"){
        cout << "Play Airlift card" << endl;
        Airlift* myAirlift = new Airlift();
        playerOrdersList.addOrder(myAirlift);
-    } else if (this->type == "diplomacy"){
+    } else if (type == "diplomacy"){
        cout << "Play Diplomacy card" << endl;
        Diplomacy* myDiplomacy = new Diplomacy();
        playerOrdersList.addOrder(myDiplomacy);
@@ -96,15 +92,18 @@ Deck::Deck(int numCard) {
 
 Deck::Deck(Deck &anotherDeck) {
     srand(time(NULL));
-    this->numCardInDeck = anotherDeck.numCardInDeck;
+    numCardInDeck = anotherDeck.numCardInDeck;
+
+    deck = vector<Card*>();
     for ( int i=0; i<anotherDeck.numCardInDeck; i++){
         Card* cards = new Card(*anotherDeck.deck.at(i));
-        this->deck.push_back(cards);
+        deck.push_back(cards);
     }
 }
 Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
         delete deck.at(i);
+        deck.at(i) = NULL;
     }
 }
 
@@ -148,16 +147,19 @@ Hand::Hand(){
     hand = vector<Card*>();
 }
 Hand::Hand(Hand &anotherHand){
-    this->numCardInHand = anotherHand.numCardInHand;
+    numCardInHand = anotherHand.numCardInHand;
+
+    hand = vector<Card*>();
     for (int i=0; i<anotherHand.numCardInHand; i++){
         Card* cards = new Card(*anotherHand.hand.at(i));
-        this->hand.push_back(cards);
+        hand.push_back(cards);
     }
 }
 
 Hand::~Hand(){
     for (int i=0;i<hand.size();i++){
         delete hand.at(i);
+        hand.at(i) = NULL;
     }
 }
 // Overload <<
