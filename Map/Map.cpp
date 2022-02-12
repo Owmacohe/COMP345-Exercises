@@ -31,45 +31,44 @@ bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
 }
 
 Territory::Territory() {
-    cout << "[Territory default constructor]" << endl;
-
     name = "";
     continent = "";
     owner = new Player;
     armies = 0;
+    
+    //cout << "[Territory default constructor]" << endl;
 }
 
-Territory::Territory(string n, string c, Player o, int a) : name(n), continent(c), armies(a) {
-    cout << "[" << n << " Territory param constructor]" << endl;
-
+Territory::Territory(string n, string c, const Player &o, int a) : name(n), continent(c), armies(a) {
     owner = new Player(o);
-    cout << owner->getName() << endl;
+
+    //cout << "[" << n << " Territory param constructor]" << endl;
 }
 
 Territory::Territory(const Territory &t) {
-    cout << "[" << t.name << " Territory copy constructor]" << endl;
-
     name = t.name;
     continent = t.continent;
     owner = new Player(*(t.owner));
     armies = t.armies;
+    
+    //cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
 Territory::~Territory() {
-    cout << "[" << name << " Territory destructor]" << endl;
-
     delete owner;
     owner = NULL;
+    
+    cout << "[" << name << " Territory destructor]" << endl;
 }
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
-Player *Territory::getOwner() { return owner; }
+Player *Territory::getOwner() { cout << "test" << endl; return owner; }
 int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(Player o) {
+void Territory::setOwner(const Player &o) {
     delete owner;
     owner = new Player(o);
 }
@@ -84,8 +83,6 @@ ostream& operator<<(ostream &strm, const Territory &t) {
 }
 
 Map::Map() {
-    cout << "[Map default constructor]" << endl;
-
     name = "";
     continentsLength = 0;
     continents = new string[continentsLength];
@@ -93,39 +90,42 @@ Map::Map() {
     territories = new Territory[territoriesLength];
     edgesLength = 0;
     edges = new Edge[edgesLength];
+
+    cout << "[Map default constructor]" << endl;
 }
 
 Map::Map(string n) : name(n) {
-    cout << "[" << n << " Map param constructor]" << endl;
-
     continentsLength = 0;
     continents = new string[continentsLength];
     territoriesLength = 0;
     territories = new Territory[territoriesLength];
     edgesLength = 0;
     edges = new Edge[edgesLength];
+    
+    cout << "[" << n << " Map param constructor]" << endl;
 }
 
 Map::Map(const Map &m) {
-    cout << "[" << m.name << " Map copy constructor]" << endl;
-
     name = m.name;
     setContinents(m.continents, m.continentsLength);
     setTerritories(m.territories, m.territoriesLength);
     setEdges(m.edges, m.edgesLength);
+
+    cout << "[" << m.name << " Map copy constructor]" << endl;
 }
 
 Map::~Map() {
-    cout << "[" << name << " Map destructor]" << endl;
-
     delete[] continents;
     continents = NULL;
 
     delete[] territories;
+    //cout << "test" << endl;
     territories = NULL;
 
     delete[] edges;
     edges = NULL;
+
+    cout << "[" << name << " Map destructor]" << endl;
 }
 
 string Map::getName() { return name; }
@@ -160,57 +160,48 @@ void Map::setEdges(Edge *e, int l) {
 }
 
 void Map::addContinent(string c) {
-    string *temp = new string[continentsLength];
-    copy(continents, continents + continentsLength, temp);
-
-    delete[] continents;
-    continents = new string[continentsLength + 1];
+    string *temp = new string[continentsLength + 1];
 
     for (int i = 0; i < continentsLength; i++) {
-        continents[i] = temp[i];
+        temp[i] = continents[i];
     }
-
-    continents[continentsLength] = c;
-
-    delete[] temp;
 
     continentsLength++;
+
+    delete[] continents;
+    continents = temp;
+
+    continents[continentsLength - 1] = c;
 }
 
-void Map::addTerritory(Territory t) {
-    Territory *temp = new Territory[territoriesLength];
-    copy(territories, territories + territoriesLength, temp);
-
-    delete[] territories;
-    territories = new Territory[territoriesLength + 1];
+void Map::addTerritory(const Territory &t) {
+    Territory *temp = new Territory[territoriesLength + 1];
 
     for (int i = 0; i < territoriesLength; i++) {
-        territories[i] = temp[i];
+        temp[i] = territories[i];
     }
-
-    territories[territoriesLength] = t;
-
-    delete[] temp;
 
     territoriesLength++;
+
+    delete[] territories;
+    territories = temp;
+
+    territories[territoriesLength - 1] = t;
 }
 
-void Map::addEdge(Edge e) {
-    Edge *temp = new Edge[edgesLength];
-    copy(edges, edges + edgesLength, temp);
-
-    delete[] edges;
-    edges = new Edge[edgesLength + 1];
+void Map::addEdge(const Edge &e) {
+    Edge *temp = new Edge[edgesLength + 1];
 
     for (int i = 0; i < edgesLength; i++) {
-        edges[i] = temp[i];
+        temp[i] = edges[i];
     }
 
-    edges[edgesLength] = e;
-
-    delete[] temp;
-
     edgesLength++;
+
+    delete[] edges;
+    edges = temp;
+
+    edges[edgesLength - 1] = e;
 }
 
 bool validateEdge(Map m, Territory start, Territory end, Territory last) {
@@ -365,12 +356,11 @@ Map MapLoader::load(string f) {
                 }
                 else if (section == 2) {
                     Player p;
+                    Territory t = Territory(lineSplit[2], m.getContinents()[stoi(lineSplit[3]) - 1], p, 0);
 
-                    m.addTerritory(Territory(
-                        lineSplit[2],
-                        m.getContinents()[stoi(lineSplit[3]) - 1],
-                        p,
-                        0));
+                    m.addTerritory(t);
+
+                    cout << "added territory" << endl;
                 }
                 else if (section == 3) {
                     int len = stoi(lineSplit[0]);
