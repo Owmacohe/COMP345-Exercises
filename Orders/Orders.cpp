@@ -558,7 +558,9 @@ playerOrderList.push_back(orderObject);}
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 void OrdersList::remove(int i){
-	int j = 0;
+
+            Order *toRemove = *(this->playerOrderList.begin() + i);
+            toRemove->~Order();
 			this->playerOrderList.erase( this->playerOrderList.begin() + i);
 }
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.

@@ -6,7 +6,7 @@ int ordersMain() {
     cout << " Empty Order List: " << player1List << endl;
 
 	//Deploy
-	Deploy *deploy1 = new Deploy();
+	Deploy *deploy1 = new Deploy(); // Explicitly delete or destructor of Vector will destro???
 	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
     cout << "Checking for validation: " << deploy1->validate() << endl;
 	player1List.addOrder(deploy1);
