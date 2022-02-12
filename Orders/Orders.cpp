@@ -18,9 +18,7 @@ Order::Order(Order& original){
     description = original.description;
 }
 // Default Destructor
-Order::~Order(){
-
-}
+Order::~Order(){}
 
 // Accessors & Mutators
 string Order::getDescription(){
@@ -56,8 +54,9 @@ bool Order::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Order::execute(){
+    cout << "Executing Order" << endl;
     return true;
 }
 
@@ -494,6 +493,7 @@ OrdersList::~OrdersList(){
 			}
 	// then delete the vector
 	this->playerOrderList.clear();
+    // delete(this); WOULD THIS DELETE THE VECTOR ITSELF?
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
@@ -507,20 +507,12 @@ OrdersList OrdersList::operator = (const OrdersList& original){
 
 // stream insertion operator that outputs the OrdersList's vector
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
-//    int a = 1;
-//    os << "Orders List:\n [";
-//    for (auto i = ordersList.playerOrderList.cbegin(); i != ordersList.playerOrderList.cend(); ++i) {
-//        cout << a << " : " << *i << "\n";
-//        a++;
-//    }
-//    cout << "]" << endl;
     os << "Order List: \n";
     for(int i = 0; i < ordersList.playerOrderList.size(); i++){
         os << i << " - " << *(ordersList.playerOrderList.at(i)) << "\n";
     }
     return os;
 }
-
 
 // Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
 void OrdersList::addOrder(Order order){
@@ -563,6 +555,7 @@ void OrdersList::remove(int i){
             toRemove->~Order();
 			this->playerOrderList.erase( this->playerOrderList.begin() + i);
 }
+
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 void OrdersList::move(int i, int j){
     swap(this->playerOrderList[i],this->playerOrderList[j]);
