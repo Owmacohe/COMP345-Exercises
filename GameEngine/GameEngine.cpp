@@ -1,10 +1,8 @@
 #include "GameEngine.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
-#include "Map/Map.h"
-#include <vector>
-#include <string>
-using namespace std;
+#include "../Map/Map.h"
+
 GameEngine::GameEngine(){
     *s = null;
     NumberOfPlayers = 0;
