@@ -53,7 +53,8 @@ return territories;
 }
 
 void Player::issueOrder() {
-    orders->addOrder(Order());
+    Order* o = new Order;
+    orders->addOrder(o);
 }
 
 // Mutators and Accessors
