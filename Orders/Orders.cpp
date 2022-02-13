@@ -67,11 +67,6 @@ Deploy::Deploy() : Order(false, "Deploy"){};
 // Parameterized Constructor
 Deploy::Deploy(bool v, string s) : Order(v,s){};
 
-//Copy constructor IT WAS WORKING AFTER MY TESTS BUT RETEST WITH OWEN's
-// <<<<<<< mj2
-// Deploy::Deploy(Deploy& original) : Order(){
-//     this->description = "Deploy Armies into a territory";
-// =======
 Deploy::Deploy(Deploy& original) : Order(original){
     description = "Deploy Armies into a territory";
 }
@@ -165,6 +160,7 @@ string Advance::validate(){
 
 // Complete Implementation next assignment
 bool Advance::execute(){
+    cout << "Executing Order Advance" << endl;
     return true;
 }
 
@@ -213,6 +209,7 @@ string Bomb::validate(){
 
 // Complete Implementation next assignment
 bool Bomb::execute(){
+    cout << "Executing Order Bomb" << endl;
     return true;
 }
 
@@ -267,6 +264,7 @@ string Blockade::validate(){
 
 // Complete Implementation next assignment
 bool Blockade::execute(){
+    cout << "Executing Order Blockade" << endl;
     return true;
 }
 
@@ -320,6 +318,7 @@ string Airlift::validate(){
 
 // Complete Implementation next assignment
 bool Airlift::execute(){
+    cout << "Executing Order Execute" << endl;
     return true;
 }
 
@@ -373,6 +372,7 @@ string Negotiate::validate(){
 
 // Complete Implementation next assignment
 bool Negotiate::execute(){
+    cout << "Executing Order Negotiate" << endl;
     return true;
 }
 
@@ -426,6 +426,7 @@ string Diplomacy::validate(){
 }
 // Complete Implementation next assignment
 bool Diplomacy::execute() {
+    cout << "Executing Order Diplomacy" << endl;
     return true;
 }
 
@@ -476,6 +477,7 @@ string Reinforcement::validate(){
 }
 // Complete Implementation next assignment
 bool Reinforcement::execute(){
+    cout << "Executing Order Reinforcement" << endl;
     return true;
 }
 
@@ -493,7 +495,6 @@ OrdersList::OrdersList(OrdersList &original) {
     for (Order* i : original.playerOrderList) {
         playerOrderList.push_back(new Order(*i));
     }
-
 }
 
 // Default Destructor
@@ -502,19 +503,22 @@ OrdersList::~OrdersList() {
     for (Order* i : playerOrderList) {
         delete i;
         i = NULL;
+        cout << "deleting an order in OrdersList" <<endl;
     }
     
 	// then delete the vector
 	playerOrderList.clear();
+    cout << "deleted OrdersList" <<endl;
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
 OrdersList OrdersList::operator = (const OrdersList& original){
 	OrdersList deepcopy;
-	for(int i= 0; i <= original.playerOrderList.size(); ++i){
-		deepcopy.playerOrderList.push_back(new Order(*original.playerOrderList[i]));
-        cout << "DEBUG : for loop inside assignment operator" <<endl;
-	}
+
+    for (Order* i : original.playerOrderList) {
+       deepcopy.playerOrderList.push_back(new Order(*i));
+       cout << "DEBUG : for loop inside assignment operator" <<endl;
+    }
 	return deepcopy;
 }
 
@@ -564,11 +568,6 @@ playerOrderList.push_back(orderObject);}
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 void OrdersList::remove(int i){
 
-// This are my changes, try out Owen's below
-//             Order *toRemove = *(this->playerOrderList.begin() + i);
-//             toRemove->~Order();
-// 			this->playerOrderList.erase( this->playerOrderList.begin() + i);
-
 	int j = 0;
 			playerOrderList.erase( playerOrderList.begin() + i);
 
@@ -576,5 +575,18 @@ void OrdersList::remove(int i){
 
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 void OrdersList::move(int i, int j){
-    swap(playerOrderList[i],playerOrderList[j]);
+
+    //Case 1: Moving Order downwards
+    if (i>j){
+        for(j; j<i;j++){
+            swap(playerOrderList[i],playerOrderList[j]);}
+    }
+    //Case 2: Moving Order Upwards
+    else if (i<j) {
+        for(j; j>i; j--){
+            swap(playerOrderList[i],playerOrderList[j]);}
+    }
+    else
+        cout<<" wrong order index or wrong destination index" <<endl;
+
 }

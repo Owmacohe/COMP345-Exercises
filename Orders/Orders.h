@@ -181,5 +181,5 @@ class OrdersList {
 		void addOrder(Order* order); // Add Method used to add an order of the OrderList.
 		void addOrder(string order); // Add Method used to add an order of the OrderList.
 		void remove(int i); // Remove Method used to remove an order of the OrderList.
-		void move(int i, int j); // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
+		void move(int i, int j); // Move Method used to move an order at index i into the position of index j.
 };

@@ -1,12 +1,13 @@
 #include "Orders.h"
 
-int Ordersmain() {
+int OrdersMain() {
 	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
 
+    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
 	//Deploy
-	Deploy *deploy1 = new Deploy(); // Explicitly delete or destructor of Vector will destro???
+	Deploy *deploy1 = new Deploy();
 	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
     cout << "Checking for validation: " << deploy1->validate() << endl;
     cout << "Checking for execution: " ; deploy1->execute() ;
@@ -53,23 +54,30 @@ int Ordersmain() {
 	player1List.addOrder(negotiate1);
 	cout << player1List << endl;
 
+    cout << "****************************** Copy constructor and assignment operator *******************************"<<endl;
 	//Create through copy constructor object
-	OrdersList player1List2;
-    //player1List2 = OrdersList(player1List); TODO
-	cout << player1List2 << endl;
+    cout << "Creating a deep copy of the OrderList through the Copy constructor\n" <<endl;
+	OrdersList player1List2(player1List);
 
 	//Create through assignment operator object
-	OrdersList player1List3;
-    //player1List3 = player1List; TODO
-	cout << player1List3 << endl;
+    cout << "Creating a deep copy of the OrderList through the assignment operator \n" <<endl;
+	OrdersList player1List3 = player1List;
 
+    cout << "****************************** move() *******************************" << endl;
 	//Move()
-	cout << "List before the switch/move of orders #2 & #3" <<endl;
+	cout << "List before the move of Advance to the index 3" <<endl;
 	cout << player1List << endl;
-	player1List.move(2,3);
-	cout << "List after the switch/move of orders #2 & #3" <<endl;
+	player1List.move(1,3);
+	cout << "List after the move of Advance to the index 3" <<endl;
 	cout << player1List << endl;
+    player1List.move(3,0);
+    cout << "List after the move of Advance to index 0" <<endl;
+    cout << player1List << endl;
+    player1List.move(0,5);
+    cout << "List after the move of Advance to the index 5" <<endl;
+    cout << player1List << endl;
 
+    cout << "****************************** remove() *******************************" <<endl;
 	//Remove()
 	cout << "List before the removal of order #2" <<endl;
 	cout << player1List << endl;
@@ -77,7 +85,7 @@ int Ordersmain() {
 	cout << "List after the removal of order #2" <<endl;
 	cout << player1List << endl;
 
-
+    cout <<"****************************** Verification of deep copies *******************************" <<endl;
 	// Check the deep copies
 	cout << "Original, now modified list" << endl;
 	cout << player1List << endl;
@@ -88,17 +96,13 @@ int Ordersmain() {
 	cout << "Copy through the assignment operator" << endl;
 	cout << player1List3 << endl;
 
-    //Delete orders lists and orders to free memory
-    player1List.~OrdersList();
-    cout << player1List << endl;
-
-    //Delete orders lists and orders to free memory
-    player1List2.~OrdersList();
-    cout << player1List2 << endl;
-
-    //Delete orders lists and orders to free memory
-    player1List3.~OrdersList();
-    cout << player1List3 << endl;
+    /****************************** new-delete pairs *******************************/
+    delete(deploy1);
+    delete(advance1);
+    delete(bomb1);
+    delete(blockade1);
+    delete(airlift1);
+    delete(negotiate1);
 
 	return 0;
 }
