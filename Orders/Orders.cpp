@@ -45,7 +45,7 @@ Order& Order::operator = (const Order& order){
 
 ostream& operator<<(ostream& os, const Order& order){
     string validated = (order.validated)? "(validated)" : "(not validated)";
-    os << order.description << " " << validated ;
+    os << order.description ;
 	return os;
 }
 
@@ -96,7 +96,7 @@ Deploy& Deploy::operator = (const Deploy& o){
 
 ostream& operator<<(ostream& os, const Deploy& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description;
     return os;};
 
 // Complete Implementation next assignment
@@ -149,7 +149,7 @@ Advance& Advance::operator = (const Advance& o){
 
 ostream& operator<<(ostream& os, const Advance& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description ;
     return os;
 };
 
@@ -198,7 +198,7 @@ Bomb& Bomb::operator = (const Bomb& o){
 }
 ostream& operator<<(ostream& os, const Bomb& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description;
     return os;
 };
 
@@ -253,7 +253,7 @@ Blockade& Blockade::operator = (const Blockade& o){
 }
 ostream& operator<<(ostream& os, const Blockade& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description ;
     return os;
 }
 
@@ -308,7 +308,7 @@ Airlift& Airlift::operator = (const Airlift& o){
 
 ostream& operator<<(ostream& os, const Airlift& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description ;
     return os;};
 
 // Complete Implementation next assignment
@@ -361,7 +361,7 @@ Negotiate& Negotiate::operator = (const Negotiate& o){
 
 ostream& operator<<(ostream& os, const Negotiate& o){
     string validated = (o.validated)? "(validated)" : "(not validated)";
-    os << o.description << " "<< validated;
+    os << o.description;
     return os;
 }
 
@@ -416,7 +416,7 @@ Diplomacy& Diplomacy::operator = (const Diplomacy& o){
 
 ostream& operator<<(ostream& os, const Diplomacy& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description;
     return os;
 }
 
@@ -468,7 +468,7 @@ Reinforcement& Reinforcement::operator = (const Reinforcement& o){
 
 ostream& operator<<(ostream& os, const Reinforcement& o){
     string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description << " "<< validated;
+    os << o.description;
     return os;
 }
 // Complete Implementation next assignment
@@ -524,9 +524,9 @@ OrdersList OrdersList::operator = (const OrdersList& original){
 
 // stream insertion operator that outputs the OrdersList's vector
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
-    os << "Order List: \n";
+    os << "Order List (size: " << ordersList.playerOrderList.size() << " ): \n";
     for(int i = 0; i < ordersList.playerOrderList.size(); i++){
-        os << i << " - " << *(ordersList.playerOrderList.at(i)) << "\n";
+        os << i << " - " << *(ordersList.playerOrderList.at(i)) << " | ";
     }
     return os;
 }
