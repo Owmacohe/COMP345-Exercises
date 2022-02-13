@@ -16,10 +16,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a69c3c93-f1d6-4845-90bf-c1d74f3f6017" name="Changes" comment="game engine .h file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.h" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
