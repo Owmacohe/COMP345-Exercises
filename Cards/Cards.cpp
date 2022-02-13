@@ -74,6 +74,8 @@ Deck::Deck(int numCard) {
                 "A default deck of 50 cards will be used instead." << endl;
         numCardInDeck = 50;
     }
+
+    deck = vector<Card*>();
     // Create the Deck of Card
     for (int i = 0; i < numCardInDeck; i++) {
         if (i % 5 == 0) {
