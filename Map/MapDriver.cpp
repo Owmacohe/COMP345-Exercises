@@ -6,16 +6,27 @@
 #include "../Orders/Orders.cpp"
 #include "../Player/Player.cpp"
 
-int mapMain() {
+int mapDriver() {
+    const int len = 5;
+    string *files = new string[len]{"canada.map", "europe.map", "LOTR2.map", "usa8regions.map", "solar.map"};
     MapLoader loader;
-    
-    Map europe = loader.load("europe.map");
-    //cout << europe << endl;
-    //cout << europe.validate() << endl;
 
-    //Map canada = loader.load("canada.map");
-    //cout << canada << endl;
-    //cout << canada.validate() << endl;
+    for (int i = 0; i < len; i++) {
+        cout << endl;
+        Map temp = loader.load(files[i]);
+
+        if (temp.isGoodMap) {
+            cout << endl;
+            cout << temp << endl;
+            cout << endl;
+            temp.validate();
+        }
+
+        cout << "\n==========" << endl;
+    }
+
+    delete[] files;
+    files = NULL;
 
     return 0;
 }

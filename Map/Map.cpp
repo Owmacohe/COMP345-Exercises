@@ -69,11 +69,20 @@ void Territory::setOwner(Player *o) { owner = o; }
 void Territory::setArmies(int a) { armies = a; }
 
 ostream& operator<<(ostream &strm, const Territory &t) {
+    string temp;
+
+    if (t.owner == NULL) {
+        temp = "null";
+    }
+    else {
+        temp = t.owner->getName();
+    }
+
     return strm <<
-        "TERRITORY: " << t.name <<
-        "\n    Continent: " << t.continent <<
-        "\n    Owner: " << t.owner->getName() <<
-        "\n    Armies: " << t.armies;
+        "-----\nTERRITORY: " << t.name <<
+        "\n\nContinent: " << t.continent <<
+        "\n\nOwner: " << temp <<
+        "\n\nArmies: " << t.armies << "\n-----";
 }
 
 Map::Map() {
@@ -85,7 +94,7 @@ Map::Map() {
     edgesLength = 0;
     edges = new Edge[edgesLength];
 
-    cout << "[Map default constructor]" << endl;
+    //cout << "[Map default constructor]" << endl;
 }
 
 Map::Map(string n) : name(n) {
@@ -96,7 +105,7 @@ Map::Map(string n) : name(n) {
     edgesLength = 0;
     edges = new Edge[edgesLength];
     
-    cout << "[" << n << " Map param constructor]" << endl;
+    //cout << "[" << n << " Map param constructor]" << endl;
 }
 
 Map::Map(const Map &m) {
@@ -105,7 +114,7 @@ Map::Map(const Map &m) {
     setTerritories(m.territories, m.territoriesLength);
     setEdges(m.edges, m.edgesLength);
 
-    cout << "[" << m.name << " Map copy constructor]" << endl;
+    //cout << "[" << m.name << " Map copy constructor]" << endl;
 }
 
 Map::~Map() {
@@ -118,7 +127,7 @@ Map::~Map() {
     delete[] edges;
     edges = NULL;
 
-    cout << "[" << name << " Map destructor]" << endl;
+    //cout << "[" << name << " Map destructor]" << endl;
 }
 
 string Map::getName() { return name; }
@@ -131,7 +140,9 @@ void Map::setContinents(string *c, int l) {
     delete[] continents;
     continents = new string[l];
 
-    copy(c, c + l, continents);
+    for (int i = 0; i < l; i++) {
+        continents[i] = c[i];
+    }
 
     continentsLength = l;
 }
@@ -139,7 +150,9 @@ void Map::setTerritories(Territory *t, int l) {
     delete[] territories;
     territories = new Territory[l];
 
-    copy(t, t + l, territories);
+    for (int i = 0; i < l; i++) {
+        territories[i] = t[i];
+    }
 
     territoriesLength = l;
 }
@@ -147,7 +160,9 @@ void Map::setEdges(Edge *e, int l) {
     delete[] edges;
     edges = new Edge[l];
 
-    copy(e, e + l, edges);
+    for (int i = 0; i < l; i++) {
+        edges[i] = e[i];
+    }
 
     edgesLength = l;
 }
@@ -197,18 +212,31 @@ void Map::addEdge(const Edge &e) {
     edges[edgesLength - 1] = e;
 }
 
-bool validateEdge(Map m, Territory start, Territory end, Territory last) {
-    for (int i = 0; i < m.edgesLength; i++) {
-        Edge temp = m.getEdges()[i];
+bool validateEdge(Map &m, Territory &start, Territory &end) {
+    Edge *temp = m.getEdges();
 
-        if (temp.a.getName() == end.getName() || temp.b.getName() == end.getName()) {
-            return true;
-        }
-        else if (temp.a.getName() == start.getName() && temp.b.getName() != last.getName()) {
-            return validateEdge(m, temp.b, end, start);
-        }
-        else if (temp.b.getName() == start.getName() && temp.a.getName() != last.getName()) {
-            return validateEdge(m, temp.a, end, start);
+    for (int i = 0; i < m.edgesLength; i++) {
+        if (!temp[i].visited) {
+            bool valid;
+
+            if (temp[i].a.getName() == end.getName() || temp[i].b.getName() == end.getName()) {
+                valid = true;
+            }
+            else if (temp[i].a.getName() == start.getName()) {
+                temp[i].visited = true;
+                valid = validateEdge(m, temp[i].b, end);
+            }
+            else if (temp[i].b.getName() == start.getName()) {
+                temp[i].visited = true;
+                valid = validateEdge(m, temp[i].a, end);
+            }
+            else {
+                valid = false;
+            }
+
+            if (valid) {
+                return true;
+            }
         }
     }
 
@@ -216,32 +244,38 @@ bool validateEdge(Map m, Territory start, Territory end, Territory last) {
 }
 
 bool Map::validate() {
-    bool valid = true;
     Territory *temp = getTerritories();
 
     for (int i = 0; i < territoriesLength; i++) {
-        for (int j = 0; j < territoriesLength; j++) {
-            valid = validateEdge(*this, temp[i], temp[j], Territory());
+        for (int j = i+1; j < territoriesLength; j++) {
+            if (j < territoriesLength) {
+                for (int k = 0; k < edgesLength; k++) {
+                    edges[k].visited = false;
+                }
 
-            if (temp[i].getContinent() == temp[j].getContinent()) {
-                valid = validateEdge(*this, temp[i], temp[j], Territory());
+                // Verifying that the map is a connected graph
+                if (!validateEdge(*this, temp[i], temp[j])) {
+                    cout << "Validation of " << name << " failed!" << endl;
+                    return false;
+                }
+
+                // Verifying that continents are connected subgraphs
+                if (temp[i].getContinent() == temp[j].getContinent() && !validateEdge(*this, temp[i], temp[j])) {
+                    cout << "Validation of " << name << " failed!" << endl;
+                    return false;
+                }
             }
         }
 
+        // Verifying that each country belongs to one and only one continent
         if (!doesContain(continents, continentsLength, territories[i].getContinent())) {
-            valid = false;
+            cout << "Validation of " << name << " failed!" << endl;
+            return false;
         }
     }
 
-
-    if (valid) {
-        cout << "Vefification succeeded!" << endl;
-    }
-    else {
-        cout << "Vefification failed!" << endl;
-    }
-
-    return valid;
+    cout << "Validation of " << name << " succeeded!" << endl;
+    return true;
 }
 
 ostream& operator<<(ostream &strm, const Map &m) {
@@ -265,10 +299,10 @@ ostream& operator<<(ostream &strm, const Map &m) {
     }
 
     return strm <<
-        "MAP: " << m.name <<
-        "\n    Continents: " << c.substr(0, c.length() - 2) <<
-        "\n    Territories: " << t.substr(0, t.length() - 2) <<
-        "\n    Edges: " << e.substr(0, e.length() - 2);
+        "-----\nMAP: " << m.name <<
+        "\n\nContinents: " << c.substr(0, c.length() - 2) <<
+        "\n\nTerritories: " << t.substr(0, t.length() - 2) <<
+        "\n\nEdges: " << e.substr(0, e.length() - 2) << "\n-----";
 }
 
 string *stringSplit(string s, char delim) {
@@ -321,7 +355,15 @@ Map MapLoader::load(string f) {
         try {
             int section = 0;
 
+            cout << "Loading name..." << endl;
+
             string *nameSplit = stringSplit(line, ' ');
+
+            if (nameSplit[1] != ";") {
+                delete[] nameSplit;
+                throw "INVALID MAP: no name!";
+            }
+
             string mapName = nameSplit[3];
             delete[] nameSplit;
 
@@ -340,14 +382,14 @@ Map MapLoader::load(string f) {
                         cout << "Loading territories..." << endl;
 
                         if (section != 2) {
-                            throw "Invalid Map!";
+                            throw "INVALID MAP: no continents!";
                         }
                     }
                     else if (line == "[borders]") {
                         cout << "Loading edges..." << endl;
 
                         if (section != 3) {
-                            throw "Invalid Map!";
+                            throw "INVALID MAP: no continents OR no territories!";
                         }
                     }
                 }
@@ -358,7 +400,7 @@ Map MapLoader::load(string f) {
                                 m.addContinent(lineSplit[1]);
                             }
                             else {
-                                throw "Invalid Map!";
+                                throw "INVALID MAP: improper continent!";
                             }
                         }
                         else if (section == 2) {
@@ -367,7 +409,7 @@ Map MapLoader::load(string f) {
                                 m.addTerritory(t);
                             }
                             else {
-                                throw "Invalid Map!";
+                                throw "INVALID MAP: improper territory!";
                             }
                         }
                         else if (section == 3) {
@@ -387,7 +429,7 @@ Map MapLoader::load(string f) {
                                 }
                             }
                             else {
-                                throw "Invalid Map!";
+                                throw "INVALID MAP: improper edge!";
                             }
                         }
                     }
@@ -398,9 +440,10 @@ Map MapLoader::load(string f) {
 
             input.close();
 
-            cout << "Map loaded!" << endl;
+            cout << m.getName() << " loaded!" << endl;
         }
         catch (const char* message) {
+            m.isGoodMap = false;
             cout << message << endl;
         }
     }

@@ -30,6 +30,7 @@ class Territory {
 
 struct Edge {
     Territory a, b;
+    bool visited = false;
 };
 
 class Map {
@@ -55,6 +56,8 @@ class Map {
         void addContinent(string); // Method to add a new Territory
         void addTerritory(const Territory &t); // Method to add a new Territory
         void addEdge(const Edge &e); // Method to add a new Edge between Territories
+
+        bool isGoodMap = true;
         bool validate(); // Method to make sure the created Map is valid
     private:
         string name; // Name of the Map

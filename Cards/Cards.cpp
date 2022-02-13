@@ -153,12 +153,12 @@ Deck& Deck::operator=(const Deck& toAssign){
 /*********************************** HAND ***********************************/
 
 Hand::Hand(){
-    cout << "Hand Default Constructor" << endl;
     numCardInHand = 0;
     hand = vector<Card*>();
+
+    //cout << "Hand Default Constructor" << endl;
 }
 Hand::Hand(Hand &anotherHand){
-    cout << "Hand Copy Constructor" << endl;
     numCardInHand = anotherHand.numCardInHand;
 
     hand = vector<Card*>();
@@ -166,6 +166,8 @@ Hand::Hand(Hand &anotherHand){
         Card* cards = new Card(*anotherHand.hand.at(i));
         hand.push_back(cards);
     }
+
+    //cout << "Hand Copy Constructor" << endl;
 }
 
 Hand::~Hand(){
@@ -174,9 +176,10 @@ Hand::~Hand(){
         hand.at(i) = NULL;
         cout << "...delete Cards on Hand" << endl;
     }
-    cout << "Hand deleted" << endl;
     // delete the Hand vector
     hand.clear();
+
+    //cout << "Hand deleted" << endl;
 }
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
