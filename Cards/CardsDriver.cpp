@@ -62,7 +62,7 @@ int cardsMain() {
     return 0;
 }
 
-int main(){
-    cardsMain();
-    return 0;
-}
+//int main(){
+//    cardsMain();
+//    return 0;
+//}

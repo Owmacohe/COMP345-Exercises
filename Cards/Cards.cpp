@@ -9,10 +9,6 @@ Card::Card(){
 }
 Card::Card(string theType){
     cout << "Card Parameterized Constructor" << endl;
-    // Convert the user input of Type to lowercase format
-    for (char c : theType){
-        c = tolower(c);
-    }
     type = theType;
 }
 Card::Card(Card &anotherCard){
@@ -42,10 +38,12 @@ void Card::play(OrdersList &playerOrdersList) const{
        cout << "Play Airlift card" << endl;
        Airlift* myAirlift = new Airlift();
        playerOrdersList.addOrder(myAirlift);
-    } else if (type == "diplomacy"){
-       cout << "Play Diplomacy card" << endl;
-       Diplomacy* myDiplomacy = new Diplomacy();
-       playerOrdersList.addOrder(myDiplomacy);
+    } else if (type == "diplomacy") {
+        cout << "Play Diplomacy card" << endl;
+        Diplomacy *myDiplomacy = new Diplomacy();
+        playerOrdersList.addOrder(myDiplomacy);
+    } else {
+        cout << "Invalid card, play() can not be called!" << endl;
     }
 
 }
@@ -112,7 +110,7 @@ Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
         delete deck.at(i);
         deck.at(i) = NULL;
-        cout << "...delete Cards in Deck" << endl;
+        cout << "...deleting Cards in Deck" << endl;
     }
     cout << "Deck deleted " <<  endl;
     // delete deck vector
@@ -122,7 +120,7 @@ Deck::~Deck(){
 Card* Deck::draw(){
 
     // Generate a random number
-    int numRandom = rand() %numCardInDeck;
+    int numRandom = rand() % numCardInDeck;
 
     // Store return card in a temp var -> So as to delete its trace in deck
     // Copy constructor
@@ -155,12 +153,12 @@ Deck& Deck::operator=(const Deck& toAssign){
 /*********************************** HAND ***********************************/
 
 Hand::Hand(){
-    cout << "Hand Default Constructor" << endl;
     numCardInHand = 0;
     hand = vector<Card*>();
+
+    //cout << "Hand Default Constructor" << endl;
 }
 Hand::Hand(Hand &anotherHand){
-    cout << "Hand Copy Constructor" << endl;
     numCardInHand = anotherHand.numCardInHand;
 
     hand = vector<Card*>();
@@ -168,6 +166,8 @@ Hand::Hand(Hand &anotherHand){
         Card* cards = new Card(*anotherHand.hand.at(i));
         hand.push_back(cards);
     }
+
+    //cout << "Hand Copy Constructor" << endl;
 }
 
 Hand::~Hand(){
@@ -176,9 +176,10 @@ Hand::~Hand(){
         hand.at(i) = NULL;
         cout << "...delete Cards on Hand" << endl;
     }
-    cout << "Hand deleted" << endl;
     // delete the Hand vector
     hand.clear();
+
+    //cout << "Hand deleted" << endl;
 }
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
@@ -217,28 +218,3 @@ void Hand::playCard(int i, Deck &d, OrdersList &l) {
     numCardInHand--;
 
 }
-/*********************************** DRAFT ***********************************/
-// DRAW CARD BY INDEX
-//int Deck::genDistinctNum() {
-//    srand(time(NULL)); // initialized the random number generator
-//    int numRandom;
-//    static vector<int> trace = vector<int>(); // Exist only 1 trace vector->static (avoid creating new vector everytime function called)
-//
-//    // Generate a Distinct random number from 0 to numCardInDeck
-//    bool generated = false;
-//    while (!generated) {
-//        numRandom = rand() % numCardInDeck;
-//
-//        if (trace.size() == numCardInDeck) {
-//            trace.clear();
-//        }
-//        if (trace.size() != 0 /* memory reference error*/ &&
-//            *find(trace.begin(), trace.end(), numRandom) == numRandom) {
-//            continue;
-//        } else {
-//            generated = true;
-//            trace.push_back(numRandom);
-//        }
-//        return numRandom;
-//    }
-//}
