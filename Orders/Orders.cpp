@@ -568,11 +568,6 @@ playerOrderList.push_back(orderObject);}
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 void OrdersList::remove(int i){
 
-// This are my changes, try out Owen's below
-//             Order *toRemove = *(this->playerOrderList.begin() + i);
-//             toRemove->~Order();
-// 			this->playerOrderList.erase( this->playerOrderList.begin() + i);
-
 	int j = 0;
 			playerOrderList.erase( playerOrderList.begin() + i);
 
@@ -580,5 +575,18 @@ void OrdersList::remove(int i){
 
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 void OrdersList::move(int i, int j){
-    swap(playerOrderList[i],playerOrderList[j]);
+
+    //Case 1: Moving Order downwards
+    if (i>j){
+        for(j; j<i;j++){
+            swap(playerOrderList[i],playerOrderList[j]);}
+    }
+    //Case 2: Moving Order Upwards
+    else if (i<j) {
+        for(j; j>i; j--){
+            swap(playerOrderList[i],playerOrderList[j]);}
+    }
+    else
+        cout<<" wrong order index or wrong destination index" <<endl;
+
 }
