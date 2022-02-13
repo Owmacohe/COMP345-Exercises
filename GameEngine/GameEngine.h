@@ -24,6 +24,7 @@ class GameEngine {
         State getState();
         int getNumberOfPlayers();
         bool endOfState ();
+        vector<Player*> getplayer_list();
 
         //setters
         void setState(State s);
@@ -35,9 +36,20 @@ class GameEngine {
         void loadMap();
         void validateMap();
         void addPlayer();
-        void executeOrdersPhase(Player* player);
-        void issueOrdersPhase(Player* player);
-        void ReinforcementPhase();
+        void assignCountries();
+        void assignReinforcementPhase();
+        void issueOrders(Player* player);
+        void endIssueOrderPhase(Player* player);
+        void executeOrders(Player* player);
+        void endexecuteOrdersPhase(Player* player);
+        void winPhase(Player *p);
+        void endPhase();
+        void playAgain();
+
+        void gameStartupTransitions(string s);
+        void gamePlayTransitions(string s, Player *p);
+        void gameEndTransitions(string s);
+
 
     private:
         State* s ;
@@ -48,7 +60,4 @@ class GameEngine {
         Deck* deck;
         vector<Player*> player_list;
 
-    void gameStartupTransitions(string s);
-
-    void gamePlayTransitions(string s, Player *p);
 };
