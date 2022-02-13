@@ -10,6 +10,7 @@
 #include "../Map/Map.cpp"
 #include "../Player/Player.cpp"
 
+
 int main() {
     GameEngine gameEngine;
 
@@ -22,7 +23,6 @@ int main() {
         cin >> input;
         gameEngine.gameStartupTransitions(input);
     }
-
 
     while (gameEngine.getState() != 8) {
     for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {

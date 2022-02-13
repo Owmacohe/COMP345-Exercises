@@ -83,6 +83,11 @@ void GameEngine::loadMap(){
     Map * m = new Map();
     *m = ml->load(map + ".map");
     cout<< "end of load map phase" << endl;
+    /* TODO THIS WAS IN THE DRIVER BUT CALLIN LOADPMAP SHOULD BE ENOUGH
+    MapLoader loader;
+    Map europe = loader.load("europe.map");
+    cout << europe << endl;
+    */
 }
 void GameEngine::validateMap(){
     //TODO call Owen's method
@@ -157,6 +162,7 @@ void GameEngine::gameStartupTransitions(string str){
     else if (str == "assigncountries" && getState() ==4){
         assignCountries();
         assignReinforcementPhase();
+
     }
      else {
         cout << "Invalid command!" << endl;
@@ -166,6 +172,7 @@ void GameEngine::gameStartupTransitions(string str){
 void GameEngine::gamePlayTransitions(string str, Player *p){
     if (str == "issueorder" && (getState() ==5 || getState() == 6)){
         issueOrders(p);
+
     }
     else if (str == "endissueorder" && getState() == 6){
         endIssueOrderPhase(p);
