@@ -43,7 +43,7 @@ int PlayerMain() {
 
 	cout  <<"\nPlayer Test IssueOrder()" <<endl;
 	// test issueOrder method
-	(*p2).issueOrder();
+	(*p2).issueOrder("bomb");
 	cout<< (*p2);
 
 	cout <<"\nPlayer Test toAttack()" <<endl;
