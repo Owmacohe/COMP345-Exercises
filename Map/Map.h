@@ -9,7 +9,7 @@ class Player;
 class Territory {
     public:
         Territory(); // Default constructor
-        Territory(string, string, const Player &o, int); // Parameterized constructor
+        Territory(string, string, Player*, int); // Parameterized constructor
         Territory(const Territory &t); // Copy constructor
         ~Territory(); // Destructor
         friend ostream& operator<<(ostream &strm, const Territory &t); // Stream insertion operator
@@ -20,7 +20,7 @@ class Territory {
         int getArmies();
 
         // Mutators
-        void setName(string), setContinent(string), setOwner(const Player &o), setArmies(int);
+        void setName(string), setContinent(string), setOwner(Player*), setArmies(int);
     private:
         string name; // Name of the Territory
         string continent; // Name of the Territory's continent
@@ -65,5 +65,5 @@ class Map {
 
 class MapLoader {
     public:
-        Map load(string);
+        Map load(string); // Method to read a .map file with the given name, and output it as a Map
 };
