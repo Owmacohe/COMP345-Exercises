@@ -39,8 +39,8 @@ Territory::Territory() {
     //cout << "[Territory default constructor]" << endl;
 }
 
-Territory::Territory(string n, string c, const Player &o, int a) : name(n), continent(c), armies(a) {
-    owner = new Player(o);
+Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
+    owner = o;
 
     //cout << "[" << n << " Territory param constructor]" << endl;
 }
@@ -48,30 +48,24 @@ Territory::Territory(string n, string c, const Player &o, int a) : name(n), cont
 Territory::Territory(const Territory &t) {
     name = t.name;
     continent = t.continent;
-    owner = new Player(*(t.owner));
+    owner = t.owner;
     armies = t.armies;
     
     //cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
 Territory::~Territory() {
-    delete owner;
-    owner = NULL;
-    
-    cout << "[" << name << " Territory destructor]" << endl;
+    //cout << "[" << name << " Territory destructor]" << endl;
 }
 
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
-Player *Territory::getOwner() { cout << "test" << endl; return owner; }
+Player *Territory::getOwner() { return owner; }
 int Territory::getArmies() { return armies; }
 
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(const Player &o) {
-    delete owner;
-    owner = new Player(o);
-}
+void Territory::setOwner(Player *o) { owner = o; }
 void Territory::setArmies(int a) { armies = a; }
 
 ostream& operator<<(ostream &strm, const Territory &t) {
@@ -119,7 +113,6 @@ Map::~Map() {
     continents = NULL;
 
     delete[] territories;
-    //cout << "test" << endl;
     territories = NULL;
 
     delete[] edges;
@@ -317,75 +310,100 @@ string *stringSplit(string s, char delim) {
 }
 
 Map MapLoader::load(string f) {
-    // TODO reject bad maps
-
     ifstream input(f);
     string line;
-    int section = 0;
+    Map m;
 
     if (!getline(input, line)) {
         cout << "Unable to read file: " << f << endl;
     }
+    else {
+        try {
+            int section = 0;
 
-    string *nameSplit = stringSplit(line, ' ');
-    string mapName = nameSplit[3];
-    delete[] nameSplit;
-    Map m = Map(mapName.substr(0, mapName.length() - 4));
+            string *nameSplit = stringSplit(line, ' ');
+            string mapName = nameSplit[3];
+            delete[] nameSplit;
 
-    // OLD: !input.eof()
-    while (getline(input, line)) {
-        string *lineSplit = stringSplit(line, ' ');
+            m.setName(mapName.substr(0, mapName.length() - 4));
 
-        if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
-            section++;
+            while (getline(input, line)) {
+                string *lineSplit = stringSplit(line, ' ');
 
-            if (line == "[continents]") {
-                cout << "Loading continents..." << endl;
-            }
-            else if (line == "[countries]") {
-                cout << "Loading territories..." << endl;
-            }
-            else if (line == "[borders]") {
-                cout << "Loading edges..." << endl;
-            }
-        }
-        else {
-            if (line != "") {
-                if (section == 1) {
-                    m.addContinent(lineSplit[1]);
+                if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
+                    section++;
+
+                    if (line == "[continents]") {
+                        cout << "Loading continents..." << endl;
+                    }
+                    else if (line == "[countries]") {
+                        cout << "Loading territories..." << endl;
+
+                        if (section != 2) {
+                            throw "Invalid Map!";
+                        }
+                    }
+                    else if (line == "[borders]") {
+                        cout << "Loading edges..." << endl;
+
+                        if (section != 3) {
+                            throw "Invalid Map!";
+                        }
+                    }
                 }
-                else if (section == 2) {
-                    Player p;
-                    Territory t = Territory(lineSplit[2], m.getContinents()[stoi(lineSplit[3]) - 1], p, 0);
+                else {
+                    if (line != "") {
+                        if (section == 1) {
+                            if (stoi(lineSplit[0]) == 3) {
+                                m.addContinent(lineSplit[1]);
+                            }
+                            else {
+                                throw "Invalid Map!";
+                            }
+                        }
+                        else if (section == 2) {
+                            if (stoi(lineSplit[0]) == 5) {
+                                Territory t = Territory(lineSplit[2], m.getContinents()[stoi(lineSplit[3]) - 1], NULL, 0);
+                                m.addTerritory(t);
+                            }
+                            else {
+                                throw "Invalid Map!";
+                            }
+                        }
+                        else if (section == 3) {
+                            if (stoi(lineSplit[0]) > 1) {
+                                int len = stoi(lineSplit[0]);
 
-                    m.addTerritory(t);
+                                for (int i = 1; i <= len; i++) {
+                                    for (int j = 1; j <= len; j++) {
+                                        Territory t1 = m.getTerritories()[stoi(lineSplit[i]) - 1];
+                                        Territory t2 = m.getTerritories()[stoi(lineSplit[j]) - 1];
+                                        Edge *tempEdges = m.getEdges();
 
-                    cout << "added territory" << endl;
-                }
-                else if (section == 3) {
-                    int len = stoi(lineSplit[0]);
-
-                    for (int i = 1; i <= len; i++) {
-                        for (int j = 1; j <= len; j++) {
-                            Territory t1 = m.getTerritories()[stoi(lineSplit[i]) - 1];
-                            Territory t2 = m.getTerritories()[stoi(lineSplit[j]) - 1];
-                            Edge *tempEdges = m.getEdges();
-
-                            if (i != j && !doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
-                                m.addEdge(Edge{t1, t2});
+                                        if (i != j && !doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
+                                            m.addEdge(Edge{t1, t2});
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                throw "Invalid Map!";
                             }
                         }
                     }
                 }
+
+                delete[] lineSplit;
             }
+
+            input.close();
+
+            cout << "Map loaded!" << endl;
         }
-
-        delete[] lineSplit;
+        catch (const char* message) {
+            cout << message << endl;
+        }
     }
-
-    input.close();
-
-    cout << "Map loaded!" << endl;
 
     return m;
 }
