@@ -12,7 +12,7 @@ Player::Player() {
     cout << "[Player default constructor]" << endl;
 }
 
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n) {
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
