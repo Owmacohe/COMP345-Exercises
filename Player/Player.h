@@ -1,15 +1,13 @@
 #pragma once
 
-#include <iostream>
-using namespace std;
-
 #include <list>
 #include <vector>
 #include <string>
+#include <iostream>
+using namespace std;
 
 class Hand;
 class OrdersList;
-class Map;
 class Territory;
 
 class Player {

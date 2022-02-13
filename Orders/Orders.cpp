@@ -482,12 +482,12 @@ bool Reinforcement::execute(){
 /****************************** OrdersList *******************************/
 
 // Default Constructor
-OrdersList::OrdersList(){
+OrdersList::OrdersList() {
     playerOrderList = vector<Order*>();
 }
 
 // Copy Constructor
-OrdersList::OrdersList(OrdersList &original){
+OrdersList::OrdersList(OrdersList &original) {
     playerOrderList = vector<Order*>();
     
     for (Order* i : original.playerOrderList) {
@@ -497,7 +497,7 @@ OrdersList::OrdersList(OrdersList &original){
 }
 
 // Default Destructor
-OrdersList::~OrdersList(){
+OrdersList::~OrdersList() {
 	// Iterate through all pointed orders and delete the content in heap of each
     for (Order* i : playerOrderList) {
         delete i;
@@ -506,7 +506,6 @@ OrdersList::~OrdersList(){
     
 	// then delete the vector
 	playerOrderList.clear();
-
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.

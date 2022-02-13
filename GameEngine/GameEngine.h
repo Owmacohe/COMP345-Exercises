@@ -15,7 +15,7 @@ enum State
 class GameEngine {
     public:
         GameEngine() ; // constructor
-        GameEngine( const GameEngine &gm); //copy constructor
+        GameEngine(const GameEngine &gm); //copy constructor
         ~GameEngine(); // destructor
         GameEngine& operator = (const GameEngine& gm); // Assignment Operator
 
