@@ -28,33 +28,41 @@ int cardsMain() {
     playerHand.playCard(4, mainDeck, player1List);
     playerHand.playCard(2, mainDeck, player1List);
     playerHand.playCard(2, mainDeck,player1List);
-    playerHand.playCard(1, mainDeck,player1List);
-    playerHand.playCard(0, mainDeck,player1List);
+//    playerHand.playCard(1, mainDeck,player1List);
+//    playerHand.playCard(0, mainDeck,player1List);
     cout << playerHand << endl;
 
     cout <<"\n---------------------------------------------------------------" << endl;
-    cout << mainDeck << endl;
+    cout << mainDeck << "\n" << endl;
 
 //  Assignemnt operator
     Deck assignDeck = mainDeck;
-    cout << endl;
-    cout << assignDeck;
+    playerHand.drawCard(assignDeck);
+    playerHand.drawCard(assignDeck);
+    cout << "\n" << endl;
+    cout << assignDeck << endl;
 
     Hand assignHand = playerHand;
     cout << endl;
-    cout << assignHand;
+    cout << assignHand << "\n" << endl;
+    assignHand.playCard(0,assignDeck,player1List);
+    assignHand.playCard(2,assignDeck,player1List);
+    assignHand.playCard(1,assignDeck,player1List);
+    assignHand.playCard(0,assignDeck,player1List);
+    cout << endl;
+    cout << assignHand << "\n" << endl;
+
 // Copy constructor
-    Hand copyHand(playerHand);
+    Hand copyHand(assignHand);
     Deck copyDeck(mainDeck);
 
     cout << endl;
-    cout << copyHand;
-    cout << endl;
-    cout << copyDeck;
+    cout << copyHand << "\n";
+    cout << copyDeck << "\n" << endl;
     return 0;
 }
 
-//int main(){
-//    cardsMain();
-//    return 0;
-//}
+int main(){
+    cardsMain();
+    return 0;
+}
