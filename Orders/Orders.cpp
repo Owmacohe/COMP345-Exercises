@@ -18,9 +18,7 @@ Order::Order(Order& original){
     description = original.description;
 }
 // Default Destructor
-Order::~Order(){
-
-}
+Order::~Order(){}
 
 // Accessors & Mutators
 string Order::getDescription(){
@@ -56,8 +54,9 @@ bool Order::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Order::execute(){
+    cout << "Executing Order" << endl;
     return true;
 }
 
@@ -68,7 +67,11 @@ Deploy::Deploy() : Order(false, "Deploy"){};
 // Parameterized Constructor
 Deploy::Deploy(bool v, string s) : Order(v,s){};
 
-//Copy constructor
+//Copy constructor IT WAS WORKING AFTER MY TESTS BUT RETEST WITH OWEN's
+// <<<<<<< mj2
+// Deploy::Deploy(Deploy& original) : Order(){
+//     this->description = "Deploy Armies into a territory";
+// =======
 Deploy::Deploy(Deploy& original) : Order(original){
     description = "Deploy Armies into a territory";
 }
@@ -106,8 +109,9 @@ string Deploy::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Deploy::execute(){
+    cout << "Executing Order Deploy" << endl;
     return true;
 }
 
@@ -158,7 +162,8 @@ ostream& operator<<(ostream& os, const Advance& o){
 string Advance::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Advance::execute(){
     return true;
 }
@@ -205,7 +210,8 @@ ostream& operator<<(ostream& os, const Bomb& o){
 string Bomb::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Bomb::execute(){
     return true;
 }
@@ -258,7 +264,8 @@ ostream& operator<<(ostream& os, const Blockade& o){
 string Blockade::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+
+// Complete Implementation next assignment
 bool Blockade::execute(){
     return true;
 }
@@ -311,7 +318,7 @@ string Airlift::validate(){
     return (validated)? "validated" : "not validated";
 }
 
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Airlift::execute(){
     return true;
 }
@@ -364,6 +371,7 @@ string Negotiate::validate(){
     return (validated)? "validated" : "not validated";
 }
 
+// Complete Implementation next assignment
 bool Negotiate::execute(){
     return true;
 }
@@ -416,7 +424,7 @@ ostream& operator<<(ostream& os, const Diplomacy& o){
 string Diplomacy::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Diplomacy::execute() {
     return true;
 }
@@ -466,7 +474,7 @@ ostream& operator<<(ostream& os, const Reinforcement& o){
 string Reinforcement::validate(){
     return (validated)? "validated" : "not validated";
 }
-//Implementation next assignment
+// Complete Implementation next assignment
 bool Reinforcement::execute(){
     return true;
 }
@@ -485,6 +493,7 @@ OrdersList::OrdersList(OrdersList &original){
     for (Order* i : original.playerOrderList) {
         playerOrderList.push_back(new Order(*i));
     }
+
 }
 
 // Default Destructor
@@ -497,6 +506,7 @@ OrdersList::~OrdersList(){
     
 	// then delete the vector
 	playerOrderList.clear();
+
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
@@ -504,19 +514,13 @@ OrdersList OrdersList::operator = (const OrdersList& original){
 	OrdersList deepcopy;
 	for(int i= 0; i <= original.playerOrderList.size(); ++i){
 		deepcopy.playerOrderList.push_back(new Order(*original.playerOrderList[i]));
+        cout << "DEBUG : for loop inside assignment operator" <<endl;
 	}
 	return deepcopy;
 }
 
 // stream insertion operator that outputs the OrdersList's vector
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
-//    int a = 1;
-//    os << "Orders List:\n [";
-//    for (auto i = ordersList.playerOrderList.cbegin(); i != ordersList.playerOrderList.cend(); ++i) {
-//        cout << a << " : " << *i << "\n";
-//        a++;
-//    }
-//    cout << "]" << endl;
     os << "Order List: \n";
     for(int i = 0; i < ordersList.playerOrderList.size(); i++){
         os << i << " - " << *(ordersList.playerOrderList.at(i)) << "\n";
@@ -524,8 +528,7 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
-
-// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order
+// Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order. Overloaded method to increase compatibility with other classes.
 void OrdersList::addOrder(Order order){
 	playerOrderList.push_back(new Order(order));
 }
@@ -561,9 +564,17 @@ playerOrderList.push_back(orderObject);}
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
 void OrdersList::remove(int i){
+
+// This are my changes, try out Owen's below
+//             Order *toRemove = *(this->playerOrderList.begin() + i);
+//             toRemove->~Order();
+// 			this->playerOrderList.erase( this->playerOrderList.begin() + i);
+
 	int j = 0;
 			playerOrderList.erase( playerOrderList.begin() + i);
+
 }
+
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
 void OrdersList::move(int i, int j){
     swap(playerOrderList[i],playerOrderList[j]);

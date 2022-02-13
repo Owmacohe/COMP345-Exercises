@@ -1,14 +1,15 @@
 #include "Orders.h"
 
-int ordersMain() {
+int Ordersmain() {
 	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
 
 	//Deploy
-	Deploy *deploy1 = new Deploy();
+	Deploy *deploy1 = new Deploy(); // Explicitly delete or destructor of Vector will destro???
 	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
     cout << "Checking for validation: " << deploy1->validate() << endl;
+    cout << "Checking for execution: " ; deploy1->execute() ;
 	player1List.addOrder(deploy1);
 	cout << player1List << endl;
 
@@ -16,6 +17,7 @@ int ordersMain() {
 	Advance *advance1 = new Advance( );
 	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
     cout << "Checking for validation: " << advance1->validate() << endl;
+    cout << "Checking for execution: " ; advance1->execute() ;
 	player1List.addOrder(advance1);
 	cout << player1List << endl;
 
@@ -23,6 +25,7 @@ int ordersMain() {
 	Bomb *bomb1 = new Bomb();
 	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
     cout << "Checking for validation: " << bomb1->validate() << endl;
+    cout << "Checking for execution: " ; bomb1->execute() ;
 	player1List.addOrder(bomb1);
 	cout << player1List << endl;
 
@@ -30,6 +33,7 @@ int ordersMain() {
 	Blockade *blockade1 = new Blockade();
 	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
     cout << "Checking for validation: " << blockade1->validate() << endl;
+    cout << "Checking for execution: " ; blockade1->execute() ;
 	player1List.addOrder(blockade1);
 	cout << player1List << endl;
 
@@ -37,6 +41,7 @@ int ordersMain() {
 	Airlift *airlift1 = new Airlift();
 	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
     cout << "Checking for validation: " << airlift1->validate() << endl;
+    cout << "Checking for execution: " ; airlift1->execute() ;
 	player1List.addOrder(airlift1);
 	cout << player1List << endl;
 
@@ -44,6 +49,7 @@ int ordersMain() {
 	Negotiate *negotiate1 = new Negotiate();
 	cout << "Adding to the OrdersList the Order: "<< *negotiate1 << endl;
     cout << "Checking for validation: " << negotiate1->validate() << endl;
+    cout << "Checking for execution: " ; negotiate1->execute() ;
 	player1List.addOrder(negotiate1);
 	cout << player1List << endl;
 
@@ -71,9 +77,6 @@ int ordersMain() {
 	cout << "List after the removal of order #2" <<endl;
 	cout << player1List << endl;
 
-	//Delete orders lists and orders to free memory
-	player1List.~OrdersList();
-	cout << player1List << endl;
 
 	// Check the deep copies
 	cout << "Original, now modified list" << endl;
@@ -84,6 +87,18 @@ int ordersMain() {
 
 	cout << "Copy through the assignment operator" << endl;
 	cout << player1List3 << endl;
+
+    //Delete orders lists and orders to free memory
+    player1List.~OrdersList();
+    cout << player1List << endl;
+
+    //Delete orders lists and orders to free memory
+    player1List2.~OrdersList();
+    cout << player1List2 << endl;
+
+    //Delete orders lists and orders to free memory
+    player1List3.~OrdersList();
+    cout << player1List3 << endl;
 
 	return 0;
 }
