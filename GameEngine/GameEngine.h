@@ -9,10 +9,11 @@ class Deck;
 
 enum State
 {
-   null = 0, start = 1, maploaded = 2, mapvalidated = 3, playersadded = 4, reinforcement = 5, issueorder = 6, executingorder = 7, win = 8
+   null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
 
 class GameEngine {
+
     public:
         GameEngine() ; // constructor
         GameEngine(const GameEngine &gm); //copy constructor
@@ -23,10 +24,12 @@ class GameEngine {
         State getState();
         int getNumberOfPlayers();
         bool endOfState ();
+
         //setters
         void setState(State s);
         void setNumberOfPlayers(int x);
         void setEndOfState(bool b);
+
         //phases , states and commands
         void startGame();
         void loadMap();
@@ -40,8 +43,8 @@ class GameEngine {
         State* s ;
         int NumberOfPlayers;
         int NumberOfTerritories;
-        MapLoader * ml;
+        MapLoader *ml;
         bool phaseEnd;
         Deck* deck;
-        vector<Player *> player_list;
+        vector<Player*> player_list;
 };
