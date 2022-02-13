@@ -4,9 +4,11 @@
 /*********************************** CARD ***********************************/
 
 Card::Card(){
+    cout << "Card Default Constructor" << endl;
     type = " ";
 }
 Card::Card(string theType){
+    cout << "Card Parameterized Constructor" << endl;
     // Convert the user input of Type to lowercase format
     for (char c : theType){
         c = tolower(c);
@@ -14,6 +16,7 @@ Card::Card(string theType){
     type = theType;
 }
 Card::Card(Card &anotherCard){
+    cout << "Card Copy Constructor" << endl;
     type = anotherCard.type;
 }
 
@@ -62,11 +65,13 @@ Card& Card::operator=(const Card &toAssign) {
 /*********************************** DECK ***********************************/
 
 Deck::Deck(){
+    cout << "Deck Default Constructor" << endl;
     srand (time(NULL));
     numCardInDeck = 0;
     deck = vector<Card*>();
 }
 Deck::Deck(int numCard) {
+    cout << "Deck Parameterized Constructor" << endl;
     srand(time(NULL));
     numCardInDeck = numCard;
     if (numCardInDeck % 5 != 0) {
@@ -93,6 +98,7 @@ Deck::Deck(int numCard) {
 }
 
 Deck::Deck(Deck &anotherDeck) {
+    cout << "Deck Copy Constructor" << endl;
     srand(time(NULL));
     numCardInDeck = anotherDeck.numCardInDeck;
 
@@ -106,8 +112,9 @@ Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
         delete deck.at(i);
         deck.at(i) = NULL;
+        cout << "...delete Cards in Deck" << endl;
     }
-
+    cout << "Deck deleted " <<  endl;
     // delete deck vector
     deck.clear();
 }
@@ -148,10 +155,12 @@ Deck& Deck::operator=(const Deck& toAssign){
 /*********************************** HAND ***********************************/
 
 Hand::Hand(){
+    cout << "Hand Default Constructor" << endl;
     numCardInHand = 0;
     hand = vector<Card*>();
 }
 Hand::Hand(Hand &anotherHand){
+    cout << "Hand Copy Constructor" << endl;
     numCardInHand = anotherHand.numCardInHand;
 
     hand = vector<Card*>();
@@ -165,7 +174,9 @@ Hand::~Hand(){
     for (int i=0;i<hand.size();i++){
         delete hand.at(i);
         hand.at(i) = NULL;
+        cout << "...delete Cards on Hand" << endl;
     }
+    cout << "Hand deleted" << endl;
     // delete the Hand vector
     hand.clear();
 }
