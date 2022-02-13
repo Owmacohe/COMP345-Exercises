@@ -19,3 +19,8 @@ int mapMain() {
 
     return 0;
 }
+
+//int main(){
+//    mapMain();
+//    return 0;
+//}

@@ -96,14 +96,10 @@ int OrdersMain() {
 	cout << "Copy through the assignment operator" << endl;
 	cout << player1List3 << endl;
 
-    /****************************** new-delete pairs *******************************/
-    delete(deploy1);
-    delete(advance1);
-    delete(bomb1);
-    delete(blockade1);
-    delete(airlift1);
-    delete(negotiate1);
-
 	return 0;
 }
 
+//int main(){
+//    OrdersMain();
+//    return 0;
+//}
