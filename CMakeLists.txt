@@ -8,17 +8,17 @@ include_directories(.)
 add_executable(COMP345-Exercises
         Cards/Cards.cpp
         Cards/Cards.h
-#        Cards/CardsDriver.cpp
-#        GameEngine/GameEngine.cpp
-#        GameEngine/GameEngine.h
-#        GameEngine/GameEngineDriver.cpp
+        Cards/CardsDriver.cpp
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngine.h
+        GameEngine/GameEngineDriver.cpp
         Map/Map.cpp
         Map/Map.h
         Map/MapDriver.cpp
         Orders/Orders.cpp
         Orders/Orders.h
-#        Orders/OrdersDriver.cpp
+        Orders/OrdersDriver.cpp
         Player/Player.cpp
         Player/Player.h
-#        Player/PlayerDriver.cpp
+        Player/PlayerDriver.cpp
         )

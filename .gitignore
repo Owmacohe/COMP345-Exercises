@@ -9,3 +9,7 @@ cmale-build-debug/
 .idea/workspace.xml
 cmake-build-debug/CMakeFiles/clion-log.txt
 cmake-build-debug/Testing/Temporary/LastTest.log
+CMakeLists.txt
+cmake-build-debug/Testing/Temporary/LastTest.log
+cmake-build-debug/CMakeFiles/clion-log.txt
+.idea/workspace.xml
