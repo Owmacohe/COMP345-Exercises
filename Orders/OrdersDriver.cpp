@@ -88,16 +88,6 @@ int Ordersmain() {
 	cout << "Copy through the assignment operator" << endl;
 	cout << player1List3 << endl;
 
-    // TEST AREA
-//    deploy1->description = "original Order";
-//     Deploy deploy2 = *deploy1; COPY CONSTRUCTOR
-//     Deploy deploy2; ASSIGNMENT OEPRATOR
-//    deploy2 = *deploy1;
-//    cout << "deploy 2 before : "<< deploy2.getDescription() <<endl;
-//    deploy2.description = "deep copy";
-//    cout << "deploy 2 after : "<< deploy2.getDescription() <<endl;
-//    cout << "deploy 1 after : "<< (*deploy1).getDescription() <<endl;
-
     //Delete orders lists and orders to free memory
     player1List.~OrdersList();
     cout << player1List << endl;
