@@ -48,15 +48,6 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
-    /*
-        State* s ;
-        int NumberOfPlayers;
-        int NumberOfTerritories;
-        MapLoader *ml;
-        bool phaseEnd;
-        Deck* deck;
-        vector<Player*> player_list;
-    */
    return *this;
 };
 
@@ -105,7 +96,7 @@ void GameEngine::validateMap(){
 };
 
 
-void GameEngine::addPlayer(){
+void GameEngine::addPlayer(){ // TODO GABBI
     *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
@@ -170,6 +161,8 @@ void GameEngine::gameStartupTransitions(string str){
     }
     else if (str == "assigncountries" && getState() ==4){
         assignCountries();
+        assignReinforcementPhase();
+
     }
      else {
         cout << "Invalid command!" << endl;
@@ -179,6 +172,7 @@ void GameEngine::gameStartupTransitions(string str){
 void GameEngine::gamePlayTransitions(string str, Player *p){
     if (str == "issueorder" && (getState() ==5 || getState() == 6)){
         issueOrders(p);
+
     }
     else if (str == "endissueorder" && getState() == 6){
         endIssueOrderPhase(p);
