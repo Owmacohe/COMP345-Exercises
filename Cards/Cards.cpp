@@ -105,6 +105,9 @@ Deck::~Deck(){
         delete deck.at(i);
         deck.at(i) = NULL;
     }
+
+    // delete deck vector
+    deck.clear();
 }
 
 Card* Deck::draw(){
@@ -161,6 +164,8 @@ Hand::~Hand(){
         delete hand.at(i);
         hand.at(i) = NULL;
     }
+    // delete the Hand vector
+    hand.clear();
 }
 // Overload <<
 ostream& operator<<(ostream& os, const Hand& h)
