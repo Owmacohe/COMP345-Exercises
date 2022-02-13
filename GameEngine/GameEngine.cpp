@@ -3,13 +3,16 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 
+// constructor
 GameEngine::GameEngine(){
     *s = null;
     NumberOfPlayers = 0;
     NumberOfTerritories = 0;
     deck = new Deck();
     player_list = vector<Player*>();
-} ; // constructor
+}
+
+//copy constructor
 GameEngine::GameEngine(const GameEngine &gm){
     s = gm.s;
     NumberOfPlayers = gm.NumberOfPlayers;
@@ -18,8 +21,9 @@ GameEngine::GameEngine(const GameEngine &gm){
     for (Player* p : gm.player_list) {
         this->player_list.push_back(new Player(*p));
     }
+}
 
-}; //copy constructor
+// destructor
 GameEngine::~GameEngine(){
     delete s;
     s = NULL;
@@ -31,10 +35,12 @@ GameEngine::~GameEngine(){
         delete p;
         p = NULL;
     }
+}
 
-} // destructor
-
-
+// Assignment operator
+GameEngine& operator = (const GameEngine& gm) {
+    //TODO
+};
 
 //getters
 State GameEngine::getState(){return *s;}
@@ -45,6 +51,7 @@ bool GameEngine::endOfState (){return phaseEnd;}
 void GameEngine::setState(State s){this->s = &s;}
 void GameEngine::setNumberOfPlayers(int x){this->NumberOfPlayers = x;}
 void GameEngine::setEndOfState(bool b){this->phaseEnd = b;}
+
 //phases , states and commands
 void GameEngine::startGame(){
     *s = start;
@@ -55,11 +62,11 @@ void GameEngine::startGame(){
 
 }
 void GameEngine::loadMap(){
-    *s = maploaded;
+    *s = mapLoaded;
     string map;
     cout<< "enter map name" << endl;
     cin >> map;
-    while(map != "canada" || map != "europe"){
+    while(map != "canada" || map != "europe"){ //TODO : Owen does this make sense with yours?
         cout<< "incorrect, please re-enter map name" << endl;
         cin >> map;
     }
@@ -68,13 +75,13 @@ void GameEngine::loadMap(){
     cout<< "end of load map phase" << endl;
 }
 void GameEngine::validateMap(){
-    //
+    //TODO call Owen's method
     cout<< "end of map validated phase" << endl;
 };
 
 
 void GameEngine::addPlayer(){
-    *s = playersadded;
+    *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
         Player *p = new Player();
@@ -83,22 +90,23 @@ void GameEngine::addPlayer(){
         p->setName(name);
         player_list.push_back (p);
     }
-    cout<< "end of add player phase" << endl;
+    cout<< "end of players added phase" << endl;
 
 }
 
 void GameEngine::issueOrdersPhase(Player* player){
-    *s = issueorder;
+    *s = issueOrder;
     cout<< "end of issue orders phase" << endl;
-
 }
+
 void GameEngine::executeOrdersPhase(Player* player){
-    *s = executingorder;
+    *s = executeOrder;
     cout<< "end of execute orders phase" << endl;
 }
+
 void GameEngine::ReinforcementPhase(){
-    *s = reinforcement;
-    cout<< "end of add player phase" << endl;
+    *s = assignReinforcement;
+    cout<< "end of assign Reinforcement" << endl;
 
 };
 
