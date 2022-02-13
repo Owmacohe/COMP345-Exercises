@@ -9,6 +9,7 @@ Player::Player() {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
+    cout << "[Player default constructor]" << endl;
 }
 
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n) {
@@ -19,6 +20,7 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o) : name(n)
     
     hand = new Hand(*h);
     orders = new OrdersList(*o);
+    cout << "[Player param constructor]" << endl;
 }
 
 Player::Player(const Player &p) {
@@ -31,6 +33,7 @@ Player::Player(const Player &p) {
 
     hand = new Hand(*(p.hand));
     orders = new OrdersList(*(p.orders));
+    cout << "[Player copy constructor]" << endl;
 }
 
 Player::~Player() {
@@ -44,7 +47,7 @@ Player::~Player() {
     delete orders;
     orders = NULL;
 
-    //cout << name << " player destroyed" << endl;
+    cout << "[Player destructor]" << endl;
 }
 
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
@@ -102,6 +105,6 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
     return strm <<
         "PLAYER: " << p.name <<
         "\n    Territories: " << t <<
-        "\n    Hand: " << p.hand <<
-        "\n    Orders : " << p.orders;
+        "\n    Players hand, " << *p.hand <<
+        "\n    Players orders, " << *p.orders;
 }
