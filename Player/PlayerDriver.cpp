@@ -11,21 +11,22 @@
 int PlayerMain() {
 
 
-	cout << "Player test!" << endl;
+	cout<< "Player test!" <<endl;
 	//test default constructor
 	Player p1;
-	cout<<p1.getName()<<endl;
-	cout<<p1<<endl;
+	cout<< p1.getName() <<endl;
+	cout<< p1 <<endl;
 
 	//test param constructor
-	//Player p2;
-	//Territory *t1 = new Territory("t1", "", p2, 0);
-	//Territory *t2 = new Territory("t2", "", p2, 0);
-	//vector<Territory*> v (t1, t2);
-	//Hand *h = new Hand;
-	//OrdersList *o = new OrdersList;
-	//p2 = Player("Player Player", v, h, o);
-	//cout<<p2<<endl;
+	Player *p2 = new Player;
+	Territory *t1 = new Territory("t1", "", p2, 0);
+	Territory *t2 = new Territory("t2", "", p2, 0);
+	vector<Territory*> v{t1, t2};
+	Hand *h = new Hand;
+	OrdersList *o = new OrdersList;
+	delete p2;
+	p2 = new Player("Player Player", v, h, o);
+	cout<< *p2 <<endl;
 
 	// test issueOrder method
 	cout<< "results of .issueOrder()";
@@ -33,13 +34,13 @@ int PlayerMain() {
 	cout<< p1;
 
 	// test toDefend and toAttack methods
-	vector<Territory*> attack = p1.toAttack();
-	cout<<"results of .toAttack()";
-	for (Territory* i : attack) cout << i << " ";
+	vector<Territory*> attack = (*p2).toAttack();
+	cout<<"results of .toAttack() ";
+	for (Territory* i : attack) cout<< (*i).getName() << " "<<endl;
 
-	vector<Territory*> defend = p1.toDefend();
-	cout<<"results of .toDefend()";
-	for (Territory* i : defend) cout << i << " ";
+	vector<Territory*> defend = (*p2).toDefend();
+	cout<<"results of .toDefend() ";
+	for (Territory* i : defend) cout<< (*i).getName() << " "<<endl;
 	
 	cout <<endl;
 	

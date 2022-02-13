@@ -40,6 +40,7 @@ Player::~Player() {
     for (Territory* i : territories) {
         delete i;
         i = NULL;
+        cout << "[Player territory destructor]" << endl;
     }
 
     delete hand;
@@ -99,7 +100,7 @@ Player& Player::operator = (const Player& p){
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
     string t = "";
     for (Territory* i : p.territories) {
-        t += i->getName() +", ";
+        t += (*i).getName() +", ";
     }
 
     return strm <<
