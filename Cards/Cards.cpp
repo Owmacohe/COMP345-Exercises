@@ -2,17 +2,18 @@
 #include "../Orders/Orders.h"
 
 /*********************************** CARD ***********************************/
-
 Card::Card(){
-    cout << "Card Default Constructor" << endl;
+//    cout << "Card Default Constructor" << endl;
     type = " ";
 }
+
 Card::Card(string theType){
-    cout << "Card Parameterized Constructor" << endl;
+//    cout << "Card Parameterized Constructor" << endl;
     type = theType;
 }
+
 Card::Card(Card &anotherCard){
-    cout << "Card Copy Constructor" << endl;
+//    cout << "Card Copy Constructor" << endl;
     type = anotherCard.type;
 }
 
@@ -48,28 +49,27 @@ void Card::play(OrdersList &playerOrdersList) const{
 
 }
 
-// Overload <<
 ostream& operator<<(ostream& os, const Card& c)
 {
     os << c.getType();
     return os;
 }
 
-// Overload =
 Card& Card::operator=(const Card &toAssign) {
     type = toAssign.type;
     return *this;
 }
-/*********************************** DECK ***********************************/
 
+/*********************************** DECK ***********************************/
 Deck::Deck(){
-    cout << "Deck Default Constructor" << endl;
+//    cout << "Deck Default Constructor" << endl;
     srand (time(NULL));
     numCardInDeck = 0;
     deck = vector<Card*>();
 }
+
 Deck::Deck(int numCard) {
-    cout << "Deck Parameterized Constructor" << endl;
+//    cout << "Deck Parameterized Constructor" << endl;
     srand(time(NULL));
     numCardInDeck = numCard;
     if (numCardInDeck % 5 != 0) {
@@ -96,7 +96,7 @@ Deck::Deck(int numCard) {
 }
 
 Deck::Deck(Deck &anotherDeck) {
-    cout << "Deck Copy Constructor" << endl;
+//    cout << "Deck Copy Constructor" << endl;
     srand(time(NULL));
     numCardInDeck = anotherDeck.numCardInDeck;
 
@@ -106,19 +106,18 @@ Deck::Deck(Deck &anotherDeck) {
         deck.push_back(cards);
     }
 }
+
 Deck::~Deck(){
     for (int i=0; i<deck.size();i++){
         delete deck.at(i);
         deck.at(i) = NULL;
-        cout << "...deleting Cards in Deck" << endl;
+//        cout << "...deleting Cards in Deck" << endl;
     }
-    cout << "Deck deleted " <<  endl;
-    // delete deck vector
+//    cout << "Deck deleted " <<  endl;
     deck.clear();
 }
 
 Card* Deck::draw(){
-
     // Generate a random number
     int numRandom = rand() % numCardInDeck;
 
@@ -135,7 +134,6 @@ Card* Deck::draw(){
     return temp;
 }
 
-// Overload <<
 ostream& operator<<(ostream& os, const Deck& d){
     os << "Number of card in deck: " << d.numCardInDeck << endl;
     for(int i = 0; i < d.numCardInDeck; i++){
@@ -144,20 +142,19 @@ ostream& operator<<(ostream& os, const Deck& d){
     return os;
 }
 
-// Overload =
 Deck& Deck::operator=(const Deck& toAssign){
     numCardInDeck = toAssign.numCardInDeck;
     deck = toAssign.deck;
     return *this;
 }
-/*********************************** HAND ***********************************/
 
+/*********************************** HAND ***********************************/
 Hand::Hand(){
     numCardInHand = 0;
     hand = vector<Card*>();
-
     //cout << "Hand Default Constructor" << endl;
 }
+
 Hand::Hand(Hand &anotherHand){
     numCardInHand = anotherHand.numCardInHand;
 
@@ -166,7 +163,6 @@ Hand::Hand(Hand &anotherHand){
         Card* cards = new Card(*anotherHand.hand.at(i));
         hand.push_back(cards);
     }
-
     //cout << "Hand Copy Constructor" << endl;
 }
 
@@ -174,14 +170,12 @@ Hand::~Hand(){
     for (int i=0;i<hand.size();i++){
         delete hand.at(i);
         hand.at(i) = NULL;
-        cout << "...delete Cards on Hand" << endl;
+//        cout << "...delete Cards on Hand" << endl;
     }
-    // delete the Hand vector
     hand.clear();
-
-    //cout << "Hand deleted" << endl;
+//    cout << "Hand deleted" << endl;
 }
-// Overload <<
+
 ostream& operator<<(ostream& os, const Hand& h)
 {
     os << "Number of cards on hand: " << h.numCardInHand << endl;
@@ -196,13 +190,13 @@ Hand& Hand::operator=(const Hand& toAssign){
     hand = toAssign.hand;
     return *this;
 }
+
 void Hand::drawCard(Deck& d){
     Card* drawnCard = d.draw();
     // Put the drawn card into Player hand
     hand.push_back(drawnCard);
     numCardInHand++;
 }
-
 
 void Hand::playCard(int i, Deck &d, OrdersList &l) {
     // Create Order and add Order to OrderList
@@ -216,5 +210,4 @@ void Hand::playCard(int i, Deck &d, OrdersList &l) {
     // Remove card from Hand
     hand.erase(hand.begin()+i); // Delete the card object along with its pointer
     numCardInHand--;
-
 }

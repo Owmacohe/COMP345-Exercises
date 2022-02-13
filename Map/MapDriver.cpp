@@ -6,7 +6,7 @@
 #include "../Orders/Orders.cpp"
 #include "../Player/Player.cpp"
 
-int mapDriver() {
+int mapMain() {
     const int len = 5;
     string *files = new string[len]{"canada.map", "europe.map", "LOTR2.map", "usa8regions.map", "solar.map"};
     MapLoader loader;
