@@ -4,6 +4,7 @@
 
 #include "Player.h"
 
+// Default constructor
 Player::Player() {
     name = "empty player";
     territories = vector<Territory*>();
@@ -12,6 +13,7 @@ Player::Player() {
     //cout << "[Player default constructor]" << endl;
 }
 
+// Param constructor
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
@@ -23,6 +25,7 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) 
     //cout << "[Player param constructor]" << endl;
 }
 
+// Copy constructor
 Player::Player(const Player &p) {
     name = p.name;
 
@@ -36,6 +39,7 @@ Player::Player(const Player &p) {
     //cout << "[Player copy constructor]" << endl;
 }
 
+// Destructor
 Player::~Player() {
     for (Territory* i : territories) {
         delete i;
@@ -87,6 +91,7 @@ Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
 // End of Mutators and Accessors
 
+// Assignment operator
 Player& Player::operator = (const Player& p){
     this->name = p.name;
     for (Territory* i : p.territories) {
@@ -97,6 +102,7 @@ Player& Player::operator = (const Player& p){
     return *this;
 }
 
+// Stream insertion operator
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
     string t = "";
     for (Territory* i : p.territories) {
