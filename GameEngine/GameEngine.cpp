@@ -48,15 +48,6 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
-    /*
-        State* s ;
-        int NumberOfPlayers;
-        int NumberOfTerritories;
-        MapLoader *ml;
-        bool phaseEnd;
-        Deck* deck;
-        vector<Player*> player_list;
-    */
    return *this;
 };
 
@@ -92,11 +83,6 @@ void GameEngine::loadMap(){
     Map * m = new Map();
     *m = ml->load(map + ".map");
     cout<< "end of load map phase" << endl;
-    /* TODO THIS WAS IN THE DRIVER BUT CALLIN LOADPMAP SHOULD BE ENOUGH
-    MapLoader loader;
-    Map europe = loader.load("europe.map");
-    cout << europe << endl;
-    */
 }
 void GameEngine::validateMap(){
     //TODO call Owen's method
@@ -105,7 +91,7 @@ void GameEngine::validateMap(){
 };
 
 
-void GameEngine::addPlayer(){
+void GameEngine::addPlayer(){ // TODO GABBI
     *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
@@ -170,6 +156,7 @@ void GameEngine::gameStartupTransitions(string str){
     }
     else if (str == "assigncountries" && getState() ==4){
         assignCountries();
+        assignReinforcementPhase();
     }
      else {
         cout << "Invalid command!" << endl;
