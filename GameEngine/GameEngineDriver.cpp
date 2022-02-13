@@ -13,19 +13,6 @@
 #include "../Player/PlayerDriver.cpp"
 
 
-/*
-int main() {
-    State * s = 0;
-    GameEngine* game = new GameEngine();
-    game->startGame();
-    *s = game->getState();
-    cout << *s << endl;
-
-    return 0;
-}
-*/
-
-
 int main() {
     GameEngine gameEngine;
     int numPlayer;
@@ -36,35 +23,29 @@ int main() {
     //START STATE -- player must enter loadmap to go to the next state
     gameEngine.startGame();
 
-    // MAP LOADED --- HAS LOOP UNTO ITSELF -- player must enter loadmap to stay or validatemap to continue
-    MapLoader loader;
-    Map europe = loader.load("europe.map");
-    cout << europe << endl; //TODO Owen how should your stream insertion be used here
-
-    // MAP VALIDATED -- player must enter add player to continue
-    cout << europe.validate() << endl; // TODO is this already included in MapLoader?
-
-    // PLAYERS ADDED --- HAS LOOP UNTO ITSELF -- player must enter addplayer to stay or assigncountries to continue
-    cout << "Enter The number of Player: ";
-    cin >> numPlayer;
-    gameEngine.setNumberOfPlayers(numPlayer);
-    gameEngine.addPlayer(); // There was a for loop here but the method already has a for loop.
+    string input;
+    while (gameEngine.getState() < 5) {
+        cout << "Enter a command: " << endl;
+        cin >> input;
+        gameEngine.gameStartupTransitions(input);
+    }
 
     // WHATEVER IS BELOW HAS TO LOOP FOR EACH PLAYER UNTIL SOMEONE WINS
-    while (gameEngine.getState() == 8) {
+    while (gameEngine.getState() != 8) {
     for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
-
-        // ASSIGN REINFORCEMENT -- player must enter issueorder to issue order
-
-        // ISSUE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter issueorder to stay or endissueorders to continue
-
-        // EXECUTE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter execorder to stay or endexecorder to continue to the next player's turn
-
+        cout << gameEngine.getplayer_list()[i]->getName() << "'s turn" <<endl;
+        string input;
+        cout << "What would you like to do now?\n" <<endl;
+        cin >> input;
+        gameEngine.gamePlayTransitions( input ,gameEngine.getplayer_list()[i]);
+        //TODO IF A PLAYER WINS AND OTEHR PLAYERS HAVE NOT HAD THEIR TURN,DO WE FINISH THE FOR LOOP OR END IT
     }
-        // WIN -- PLayer enters win
-        // PLAY AGAIN
     }
 
+    while(gameEngine.getState() == 8) {
+        cout << "What would you like to do next? To Play Again or end the game?" <<endl;
+        gameEngine.gameEndTransitions(input);
+    }
     return 0;
 
 }
