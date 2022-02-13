@@ -67,11 +67,6 @@ Deploy::Deploy() : Order(false, "Deploy"){};
 // Parameterized Constructor
 Deploy::Deploy(bool v, string s) : Order(v,s){};
 
-//Copy constructor IT WAS WORKING AFTER MY TESTS BUT RETEST WITH OWEN's
-// <<<<<<< mj2
-// Deploy::Deploy(Deploy& original) : Order(){
-//     this->description = "Deploy Armies into a territory";
-// =======
 Deploy::Deploy(Deploy& original) : Order(original){
     description = "Deploy Armies into a territory";
 }
@@ -499,9 +494,7 @@ OrdersList::OrdersList(OrdersList &original){
     
     for (Order* i : original.playerOrderList) {
         playerOrderList.push_back(new Order(*i));
-        cout << "pushing back a new Order" << endl;
     }
-    cout <<"copy constructor done"<<endl;
 }
 
 // Default Destructor
@@ -510,20 +503,22 @@ OrdersList::~OrdersList(){
     for (Order* i : playerOrderList) {
         delete i;
         i = NULL;
+        cout << "deleting an order in OrdersList" <<endl;
     }
     
 	// then delete the vector
 	playerOrderList.clear();
-
+    cout << "deleted OrdersList" <<endl;
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
 OrdersList OrdersList::operator = (const OrdersList& original){
 	OrdersList deepcopy;
-	for(int i= 0; i <= original.playerOrderList.size(); ++i){
-		deepcopy.playerOrderList.push_back(new Order(*original.playerOrderList[i]));
-        cout << "DEBUG : for loop inside assignment operator" <<endl;
-	}
+
+    for (Order* i : original.playerOrderList) {
+       deepcopy.playerOrderList.push_back(new Order(*i));
+       cout << "DEBUG : for loop inside assignment operator" <<endl;
+    }
 	return deepcopy;
 }
 

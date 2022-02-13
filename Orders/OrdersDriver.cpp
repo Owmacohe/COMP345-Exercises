@@ -54,13 +54,12 @@ int Ordersmain() {
 	cout << player1List << endl;
 
 	//Create through copy constructor object
+    cout << "Creating a deep copy of the OrderList through the Copy constructor" <<endl;
 	OrdersList player1List2(player1List);
-	cout << player1List2 << endl;
 
-//	//Create through assignment operator object
-//	OrdersList player1List3;
-//    player1List3 = player1List;
-//	cout << player1List3 << endl;
+	//Create through assignment operator object
+    cout << "Creating a deep copy of the OrderList through the assignment operator" <<endl;
+	OrdersList player1List3 = player1List;
 
 	//Move()
 	cout << "List before the switch/move of orders #2 & #3" <<endl;
@@ -84,20 +83,16 @@ int Ordersmain() {
 	cout << "Copy through the copy constructor" << endl;
 	cout << player1List2 << endl;
 
-//	cout << "Copy through the assignment operator" << endl;
-//	cout << player1List3 << endl;
+	cout << "Copy through the assignment operator" << endl;
+	cout << player1List3 << endl;
 
-//    //Delete orders lists and orders to free memory
-//    player1List.~OrdersList();
-//    cout << player1List << endl;
-//
-//    //Delete orders lists and orders to free memory
-//    player1List2.~OrdersList();
-//    cout << player1List2 << endl;
-//
-//    //Delete orders lists and orders to free memory
-//    player1List3.~OrdersList();
-//    cout << player1List3 << endl;
+
+    delete(deploy1);
+    delete(advance1);
+    delete(bomb1);
+    delete(blockade1);
+    delete(airlift1);
+    delete(negotiate1);
 
 	return 0;
 }
