@@ -91,22 +91,64 @@ void GameEngine::addPlayer(){
         player_list.push_back (p);
     }
     cout<< "end of players added phase" << endl;
-
 }
 
-void GameEngine::issueOrdersPhase(Player* player){
+void GameEngine::issueOrdersPhase(Player *player){
     *s = issueOrder;
-    cout<< "end of issue orders phase" << endl;
+    cout<< "end of issue orders phase for player " << player->getName() << endl;
 }
 
-void GameEngine::executeOrdersPhase(Player* player){
+void GameEngine::executeOrdersPhase(Player *player){
     *s = executeOrder;
-    cout<< "end of execute orders phase" << endl;
+    cout<< "end of execute orders phase for player " << player->getName() << endl;
 }
 
 void GameEngine::ReinforcementPhase(){
     *s = assignReinforcement;
     cout<< "end of assign Reinforcement" << endl;
+}
 
-};
+void GameEngine::gameStartupTransitions(string str){
+    if (str == "loadmap"){
+    loadMap();
+    }
+    else if (str == "validatemap"){
+        validateMap();
+    }
+    else if (str == "addplayer"){
+       addPlayer();
+    }
+    else if (str == "assigncountries"){
+        assignCountries() // TODO in h and cpp
+    }
+     else {
+        cout << "Invalid command!" << endl;
+    }
+}
 
+void GameEngine::gamePlayTransitions(string str, Player *p){
+    if (str == "issueorder"){
+        issueOrdersPhase(*p);
+    }
+    else if (str == "endissueorder"){
+        endIssueOrder(); //TODO
+    }
+    else if (str == "execorder"){
+        execOrder();  //TODO
+    }
+    else if (str == "endexecorders"){
+        endexecorders; //TODO
+    }
+    else if (str == "win"){
+        win(); // TODO
+    }
+    else if (str == "end"){
+        end(); // TODO
+    }
+    else if (str == "play"){
+        play(); // TODO
+    }
+    else {
+        cout << "Invalid command!" << endl;
+    }
+}

@@ -34,12 +34,12 @@ int main() {
     // else we need error message and try again or stay in the same state
 
     //START STATE -- player must enter loadmap to go to the next state
-    cout << "Welcome to Warzone" << endl;
+    gameEngine.startGame();
 
     // MAP LOADED --- HAS LOOP UNTO ITSELF -- player must enter loadmap to stay or validatemap to continue
     MapLoader loader;
     Map europe = loader.load("europe.map");
-    cout << europe << endl; //TODO Owen how should your stream inseration be used here
+    cout << europe << endl; //TODO Owen how should your stream insertion be used here
 
     // MAP VALIDATED -- player must enter add player to continue
     cout << europe.validate() << endl; // TODO is this already included in MapLoader?
@@ -51,16 +51,19 @@ int main() {
     gameEngine.addPlayer(); // There was a for loop here but the method already has a for loop.
 
     // WHATEVER IS BELOW HAS TO LOOP FOR EACH PLAYER UNTIL SOMEONE WINS
-    // ASSIGN REINFORCEMENT -- player must enter issueorder to issue order
-    //TODO in cpp, not sure if implementaiton is needed or just going through the states is enough
+    while (gameEngine.getState() == 8) {
+    for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
 
-    // ISSUE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter issueorder to stay or endissueorders to continue
-    //TODO  in cpp, not sure if implementaiton is needed or just going through the states  is enough
+        // ASSIGN REINFORCEMENT -- player must enter issueorder to issue order
 
-    // EXECUTE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter execorder to stay or endexecorder to continue to the next player's turn
-    // TODO in cpp, not sure if implementaiton is needed or just going through the states  is enough
+        // ISSUE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter issueorder to stay or endissueorders to continue
 
-    // WIN -- PLayer enters win
+        // EXECUTE ORDERS -- HAS LOOP UNTO ITSELF -- player must enter execorder to stay or endexecorder to continue to the next player's turn
+
+    }
+        // WIN -- PLayer enters win
+        // PLAY AGAIN
+    }
 
     return 0;
 

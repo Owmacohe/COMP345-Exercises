@@ -47,4 +47,8 @@ class GameEngine {
         bool phaseEnd;
         Deck* deck;
         vector<Player*> player_list;
+
+    void gameStartupTransitions(string s);
+
+    void gamePlayTransitions(string s, Player *p);
 };
