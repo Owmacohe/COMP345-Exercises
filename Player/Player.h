@@ -21,7 +21,7 @@ class Player {
         vector<Territory*> toDefend(); // Territories for player to defend
         vector<Territory*> toAttack(); // Territories for player to attack
 
-        void issueOrder(); //  Create order and adds order to players order list
+        void issueOrder(string); //  Create order and adds order to players order list
 
         // Accessors
         void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o);
