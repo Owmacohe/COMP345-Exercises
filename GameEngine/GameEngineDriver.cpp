@@ -1,34 +1,32 @@
+/*
 #include "../Cards/Cards.cpp"
 #include "../Orders/Orders.cpp"
 #include "../Map/Map.cpp"
 #include "../Player/Player.cpp"
 #include "GameEngine.cpp"
+*/
 
+/*
 #include "../Cards/CardsDriver.cpp"
 #include "../Orders/OrdersDriver.cpp"
 #include "../Map/MapDriver.cpp"
 #include "../Player/PlayerDriver.cpp"
+*/
 
+/*
 int main() {
-    //cardsMain();
-    //gameEngineMain();
-    mapMain();
-    //ordersMain();
-    //playerMain();
-
-    /*
     State * s = 0;
     GameEngine* game = new GameEngine();
     game->startGame();
     *s = game->getState();
     cout << *s << endl;
-    */
 
     return 0;
 }
+*/
 
 /*
-int main(){
+int main() {
     GameEngine gameEngine;
     int numPlayer;
     
