@@ -4,8 +4,9 @@
 #include <fstream>
 using namespace std;
 
-class Player;
+class Player; // Forward declaration of Player
 
+// Class representing a node on the graph
 class Territory {
     public:
         Territory(); // Default constructor
@@ -28,11 +29,13 @@ class Territory {
         int armies; // Number of armies that the Territory has
 };
 
+// Small struct representing an edge between nodes on the graph
 struct Edge {
-    Territory a, b;
-    bool visited = false;
+    Territory a, b; // Connected territories
+    bool visited; // Whether the edge has been visited (when validating)
 };
 
+// Class representing the graph data structure
 class Map {
     public:
         Map(); // Default constructor
@@ -66,6 +69,7 @@ class Map {
         Edge *edges; // Array of edges between the Territories
 };
 
+// Class to load in new graphs
 class MapLoader {
     public:
         Map load(string); // Method to read a .map file with the given name, and output it as a Map

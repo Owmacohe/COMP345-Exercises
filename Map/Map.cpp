@@ -1,21 +1,19 @@
 #include "Map.h"
 #include "../Player/Player.h"
 
+// Free method to determine whether a string pointer array contains a given string
 bool doesContain(string* arr, int size, string s) {
-    bool found = false;
-
     for (int i = 0; i < size; i++) {
         if (arr[i] == s) {
-            found = true;
+            return true;
         }
     }
 
-    return found;
+    return false;
 }
 
+// Free method to determine whether an Edge pointer array contains an Edge between the given Territories
 bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
-    bool found = false;
-
     for (int i = 0; i < size; i++) {
         string n1 = arr[i].a.getName();
         string n2 = arr[i].b.getName();
@@ -23,13 +21,14 @@ bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
         string n4 = t2.getName();
 
         if (n1 == n3 && n2 == n4) {
-            found = true;
+            return true;
         }
     }
 
-    return found;
+    return false;
 }
 
+// Territory default constructor
 Territory::Territory() {
     name = "";
     continent = "";
@@ -39,12 +38,14 @@ Territory::Territory() {
     //cout << "[Territory default constructor]" << endl;
 }
 
+// Territory parameterized constructor
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
     owner = o;
 
     //cout << "[" << n << " Territory param constructor]" << endl;
 }
 
+// Territory copy constructor
 Territory::Territory(const Territory &t) {
     name = t.name;
     continent = t.continent;
@@ -54,20 +55,24 @@ Territory::Territory(const Territory &t) {
     //cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
+// Territory destructor
 Territory::~Territory() {
     //cout << "[" << name << " Territory destructor]" << endl;
 }
 
+// Territory accessors
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
 Player *Territory::getOwner() { return owner; }
 int Territory::getArmies() { return armies; }
 
+// Territory mutators
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
 void Territory::setOwner(Player *o) { owner = o; }
 void Territory::setArmies(int a) { armies = a; }
 
+// Territory stream insertion operator
 ostream& operator<<(ostream &strm, const Territory &t) {
     string temp;
 
@@ -79,12 +84,13 @@ ostream& operator<<(ostream &strm, const Territory &t) {
     }
 
     return strm <<
-        "-----\nTERRITORY: " << t.name <<
-        "\n\nContinent: " << t.continent <<
-        "\n\nOwner: " << temp <<
-        "\n\nArmies: " << t.armies << "\n-----";
+        "[TERRITORY PRINT: " << t.name << "]" <<
+        endl << "[--- Continent: " << t.continent << " ---]" <<
+        endl << "[--- Owner: " << temp << " ---]" <<
+        endl << "[--- Armies: " << t.armies << " ---]";
 }
 
+// Map default constructor
 Map::Map() {
     name = "";
     continentsLength = 0;
@@ -97,6 +103,7 @@ Map::Map() {
     //cout << "[Map default constructor]" << endl;
 }
 
+// Map parameterized constructor
 Map::Map(string n) : name(n) {
     continentsLength = 0;
     continents = new string[continentsLength];
@@ -108,6 +115,7 @@ Map::Map(string n) : name(n) {
     //cout << "[" << n << " Map param constructor]" << endl;
 }
 
+// Map copy constructor
 Map::Map(const Map &m) {
     name = m.name;
     setContinents(m.continents, m.continentsLength);
@@ -117,6 +125,7 @@ Map::Map(const Map &m) {
     //cout << "[" << m.name << " Map copy constructor]" << endl;
 }
 
+// Map destructor
 Map::~Map() {
     delete[] continents;
     continents = NULL;
@@ -130,11 +139,13 @@ Map::~Map() {
     //cout << "[" << name << " Map destructor]" << endl;
 }
 
+// Map accessors
 string Map::getName() { return name; }
 string *Map::getContinents() { return continents; }
 Territory *Map::getTerritories() { return territories; }
 Edge *Map::getEdges() { return edges; }
 
+// Map mutators
 void Map::setName(string n) { name = n; }
 void Map::setContinents(string *c, int l) {
     delete[] continents;
@@ -167,61 +178,74 @@ void Map::setEdges(Edge *e, int l) {
     edgesLength = l;
 }
 
+// Method to add a string continent to a Map
 void Map::addContinent(string c) {
-    string *temp = new string[continentsLength + 1];
+    string *temp = new string[continentsLength + 1]; // Creating a new array (1 size larger)
 
+    // Copying the old elements into the new array
     for (int i = 0; i < continentsLength; i++) {
         temp[i] = continents[i];
     }
 
-    continentsLength++;
-
+    // Freeing the old memory and setting the new address
     delete[] continents;
     continents = temp;
 
-    continents[continentsLength - 1] = c;
+    // Setting the new element and incrementing the size variable
+    continents[continentsLength] = c;
+    continentsLength++;
 }
 
+// Method to add a Territory to a Map
 void Map::addTerritory(const Territory &t) {
-    Territory *temp = new Territory[territoriesLength + 1];
+    Territory *temp = new Territory[territoriesLength + 1]; // Creating a new array (1 size larger)
 
+    // Copying the old elements into the new array
     for (int i = 0; i < territoriesLength; i++) {
         temp[i] = territories[i];
     }
 
-    territoriesLength++;
-
+    // Freeing the old memory and setting the new address
     delete[] territories;
     territories = temp;
 
-    territories[territoriesLength - 1] = t;
+    // Setting the new element and incrementing the size variable
+    territories[territoriesLength] = t;
+    territoriesLength++;
 }
 
+// Method to add an Edge to a Map
 void Map::addEdge(const Edge &e) {
-    Edge *temp = new Edge[edgesLength + 1];
+    Edge *temp = new Edge[edgesLength + 1]; // Creating a new array (1 size larger)
 
+    // Copying the old elements into the new array
     for (int i = 0; i < edgesLength; i++) {
         temp[i] = edges[i];
     }
 
-    edgesLength++;
-
+    // Freeing the old memory and setting the new address
     delete[] edges;
     edges = temp;
 
-    edges[edgesLength - 1] = e;
+    // Setting the new element and incrementing the size variable
+    edges[edgesLength] = e;
+    edgesLength++;
 }
 
+// Free method to recursively determine if two given Territories are connected between edges on a Map
 bool validateEdge(Map &m, Territory &start, Territory &end) {
     Edge *temp = m.getEdges();
 
+    // Checking all the edges for matches
     for (int i = 0; i < m.edgesLength; i++) {
-        if (!temp[i].visited) {
+        if (!temp[i].visited) { // Making sure not to check previously used edges
             bool valid;
 
+            // True if the desired destination edge has been reached
             if (temp[i].a.getName() == end.getName() || temp[i].b.getName() == end.getName()) {
                 valid = true;
             }
+            // Visiting the edge and checking the other Territory if not yet found
             else if (temp[i].a.getName() == start.getName()) {
                 temp[i].visited = true;
                 valid = validateEdge(m, temp[i].b, end);
@@ -230,25 +254,30 @@ bool validateEdge(Map &m, Territory &start, Territory &end) {
                 temp[i].visited = true;
                 valid = validateEdge(m, temp[i].a, end);
             }
+            // False if no other option
             else {
                 valid = false;
             }
 
+            // Immediately returning true if the destination has been found
             if (valid) {
                 return true;
             }
         }
     }
 
-    return false;
+    return false; // False if no matches
 }
 
+// Method to determine if a Map is valid
 bool Map::validate() {
     Territory *temp = getTerritories();
 
+    // Checking paths from every Territory to every other
     for (int i = 0; i < territoriesLength; i++) {
         for (int j = i+1; j < territoriesLength; j++) {
             if (j < territoriesLength) {
+                // Making sure to set the edges to un-visited each new check
                 for (int k = 0; k < edgesLength; k++) {
                     edges[k].visited = false;
                 }
@@ -278,44 +307,55 @@ bool Map::validate() {
     return true;
 }
 
+// Map stream insertion operator
 ostream& operator<<(ostream &strm, const Map &m) {
     string c = "";
     string t = "";
     string e = "";
 
+    // Creating a long deliminated string of all the continents
     string *continents = m.continents;
     for (int i = 0; i < m.continentsLength; i++) {
-        c += continents[i] + ", ";
+        c += continents[i] + " | ";
     }
 
+    // Creating a long deliminated string of all the territories
     Territory *territories = m.territories;
     for (int j = 0; j < m.territoriesLength; j++) {
-        t += territories[j].getName() + ", ";
+        t += territories[j].getName() + " | ";
     }
 
+    // Creating a long deliminated string of all the Edges
     Edge *edges = m.edges;
     for (int k = 0; k < m.edgesLength; k++) {
-        e += edges[k].a.getName() + " and " + edges[k].b.getName() + ", ";
+        e += edges[k].a.getName() + " and " + edges[k].b.getName() + " | ";
     }
 
     return strm <<
-        "-----\nMAP: " << m.name <<
-        "\n\nContinents: " << c.substr(0, c.length() - 2) <<
-        "\n\nTerritories: " << t.substr(0, t.length() - 2) <<
-        "\n\nEdges: " << e.substr(0, e.length() - 2) << "\n-----";
+        "[MAP PRINT: " << m.name << "]" << endl <<
+        endl << "[-------------------------Continents--------------------------]" <<
+        endl << c.substr(0, c.length() - 3) << endl <<
+        endl << "[-------------------------Territories--------------------------]" <<
+        endl << t.substr(0, t.length() - 3) << endl <<
+        endl << "[-------------------------Edges--------------------------]" <<
+        endl << e.substr(0, e.length() - 3);
 }
 
+// Free method to split a given string into a pointer array based on a given delimiter
 string *stringSplit(string s, char delim) {
     int indexChecker = 0;
     int splitLength = 1;
     string *result = new string[splitLength];
     string temp;
 
+    // Looping through all the characters in the string
     for (char i : s) {
+        // Adding to the current word if a delimiter has not been reached
         if (i != delim) {
             temp += i;
         }
 
+        // Adding the neew word to the pointer array if a delimiter or the end has been reached
         if (i == delim || indexChecker == s.length() - 1) {
             string *tempResult = new string[splitLength + 1];
             copy(result, result + splitLength, tempResult);
@@ -338,20 +378,23 @@ string *stringSplit(string s, char delim) {
         indexChecker++;
     }
 
-    result[0] = to_string(splitLength - 1);
+    result[0] = to_string(splitLength - 1); // Making the first element of the array the length
 
     return result;
 }
 
+// Method to read the information at a given file, and output a fully-crafted Map object
 Map MapLoader::load(string f) {
     ifstream input(f);
     string line;
     Map m;
 
+    // Checking to see if the file can even be read from
     if (!getline(input, line)) {
         cout << "Unable to read file: " << f << endl;
     }
     else {
+        // Catching any issues that might arise from a bad map file
         try {
             int section = 0;
 
@@ -359,6 +402,7 @@ Map MapLoader::load(string f) {
 
             string *nameSplit = stringSplit(line, ' ');
 
+            // Making sure the first line (which contains the name) is valid
             if (nameSplit[1] != ";") {
                 delete[] nameSplit;
                 throw "INVALID MAP: no name!";
@@ -367,11 +411,13 @@ Map MapLoader::load(string f) {
             string mapName = nameSplit[3];
             delete[] nameSplit;
 
-            m.setName(mapName.substr(0, mapName.length() - 4));
+            m.setName(mapName.substr(0, mapName.length() - 4)); // Setting the new Map's name
 
+            // Reading every subsequent line in the file
             while (getline(input, line)) {
-                string *lineSplit = stringSplit(line, ' ');
+                string *lineSplit = stringSplit(line, ' '); // Splitting the line
 
+                // Checking to see if a new section of the file has been reached
                 if (line == "[continents]" || line == "[countries]" || line == "[borders]") {
                     section++;
 
@@ -381,6 +427,7 @@ Map MapLoader::load(string f) {
                     else if (line == "[countries]") {
                         cout << "Loading territories..." << endl;
 
+                        // Making sure no sections have been left out
                         if (section != 2) {
                             throw "INVALID MAP: no continents!";
                         }
@@ -388,13 +435,16 @@ Map MapLoader::load(string f) {
                     else if (line == "[borders]") {
                         cout << "Loading edges..." << endl;
 
+                        // Making sure no sections have been left out
                         if (section != 3) {
                             throw "INVALID MAP: no continents OR no territories!";
                         }
                     }
                 }
                 else {
+                    // Skipping over blank lines
                     if (line != "") {
+                        // Adding each continent
                         if (section == 1) {
                             if (stoi(lineSplit[0]) == 3) {
                                 m.addContinent(lineSplit[1]);
@@ -403,6 +453,7 @@ Map MapLoader::load(string f) {
                                 throw "INVALID MAP: improper continent!";
                             }
                         }
+                        // Adding each Territory
                         else if (section == 2) {
                             if (stoi(lineSplit[0]) == 5) {
                                 Territory t = Territory(lineSplit[2], m.getContinents()[stoi(lineSplit[3]) - 1], NULL, 0);
@@ -412,17 +463,19 @@ Map MapLoader::load(string f) {
                                 throw "INVALID MAP: improper territory!";
                             }
                         }
+                        // Adding each Edge
                         else if (section == 3) {
                             if (stoi(lineSplit[0]) > 1) {
                                 int len = stoi(lineSplit[0]);
-
+                                
+                                // Comparing each Territory with the others on the line, and adding the new Edge if it doesn't yet exist
                                 for (int i = 1; i <= len; i++) {
-                                    for (int j = 1; j <= len; j++) {
+                                    for (int j = i+1; j <= len; j++) {
                                         Territory t1 = m.getTerritories()[stoi(lineSplit[i]) - 1];
                                         Territory t2 = m.getTerritories()[stoi(lineSplit[j]) - 1];
                                         Edge *tempEdges = m.getEdges();
 
-                                        if (i != j && !doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
+                                        if (!doesContain(tempEdges, m.edgesLength, t1, t2) && !doesContain(tempEdges, m.edgesLength, t2, t1)) {
                                             m.addEdge(Edge{t1, t2});
                                         }
                                     }
@@ -439,9 +492,9 @@ Map MapLoader::load(string f) {
             }
 
             input.close();
-
             cout << m.getName() << " loaded!" << endl;
         }
+        // Setting the Map to bad, and printing the error message
         catch (const char* message) {
             m.isGoodMap = false;
             cout << message << endl;
