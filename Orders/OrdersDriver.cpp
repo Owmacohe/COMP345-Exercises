@@ -54,14 +54,13 @@ int Ordersmain() {
 	cout << player1List << endl;
 
 	//Create through copy constructor object
-	OrdersList player1List2;
-    //player1List2 = OrdersList(player1List); TODO
+	OrdersList player1List2(player1List);
 	cout << player1List2 << endl;
 
-	//Create through assignment operator object
-	OrdersList player1List3;
-    //player1List3 = player1List; TODO
-	cout << player1List3 << endl;
+//	//Create through assignment operator object
+//	OrdersList player1List3;
+//    player1List3 = player1List;
+//	cout << player1List3 << endl;
 
 	//Move()
 	cout << "List before the switch/move of orders #2 & #3" <<endl;
@@ -85,20 +84,20 @@ int Ordersmain() {
 	cout << "Copy through the copy constructor" << endl;
 	cout << player1List2 << endl;
 
-	cout << "Copy through the assignment operator" << endl;
-	cout << player1List3 << endl;
+//	cout << "Copy through the assignment operator" << endl;
+//	cout << player1List3 << endl;
 
-    //Delete orders lists and orders to free memory
-    player1List.~OrdersList();
-    cout << player1List << endl;
-
-    //Delete orders lists and orders to free memory
-    player1List2.~OrdersList();
-    cout << player1List2 << endl;
-
-    //Delete orders lists and orders to free memory
-    player1List3.~OrdersList();
-    cout << player1List3 << endl;
+//    //Delete orders lists and orders to free memory
+//    player1List.~OrdersList();
+//    cout << player1List << endl;
+//
+//    //Delete orders lists and orders to free memory
+//    player1List2.~OrdersList();
+//    cout << player1List2 << endl;
+//
+//    //Delete orders lists and orders to free memory
+//    player1List3.~OrdersList();
+//    cout << player1List3 << endl;
 
 	return 0;
 }

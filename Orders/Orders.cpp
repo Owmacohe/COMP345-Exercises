@@ -165,6 +165,7 @@ string Advance::validate(){
 
 // Complete Implementation next assignment
 bool Advance::execute(){
+    cout << "Executing Order Advance" << endl;
     return true;
 }
 
@@ -213,6 +214,7 @@ string Bomb::validate(){
 
 // Complete Implementation next assignment
 bool Bomb::execute(){
+    cout << "Executing Order Bomb" << endl;
     return true;
 }
 
@@ -267,6 +269,7 @@ string Blockade::validate(){
 
 // Complete Implementation next assignment
 bool Blockade::execute(){
+    cout << "Executing Order Blockade" << endl;
     return true;
 }
 
@@ -320,6 +323,7 @@ string Airlift::validate(){
 
 // Complete Implementation next assignment
 bool Airlift::execute(){
+    cout << "Executing Order Execute" << endl;
     return true;
 }
 
@@ -373,6 +377,7 @@ string Negotiate::validate(){
 
 // Complete Implementation next assignment
 bool Negotiate::execute(){
+    cout << "Executing Order Negotiate" << endl;
     return true;
 }
 
@@ -426,6 +431,7 @@ string Diplomacy::validate(){
 }
 // Complete Implementation next assignment
 bool Diplomacy::execute() {
+    cout << "Executing Order Diplomacy" << endl;
     return true;
 }
 
@@ -476,6 +482,7 @@ string Reinforcement::validate(){
 }
 // Complete Implementation next assignment
 bool Reinforcement::execute(){
+    cout << "Executing Order Reinforcement" << endl;
     return true;
 }
 
@@ -492,8 +499,9 @@ OrdersList::OrdersList(OrdersList &original){
     
     for (Order* i : original.playerOrderList) {
         playerOrderList.push_back(new Order(*i));
+        cout << "pushing back a new Order" << endl;
     }
-
+    cout <<"copy constructor done"<<endl;
 }
 
 // Default Destructor
