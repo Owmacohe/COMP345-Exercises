@@ -38,8 +38,26 @@ GameEngine::~GameEngine(){
 }
 
 // Assignment operator
-GameEngine& operator = (const GameEngine& gm) {
-    //TODO
+GameEngine& GameEngine::operator = (const GameEngine& gm) {
+    this->s = gm.s;
+    NumberOfPlayers = gm.NumberOfPlayers;
+    NumberOfTerritories = gm.NumberOfTerritories;
+    this->ml = gm.ml;
+    phaseEnd = gm.phaseEnd;
+    this->deck = gm.deck;
+    for (Player* p : gm.player_list) {
+        this->player_list.push_back(p);
+    }
+    /*
+        State* s ;
+        int NumberOfPlayers;
+        int NumberOfTerritories;
+        MapLoader *ml;
+        bool phaseEnd;
+        Deck* deck;
+        vector<Player*> player_list;
+    */
+   return *this;
 };
 
 //getters
