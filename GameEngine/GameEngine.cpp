@@ -54,8 +54,17 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
 
 // Stream insertion operator    // TODO implement stream insertion op
 ostream& operator<<(ostream &os, const GameEngine& gm){
+       string p = "";
+    for (Player* i : gm.player_list) {
+        p += (*i).getName() +" | ";
+    }
 
+    return os <<
+        "GAME ENGINE: Current state: "<< gm.s <<
+        "\n    Players (" <<gm.NumberOfPlayers<< "): " <<endl<< p.substr(0, p.length() - 2) <<
+        "\n    Number of Territories : (" <<gm.NumberOfTerritories<< ")"<<endl;
 }
+
 //getters
 State GameEngine::getState(){ return *s; }
 int GameEngine::getNumberOfPlayers(){return NumberOfPlayers;}
