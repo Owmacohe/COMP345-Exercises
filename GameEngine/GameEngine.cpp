@@ -49,20 +49,20 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
-   return *this;
+    return *this;
 };
 
-// Stream insertion operator    // TODO implement stream insertion op
-ostream& operator<<(ostream &os, const GameEngine& gm){
-       string p = "";
+// Stream insertion operator
+ostream& operator<<(ostream &os, const GameEngine& gm) {
+    string p = "";
     for (Player* i : gm.player_list) {
-        p += (*i).getName() +" | ";
+        p += (*i).getName() + " | ";
     }
 
     return os <<
         "GAME ENGINE: Current state: "<< gm.s <<
-        "\n    Players (" <<gm.NumberOfPlayers<< "): " <<endl<< p.substr(0, p.length() - 2) <<
-        "\n    Number of Territories : (" <<gm.NumberOfTerritories<< ")"<<endl;
+        "\n    Players (" << gm.NumberOfPlayers<< "): " <<endl<< p.substr(0, p.length() - 2) <<
+        "\n    Number of Territories : (" << gm.NumberOfTerritories << ")" << endl;
 }
 
 //getters
