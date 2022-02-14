@@ -1,4 +1,3 @@
-
 #include "../Cards/Cards.h"
 #include "../Orders/Orders.h"
 #include "../Map/Map.h"
@@ -9,35 +8,58 @@
 #include "../Orders/Orders.cpp"
 #include "../Map/Map.cpp"
 #include "../Player/Player.cpp"
-
+#include "GameEngine.cpp"
 
 int main() {
     GameEngine gameEngine;
-
-    //START STATE -- player must enter loadmap to go to the next state
-    gameEngine.startGame();
-
     string input;
-    while (gameEngine.getState() < 5) {
-        cout << "Enter a command: " << endl;
-        cin >> input;
-        gameEngine.gameStartupTransitions(input);
-    }
+    bool isPlaying = true;
 
-    while (gameEngine.getState() != 8) {
-    for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
-        cout << gameEngine.getplayer_list()[i]->getName() << "'s turn" <<endl;
-        string input;
-        cout << "What would you like to do now?\n" <<endl;
-        cin >> input;
-        gameEngine.gamePlayTransitions( input ,gameEngine.getplayer_list()[i]);
-    }
-    }
+    while (isPlaying) {
+        gameEngine.startGame();
 
-    while(gameEngine.getState() == 8) {
-        cout << "What would you like to do next? To Play Again or end the game?" <<endl;
-        gameEngine.gameEndTransitions(input);
+        while (gameEngine.getState() < 5) {
+            cout << "Enter a command: " << endl;
+            cin >> input;
+            gameEngine.gameStartupTransitions(input);
+        }
+
+        while (gameEngine.getState() != 8) {
+            for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
+                while (true) {
+                    cout << gameEngine.getplayer_list()[i]->getName() << "'s turn" <<endl;
+                    cout << "What would you like to do now?\n" <<endl;
+                    cin >> input;
+                    gameEngine.gamePlayTransitions(input, gameEngine.getplayer_list()[i]);
+                    
+                    if ((gameEngine.getState() == 5 && input == "endexecorders") || (gameEngine.getState() == 8 && input == "win")) {
+                        cout << "break" << endl;
+                        break;
+                    }
+                }
+
+                if (input == "win") {
+                    break;
+                }
+            }
+        }
+
+        while (gameEngine.getState() == 8) {
+            while (true) {
+                cout << "What would you like to do next? To Play Again or end the game?" <<endl;
+                cin >> input;
+                gameEngine.gameEndTransitions(input);
+
+                if (gameEngine.getState() == 0) {
+                    if (input == "end") {
+                        isPlaying = false;
+                    }
+
+                    break;
+                }
+            }
+        }
     }
+    
     return 0;
-
 }
