@@ -487,6 +487,10 @@ bool Reinforcement::execute(){
 OrdersList::OrdersList() {
     playerOrderList = vector<Order*>();
 }
+// Parameterized constructor
+OrdersList::OrdersList(vector<Order*> vo, bool aov) {
+// TODO PLEASE
+}
 
 // Copy Constructor
 OrdersList::OrdersList(OrdersList &original) {
