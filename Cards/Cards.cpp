@@ -79,7 +79,7 @@ Deck::Deck(int numCard) {
     }
 
     deck = vector<Card*>();
-    // Create the Deck of Card
+
     for (int i = 0; i < numCardInDeck; i++) {
         if (i % 5 == 0) {
             deck.push_back(new Card("bomb"));
@@ -121,8 +121,7 @@ Card* Deck::draw(){
     // Generate a random number
     int numRandom = rand() % numCardInDeck;
 
-    // Store return card in a temp var -> So as to delete its trace in deck
-    // Copy constructor
+    // keep a copy of the returned card in a temp var
     Card * temp = deck.at(numRandom);
 
     //Display the type of card that is drawn
