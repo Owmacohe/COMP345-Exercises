@@ -52,6 +52,10 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
    return *this;
 };
 
+// Stream insertion operator    // TODO implement stream insertion op
+ostream& operator<<(ostream &os, const GameEngine& gm){
+
+}
 //getters
 State GameEngine::getState(){ return *s; }
 int GameEngine::getNumberOfPlayers(){return NumberOfPlayers;}

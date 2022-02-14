@@ -19,6 +19,7 @@ class GameEngine {
         GameEngine(const GameEngine &gm); //copy constructor
         ~GameEngine(); // destructor
         GameEngine& operator = (const GameEngine& gm); // Assignment Operator
+        friend ostream& operator<<(ostream& os, const GameEngine& gm); // stream insertion operator
 
         //getters
         State getState();
