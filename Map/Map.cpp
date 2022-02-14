@@ -90,6 +90,15 @@ ostream& operator<<(ostream &strm, const Territory &t) {
         endl << "[--- Armies: " << t.armies << " ---]";
 }
 
+// Territory assignment operator
+Territory& Territory::operator = (const Territory& toAssign){
+    name = toAssign.name;
+    continent = toAssign.continent;
+    owner = toAssign.owner;
+    armies = toAssign.armies;
+    return *this;
+}
+
 // Map default constructor
 Map::Map() {
     name = "";
@@ -339,6 +348,15 @@ ostream& operator<<(ostream &strm, const Map &m) {
         endl << t.substr(0, t.length() - 3) << endl <<
         endl << "[-------------------------Edges--------------------------]" <<
         endl << e.substr(0, e.length() - 3);
+}
+
+// Map assignment operator
+Map& Map::operator = (const Map& toAssign){
+    name = toAssign.name;
+    continents = toAssign.continents;
+    territories = toAssign.territories;
+    edges = toAssign.edges;
+    return *this;
 }
 
 // Free method to split a given string into a pointer array based on a given delimiter
