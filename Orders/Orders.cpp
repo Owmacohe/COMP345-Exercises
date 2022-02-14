@@ -489,7 +489,13 @@ OrdersList::OrdersList() {
 }
 // Parameterized constructor
 OrdersList::OrdersList(vector<Order*> vo, bool aov) {
-// TODO PLEASE
+    playerOrderList = vector<Order*>();
+    
+    for (Order* i : vo) {
+        playerOrderList.push_back(new Order(*i));
+    }
+    
+    allOrdersValidated = aov;
 }
 
 // Copy Constructor
@@ -499,6 +505,8 @@ OrdersList::OrdersList(OrdersList &original) {
     for (Order* i : original.playerOrderList) {
         playerOrderList.push_back(new Order(*i));
     }
+
+    allOrdersValidated = original.allOrdersValidated;
 }
 
 // Default Destructor
@@ -507,12 +515,12 @@ OrdersList::~OrdersList() {
     for (Order* i : playerOrderList) {
         delete i;
         i = NULL;
-        cout << "deleting an order in OrdersList" <<endl;
+        //cout << "deleting an order in OrdersList" <<endl;
     }
     
 	// then delete the vector
 	playerOrderList.clear();
-    cout << "deleted OrdersList" <<endl;
+    //cout << "deleted OrdersList" <<endl;
 }
 
 // Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.

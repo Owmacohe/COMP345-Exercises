@@ -4,7 +4,8 @@
 #include "../Map/Map.h"
 
 // constructor
-GameEngine::GameEngine(){
+GameEngine::GameEngine() {
+    s = new State;
     *s = null;
     NumberOfPlayers = 0;
     NumberOfTerritories = 0;
@@ -52,7 +53,7 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
 };
 
 //getters
-State GameEngine::getState(){return *s;}
+State GameEngine::getState(){ return *s; }
 int GameEngine::getNumberOfPlayers(){return NumberOfPlayers;}
 bool GameEngine::endOfState (){return phaseEnd;}
 vector<Player*> GameEngine::getplayer_list() {return player_list;}
@@ -71,32 +72,31 @@ void GameEngine::startGame(){
     cout<< "end of start phase" << endl;
 
 }
-void GameEngine::loadMap(){
+void GameEngine::loadMap() {
     *s = mapLoaded;
-    string map;
-    cout<< "enter map name" << endl;
-    cin >> map;
-    while(map != "canada" || map != "europe"){ //TODO : Owen does this make sense with yours?
+
+    /*
+    string mapName;
+    cout << "enter map name" << endl;
+    cin >> mapName;
+
+    while(mapName != "canada" || mapName != "europe") {
         cout<< "incorrect, please re-enter map name" << endl;
-        cin >> map;
+        cin >> mapName;
     }
-    Map * m = new Map();
-    *m = ml->load(map + ".map");
-    cout<< "end of load map phase" << endl;
-    /* TODO THIS WAS IN THE DRIVER BUT CALLIN LOADPMAP SHOULD BE ENOUGH
-    MapLoader loader;
-    Map europe = loader.load("europe.map");
-    cout << europe << endl;
+    
+    Map m = ml->load(mapName + ".map");
     */
+
+    cout << "loaded map" << endl;
 }
 void GameEngine::validateMap(){
-    //TODO call Owen's method
     *s = mapValidated;
     cout<< "end of map validated phase" << endl;
 };
 
 
-void GameEngine::addPlayer(){ // TODO GABBI
+void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
     *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
@@ -133,7 +133,8 @@ void GameEngine::executeOrders(Player *player){
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
-    cout<< "ended phase execute Order for player " << player->getName() << endl;
+    *s = assignReinforcement;
+    cout << "ended phase execute Order for player " << player->getName() << endl;
 }
 
 void GameEngine::winPhase(Player *p){
@@ -142,18 +143,20 @@ void GameEngine::winPhase(Player *p){
 }
 
 void GameEngine::endPhase(){
+    *s = null;
     cout<< "Thank you for Playing Warzone" << endl;
 }
 
 void GameEngine::playAgain(){
+    *s = null;
     cout<< "the Game will restart soon" << endl;
 }
 
-void GameEngine::gameStartupTransitions(string str){
-    if (str == "loadmap" && getState() < 3){
-    loadMap();
+void GameEngine::gameStartupTransitions(string str) {
+    if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
+        loadMap();
     }
-    else if (str == "validatemap" && getState() == 2){
+    else if (str == "validatemap" && getState() == 2) {
         validateMap();
     }
     else if (str == "addplayer" && (getState() ==3 || getState() == 4)){
@@ -162,43 +165,39 @@ void GameEngine::gameStartupTransitions(string str){
     else if (str == "assigncountries" && getState() ==4){
         assignCountries();
         assignReinforcementPhase();
-
     }
      else {
         cout << "Invalid command!" << endl;
     }
 }
 
-void GameEngine::gamePlayTransitions(string str, Player *p){
-    if (str == "issueorder" && (getState() ==5 || getState() == 6)){
+void GameEngine::gamePlayTransitions(string str, Player *p) {
+    if (str == "issueorder" && (getState() == 5 || getState() == 6)) {
         issueOrders(p);
-
     }
-    else if (str == "endissueorder" && getState() == 6){
+    else if (str == "endissueorders" && getState() == 6) {
         endIssueOrderPhase(p);
     }
-    else if (str == "execorder" && getState() == 7){
+    else if (str == "execorder" && getState() == 7) {
         executeOrders(p);
     }
-    else if (str == "endexecorders" && getState() == 7){
+    else if (str == "endexecorders" && getState() == 7) {
         endexecuteOrdersPhase(p);
     }
-    else if (str == "win" && getState() == 7){
+    else if (str == "win" && getState() == 7) {
         winPhase(p);
     }
-
     else {
         cout << "Invalid command!" << endl;
     }
-
 }
 
 void GameEngine::gameEndTransitions(string str){
-    if (str == "end" && getState() == 8){
-    endPhase();
+    if (str == "end" && getState() == 8) {
+        endPhase();
     }
-    else if (str == "play" && getState() == 8){
-    playAgain();
+    else if (str == "play" && getState() == 8) {
+        playAgain();
     }
     else {
         cout << "Invalid command!" << endl;
