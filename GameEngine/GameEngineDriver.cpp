@@ -10,7 +10,7 @@
 #include "../Player/Player.cpp"
 #include "GameEngine.cpp"
 
-int main() {
+int gameEngineMain() {
     GameEngine gameEngine;
     string input;
     bool isPlaying = true;
