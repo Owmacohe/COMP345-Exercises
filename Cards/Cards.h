@@ -12,7 +12,7 @@ class Card {
         Card(); // Default Constructor - initialize card type to null
         Card(string type);  // Parameterized Constructor - initialize type of card
         Card(Card &anotherCard);  // Copy Constructor
-
+        ~Card();
         string getType() const;
         void play(OrdersList &ordersList) const;
         friend ostream& operator<<(ostream& os, const Card& card); // Over load << operator to print out value in Hand

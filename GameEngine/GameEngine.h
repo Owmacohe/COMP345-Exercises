@@ -47,6 +47,7 @@ class GameEngine {
         void endPhase();
         void playAgain();
 
+        // Transition Method
         void gameStartupTransitions(string s);
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);

@@ -10,7 +10,6 @@ Player::Player() {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
-    //cout << "[Player default constructor]" << endl;
 }
 
 // Param constructor
@@ -22,7 +21,6 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) 
     
     hand = new Hand(*h);
     orders = new OrdersList(*o);
-    //cout << "[Player param constructor]" << endl;
 }
 
 // Copy constructor
@@ -36,7 +34,6 @@ Player::Player(const Player &p) {
 
     hand = new Hand(*(p.hand));
     orders = new OrdersList(*(p.orders));
-    //cout << "[Player copy constructor]" << endl;
 }
 
 // Destructor
@@ -44,7 +41,7 @@ Player::~Player() {
     for (Territory* i : territories) {
         delete i;
         i = NULL;
-        //cout << "[Player territory destructor]" << endl;
+
     }
 
     delete hand;
@@ -52,19 +49,16 @@ Player::~Player() {
     delete orders;
     orders = NULL;
 
-    //cout << "[Player destructor]" << endl;
 }
 
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
 vector<Territory*> Player::toDefend() {
-// TODO next assignment
 //have to check if territories have surrounding enemies
 //for now just returns vector list of the players territories
 return territories;
 }
 
 vector<Territory*> Player::toAttack() {
-// TODO next assignment
 //have to check if territories have surrounding enemies
 //for now returns vector list of territories that arent players
 return territories;

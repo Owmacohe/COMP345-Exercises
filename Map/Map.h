@@ -14,6 +14,7 @@ class Territory {
         Territory(const Territory &t); // Copy constructor
         ~Territory(); // Destructor
         friend ostream& operator<<(ostream &strm, const Territory &t); // Stream insertion operator
+        Territory& operator = (const Territory& toAssign);  // Assignment operator
 
         // Accessors
         string getName(), getContinent();
@@ -43,6 +44,7 @@ class Map {
         Map(const Map &m); // Copy constructor
         ~Map(); // Destructor
         friend ostream& operator<<(ostream &strm, const Map &m); // Stream insertion operator
+        Map& operator = (const Map& toAssign); // Assignment operator
 
         // Accessors
         string getName();

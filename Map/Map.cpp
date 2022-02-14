@@ -34,15 +34,13 @@ Territory::Territory() {
     continent = "";
     owner = new Player;
     armies = 0;
-    
-    //cout << "[Territory default constructor]" << endl;
+
 }
 
 // Territory parameterized constructor
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
     owner = o;
 
-    //cout << "[" << n << " Territory param constructor]" << endl;
 }
 
 // Territory copy constructor
@@ -51,13 +49,11 @@ Territory::Territory(const Territory &t) {
     continent = t.continent;
     owner = t.owner;
     armies = t.armies;
-    
-    //cout << "[" << t.name << " Territory copy constructor]" << endl;
+
 }
 
 // Territory destructor
 Territory::~Territory() {
-    //cout << "[" << name << " Territory destructor]" << endl;
 }
 
 // Territory accessors
@@ -90,6 +86,15 @@ ostream& operator<<(ostream &strm, const Territory &t) {
         endl << "[--- Armies: " << t.armies << " ---]";
 }
 
+// Assignment operator
+Territory& Territory::operator = (const Territory& toAssign){
+    name = toAssign.name;
+    continent = toAssign.continent;
+    owner = toAssign.owner;
+    armies = toAssign.armies;
+    return *this;
+}
+
 // Map default constructor
 Map::Map() {
     name = "";
@@ -100,7 +105,6 @@ Map::Map() {
     edgesLength = 0;
     edges = new Edge[edgesLength];
 
-    //cout << "[Map default constructor]" << endl;
 }
 
 // Map parameterized constructor
@@ -111,8 +115,7 @@ Map::Map(string n) : name(n) {
     territories = new Territory[territoriesLength];
     edgesLength = 0;
     edges = new Edge[edgesLength];
-    
-    //cout << "[" << n << " Map param constructor]" << endl;
+
 }
 
 // Map copy constructor
@@ -122,7 +125,6 @@ Map::Map(const Map &m) {
     setTerritories(m.territories, m.territoriesLength);
     setEdges(m.edges, m.edgesLength);
 
-    //cout << "[" << m.name << " Map copy constructor]" << endl;
 }
 
 // Map destructor
@@ -136,7 +138,6 @@ Map::~Map() {
     delete[] edges;
     edges = NULL;
 
-    //cout << "[" << name << " Map destructor]" << endl;
 }
 
 // Map accessors
@@ -341,6 +342,15 @@ ostream& operator<<(ostream &strm, const Map &m) {
         endl << e.substr(0, e.length() - 3);
 }
 
+// Assignment operator
+Map& Map::operator = (const Map& toAssign){
+    name = toAssign.name;
+    continents = toAssign.continents;
+    territories = toAssign.territories;
+    edges = toAssign.edges;
+    return *this;
+}
+
 // Free method to split a given string into a pointer array based on a given delimiter
 string *stringSplit(string s, char delim) {
     int indexChecker = 0;
@@ -355,7 +365,7 @@ string *stringSplit(string s, char delim) {
             temp += i;
         }
 
-        // Adding the neew word to the pointer array if a delimiter or the end has been reached
+        // Adding the new word to the pointer array if a delimiter or the end has been reached
         if (i == delim || indexChecker == s.length() - 1) {
             string *tempResult = new string[splitLength + 1];
             copy(result, result + splitLength, tempResult);

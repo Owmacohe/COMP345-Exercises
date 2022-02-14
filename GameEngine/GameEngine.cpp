@@ -3,7 +3,7 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 
-// constructor
+// Default constructor
 GameEngine::GameEngine() {
     s = new State;
     *s = null;
@@ -76,7 +76,7 @@ void GameEngine::setState(State s){this->s = &s;}
 void GameEngine::setNumberOfPlayers(int x){this->NumberOfPlayers = x;}
 void GameEngine::setEndOfState(bool b){this->phaseEnd = b;}
 
-//phases , states and commands
+//phases and states
 void GameEngine::startGame(){
     *s = start;
     cout << "Welcome to Warzone" << endl;
@@ -88,19 +88,6 @@ void GameEngine::startGame(){
 void GameEngine::loadMap() {
     *s = mapLoaded;
 
-    /*
-    string mapName;
-    cout << "enter map name" << endl;
-    cin >> mapName;
-
-    while(mapName != "canada" || mapName != "europe") {
-        cout<< "incorrect, please re-enter map name" << endl;
-        cin >> mapName;
-    }
-    
-    Map m = ml->load(mapName + ".map");
-    */
-
     cout << "loaded map" << endl;
 }
 void GameEngine::validateMap(){
@@ -108,8 +95,7 @@ void GameEngine::validateMap(){
     cout<< "end of map validated phase" << endl;
 };
 
-
-void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
+void GameEngine::addPlayer() {
     *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
@@ -165,6 +151,7 @@ void GameEngine::playAgain(){
     cout<< "the Game will restart soon" << endl;
 }
 
+// Transition handling Methods
 void GameEngine::gameStartupTransitions(string str) {
     if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
         loadMap();

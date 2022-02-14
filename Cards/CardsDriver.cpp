@@ -1,8 +1,10 @@
 #include "Cards.h"
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
+#include "../Map/Map.h"
 
-int cardsMain() {
+
+int CardsMain() {
     Deck *mainDeck = new Deck(10);
     Player *player1 = new Player();
 
