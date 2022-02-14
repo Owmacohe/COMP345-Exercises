@@ -100,11 +100,11 @@ void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
     *s = playersAdded;
     for(int i =0 ; i<NumberOfPlayers ; i++){
         string name;
-        Player *p = new Player();
+        Player *p = new Player;
         cout << "Please enter the player's name" << endl;
         cin >> name;
         p->setName(name);
-        player_list.push_back (p);
+        player_list.push_back(p);
     }
     cout<< "end of players added phase" << endl;
 }
