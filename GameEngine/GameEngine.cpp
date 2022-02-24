@@ -3,7 +3,7 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 
-// constructor
+// Default constructor
 GameEngine::GameEngine() {
     s = new State;
     *s = null;
@@ -13,19 +13,20 @@ GameEngine::GameEngine() {
     player_list = vector<Player*>();
 }
 
-//copy constructor
-GameEngine::GameEngine(const GameEngine &gm){
+// Copy constructor
+GameEngine::GameEngine(const GameEngine &gm) {
     s = gm.s;
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
     this->deck = new Deck(*(gm.deck));
+
     for (Player* p : gm.player_list) {
         this->player_list.push_back(new Player(*p));
     }
 }
 
-// destructor
-GameEngine::~GameEngine(){
+// Destructor
+GameEngine::~GameEngine() {
     delete s;
     s = NULL;
 
@@ -46,9 +47,11 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     this->ml = gm.ml;
     phaseEnd = gm.phaseEnd;
     this->deck = gm.deck;
+
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
+    
     return *this;
 };
 
@@ -65,26 +68,26 @@ ostream& operator<<(ostream &os, const GameEngine& gm) {
         "\n    Number of Territories : (" << gm.NumberOfTerritories << ")" << endl;
 }
 
-//getters
-State GameEngine::getState(){ return *s; }
-int GameEngine::getNumberOfPlayers(){return NumberOfPlayers;}
-bool GameEngine::endOfState (){return phaseEnd;}
-vector<Player*> GameEngine::getplayer_list() {return player_list;}
+// Accessors
+State GameEngine::getState() { return *s; }
+int GameEngine::getNumberOfPlayers() { return NumberOfPlayers; }
+bool GameEngine::endOfState() { return phaseEnd; }
+vector<Player*> GameEngine::getplayer_list() { return player_list; }
 
-//setters
-void GameEngine::setState(State s){this->s = &s;}
-void GameEngine::setNumberOfPlayers(int x){this->NumberOfPlayers = x;}
-void GameEngine::setEndOfState(bool b){this->phaseEnd = b;}
+// Mutators
+void GameEngine::setState(State s) { this->s = &s; }
+void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
+void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 
-//phases , states and commands
-void GameEngine::startGame(){
+// Phases, states, and commands
+void GameEngine::startGame() {
     *s = start;
     cout << "Welcome to Warzone" << endl;
     cout << "Please enter the number of players" << endl;
     cin >> this->NumberOfPlayers;
     cout<< "end of start phase" << endl;
-
 }
+
 void GameEngine::loadMap() {
     *s = mapLoaded;
 
@@ -103,7 +106,8 @@ void GameEngine::loadMap() {
 
     cout << "loaded map" << endl;
 }
-void GameEngine::validateMap(){
+
+void GameEngine::validateMap() {
     *s = mapValidated;
     cout<< "end of map validated phase" << endl;
 };
@@ -111,7 +115,8 @@ void GameEngine::validateMap(){
 
 void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
     *s = playersAdded;
-    for(int i =0 ; i<NumberOfPlayers ; i++){
+
+    for(int i = 0; i < NumberOfPlayers; i++) {
         string name;
         Player *p = new Player;
         cout << "Please enter the player's name" << endl;
@@ -119,29 +124,30 @@ void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
         p->setName(name);
         player_list.push_back(p);
     }
+
     cout<< "end of players added phase" << endl;
 }
 
-void GameEngine::assignCountries(){
+void GameEngine::assignCountries() {
     cout<< "end of assign countries command" << endl;
 }
 
-void GameEngine::assignReinforcementPhase(){
+void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout<< "end of assign Reinforcement" << endl;
 }
 
-void GameEngine::issueOrders(Player *player){
+void GameEngine::issueOrders(Player *player) {
     *s = issueOrder;
     cout<< "Issued the order for player " << player->getName() << endl;
 }
 
-void GameEngine::endIssueOrderPhase(Player *player){
+void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
     cout<< "ended phase issue Orders for player " << player->getName() << endl;
 }
 
-void GameEngine::executeOrders(Player *player){
+void GameEngine::executeOrders(Player *player) {
     cout<< "executed the order for player " << player->getName() << endl;
 }
 
@@ -150,17 +156,17 @@ void GameEngine::endexecuteOrdersPhase(Player *player) {
     cout << "ended phase execute Order for player " << player->getName() << endl;
 }
 
-void GameEngine::winPhase(Player *p){
+void GameEngine::winPhase(Player *p) {
     *s = win;
     cout<< "victory for player: " << p->getName() << endl;
 }
 
-void GameEngine::endPhase(){
+void GameEngine::endPhase() {
     *s = null;
     cout<< "Thank you for Playing Warzone" << endl;
 }
 
-void GameEngine::playAgain(){
+void GameEngine::playAgain() {
     *s = null;
     cout<< "the Game will restart soon" << endl;
 }
@@ -179,7 +185,7 @@ void GameEngine::gameStartupTransitions(string str) {
         assignCountries();
         assignReinforcementPhase();
     }
-     else {
+    else {
         cout << "Invalid command!" << endl;
     }
 }
@@ -205,7 +211,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
     }
 }
 
-void GameEngine::gameEndTransitions(string str){
+void GameEngine::gameEndTransitions(string str) {
     if (str == "end" && getState() == 8) {
         endPhase();
     }

@@ -1,492 +1,477 @@
 #include "Orders.h"
 #include <string>
+
 /****************************** Order *******************************/
-// Default Constructor
-Order::Order(){
+
+// Default constructor
+Order::Order() {
     validated = false;
     description = "";
 }
 
-Order::Order(bool v, string s){
+// Parameterized constructor
+Order::Order(bool v, string s) {
     validated = v;
     description = s;
-}; // Parameterized Constructor
+};
 
-// Copy Constructor
-Order::Order(Order& original){
+// Copy constructor
+Order::Order(Order& original) {
     validated = original.validated;
     description = original.description;
 }
-// Default Destructor
-Order::~Order(){}
 
-// Accessors & Mutators
-string Order::getDescription(){
-    return description;
-}
+// Destructor
+Order::~Order() { }
 
-bool Order::getValidated(){
-    return validated;
-}
+// Accessors
+string Order::getDescription() { return description; }
+bool Order::getValidated() { return validated; }
 
-void Order::setDescription(string d){
+// Mutators
+void Order::setDescription(string d) {
     description = d;
 }
-
-void Order::setValidated(bool v){
+void Order::setValidated(bool v) {
     validated = v;
 }
 
-Order& Order::operator = (const Order& order){
+Order& Order::operator = (const Order& order) {
     validated = order.validated;
     description = order.description;
     return *this;
 }
 
-ostream& operator<<(ostream& os, const Order& order){
+ostream& operator<<(ostream& os, const Order& order) {
     string validated = (order.validated)? "(validated)" : "(not validated)";
     os << order.description ;
 	return os;
 }
 
-// Complete Implementation next assignment
-bool Order::validate(){
+// Complete implementation next assignment
+bool Order::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Order::execute(){
+// Complete implementation next assignment
+bool Order::execute() {
     cout << "Executing Order" << endl;
     return true;
 }
 
 /****************************** Deploy *******************************/
-// Default Constructor
-Deploy::Deploy() : Order(false, "Deploy"){};
 
-// Parameterized Constructor
-Deploy::Deploy(bool v, string s) : Order(v,s){};
+// Default constructor
+Deploy::Deploy() : Order(false, "Deploy") { };
 
-Deploy::Deploy(Deploy& original) : Order(original){
+// Parameterized constructor
+Deploy::Deploy(bool v, string s) : Order(v,s) { };
+
+Deploy::Deploy(Deploy& original) : Order(original) {
     description = "Deploy Armies into a territory";
 }
 
-// Default Destructor
-Deploy::~Deploy(){};
-// Accessors
+// Destructor
+Deploy::~Deploy() { };
 
-string Deploy::getDescription(){
-    return description;
-}
-bool Deploy::getValidated(){
-    return validated;
-}
+// Accessors
+string Deploy::getDescription() { return description; }
+bool Deploy::getValidated() { return validated; }
 
 // Mutators
-void Deploy::setDescription(string d){
+void Deploy::setDescription(string d) {
     description = d;
 }
-void Deploy::setValidated(bool v){
+void Deploy::setValidated(bool v) {
     validated = v;
 }
-Deploy& Deploy::operator = (const Deploy& o){
+
+Deploy& Deploy::operator = (const Deploy& o) {
     validated = o.validated;
     description = o.description;
-    return *this;}
+    return *this;
+}
 
-ostream& operator<<(ostream& os, const Deploy& o){
+ostream& operator<<(ostream& os, const Deploy& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description;
-    return os;};
+    return os;
+}
 
-// Complete Implementation next assignment
-string Deploy::validate(){
+// Complete implementation next assignment
+string Deploy::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Deploy::execute(){
+// Complete implementation next assignment
+bool Deploy::execute() {
     cout << "Executing Order Deploy" << endl;
     return true;
 }
 
 /****************************** Advance *******************************/
-// Default Constructor
-Advance::Advance() : Order(false, "Advance"){};
 
-// Parameterized Constructor
-Advance::Advance(bool v, string s) : Order(v,s){};
+// Default constructor
+Advance::Advance() : Order(false, "Advance") { };
 
-// Copy Constructor
-Advance::Advance(Advance& original) : Order(original){
+// Parameterized constructor
+Advance::Advance(bool v, string s) : Order(v,s) { };
+
+// Copy constructor
+Advance::Advance(Advance& original) : Order(original) {
     description = "Advance Armies into a territory";
 }
 
-// Default Destructor
-Advance::~Advance(){};
+// Destructor
+Advance::~Advance() { };
 
 // Accessors
-string Advance::getDescription(){
-    return description;
-
-}
-bool Advance::getValidated(){
-    return validated;
-}
+string Advance::getDescription() { return description; }
+bool Advance::getValidated() { return validated; }
 
 // Mutators
-void Advance::setDescription(string d){
+void Advance::setDescription(string d) {
     description = d;
 }
-void Advance::setValidated(bool v){
+void Advance::setValidated(bool v) {
     validated = v;
 }
-Advance& Advance::operator = (const Advance& o){
+
+Advance& Advance::operator = (const Advance& o) {
     validated = o.validated;
     description = o.description;
     return *this;
 }
 
-ostream& operator<<(ostream& os, const Advance& o){
+ostream& operator<<(ostream& os, const Advance& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description ;
     return os;
-};
+}
 
-// Complete Implementation next assignment
-string Advance::validate(){
+// Complete implementation next assignment
+string Advance::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Advance::execute(){
+// Complete implementation next assignment
+bool Advance::execute() {
     cout << "Executing Order Advance" << endl;
     return true;
 }
 
 /****************************** Bomb *******************************/
-// Default Constructor
-Bomb::Bomb() : Order(false, "Bomb"){};
-// Parameterized Constructor
-Bomb::Bomb(bool v, string s) : Order(v,s){};
 
-// Copy Constructor
-Bomb::Bomb(Bomb& original) : Order(original){
+// Default constructor
+Bomb::Bomb() : Order(false, "Bomb") { };
+
+// Parameterized constructor
+Bomb::Bomb(bool v, string s) : Order(v,s) { };
+
+// Copy constructor
+Bomb::Bomb(Bomb& original) : Order(original) {
     description = "Bomb a territory";
 }
-// Default Destructor
-Bomb::~Bomb(){};
+
+// Destructor
+Bomb::~Bomb() { };
 
 // Accessors
-string Bomb::getDescription(){
-    return description;
-}
-bool Bomb::getValidated(){
-    return validated;
-}
+string Bomb::getDescription() { return description; }
+bool Bomb::getValidated() { return validated; }
+
 // Mutators
-void Bomb::setDescription(string d){
+void Bomb::setDescription(string d) {
     description = d;
 }
-void Bomb::setValidated(bool v){
+void Bomb::setValidated(bool v) {
     validated = v;
 }
-Bomb& Bomb::operator = (const Bomb& o){
+
+Bomb& Bomb::operator = (const Bomb& o) {
     validated = o.validated;
     description = o.description;
     return *this;
 }
-ostream& operator<<(ostream& os, const Bomb& o){
+
+ostream& operator<<(ostream& os, const Bomb& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description;
     return os;
-};
+}
 
-// Complete Implementation next assignment
-string Bomb::validate(){
+// Complete implementation next assignment
+string Bomb::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Bomb::execute(){
+// Complete implementation next assignment
+bool Bomb::execute() {
     cout << "Executing Order Bomb" << endl;
     return true;
 }
 
 /****************************** Blockade *******************************/
-// Default Constructor
-Blockade::Blockade() : Order(false, "Blockade"){};
 
-// Parameterized Constructor
-Blockade::Blockade(bool v, string s) : Order(v,s){};
+// Default constructor
+Blockade::Blockade() : Order(false, "Blockade") { };
 
-// Copy Constructor
-Blockade::Blockade(Blockade& original) : Order(original){
+// Parameterized constructor
+Blockade::Blockade(bool v, string s) : Order(v,s) { };
+
+// Copy constructor
+Blockade::Blockade(Blockade& original) : Order(original) {
     description = "Create a blockade in a territory";
 }
 
-// Default Destructor
-Blockade::~Blockade(){};
+// Destructor
+Blockade::~Blockade() { };
 
 // Accessors
-string Blockade::getDescription(){
-    return description;
-}
-
-bool Blockade::getValidated(){
-    return validated;
-}
+string Blockade::getDescription() { return description; }
+bool Blockade::getValidated() { return validated; }
 
 // Mutators
-void Blockade::setDescription(string d){
+void Blockade::setDescription(string d) {
     description = d;
 }
-
-void Blockade::setValidated(bool v){
+void Blockade::setValidated(bool v) {
     validated = v;
 }
 
-Blockade& Blockade::operator = (const Blockade& o){
+Blockade& Blockade::operator = (const Blockade& o) {
     validated = o.validated;
     description = o.description;
     return *this;
 }
-ostream& operator<<(ostream& os, const Blockade& o){
+
+ostream& operator<<(ostream& os, const Blockade& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description ;
     return os;
 }
 
-// Complete Implementation next assignment
-string Blockade::validate(){
+// Complete implementation next assignment
+string Blockade::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Blockade::execute(){
+// Complete implementation next assignment
+bool Blockade::execute() {
     cout << "Executing Order Blockade" << endl;
     return true;
 }
 
 /****************************** Airlift *******************************/
-// Default Constructor
-Airlift::Airlift() : Order(false, "Airlift"){};
 
-// Parameterized Constructor
-Airlift::Airlift(bool v, string s): Order(v,s){};
+// Default constructor
+Airlift::Airlift() : Order(false, "Airlift") { };
 
-// Copy Constructor
-Airlift::Airlift(Airlift& original) : Order(original){
+// Parameterized constructor
+Airlift::Airlift(bool v, string s): Order(v,s) { };
+
+// Copy constructor
+Airlift::Airlift(Airlift& original) : Order(original) {
     description = "Airlift Armies into another territory";
-
 }
 
-// Default Destructor
-Airlift::~Airlift(){};
+// Destructor
+Airlift::~Airlift() { };
 
 // Accessors
-string Airlift::getDescription(){
-    return description;
-}
-bool Airlift::getValidated(){
-    return validated;
-}
+string Airlift::getDescription() { return description; }
+bool Airlift::getValidated() { return validated; }
 
 // Mutators
-void Airlift::setDescription(string d){
+void Airlift::setDescription(string d) {
     description = d;
 }
-
-void Airlift::setValidated(bool v){
+void Airlift::setValidated(bool v) {
     validated = v;
 }
 
-Airlift& Airlift::operator = (const Airlift& o){
-    validated = o.validated;
-    description = o.description;
-    return *this;}
-
-ostream& operator<<(ostream& os, const Airlift& o){
-    string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description ;
-    return os;};
-
-// Complete Implementation next assignment
-string Airlift::validate(){
-    return (validated)? "validated" : "not validated";
-}
-
-// Complete Implementation next assignment
-bool Airlift::execute(){
-    cout << "Executing Order Execute" << endl;
-    return true;
-}
-
-/****************************** Negotiate *******************************/
-// Default Constructor
-Negotiate::Negotiate() : Order(false, "Negotiate"){};
-
-// Parameterized Constructor
-Negotiate::Negotiate(bool v, string s) : Order(v,s) {};
-
-// Copy Constructor
-Negotiate::Negotiate(Negotiate& original) : Order(original){
-    description = "Negotiate with another Army";
-}
-// Default Destructor
-Negotiate::~Negotiate(){};
-
-// Accessors
-string Negotiate::getDescription(){
-    return description;
-}
-
-bool Negotiate::getValidated(){
-    return validated;
-}
-// Mutators
-void Negotiate::setDescription(string d){
-    description = d;
-}
-
-void Negotiate::setValidated(bool v){
-    validated = v;
-}
-
-Negotiate& Negotiate::operator = (const Negotiate& o){
+Airlift& Airlift::operator = (const Airlift& o) {
     validated = o.validated;
     description = o.description;
     return *this;
 }
 
-ostream& operator<<(ostream& os, const Negotiate& o){
+ostream& operator<<(ostream& os, const Airlift& o) {
+    string validated = (o.validated)? " (validated)" : " (not validated)";
+    os << o.description ;
+    return os;
+}
+
+// Complete implementation next assignment
+string Airlift::validate() {
+    return (validated)? "validated" : "not validated";
+}
+
+// Complete implementation next assignment
+bool Airlift::execute() {
+    cout << "Executing Order Execute" << endl;
+    return true;
+}
+
+/****************************** Negotiate *******************************/
+
+// Default constructor
+Negotiate::Negotiate() : Order(false, "Negotiate") { };
+
+// Parameterized constructor
+Negotiate::Negotiate(bool v, string s) : Order(v,s) { };
+
+// Copy constructor
+Negotiate::Negotiate(Negotiate& original) : Order(original) {
+    description = "Negotiate with another Army";
+}
+
+// Destructor
+Negotiate::~Negotiate() { };
+
+// Accessors
+string Negotiate::getDescription() { return description; }
+bool Negotiate::getValidated() { return validated; }
+
+// Mutators
+void Negotiate::setDescription(string d) {
+    description = d;
+}
+void Negotiate::setValidated(bool v) {
+    validated = v;
+}
+
+Negotiate& Negotiate::operator = (const Negotiate& o) {
+    validated = o.validated;
+    description = o.description;
+    return *this;
+}
+
+ostream& operator<<(ostream& os, const Negotiate& o) {
     string validated = (o.validated)? "(validated)" : "(not validated)";
     os << o.description;
     return os;
 }
 
-// Complete Implementation next assignment
-string Negotiate::validate(){
+// Complete implementation next assignment
+string Negotiate::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete Implementation next assignment
-bool Negotiate::execute(){
+// Complete implementation next assignment
+bool Negotiate::execute() {
     cout << "Executing Order Negotiate" << endl;
     return true;
 }
 
 /****************************** Diplomacy *******************************/
-// Default Constructor
-Diplomacy::Diplomacy() : Order(false, "Diplomacy"){};
 
-// Parameterized Constructor
-Diplomacy::Diplomacy(bool v, string s) : Order(v,s) {} ;
+// Default constructor
+Diplomacy::Diplomacy() : Order(false, "Diplomacy") { };
 
-// Copy Constructor
-Diplomacy::Diplomacy(Diplomacy& original) : Order(original){
+// Parameterized constructor
+Diplomacy::Diplomacy(bool v, string s) : Order(v,s) { } ;
+
+// Copy constructor
+Diplomacy::Diplomacy(Diplomacy& original) : Order(original) {
     description = "Diplomatic convention";
 }
 
-// Default Destructor
-Diplomacy::~Diplomacy(){};
+// Destructor
+Diplomacy::~Diplomacy() { };
 
 // Accessors
-string Diplomacy::getDescription(){
-    return description;
-
-}
-bool Diplomacy::getValidated(){
-    return validated;
-}
+string Diplomacy::getDescription() { return description; }
+bool Diplomacy::getValidated() { return validated; }
 
 // Mutators
-void Diplomacy::setDescription(string d){
+void Diplomacy::setDescription(string d) {
     description = d;
 }
-
-void Diplomacy::setValidated(bool v){
+void Diplomacy::setValidated(bool v) {
     validated = v;
 }
 
-Diplomacy& Diplomacy::operator = (const Diplomacy& o){
+Diplomacy& Diplomacy::operator = (const Diplomacy& o) {
     validated = o.validated;
     description = o.description;
-    return *this;}
+    return *this;
+}
 
-ostream& operator<<(ostream& os, const Diplomacy& o){
+ostream& operator<<(ostream& os, const Diplomacy& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description;
     return os;
 }
 
-// Complete Implementation next assignment
-string Diplomacy::validate(){
+// Complete implementation next assignment
+string Diplomacy::validate() {
     return (validated)? "validated" : "not validated";
 }
-// Complete Implementation next assignment
+
+// Complete implementation next assignment
 bool Diplomacy::execute() {
     cout << "Executing Order Diplomacy" << endl;
     return true;
 }
 
 /****************************** Reinforcement *******************************/
-// Default Constructor
-Reinforcement::Reinforcement() : Order(false, "Reinforcement"){};
 
-// Parameterized Constructor
-Reinforcement::Reinforcement(bool v, string s): Order(v,s){};
+// Default constructor
+Reinforcement::Reinforcement() : Order(false, "Reinforcement") { };
 
-// Copy Constructor
-Reinforcement::Reinforcement(Reinforcement& original) : Order(original){
+// Parameterized constructor
+Reinforcement::Reinforcement(bool v, string s): Order(v,s) { };
+
+// Copy constructor
+Reinforcement::Reinforcement(Reinforcement& original) : Order(original) {
     description = "Send reinforcement into a territory";
 }
 
-// Default Destructor
-Reinforcement::~Reinforcement(){};
+// Destructor
+Reinforcement::~Reinforcement() { };
 
 // Accessors
-string Reinforcement::getDescription(){
-    return description;
-}
+string Reinforcement::getDescription() { return description; }
+bool Reinforcement::getValidated() { return validated; }
 
-bool Reinforcement::getValidated(){
-    return validated;
-}
 // Mutators
-void Reinforcement::setDescription(string d){
+void Reinforcement::setDescription(string d) {
     description = d;
 }
-
-void Reinforcement::setValidated(bool v){
+void Reinforcement::setValidated(bool v) {
     validated = v;
 }
 
-Reinforcement& Reinforcement::operator = (const Reinforcement& o){
+Reinforcement& Reinforcement::operator = (const Reinforcement& o) {
     validated = o.validated; description = o.description;
-    return *this;}
+    return *this;
+}
 
-ostream& operator<<(ostream& os, const Reinforcement& o){
+ostream& operator<<(ostream& os, const Reinforcement& o) {
     string validated = (o.validated)? " (validated)" : " (not validated)";
     os << o.description;
     return os;
 }
-// Complete Implementation next assignment
-string Reinforcement::validate(){
+
+// Complete implementation next assignment
+string Reinforcement::validate() {
     return (validated)? "validated" : "not validated";
 }
-// Complete Implementation next assignment
-bool Reinforcement::execute(){
+
+// Complete implementation next assignment
+bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
     return true;
 }
 
 /****************************** OrdersList *******************************/
 
-// Default Constructor
+// Default constructor
 OrdersList::OrdersList() {
     playerOrderList = vector<Order*>();
 }
+
 // Parameterized constructor
 OrdersList::OrdersList(vector<Order*> vo, bool aov) {
     playerOrderList = vector<Order*>();
@@ -498,7 +483,7 @@ OrdersList::OrdersList(vector<Order*> vo, bool aov) {
     allOrdersValidated = aov;
 }
 
-// Copy Constructor
+// Copy constructor
 OrdersList::OrdersList(OrdersList &original) {
     playerOrderList = vector<Order*>();
     
@@ -509,7 +494,7 @@ OrdersList::OrdersList(OrdersList &original) {
     allOrdersValidated = original.allOrdersValidated;
 }
 
-// Default Destructor
+// Destructor
 OrdersList::~OrdersList() {
 	// Iterate through all pointed orders and delete the content in heap of each
     for (Order* i : playerOrderList) {
@@ -523,8 +508,8 @@ OrdersList::~OrdersList() {
     //cout << "deleted OrdersList" <<endl;
 }
 
-// Assignment Operator overloading, will have the same behavior as the copy constructor. Deep copy of Vector through = operator.
-OrdersList OrdersList::operator = (const OrdersList& original){
+// Assignment Operator overloading, will have the same behavior as the Copy constructor. Deep copy of Vector through = operator.
+OrdersList OrdersList::operator = (const OrdersList& original) {
 	OrdersList deepcopy;
 
     for (Order* i : original.playerOrderList) {
@@ -537,23 +522,24 @@ OrdersList OrdersList::operator = (const OrdersList& original){
 // stream insertion operator that outputs the OrdersList's vector
 ostream& operator<<(ostream& os, const OrdersList& ordersList) {
     os << "Order List (size: " << ordersList.playerOrderList.size() << " ): \n";
-    for(int i = 0; i < ordersList.playerOrderList.size(); i++){
+    for(int i = 0; i < ordersList.playerOrderList.size(); i++) {
         os << i << " - " << *(ordersList.playerOrderList.at(i)) << " | ";
     }
     return os;
 }
 
 // Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order. Overloaded method to increase compatibility with other classes.
-void OrdersList::addOrder(Order order){
+void OrdersList::addOrder(Order order) {
 	playerOrderList.push_back(new Order(order));
 }
 
-void OrdersList::addOrder(Order* order){
+void OrdersList::addOrder(Order* order) {
 	playerOrderList.push_back(order);
 }
 
-void OrdersList::addOrder(string orderString){
+void OrdersList::addOrder(string orderString) {
 	Order* orderObject;
+
 	// CONDITIONAL
 	if (orderString == "deploy") {
         orderObject = new Deploy();
@@ -573,32 +559,32 @@ void OrdersList::addOrder(string orderString){
 	else if (orderString == "diplomacy") {
         orderObject = new Diplomacy();
     }
-	else cout << "wrong Order/Card type" << endl;
+	else {
+        cout << "wrong Order/Card type" << endl;
+    }
 
-playerOrderList.push_back(orderObject);}
+    playerOrderList.push_back(orderObject);
+}
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
-void OrdersList::remove(int i){
-
+void OrdersList::remove(int i) {
 	int j = 0;
-			playerOrderList.erase( playerOrderList.begin() + i);
-
+	playerOrderList.erase( playerOrderList.begin() + i);
 }
 
 // Move Method used to swap to Orders in the list. The parameters are both int type for the index of the Orders.
-void OrdersList::move(int i, int j){
-
+void OrdersList::move(int i, int j) {
     //Case 1: Moving Order downwards
-    if (i>j){
-        for(j; j<i;j++){
+    if (i > j) {
+        for(j; j<i;j++) {
             swap(playerOrderList[i],playerOrderList[j]);}
     }
     //Case 2: Moving Order Upwards
-    else if (i<j) {
-        for(j; j>i; j--){
+    else if (i < j) {
+        for(j; j>i; j--) {
             swap(playerOrderList[i],playerOrderList[j]);}
     }
-    else
+    else {
         cout<<" wrong order index or wrong destination index" <<endl;
-
+    }
 }

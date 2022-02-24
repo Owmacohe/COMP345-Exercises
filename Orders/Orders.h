@@ -8,157 +8,154 @@ class Order {
 	public:
 		bool validated;
 		string description;
-		Order();  // Default Constructor
-		Order(bool v, string s);  // Parameterized Constructor
-		Order(Order& o); // Copy Constructor
-		~Order(); // Default Destructor
+		Order(); // Default constructor
+		Order(bool v, string s); // Parameterized constructor
+		Order(Order& o); // Copy constructor
+		~Order(); // Destructor
 		
-		// Accessors
-		string getDescription(); bool getValidated();
-		// Mutators
-		void setDescription(string d); void setValidated(bool v);
+		string getDescription(); bool getValidated(); // Accessors
+		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Order& operator = (const Order& D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Order& order); // stream insertion operator
+		Order& operator = (const Order& D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
 		bool validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Deploy : public Order{
 	public:
-		Deploy(); // Default Constructor
-		Deploy(bool v, string s);  // Parameterized Constructor
-		Deploy(Deploy& original); // Copy Constructor
-		~Deploy(); // Default Destructor
+		Deploy(); // Default constructor
+		Deploy(bool v, string s);  // Parameterized constructor
+		Deploy(Deploy& original); // Copy constructor
+		~Deploy(); // Destructor
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Deploy& operator = (const Deploy& D); 	// Assignment Operator
-		friend ostream& operator<<(ostream& os, const Deploy& deploy); // stream insertion operator
+		Deploy& operator = (const Deploy& D); 	// Assignment operator
+		friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
-
 
 class Advance : public Order{
 	public:
-		Advance(); // Default Constructor
-		Advance(bool v, string s);  // Parameterized Constructor
-		Advance(Advance& original); // Copy Constructor
-		~Advance(); // Default Destructor 
+		Advance(); // Default constructor
+		Advance(bool v, string s);  // Parameterized constructor
+		Advance(Advance& original); // Copy constructor
+		~Advance(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Advance& operator = (const Advance& d); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Advance& advance); // stream insertion operator
+		Advance& operator = (const Advance& d); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Advance& advance); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Bomb : public Order{
 	public:
-		Bomb(); // Default Constructor
-		Bomb(bool v, string s);  // Parameterized Constructor
-		Bomb(Bomb& original); // Copy Constructor
-		~Bomb(); // Default Destructor 
+		Bomb(); // Default constructor
+		Bomb(bool v, string s);  // Parameterized constructor
+		Bomb(Bomb& original); // Copy constructor
+		~Bomb(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Bomb& operator = (const Bomb& D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Bomb& bomb); // stream insertion operator
+		Bomb& operator = (const Bomb& D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Bomb& bomb); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Blockade : public Order{
 	public:
-		Blockade();  // Default Constructor
-		Blockade(bool v, string s);  // Parameterized Constructor
-		Blockade(Blockade& original); // Copy Constructor
-		~Blockade(); // Default Destructor 
+		Blockade();  // Default constructor
+		Blockade(bool v, string s);  // Parameterized constructor
+		Blockade(Blockade& original); // Copy constructor
+		~Blockade(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Blockade& operator = (const Blockade& D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Blockade& blockade); // stream insertion operator
+		Blockade& operator = (const Blockade& D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Blockade& blockade); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Airlift : public Order{
 	public:
-		Airlift();  // Default Constructor
-		Airlift(bool v, string s);  // Parameterized Constructor
-		Airlift(Airlift& original); // Copy Constructor
-		~Airlift(); // Default Destructor 
+		Airlift();  // Default constructor
+		Airlift(bool v, string s);  // Parameterized constructor
+		Airlift(Airlift& original); // Copy constructor
+		~Airlift(); // Destructor 
 		
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Airlift& operator = (const Airlift &D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Airlift& airflit); // stream insertion operator
+		Airlift& operator = (const Airlift &D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Airlift& airflit); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Negotiate : public Order{
 	public:
-		Negotiate();  // Default Constructor
-		Negotiate(bool v, string s);  // Parameterized Constructor
-		Negotiate(Negotiate& original); // Copy Constructor
-		~Negotiate(); // Default Destructor 
+		Negotiate();  // Default constructor
+		Negotiate(bool v, string s);  // Parameterized constructor
+		Negotiate(Negotiate& original); // Copy constructor
+		~Negotiate(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Negotiate& operator = (const Negotiate& D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // stream insertion operator
+		Negotiate& operator = (const Negotiate& D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // Stream insertion operator
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Reinforcement : public Order{
 	public:
-		Reinforcement();  // Default Constructor
-		Reinforcement(bool v, string s);  // Parameterized Constructor
-		Reinforcement(Reinforcement& original); // Copy Constructor
-		~Reinforcement(); // Default Destructor 
+		Reinforcement();  // Default constructor
+		Reinforcement(bool v, string s);  // Parameterized constructor
+		Reinforcement(Reinforcement& original); // Copy constructor
+		~Reinforcement(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Reinforcement& operator = (const Reinforcement& D); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // stream insertion operator
+		Reinforcement& operator = (const Reinforcement& D); // Assignment operator
+		friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class Diplomacy : public Order{
 	public:
-		Diplomacy();  // Default Constructor
-		Diplomacy(bool v, string s);  // Parameterized Constructor
-		Diplomacy(Diplomacy& original); // Copy Constructor
-		~Diplomacy(); // Default Destructor 
+		Diplomacy();  // Default constructor
+		Diplomacy(bool v, string s);  // Parameterized constructor
+		Diplomacy(Diplomacy& original); // Copy constructor
+		~Diplomacy(); // Destructor 
 
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
 
-		Diplomacy& operator = (const Diplomacy& D); // Assignment Operator 
+		Diplomacy& operator = (const Diplomacy& D); // Assignment operator 
 		friend ostream& operator<<(ostream& description, const Diplomacy& diplomacy);
 
 		string validate();
-		bool execute(); //Implementation next assignment
+		bool execute(); // Implementation next assignment
 };
 
 class OrdersList {
@@ -166,16 +163,16 @@ class OrdersList {
 		vector<Order*> playerOrderList;
 		bool allOrdersValidated;
 
-		OrdersList(); // Default Constructor
-		OrdersList(vector<Order*> vo, bool aov); // Parameterized Constructor
-		OrdersList(OrdersList& original);  // Copy Constructor
-		~OrdersList(); // Default Destructor 
+		OrdersList(); // Default constructor
+		OrdersList(vector<Order*> vo, bool aov); // Parameterized constructor
+		OrdersList(OrdersList& original);  // Copy constructor
+		~OrdersList(); // Destructor 
 
 		vector<Order*> getOrderList(); bool getAllOrdersValidated(); // Accessors
 		void setOrderList(vector<Order*> vo); void setAllOrdersValidated(bool v); // Mutators
 
-		OrdersList operator = (const OrdersList& original); // Assignment Operator
-		friend ostream& operator<<(ostream& os, const OrdersList& ordersList); // stream insertion operator
+		OrdersList operator = (const OrdersList& original); // Assignment operator
+		friend ostream& operator<<(ostream& os, const OrdersList& ordersList); // Stream insertion operator
 
 		void addOrder(Order order); // Add Method used to add an order of the OrderList.
 		void addOrder(Order* order); // Add Method used to add an order of the OrderList.
