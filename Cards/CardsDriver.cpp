@@ -103,4 +103,3 @@ int cardsMain() {
 
     return 0;
 }
-

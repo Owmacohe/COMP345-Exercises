@@ -7,32 +7,30 @@ class Player;
 class MapLoader;
 class Deck;
 
-enum State
-{
+enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
 
 class GameEngine {
-
     public:
-        GameEngine() ; // constructor
-        GameEngine(const GameEngine &gm); //copy constructor
-        ~GameEngine(); // destructor
-        GameEngine& operator = (const GameEngine& gm); // Assignment Operator
-        friend ostream& operator<<(ostream& os, const GameEngine& gm); // stream insertion operator
+        GameEngine() ; // Constructor
+        GameEngine(const GameEngine &gm); // Copy constructor
+        ~GameEngine(); // Destructor
+        GameEngine& operator = (const GameEngine& gm); // Assignment operator
+        friend ostream& operator<<(ostream& os, const GameEngine& gm); // Stream insertion operator
 
-        //getters
+        // Accessors
         State getState();
         int getNumberOfPlayers();
         bool endOfState ();
         vector<Player*> getplayer_list();
 
-        //setters
+        // Mutators
         void setState(State s);
         void setNumberOfPlayers(int x);
         void setEndOfState(bool b);
 
-        //phases , states and commands
+        // Phases, states, and commands
         void startGame();
         void loadMap();
         void validateMap();
@@ -51,14 +49,13 @@ class GameEngine {
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);
 
-
+        void startupPhase();
     private:
-        State* s ;
+        State* s;
         int NumberOfPlayers;
         int NumberOfTerritories;
         MapLoader *ml;
         bool phaseEnd;
         Deck* deck;
         vector<Player*> player_list;
-
 };

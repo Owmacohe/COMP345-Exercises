@@ -8,8 +8,7 @@
 #include "../Orders/Orders.cpp"
 #include "../Cards/Cards.cpp"
 
-int PlayerMain() {
-
+int playerMain() {
 	cout << "\nPlayer Test Default Constructor" <<endl;
 	//test default constructor
 	Player p1;
