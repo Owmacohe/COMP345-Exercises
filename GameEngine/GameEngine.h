@@ -48,6 +48,8 @@ class GameEngine {
         void gameStartupTransitions(string s);
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);
+
+        void startupPhase();
     private:
         State* s;
         int NumberOfPlayers;

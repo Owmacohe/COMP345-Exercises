@@ -222,3 +222,20 @@ void GameEngine::gameEndTransitions(string str) {
         cout << "Invalid command!" << endl;
     }
 }
+
+void GameEngine::startupPhase() {
+    // use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+
+    // use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
+
+    // use the addplayer <playername> command to enter players in the game (2-6 players)
+
+    /*
+    use the gamestart command to:
+        fairly distribute all the territories to the players
+        determine randomly the order of play of the players in the game
+        give 50 initial armies to the players, which are placed in their respective reinforcement pool
+        let each player draw 2 initial cards from the deck using the deck’s draw() method
+        switch the game to the play phase
+    */
+}
