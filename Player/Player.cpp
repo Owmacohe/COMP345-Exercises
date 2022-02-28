@@ -10,11 +10,14 @@ Player::Player() {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
+
+    //added with a2
+    num_armies = 0;
     //cout << "[Player default constructor]" << endl;
 }
 
 // Param constructor
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) {
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int a): name(n), num_armies(a) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
@@ -57,37 +60,37 @@ Player::~Player() {
 
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
 vector<Territory*> Player::toDefend() {
-    // TODO next assignment
-    //have to check if territories have surrounding enemies
-    //for now just returns vector list of the players territories
-    return territories;
+// TODO next assignment
+//have to check if territories have surrounding enemies
+//for now just returns vector list of the players territories
+return territories;
 }
 
 vector<Territory*> Player::toAttack() {
-    // TODO next assignment
-    //have to check if territories have surrounding enemies
-    //for now returns vector list of territories that arent players
-    return territories;
+// TODO next assignment
+//have to check if territories have surrounding enemies
+//for now returns vector list of territories that arent players
+return territories;
 }
 
 void Player::issueOrder(string type) {
-    if (type == "deploy") {
+    if (type == "deploy"){
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
     } 
-    else if (type == "advance") {
+    else if (type == "advance"){
         Advance* o = new Advance;
         orders->addOrder(o);
     } 
-    else if (type == "bomb") {
+    else if (type == "bomb"){
         Bomb* o = new Bomb;
         orders->addOrder(o);
     }
-    else if (type == "blockade") {
+    else if (type == "blockade"){
         Blockade* o = new Blockade;
         orders->addOrder(o);
     } 
-    else if (type == "airlift") {
+    else if (type == "airlift"){
         Airlift* o = new Airlift;
         orders->addOrder(o);
     } 
@@ -108,13 +111,7 @@ void Player::issueOrder(string type) {
     }
 }
 
-// Accessors
-string Player::getName() { return name; }
-vector<Territory*> Player::getTerritory() { return territories; }
-Hand* Player::getHand() { return hand; }
-OrdersList* Player::getOrder() { return orders; }
-
-// Mutators
+// Mutators and Accessors
 void Player::setName(string n) { name = n; }
 void Player::setTerritory(vector<Territory*> t) {
     for (Territory* i : t) {
@@ -123,15 +120,24 @@ void Player::setTerritory(vector<Territory*> t) {
 }
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
+void Player::setArmies(int a) { num_armies = a; }
+
+string Player::getName() { return name; }
+vector<Territory*> Player::getTerritory() { return territories; }
+Hand* Player::getHand() { return hand; }
+OrdersList* Player::getOrder() { return orders; }
+int Player::getArmies() { return num_armies; }
+// End of Mutators and Accessors
 
 // Assignment operator
-Player& Player::operator = (const Player& p) {
+Player& Player::operator = (const Player& p){
     this->name = p.name;
     for (Territory* i : p.territories) {
             this->territories.push_back(i);
     }
     this->hand = p.hand;
     this->orders = p.orders;
+    this->num_armies = p.num_armies;
     return *this;
 }
 
@@ -146,5 +152,6 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
         "PLAYER: " << p.name <<
         "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
         "\n    Players hand, " << *p.hand <<
-        "\n    Players orders, " << *p.orders <<endl;
+        "\n    Players orders, " << *p.orders <<
+        "\n    Number of Armies: " << p.num_armies <<endl;
 }
