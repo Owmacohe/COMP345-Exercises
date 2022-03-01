@@ -63,6 +63,9 @@ vector<Territory*> Player::toDefend() {
 // TODO next assignment
 //have to check if territories have surrounding enemies
 //for now just returns vector list of the players territories
+
+//check each continent for territories in our list, gives a list of territories that we own versus dont, order them by edges and number of armies on those edges
+
 return territories;
 }
 

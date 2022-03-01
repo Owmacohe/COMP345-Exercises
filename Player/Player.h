@@ -44,4 +44,6 @@ class Player {
 
         //added with a2
         int num_armies;
+        //probably have to created a class reinforcement pool to hold armies, and have each player have a reinforcement pool
+        //check until reinforcement pool is empty then all armies are either attacking or defending
 };
