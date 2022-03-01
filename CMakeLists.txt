@@ -21,4 +21,4 @@ add_executable(COMP345-Exercises
         Player/Player.cpp
         Player/Player.h
         Player/PlayerDriver.cpp
-        )
+        LoggingObserver/LoggingObserver.cpp LoggingObserver/LoggingObserver.h LoggingObserver/LoggingObserverDriver.cpp)
