@@ -48,11 +48,7 @@ ostream& operator<<(ostream& os, const Order& order) {
 	return os;
 }
 
-
-bool Order::validate() {
-    return (validated)? "validated" : "not validated";
-}
-
+bool Order::validate() {} // Virtual Method
 
 bool Order::execute() {
     cout << "Executing Order" << endl;
@@ -106,14 +102,20 @@ ostream& operator<<(ostream& os, const Deploy& o) {
 
 
 bool Deploy::validate() {
+    /*
+     * Check if Territory belongs to the player that issued the Order ----> So each Order has a Player* & each OrderList has a Player*
+     */
     return validated;
 }
 
 
 bool Deploy::execute() {
-    cout << "Executing Order Deploy" << endl;
-    /* will call validate()
-     *
+    int armiesForDeployment;
+    /* Maybe ask for input of the player for the number of armies for deployment or is it a standard number?
+     * Validate number here? make sure its <= than the Player's reinforcement pool Or Change Validate to receive int armies and Territory
+     * will call validate() to check Territory
+     * if false, print out invalid
+     * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
      */
     return true;
 }
@@ -159,13 +161,27 @@ ostream& operator<<(ostream& os, const Advance& o) {
 }
 
 
-bool Advance::validate() {
+int Advance::validate() { // there are 3 options: valid, invalid and ATTACK
+    /*
+     * Check if Territory B belongs to player return 1
+     * Check if Territory A is adjacent to territory B return 1
+     *
+     * If territory B belong to player and is adjacent return 2
+     *
+     * If Territory B is another Player's return 3
+     */
     return validated;
 }
 
 
 bool Advance::execute() {
-    cout << "Executing Order Advance" << endl;
+    /*
+     * ask input from the player for number of armies moved, Territory A and Territory B
+     * call validate() --> Change method to accept armies, Territory A and Territory B ?
+     * if 1 print invalid order
+     * if 2 remove armies from Territory A and add them to Territory B
+     *  if 3 ATTACK
+     */
     return true;
 }
 
@@ -211,12 +227,23 @@ ostream& operator<<(ostream& os, const Bomb& o) {
 
 
 bool Bomb::validate() {
+    /*
+     * Check that Territory A is not the Player's
+     * Check that Territory A is adjacent to one of the Player's
+     * if all good, return true, else false
+     */
     return validated;
 }
 
 
 bool Bomb::execute() {
-    cout << "Executing Order Bomb" << endl;
+    /*
+     * Can only be played with a CARD so remove it from IssueOrder in Player
+     * Ask player for Territory A
+     * validate()
+     * if false, invalid order
+     * if true, /2 armies in the other Player's Territory A
+     */
     return true;
 }
 
@@ -262,12 +289,24 @@ ostream& operator<<(ostream& os, const Blockade& o) {
 
 
 bool Blockade::validate() {
+    /*
+     * Check if Territory A belong to the player
+     * if no, return false
+     * if yes, return true
+     */
     return validated;
 }
 
 
 bool Blockade::execute() {
-    cout << "Executing Order Blockade" << endl;
+    /*
+     *  Can only be played with a CARD so remove it from IssueOrder in Player
+     *  ask the player for a Territory A
+     *  validate()
+     *  if false, invalid order
+     *  if true, make armies in territory x2 and make 'Neutral Player owner of that'
+     *  Maybe create Neutral Player here (or at startup of game)
+     */
     return true;
 }
 
@@ -313,12 +352,23 @@ ostream& operator<<(ostream& os, const Airlift& o) {
 
 
 bool Airlift::validate() {
+    /*
+     * check that A and B are the Player's territories
+     * return true
+     * else false
+     */
     return validated;
 }
 
 
 bool Airlift::execute() {
-    cout << "Executing Order Execute" << endl;
+    /*
+     * Can only be played with a CARD so remove it from IssueOrder in Player
+     * Ask player for Territory A, Territory B and int armies
+     * validate()
+     *if false, order invalid
+     * if true, remove armies from Territory A and add them to Territory B
+     */
     return true;
 }
 
@@ -364,16 +414,31 @@ ostream& operator<<(ostream& os, const Negotiate& o) {
 
 
 bool Negotiate::validate() {
+    /*
+     * Check if the player name submitted is not the same as the player that issued the order
+     * (Check if its not the neutral player....?)
+     * return true if ok
+     * else false
+     */
     return validated;
 }
 
 
 bool Negotiate::execute() {
-    cout << "Executing Order Negotiate" << endl;
+    /*
+     * Can only be played with a DIPLOMACY CARD so remove it from IssueOrder in Player
+     * Ask player for another player name
+     * validate()
+     * if false, invalid order
+     * if true make any attack from Player A to Player B and vice-versa invalid until end of turn (probably until reinforcement phase)
+     * Maybe add a List of Player* as an attribute in PLayer to keep track of who has a truce with who.
+     * In this case, this adds Player A to Player B's list and vice-versa
+     * Lists must be cleared when goes to reinforcement phase
+     */
     return true;
 }
 
-/****************************** Diplomacy *******************************/
+/****************************** Diplomacy *******************************/ // WE JUST USE THIS CARD NAME BUT IT CALLS NEGOTIATE
 
 // Default constructor
 Diplomacy::Diplomacy() : Order(false, "Diplomacy") { };
@@ -424,7 +489,7 @@ bool Diplomacy::execute() {
     return true;
 }
 
-/****************************** Reinforcement *******************************/
+/****************************** Reinforcement *******************************/ // I THINK WE CAN DELETE THIS
 
 // Default constructor
 Reinforcement::Reinforcement() : Order(false, "Reinforcement") { };
