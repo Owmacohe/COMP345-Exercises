@@ -56,8 +56,14 @@ bool Order::validate() {
 // Complete implementation next assignment
 bool Order::execute() {
     cout << "Executing Order" << endl;
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+// From Iloggable
+string Order::stringToLog(){
+    string logString = "The Order has been executed.\n";
+    return logString;}
 
 /****************************** Deploy *******************************/
 

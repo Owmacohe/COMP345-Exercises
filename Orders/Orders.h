@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include "LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
-class Order {
+class Order : public Iloggable, Subject {
 	public:
 		bool validated;
 		string description;
@@ -21,6 +22,9 @@ class Order {
 
 		bool validate();
 		bool execute(); // Implementation next assignment
+
+        // From Iloggable
+        string stringToLog();
 };
 
 class Deploy : public Order{
