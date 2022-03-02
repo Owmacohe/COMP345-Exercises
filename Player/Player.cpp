@@ -96,27 +96,27 @@ void Player::issueOrder(string type = "default") {
         Advance* o = new Advance;
         orders->addOrder(o);
     } 
-    else if (type == "bomb"){
+    else if (type == "bomb"){ //HEY REMOVE THIS ONE, CAN ONLY BE PLAYED THROUGH A CARD  :) - MJ
         Bomb* o = new Bomb;
         orders->addOrder(o);
     }
-    else if (type == "blockade"){
+    else if (type == "blockade"){ //HEY REMOVE THIS ONE, CAN ONLY BE PLAYED THROUGH A CARD  :) - MJ
         Blockade* o = new Blockade;
         orders->addOrder(o);
     } 
-    else if (type == "airlift"){
+    else if (type == "airlift"){ //HEY REMOVE THIS ONE, CAN ONLY BE PLAYED THROUGH A CARD  :) - MJ
         Airlift* o = new Airlift;
         orders->addOrder(o);
     } 
-    else if (type == "negotiate") {
+    else if (type == "negotiate") { //HEY REMOVE THIS ONE, CAN ONLY BE PLAYED THROUGH A CARD  :) - MJ
         Negotiate* o = new Negotiate;
         orders->addOrder(o);
     }
-    else if (type == "reinforcement") {
+    else if (type == "reinforcement") { //HEY REMOVE THIS ONE, probably a mistake in the last assignment instructions - MJ
         Reinforcement* o = new Reinforcement;
         orders->addOrder(o);
     }  
-    else if (type == "diplomacy") {
+    else if (type == "diplomacy") { //HEY REMOVE THIS ONE, CAN ONLY BE PLAYED THROUGH A CARD  :) - MJ
         Diplomacy* o = new Diplomacy;
         orders->addOrder(o);
     } 
