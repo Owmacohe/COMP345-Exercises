@@ -16,9 +16,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a69c3c93-f1d6-4845-90bf-c1d74f3f6017" name="Changes" comment="game engine .h file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.h" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Orders/Orders.h" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.h" afterDir="false" />
     </list>

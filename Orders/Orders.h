@@ -21,7 +21,7 @@ class Order : public Iloggable, Subject {
 		friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
 		bool validate();
-		bool execute(); // Implementation next assignment
+		bool virtual execute(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS
 
         // From Iloggable
         string stringToLog();
@@ -40,8 +40,8 @@ class Deploy : public Order{
 		Deploy& operator = (const Deploy& D); 	// Assignment operator
 		friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+		bool validate();
+		bool execute();
 };
 
 class Advance : public Order{
@@ -57,8 +57,8 @@ class Advance : public Order{
 		Advance& operator = (const Advance& d); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Advance& advance); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Bomb : public Order{
@@ -74,8 +74,8 @@ class Bomb : public Order{
 		Bomb& operator = (const Bomb& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Bomb& bomb); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Blockade : public Order{
@@ -91,8 +91,8 @@ class Blockade : public Order{
 		Blockade& operator = (const Blockade& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Blockade& blockade); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Airlift : public Order{
@@ -108,8 +108,8 @@ class Airlift : public Order{
 		Airlift& operator = (const Airlift &D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Airlift& airflit); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Negotiate : public Order{
@@ -124,8 +124,8 @@ class Negotiate : public Order{
 
 		Negotiate& operator = (const Negotiate& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // Stream insertion operator
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Reinforcement : public Order{
@@ -141,8 +141,8 @@ class Reinforcement : public Order{
 		Reinforcement& operator = (const Reinforcement& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class Diplomacy : public Order{
@@ -158,8 +158,8 @@ class Diplomacy : public Order{
 		Diplomacy& operator = (const Diplomacy& D); // Assignment operator 
 		friend ostream& operator<<(ostream& description, const Diplomacy& diplomacy);
 
-		string validate();
-		bool execute(); // Implementation next assignment
+        bool validate();
+		bool execute();
 };
 
 class OrdersList {

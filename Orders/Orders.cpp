@@ -48,12 +48,12 @@ ostream& operator<<(ostream& os, const Order& order) {
 	return os;
 }
 
-// Complete implementation next assignment
+
 bool Order::validate() {
     return (validated)? "validated" : "not validated";
 }
 
-// Complete implementation next assignment
+
 bool Order::execute() {
     cout << "Executing Order" << endl;
     notify(this); // FROM SUBJECT
@@ -104,14 +104,17 @@ ostream& operator<<(ostream& os, const Deploy& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Deploy::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Deploy::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Deploy::execute() {
     cout << "Executing Order Deploy" << endl;
+    /* will call validate()
+     *
+     */
     return true;
 }
 
@@ -155,12 +158,12 @@ ostream& operator<<(ostream& os, const Advance& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Advance::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Advance::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Advance::execute() {
     cout << "Executing Order Advance" << endl;
     return true;
@@ -206,12 +209,12 @@ ostream& operator<<(ostream& os, const Bomb& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Bomb::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Bomb::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Bomb::execute() {
     cout << "Executing Order Bomb" << endl;
     return true;
@@ -257,12 +260,12 @@ ostream& operator<<(ostream& os, const Blockade& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Blockade::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Blockade::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Blockade::execute() {
     cout << "Executing Order Blockade" << endl;
     return true;
@@ -308,12 +311,12 @@ ostream& operator<<(ostream& os, const Airlift& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Airlift::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Airlift::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Airlift::execute() {
     cout << "Executing Order Execute" << endl;
     return true;
@@ -359,12 +362,12 @@ ostream& operator<<(ostream& os, const Negotiate& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Negotiate::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Negotiate::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Negotiate::execute() {
     cout << "Executing Order Negotiate" << endl;
     return true;
@@ -410,12 +413,12 @@ ostream& operator<<(ostream& os, const Diplomacy& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Diplomacy::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Diplomacy::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Diplomacy::execute() {
     cout << "Executing Order Diplomacy" << endl;
     return true;
@@ -460,12 +463,12 @@ ostream& operator<<(ostream& os, const Reinforcement& o) {
     return os;
 }
 
-// Complete implementation next assignment
-string Reinforcement::validate() {
-    return (validated)? "validated" : "not validated";
+
+bool Reinforcement::validate() {
+    return validated;
 }
 
-// Complete implementation next assignment
+
 bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
     return true;
