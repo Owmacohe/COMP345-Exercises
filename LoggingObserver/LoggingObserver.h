@@ -32,10 +32,10 @@ class Subject {
 public:
     Subject();
     ~Subject();
-
+    void notify(Iloggable* il);
     void attach(Observer *obs);
     void detach(Observer *obs);
-    void notify(Iloggable* il);
+
 
     public:
     list<Observer*> observers;
