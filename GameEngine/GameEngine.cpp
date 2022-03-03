@@ -2,8 +2,13 @@
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include "../Orders/Orders.cpp"
 
-// constructor
+class OrdersList;
+class Player;
+
+// Default constructor
 GameEngine::GameEngine() {
     s = new State;
     *s = null;
@@ -13,19 +18,20 @@ GameEngine::GameEngine() {
     player_list = vector<Player*>();
 }
 
-//copy constructor
-GameEngine::GameEngine(const GameEngine &gm){
+// Copy constructor
+GameEngine::GameEngine(const GameEngine &gm) {
     s = gm.s;
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
     this->deck = new Deck(*(gm.deck));
+
     for (Player* p : gm.player_list) {
         this->player_list.push_back(new Player(*p));
     }
 }
 
-// destructor
-GameEngine::~GameEngine(){
+// Destructor
+GameEngine::~GameEngine() {
     delete s;
     s = NULL;
 
@@ -46,9 +52,11 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     this->ml = gm.ml;
     phaseEnd = gm.phaseEnd;
     this->deck = gm.deck;
+
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
+    
     return *this;
 };
 
@@ -65,26 +73,26 @@ ostream& operator<<(ostream &os, const GameEngine& gm) {
         "\n    Number of Territories : (" << gm.NumberOfTerritories << ")" << endl;
 }
 
-//getters
-State GameEngine::getState(){ return *s; }
-int GameEngine::getNumberOfPlayers(){return NumberOfPlayers;}
-bool GameEngine::endOfState (){return phaseEnd;}
-vector<Player*> GameEngine::getplayer_list() {return player_list;}
+// Accessors
+State GameEngine::getState() { return *s; }
+int GameEngine::getNumberOfPlayers() { return NumberOfPlayers; }
+bool GameEngine::endOfState() { return phaseEnd; }
+vector<Player*> GameEngine::getplayer_list() { return player_list; }
 
-//setters
-void GameEngine::setState(State s){this->s = &s;}
-void GameEngine::setNumberOfPlayers(int x){this->NumberOfPlayers = x;}
-void GameEngine::setEndOfState(bool b){this->phaseEnd = b;}
+// Mutators
+void GameEngine::setState(State s) { this->s = &s; }
+void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
+void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 
-//phases , states and commands
-void GameEngine::startGame(){
+// Phases, states, and commands
+void GameEngine::startGame() {
     *s = start;
     cout << "Welcome to Warzone" << endl;
     cout << "Please enter the number of players" << endl;
     cin >> this->NumberOfPlayers;
     cout<< "end of start phase" << endl;
-
 }
+
 void GameEngine::loadMap() {
     *s = mapLoaded;
 
@@ -103,15 +111,16 @@ void GameEngine::loadMap() {
 
     cout << "loaded map" << endl;
 }
-void GameEngine::validateMap(){
+
+void GameEngine::validateMap() {
     *s = mapValidated;
     cout<< "end of map validated phase" << endl;
-};
-
+}
 
 void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
     *s = playersAdded;
-    for(int i =0 ; i<NumberOfPlayers ; i++){
+
+    for(int i = 0; i < NumberOfPlayers; i++) {
         string name;
         Player *p = new Player;
         cout << "Please enter the player's name" << endl;
@@ -119,30 +128,81 @@ void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
         p->setName(name);
         player_list.push_back(p);
     }
+
     cout<< "end of players added phase" << endl;
 }
 
-void GameEngine::assignCountries(){
+void GameEngine::assignCountries() {
     cout<< "end of assign countries command" << endl;
 }
 
-void GameEngine::assignReinforcementPhase(){
+void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout<< "end of assign Reinforcement" << endl;
 }
 
-void GameEngine::issueOrders(Player *player){
+void GameEngine::issueOrders(Player *player) {
     *s = issueOrder;
     cout<< "Issued the order for player " << player->getName() << endl;
 }
 
-void GameEngine::endIssueOrderPhase(Player *player){
+void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
     cout<< "ended phase issue Orders for player " << player->getName() << endl;
 }
 
-void GameEngine::executeOrders(Player *player){
-    cout<< "executed the order for player " << player->getName() << endl;
+void GameEngine::executeOrdersPhase() {
+    //first , adding all deploy orders into a separate list and removing them from the original player's lists
+    cout << "Executing Deploy Order" << endl;
+    for (int i = 0; i < player_list.size(); i++) {
+        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
+            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
+                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
+                  player_list.at(i)->getOrder()->remove(j);
+            }
+        }
+    }
+    // to execute and remove the deploy orders
+    int  deployDoneCount =0;
+    while(deployDoneCount < NumberOfPlayers){
+        deployDoneCount =0;
+        for (int i = 0; i < player_list.size(); i++) {
+            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
+                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
+                player_list[i]->getOrder()->remove(i);
+
+            } else deployDoneCount++;
+        }
+    }
+    // to execute the rest of the orders on each player's list
+    int  playersDone =0;
+    while(playersDone < NumberOfPlayers){
+        playersDone =0;
+        for (int i = 0; i < player_list.size(); i++) {
+            if (!player_list[i]->getOrder()->getOrderList().empty()) {
+                player_list[i]->getOrder()->getOrderList().at(i)->execute();
+                player_list[i]->getOrder()->remove(i);
+
+            } else {
+
+                playersDone++;
+            }
+        }
+    }
+    int lost = 0;
+    for (int i = 0 ; i<NumberOfPlayers; i++){
+        if(player_list[i]->getTerritory().size() == 0)
+            lost ++ ;
+        if (lost == NumberOfPlayers-1){
+            for (int j = 0; j < NumberOfPlayers; j++) {
+                if(player_list[j]->getTerritory().size()>0){
+                    winPhase(player_list[j]);
+                    break;
+                }
+                break;
+            }
+        }else assignReinforcementPhase();
+    }
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
@@ -150,17 +210,17 @@ void GameEngine::endexecuteOrdersPhase(Player *player) {
     cout << "ended phase execute Order for player " << player->getName() << endl;
 }
 
-void GameEngine::winPhase(Player *p){
+void GameEngine::winPhase(Player *p) {
     *s = win;
     cout<< "victory for player: " << p->getName() << endl;
 }
 
-void GameEngine::endPhase(){
+void GameEngine::endPhase() {
     *s = null;
     cout<< "Thank you for Playing Warzone" << endl;
 }
 
-void GameEngine::playAgain(){
+void GameEngine::playAgain() {
     *s = null;
     cout<< "the Game will restart soon" << endl;
 }
@@ -179,7 +239,7 @@ void GameEngine::gameStartupTransitions(string str) {
         assignCountries();
         assignReinforcementPhase();
     }
-     else {
+    else {
         cout << "Invalid command!" << endl;
     }
 }
@@ -192,7 +252,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
         endIssueOrderPhase(p);
     }
     else if (str == "execorder" && getState() == 7) {
-        executeOrders(p);
+        executeOrdersPhase();
     }
     else if (str == "endexecorders" && getState() == 7) {
         endexecuteOrdersPhase(p);
@@ -205,7 +265,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
     }
 }
 
-void GameEngine::gameEndTransitions(string str){
+void GameEngine::gameEndTransitions(string str) {
     if (str == "end" && getState() == 8) {
         endPhase();
     }
@@ -215,4 +275,21 @@ void GameEngine::gameEndTransitions(string str){
     else {
         cout << "Invalid command!" << endl;
     }
+}
+
+void GameEngine::startupPhase() {
+    // use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+
+    // use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
+
+    // use the addplayer <playername> command to enter players in the game (2-6 players)
+
+    /*
+    use the gamestart command to:
+        fairly distribute all the territories to the players
+        determine randomly the order of play of the players in the game
+        give 50 initial armies to the players, which are placed in their respective reinforcement pool
+        let each player draw 2 initial cards from the deck using the deck’s draw() method
+        switch the game to the play phase
+    */
 }
