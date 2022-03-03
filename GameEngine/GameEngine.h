@@ -39,7 +39,7 @@ class GameEngine {
         void assignReinforcementPhase();
         void issueOrders(Player* player);
         void endIssueOrderPhase(Player* player);
-        void executeOrders(Player* player);
+        void executeOrdersPhase();
         void endexecuteOrdersPhase(Player* player);
         void winPhase(Player *p);
         void endPhase();

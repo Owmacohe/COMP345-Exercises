@@ -2,6 +2,12 @@
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 #include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include "../Orders/Orders.cpp"
+#include <vector>
+#include <iostream>
+class OrdersList;
+class Player;
 
 // Default constructor
 GameEngine::GameEngine() {
@@ -147,9 +153,62 @@ void GameEngine::endIssueOrderPhase(Player *player) {
     cout<< "ended phase issue Orders for player " << player->getName() << endl;
 }
 
-void GameEngine::executeOrders(Player *player) {
-    cout<< "executed the order for player " << player->getName() << endl;
+void GameEngine::executeOrdersPhase() {
+
+//first , adding all deploy orders into a separate list and removing them from the original player's lists
+    cout << "Executing Deploy Order" << endl;
+    for (int i = 0; i < player_list.size(); i++) {
+        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
+            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
+                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
+                  player_list.at(i)->getOrder()->remove(j);
+            }
+        }
+    }
+    // to execute and remove the deploy orders
+    int  deployDoneCount =0;
+    while(deployDoneCount < NumberOfPlayers){
+        deployDoneCount =0;
+        for (int i = 0; i < player_list.size(); i++) {
+            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
+                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
+                player_list[i]->getOrder()->remove(i);
+
+            } else deployDoneCount++;
+        }
+    }
+    // to execute the rest of the orders on each player's list
+    int  playersDone =0;
+    while(playersDone < NumberOfPlayers){
+        playersDone =0;
+        for (int i = 0; i < player_list.size(); i++) {
+            if (!player_list[i]->getOrder()->getOrderList().empty()) {
+                player_list[i]->getOrder()->getOrderList().at(i)->execute();
+                player_list[i]->getOrder()->remove(i);
+
+            } else {
+
+                playersDone++;
+            }
+        }
+    }
+    int lost = 0;
+    for (int i = 0 ; i<NumberOfPlayers; i++){
+        if(player_list[i]->getTerritory().size() == 0)
+            lost ++ ;
+        if (lost == NumberOfPlayers-1){
+            for (int j = 0; j < NumberOfPlayers; j++) {
+                if(player_list[j]->getTerritory().size()>0){
+                    winPhase(player_list[j]);
+                    break;
+                }
+                break;
+            }
+        }else assignReinforcementPhase();
+    }
 }
+
+
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
     *s = assignReinforcement;
@@ -198,7 +257,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
         endIssueOrderPhase(p);
     }
     else if (str == "execorder" && getState() == 7) {
-        executeOrders(p);
+        executeOrdersPhase();
     }
     else if (str == "endexecorders" && getState() == 7) {
         endexecuteOrdersPhase(p);
