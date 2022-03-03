@@ -40,9 +40,9 @@ void Card::play(OrdersList &playerOrdersList) const {
        Airlift* myAirlift = new Airlift();
        playerOrdersList.addOrder(myAirlift);
     } else if (type == "diplomacy") {
-        cout << "Play Diplomacy card" << endl;
-        Diplomacy *myDiplomacy = new Diplomacy();
-        playerOrdersList.addOrder(myDiplomacy);
+        cout << "Play Negotiate card" << endl;
+        Negotiate *myNegotiate = new Negotiate();
+        playerOrdersList.addOrder(myNegotiate);
     } else {
         cout << "Invalid card, play() can not be called!" << endl;
     }
