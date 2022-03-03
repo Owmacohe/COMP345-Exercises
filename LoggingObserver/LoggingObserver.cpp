@@ -55,8 +55,8 @@
     * Command
     * CommandProcessor
     * FileCommandProcessorAdapter
-    * OrderList
-    * Order
+    * OrderList -- DONE .h and .cpp
+    * Order  -- DONE .h and .cpp
     * GameEngine
     *
     */
@@ -64,7 +64,7 @@
     /**
      * In Each Subject
      * Add in Class Declaration of each Subject ----------------------------------------
-     *  : public Iloggable, Subject
+     *  : public Iloggable, public Subject
      *
      *  Add in h file of each Subject ----------------------------------------
      *  string stringToLog();
@@ -73,4 +73,7 @@
      *  string Class::stringToLog(){
      *  string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
      *  return logString;}
+     *
+     *  add
+     *  Notify(This); in each triggering method
      */

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class Order : public Iloggable, Subject {
+class Order : public Iloggable, public Subject {
 	public:
 		bool validated;
 		string description;
@@ -25,9 +25,11 @@ class Order : public Iloggable, Subject {
 
         // From Iloggable
         string stringToLog();
+        // From Subject but no need to overload it
+        //void notify(Iloggable* il);
 };
 
-class Deploy : public Order{
+class Deploy : public Order {
 	public:
 		Deploy(); // Default constructor
 		Deploy(bool v, string s);  // Parameterized constructor
@@ -42,6 +44,10 @@ class Deploy : public Order{
 
 		bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
 class Advance : public Order{
@@ -59,6 +65,10 @@ class Advance : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
 class Bomb : public Order{
@@ -76,6 +86,10 @@ class Bomb : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
 class Blockade : public Order{
@@ -93,9 +107,13 @@ class Blockade : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
-class Airlift : public Order{
+class Airlift : public Order {
 	public:
 		Airlift();  // Default constructor
 		Airlift(bool v, string s);  // Parameterized constructor
@@ -110,9 +128,13 @@ class Airlift : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
-class Negotiate : public Order{
+class Negotiate : public Order {
 	public:
 		Negotiate();  // Default constructor
 		Negotiate(bool v, string s);  // Parameterized constructor
@@ -126,6 +148,10 @@ class Negotiate : public Order{
 		friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // Stream insertion operator
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
+
 };
 
 class Reinforcement : public Order{
@@ -143,9 +169,12 @@ class Reinforcement : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
 };
 
-class Diplomacy : public Order{
+class Diplomacy : public Order {
 	public:
 		Diplomacy();  // Default constructor
 		Diplomacy(bool v, string s);  // Parameterized constructor
@@ -160,9 +189,12 @@ class Diplomacy : public Order{
 
         bool validate();
 		bool execute();
+
+        // From Iloggable
+        string stringToLog();
 };
 
-class OrdersList {
+class OrdersList : public Iloggable, Subject {
 	public: 
 		vector<Order*> playerOrderList;
 		bool allOrdersValidated;
@@ -183,4 +215,7 @@ class OrdersList {
 		void addOrder(string order); // Add Method used to add an order of the OrderList.
 		void remove(int i); // Remove Method used to remove an order of the OrderList.
 		void move(int i, int j); // Move Method used to move an order at index i into the position of index j.
+
+        // From Iloggable
+        string stringToLog();
 };
