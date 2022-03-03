@@ -1,6 +1,6 @@
 #include "Orders.h"
 
-int ordersMain() {
+int main() {
 	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
