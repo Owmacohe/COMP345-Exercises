@@ -1,5 +1,6 @@
 #include "CommandProcessing.h"
 #include "../GameEngine/GameEngine.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 // Free method to split a given string into a pointer array based on a given delimiter
 string *stringSplit(string s, char delim) {
@@ -130,7 +131,11 @@ void Command::setValidIn(string *v, int l) {
     validInLength = l;
 }
 void Command::setTransitionsTo(string t) { transitionsTo = t; }
-void Command::setEffect(string e) { effect = e; }
+void Command::saveEffect(string e) {
+    effect = e;
+
+    notify(this); // FROM SUBJECT ---- IN MY DIAGRAM PART 5 SAVEEFFECT IS IN COMMAND NOT COMMANDPROCESSOR, ERROR ASSIGNMENT? DO YOU HAVE AN EQUIVALENT IN COMMAND? IN FILECOMMAND?
+}
 
 void Command::addValidInState(string s) {
     string *temp = new string[validInLength + 1]; // Creating a new array (1 size larger)
@@ -149,9 +154,10 @@ void Command::addValidInState(string s) {
     validInLength++;
 }
 
-string Command::stringToLog(){
+string Command::stringToLog() {
     string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
-    return logString;}
+    return logString;
+}
 
 CommandProcessor::CommandProcessor() {
     engine = new GameEngine;
@@ -247,13 +253,6 @@ void CommandProcessor::getCommand() {
     // Call saveEffects() to save the Command's effects
 }
 
-void CommandProcessor::saveEffect(string e) {
-
-    commands[commandsLength - 1].setEffect(e);
-
-    notify(this); // FROM SUBJECT ---- IN MY DIAGRAM PART 5 SAVEEFFECT IS IN COMMAND NOT COMMANDPROCESSOR, ERROR ASSIGNMENT? DO YOU HAVE AN EQUIVALENT IN COMMAND? IN FILECOMMAND?
-}
-
 bool CommandProcessor::validate() {
     /*
     Command temp = commands[commandsLength - 1];
@@ -275,9 +274,10 @@ bool CommandProcessor::validate() {
     */
 }
 
-string CommandProcessor::stringToLog(){
+string CommandProcessor::stringToLog() {
     string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
-    return logString;}
+    return logString;
+}
 
 void FileCommandProcessorAdapter::readFromFile() {
     // Uses CommandProcessor methods (readCommand() (or variant) in particular)
@@ -285,6 +285,7 @@ void FileCommandProcessorAdapter::readFromFile() {
     // But instead reads line by line in a file
 }
 
-string FileCommandProcessorAdapter::stringToLog(){
+string FileCommandProcessorAdapter::stringToLog() {
     string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
-    return logString;}
+    return logString;
+}
