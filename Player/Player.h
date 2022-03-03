@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 class Hand;
@@ -21,7 +22,7 @@ class Player {
         vector<Territory*> toDefend(); // Territories for player to defend
         vector<Territory*> toAttack(); // Territories for player to attack
 
-        void issueOrder(string); //  Create order and adds order to players order list
+        void issueOrder(int); //  Create order and adds order to players order list
 
         int getNumberOfArmies(); // Get number of armies player owns
 
