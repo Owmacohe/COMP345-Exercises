@@ -18,7 +18,7 @@ class Territory {
 
         // Accessors
         string getName(), getContinent();
-        Player* getOwner();
+        Player *getOwner();
         int getArmies();
 
         // Mutators
@@ -48,9 +48,9 @@ class Map {
 
         // Accessors
         string getName();
-        string* getContinents();
-        Territory* getTerritories();
-        Edge* getEdges();
+        string *getContinents();
+        Territory *getTerritories();
+        Edge *getEdges();
 
         // Array lengths
         int continentsLength, territoriesLength, edgesLength;
@@ -64,6 +64,8 @@ class Map {
 
         bool isGoodMap = true;
         bool validate(); // Method to make sure the created Map is valid
+
+        Territory *getConnectedTerritories(string);
     private:
         string name; // Name of the Map
         string *continents; // Array of strings of all the continent names

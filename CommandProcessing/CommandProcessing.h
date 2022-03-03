@@ -2,14 +2,11 @@
 
 #include <string>
 #include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
 using namespace std;
-
 
 class GameEngine;
 
 class Command : public Iloggable, public Subject {
-
     public:
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1
@@ -20,7 +17,7 @@ class Command : public Iloggable, public Subject {
         string getCommand(), *getValidIn(), getTransitionsTo(), getEffect();
 
         // Mutators
-        void setCommand(string), setValidIn(string*, int), setTransitionsTo(string), setEffect(string);
+        void setCommand(string), setValidIn(string*, int), setTransitionsTo(string), saveEffect(string);
 
         void addValidInState(string);
 
@@ -28,7 +25,6 @@ class Command : public Iloggable, public Subject {
 
         // From Iloggable
         string stringToLog();
-
     private:
         string command, *validIn, transitionsTo, effect; // Command name, which states it valid in, next state, and dynamic effect of the command
 
@@ -50,7 +46,6 @@ class CommandProcessor : public Iloggable, public Subject {
         Command readCommand(); // Gets command from console
         void saveCommand(const Command &c); // Stores the gotten Command in the array
         void getCommand(); // Reads and then saves a command from the console
-        void saveEffect(string); // Stores the result of the current Command in the current (last) Command
 
         bool validate(); // Checks if the current Command is in the valid state
 
@@ -58,7 +53,6 @@ class CommandProcessor : public Iloggable, public Subject {
 
         // From Iloggable
         string stringToLog();
-
     private:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         Command *commands; // Array of current and past Commands

@@ -90,7 +90,7 @@ void GameEngine::startGame() {
     cout << "Welcome to Warzone" << endl;
     cout << "Please enter the number of players" << endl;
     cin >> this->NumberOfPlayers;
-    cout<< "end of start phase" << endl;
+    cout << "end of start phase" << endl;
 }
 
 void GameEngine::loadMap() {
@@ -102,7 +102,7 @@ void GameEngine::loadMap() {
     cin >> mapName;
 
     while(mapName != "canada" || mapName != "europe") {
-        cout<< "incorrect, please re-enter map name" << endl;
+        cout << "incorrect, please re-enter map name" << endl;
         cin >> mapName;
     }
     
@@ -114,7 +114,7 @@ void GameEngine::loadMap() {
 
 void GameEngine::validateMap() {
     *s = mapValidated;
-    cout<< "end of map validated phase" << endl;
+    cout << "end of map validated phase" << endl;
 }
 
 void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
@@ -129,26 +129,26 @@ void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
         player_list.push_back(p);
     }
 
-    cout<< "end of players added phase" << endl;
+    cout << "end of players added phase" << endl;
 }
 
 void GameEngine::assignCountries() {
-    cout<< "end of assign countries command" << endl;
+    cout << "end of assign countries command" << endl;
 }
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
-    cout<< "end of assign Reinforcement" << endl;
+    cout << "end of assign Reinforcement" << endl;
 }
 
 void GameEngine::issueOrders(Player *player) {
     *s = issueOrder;
-    cout<< "Issued the order for player " << player->getName() << endl;
+    cout << "Issued the order for player " << player->getName() << endl;
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
-    cout<< "ended phase issue Orders for player " << player->getName() << endl;
+    cout << "ended phase issue Orders for player " << player->getName() << endl;
 }
 
 void GameEngine::executeOrdersPhase() {
@@ -212,17 +212,17 @@ void GameEngine::endexecuteOrdersPhase(Player *player) {
 
 void GameEngine::winPhase(Player *p) {
     *s = win;
-    cout<< "victory for player: " << p->getName() << endl;
+    cout << "victory for player: " << p->getName() << endl;
 }
 
 void GameEngine::endPhase() {
     *s = null;
-    cout<< "Thank you for Playing Warzone" << endl;
+    cout << "Thank you for Playing Warzone" << endl;
 }
 
 void GameEngine::playAgain() {
     *s = null;
-    cout<< "the Game will restart soon" << endl;
+    cout << "the Game will restart soon" << endl;
 }
 
 void GameEngine::gameStartupTransitions(string str) {
@@ -242,6 +242,7 @@ void GameEngine::gameStartupTransitions(string str) {
     else {
         cout << "Invalid command!" << endl;
     }
+
     notify(this); // FROM SUBJECT
 }
 
@@ -264,6 +265,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
     else {
         cout << "Invalid command!" << endl;
     }
+    
     notify(this); // FROM SUBJECT
 }
 
@@ -300,8 +302,8 @@ void GameEngine::startupPhase() {
     notify(this); // FROM SUBJECT
 }
 
-    // From Iloggable
-    string GameEngine::stringToLog() {
-         string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
-        return logString;
+// From Iloggable
+string GameEngine::stringToLog() {
+    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    return logString;
 };
