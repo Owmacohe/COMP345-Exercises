@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include "LoggingObserver/LoggingObserver.h"
+
 using namespace std;
 
 class Player;
@@ -11,7 +13,7 @@ enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
 
-class GameEngine {
+class GameEngine : public Iloggable, public Subject{
     public:
         GameEngine() ; // Constructor
         GameEngine(const GameEngine &gm); // Copy constructor
@@ -50,6 +52,10 @@ class GameEngine {
         void gameEndTransitions(string s);
 
         void startupPhase();
+
+        // From Iloggable
+        string stringToLog();
+
     private:
         State* s;
         int NumberOfPlayers;

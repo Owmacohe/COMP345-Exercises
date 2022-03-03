@@ -52,12 +52,12 @@
 
     /**
     * Subjects of logging mechanism that will have to inherit interfaces Iloggable and Subject:
-    * Command
-    * CommandProcessor
-    * FileCommandProcessorAdapter
+    * Command -- DONE .h and .cpp
+    * CommandProcessor -- DONE .h and .cpp
+    * FileCommandProcessorAdapter -- DONE .h and .cpp
     * OrderList -- DONE .h and .cpp
     * Order  -- DONE .h and .cpp
-    * GameEngine
+    * GameEngine -- DONE .h and .cpp
     *
     */
 

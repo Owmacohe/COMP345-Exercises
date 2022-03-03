@@ -188,6 +188,7 @@ void GameEngine::gameStartupTransitions(string str) {
     else {
         cout << "Invalid command!" << endl;
     }
+    notify(this); // FROM SUBJECT
 }
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
@@ -209,6 +210,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
     else {
         cout << "Invalid command!" << endl;
     }
+    notify(this); // FROM SUBJECT
 }
 
 void GameEngine::gameEndTransitions(string str) {
@@ -221,6 +223,8 @@ void GameEngine::gameEndTransitions(string str) {
     else {
         cout << "Invalid command!" << endl;
     }
+
+    notify(this); // FROM SUBJECT
 }
 
 void GameEngine::startupPhase() {
@@ -238,4 +242,12 @@ void GameEngine::startupPhase() {
         let each player draw 2 initial cards from the deck using the deck’s draw() method
         switch the game to the play phase
     */
+
+    notify(this); // FROM SUBJECT
 }
+
+    // From Iloggable
+    string GameEngine::stringToLog() {
+         string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+        return logString;
+};
