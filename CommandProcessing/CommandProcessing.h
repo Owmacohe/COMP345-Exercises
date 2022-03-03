@@ -4,6 +4,8 @@
 #include <iostream>
 using namespace std;
 
+class GameEngine;
+
 class Command {
     public:
         Command(); // Default constructor
@@ -27,23 +29,26 @@ class Command {
 class CommandProcessor {
     public:
         CommandProcessor(); // Default constructor
+        CommandProcessor(GameEngine); // Parameterized constructor
         ~CommandProcessor(); // Destructor
 
         // Accessors
         Command *getCommands();
+        GameEngine *getEngine();
 
         // Mutators
-        void setCommands(Command*, int);
+        void setCommands(Command*, int), setEngine(GameEngine*);
 
-        void readCommand(); // Gets command from console
-        void saveCommand(Command); // Stores the gotten Command in the array
-        Command getCommand(); // Gets the current Command (front of the array)
-        void saveEffect(string); // Stores the result of the current Command in the current Command
+        Command readCommand(); // Gets command from console
+        void saveCommand(const Command &c); // Stores the gotten Command in the array
+        void getCommand(); // Reads and then saves a command from the console
+        void saveEffect(string); // Stores the result of the current Command in the current (last) Command
 
         bool validate(); // Checks if the current Command is in the valid state
 
         int commandsLength;
     private:
+        GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         Command *commands; // Array of current and past Commands
 };
 

@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "../LoggingObserver/LoggingObserver.h"
 #include <string>
 
 /****************************** Order *******************************/
@@ -161,7 +162,7 @@ ostream& operator<<(ostream& os, const Advance& o) {
 }
 
 
-int Advance::validate() { // there are 3 options: valid, invalid and ATTACK
+bool Advance::validate() { // there are 3 options: valid, invalid and ATTACK
     /*
      * Check if Territory B belongs to player return 1
      * Check if Territory A is adjacent to territory B return 1

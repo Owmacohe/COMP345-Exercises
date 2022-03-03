@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
@@ -27,7 +26,7 @@ class Order : public Iloggable, Subject {
         string stringToLog();
 };
 
-class Deploy : public Order{
+class Deploy : public Order {
 	public:
 		Deploy(); // Default constructor
 		Deploy(bool v, string s);  // Parameterized constructor
@@ -44,7 +43,7 @@ class Deploy : public Order{
 		bool execute();
 };
 
-class Advance : public Order{
+class Advance : public Order {
 	public:
 		Advance(); // Default constructor
 		Advance(bool v, string s);  // Parameterized constructor
@@ -61,7 +60,7 @@ class Advance : public Order{
 		bool execute();
 };
 
-class Bomb : public Order{
+class Bomb : public Order {
 	public:
 		Bomb(); // Default constructor
 		Bomb(bool v, string s);  // Parameterized constructor
@@ -78,7 +77,7 @@ class Bomb : public Order{
 		bool execute();
 };
 
-class Blockade : public Order{
+class Blockade : public Order {
 	public:
 		Blockade();  // Default constructor
 		Blockade(bool v, string s);  // Parameterized constructor
@@ -95,7 +94,7 @@ class Blockade : public Order{
 		bool execute();
 };
 
-class Airlift : public Order{
+class Airlift : public Order {
 	public:
 		Airlift();  // Default constructor
 		Airlift(bool v, string s);  // Parameterized constructor
@@ -112,7 +111,7 @@ class Airlift : public Order{
 		bool execute();
 };
 
-class Negotiate : public Order{
+class Negotiate : public Order {
 	public:
 		Negotiate();  // Default constructor
 		Negotiate(bool v, string s);  // Parameterized constructor
@@ -128,7 +127,7 @@ class Negotiate : public Order{
 		bool execute();
 };
 
-class Reinforcement : public Order{
+class Reinforcement : public Order {
 	public:
 		Reinforcement();  // Default constructor
 		Reinforcement(bool v, string s);  // Parameterized constructor
@@ -145,7 +144,7 @@ class Reinforcement : public Order{
 		bool execute();
 };
 
-class Diplomacy : public Order{
+class Diplomacy : public Order {
 	public:
 		Diplomacy();  // Default constructor
 		Diplomacy(bool v, string s);  // Parameterized constructor

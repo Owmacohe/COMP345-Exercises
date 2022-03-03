@@ -4,8 +4,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../Orders/Orders.cpp"
-#include <vector>
-#include <iostream>
+
 class OrdersList;
 class Player;
 
@@ -116,8 +115,7 @@ void GameEngine::loadMap() {
 void GameEngine::validateMap() {
     *s = mapValidated;
     cout<< "end of map validated phase" << endl;
-};
-
+}
 
 void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
     *s = playersAdded;
@@ -154,8 +152,7 @@ void GameEngine::endIssueOrderPhase(Player *player) {
 }
 
 void GameEngine::executeOrdersPhase() {
-
-//first , adding all deploy orders into a separate list and removing them from the original player's lists
+    //first , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
     for (int i = 0; i < player_list.size(); i++) {
         for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
@@ -207,8 +204,6 @@ void GameEngine::executeOrdersPhase() {
         }else assignReinforcementPhase();
     }
 }
-
-
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
     *s = assignReinforcement;
