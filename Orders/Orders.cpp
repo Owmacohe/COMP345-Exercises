@@ -118,8 +118,14 @@ bool Deploy::execute() {
      * if false, print out invalid
      * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+string Deploy::stringToLog(){
+    string logString = "Create log string for execution of deploy.\n";
+    return logString;}
+
 
 /****************************** Advance *******************************/
 
@@ -183,8 +189,13 @@ bool Advance::execute() {
      * if 2 remove armies from Territory A and add them to Territory B
      *  if 3 ATTACK
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+string Advance::stringToLog(){
+    string logString = "Create log string for execution.\n";
+    return logString;}
 
 /****************************** Bomb *******************************/
 
@@ -245,8 +256,13 @@ bool Bomb::execute() {
      * if false, invalid order
      * if true, /2 armies in the other Player's Territory A
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+string Bomb::stringToLog(){
+    string logString = "Create log string for execution.\n";
+    return logString;}
 
 /****************************** Blockade *******************************/
 
@@ -308,8 +324,13 @@ bool Blockade::execute() {
      *  if true, make armies in territory x2 and make 'Neutral Player owner of that'
      *  Maybe create Neutral Player here (or at startup of game)
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+string Blockade::stringToLog(){
+    string logString = "Create log string for execution.\n";
+    return logString;}
 
 /****************************** Airlift *******************************/
 
@@ -370,8 +391,13 @@ bool Airlift::execute() {
      *if false, order invalid
      * if true, remove armies from Territory A and add them to Territory B
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
+
+string Airlift::stringToLog(){
+    string logString = "Create log string for execution.\n";
+    return logString;}
 
 /****************************** Negotiate *******************************/
 
@@ -436,59 +462,13 @@ bool Negotiate::execute() {
      * In this case, this adds Player A to Player B's list and vice-versa
      * Lists must be cleared when goes to reinforcement phase
      */
+    notify(this); // FROM SUBJECT
     return true;
 }
 
-/****************************** Diplomacy *******************************/ // WE JUST USE THIS CARD NAME BUT IT CALLS NEGOTIATE
-
-// Default constructor
-Diplomacy::Diplomacy() : Order(false, "Diplomacy") { };
-
-// Parameterized constructor
-Diplomacy::Diplomacy(bool v, string s) : Order(v,s) { } ;
-
-// Copy constructor
-Diplomacy::Diplomacy(Diplomacy& original) : Order(original) {
-    description = "Diplomatic convention";
-}
-
-// Destructor
-Diplomacy::~Diplomacy() { };
-
-// Accessors
-string Diplomacy::getDescription() { return description; }
-bool Diplomacy::getValidated() { return validated; }
-
-// Mutators
-void Diplomacy::setDescription(string d) {
-    description = d;
-}
-void Diplomacy::setValidated(bool v) {
-    validated = v;
-}
-
-Diplomacy& Diplomacy::operator = (const Diplomacy& o) {
-    validated = o.validated;
-    description = o.description;
-    return *this;
-}
-
-ostream& operator<<(ostream& os, const Diplomacy& o) {
-    string validated = (o.validated)? " (validated)" : " (not validated)";
-    os << o.description;
-    return os;
-}
-
-
-bool Diplomacy::validate() {
-    return validated;
-}
-
-
-bool Diplomacy::execute() {
-    cout << "Executing Order Diplomacy" << endl;
-    return true;
-}
+string Negotiate::stringToLog(){
+    string logString = "Create log string for execution.\n";
+    return logString;}
 
 /****************************** Reinforcement *******************************/ // I THINK WE CAN DELETE THIS
 
@@ -537,6 +517,7 @@ bool Reinforcement::validate() {
 
 bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
+    notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -606,10 +587,12 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
 // Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order. Overloaded method to increase compatibility with other classes.
 void OrdersList::addOrder(Order order) {
 	playerOrderList.push_back(new Order(order));
+    notify(this); // FROM SUBJECT
 }
 
 void OrdersList::addOrder(Order* order) {
 	playerOrderList.push_back(order);
+    notify(this); // FROM SUBJECT
 }
 
 void OrdersList::addOrder(string orderString) {
@@ -639,6 +622,7 @@ void OrdersList::addOrder(string orderString) {
     }
 
     playerOrderList.push_back(orderObject);
+    notify(this); // FROM SUBJECT
 }
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
@@ -663,3 +647,7 @@ void OrdersList::move(int i, int j) {
         cout<<" wrong order index or wrong destination index" <<endl;
     }
 }
+
+string OrdersList::stringToLog(){
+    string logString = "Create log string for adding an Order.\n";
+    return logString;}

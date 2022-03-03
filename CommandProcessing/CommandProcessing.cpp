@@ -149,6 +149,10 @@ void Command::addValidInState(string s) {
     validInLength++;
 }
 
+string Command::stringToLog(){
+    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    return logString;}
+
 CommandProcessor::CommandProcessor() {
     engine = new GameEngine;
 
@@ -230,6 +234,8 @@ void CommandProcessor::saveCommand(const Command &c) {
     // Setting the new element and incrementing the size variable
     commands[commandsLength] = c;
     commandsLength++;
+
+    notify(this); // FROM SUBJECT
 }
 
 void CommandProcessor::getCommand() {
@@ -242,7 +248,10 @@ void CommandProcessor::getCommand() {
 }
 
 void CommandProcessor::saveEffect(string e) {
+
     commands[commandsLength - 1].setEffect(e);
+
+    notify(this); // FROM SUBJECT ---- IN MY DIAGRAM PART 5 SAVEEFFECT IS IN COMMAND NOT COMMANDPROCESSOR, ERROR ASSIGNMENT? DO YOU HAVE AN EQUIVALENT IN COMMAND? IN FILECOMMAND?
 }
 
 bool CommandProcessor::validate() {
@@ -266,8 +275,16 @@ bool CommandProcessor::validate() {
     */
 }
 
+string CommandProcessor::stringToLog(){
+    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    return logString;}
+
 void FileCommandProcessorAdapter::readFromFile() {
     // Uses CommandProcessor methods (readCommand() (or variant) in particular)
     // Does the same as if reading from console
     // But instead reads line by line in a file
 }
+
+string FileCommandProcessorAdapter::stringToLog(){
+    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    return logString;}
