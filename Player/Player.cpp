@@ -4,6 +4,8 @@
 
 #include "Player.h"
 
+// PLAYER CLASS
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Default constructor
 Player::Player() {
     name = "empty player";
@@ -13,9 +15,13 @@ Player::Player() {
 
     //added with a2
     num_armies = 0;
+    num_reinforcement = 0;
+    armies = new Army[num_armies];
+    
     //cout << "[Player default constructor]" << endl;
 }
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Param constructor
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int a): name(n), num_armies(a) {
     territories = vector<Territory*>();
@@ -28,6 +34,7 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int a): n
     //cout << "[Player param constructor]" << endl;
 }
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Copy constructor
 Player::Player(const Player &p) {
     name = p.name;
@@ -42,6 +49,7 @@ Player::Player(const Player &p) {
     //cout << "[Player copy constructor]" << endl;
 }
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Destructor
 Player::~Player() {
     for (Territory* i : territories) {
@@ -58,6 +66,7 @@ Player::~Player() {
     //cout << "[Player destructor]" << endl;
 }
 
+// TO DO
 //For now, all that these methods should do is to establish an arbitrary list of territories to be defended, and an arbitrary list of territories that are to be attacked. 
 vector<Territory*> Player::toDefend() {
 // TODO next assignment
@@ -69,6 +78,7 @@ vector<Territory*> Player::toDefend() {
 return territories;
 }
 
+// TO DO
 vector<Territory*> Player::toAttack() {
 // TODO next assignment
 //have to check if territories have surrounding enemies
@@ -76,7 +86,8 @@ vector<Territory*> Player::toAttack() {
 return territories;
 }
 
-void Player::issueOrder(string type) {
+// TO DO
+void Player::issueOrder(string type = "default") {
     if (type == "deploy"){
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
@@ -114,6 +125,7 @@ void Player::issueOrder(string type) {
     }
 }
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Mutators and Accessors
 void Player::setName(string n) { name = n; }
 void Player::setTerritory(vector<Territory*> t) {
@@ -132,6 +144,7 @@ OrdersList* Player::getOrder() { return orders; }
 int Player::getArmies() { return num_armies; }
 // End of Mutators and Accessors
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Assignment operator
 Player& Player::operator = (const Player& p){
     this->name = p.name;
@@ -144,6 +157,7 @@ Player& Player::operator = (const Player& p){
     return *this;
 }
 
+//  MUST BE UPDATED TO ACCOMODATE THE NEW ADDED VARIABLES
 // Stream insertion operator
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
     string t = "";
@@ -158,3 +172,52 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
         "\n    Players orders, " << *p.orders <<
         "\n    Number of Armies: " << p.num_armies <<endl;
 }
+
+// ARMY CLASS
+// Default constructor
+Army::Army() {
+    a_num = 0;
+    located = NULL;
+}
+
+// Param constructor
+Army::Army(int a, Territory* t) {
+    a_num = a;
+    located = new Territory(*t);
+}
+
+// Copy constructor 
+Army::Army(const Army &a) {
+    a_num = a.a_num;
+    located = new Territory(*(a.located));
+}
+
+// Destructor
+Army::~Army() {
+    delete located;
+    located = NULL;
+}
+
+// Mutators and Accessors
+void Army::setA_Num(int a) { a_num = a; }
+void Army::setLocated(Territory* t) { located = t; }
+
+int Army::getA_Num() { return a_num; }
+Territory* Army::getLocated() { return located; }
+// End of Mutators and Accessors
+
+// Assignment operator
+Army& Army::operator = (const Army& a){
+    this->a_num = a.a_num;
+    this->located = a.located;
+    return *this;
+}
+
+// Stream insertion operator
+std::ostream& operator<<(std::ostream &strm, const Army &a) {
+
+    return strm <<
+        "ARMY: Number: " << a.a_num <<
+        "\n    Located at : " << a.located <<endl;
+}
+
