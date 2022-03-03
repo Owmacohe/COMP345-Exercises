@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
@@ -50,7 +49,7 @@ class Deploy : public Order {
 
 };
 
-class Advance : public Order{
+class Advance : public Order {
 	public:
 		Advance(); // Default constructor
 		Advance(bool v, string s);  // Parameterized constructor
@@ -71,7 +70,7 @@ class Advance : public Order{
 
 };
 
-class Bomb : public Order{
+class Bomb : public Order {
 	public:
 		Bomb(); // Default constructor
 		Bomb(bool v, string s);  // Parameterized constructor
@@ -92,7 +91,7 @@ class Bomb : public Order{
 
 };
 
-class Blockade : public Order{
+class Blockade : public Order {
 	public:
 		Blockade();  // Default constructor
 		Blockade(bool v, string s);  // Parameterized constructor
@@ -154,7 +153,7 @@ class Negotiate : public Order {
 
 };
 
-class Reinforcement : public Order{
+class Reinforcement : public Order {
 	public:
 		Reinforcement();  // Default constructor
 		Reinforcement(bool v, string s);  // Parameterized constructor

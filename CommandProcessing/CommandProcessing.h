@@ -5,7 +5,11 @@
 #include "LoggingObserver/LoggingObserver.h"
 using namespace std;
 
+
+class GameEngine;
+
 class Command : public Iloggable, public Subject {
+
     public:
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1
@@ -33,18 +37,20 @@ class Command : public Iloggable, public Subject {
 class CommandProcessor : public Iloggable, public Subject {
     public:
         CommandProcessor(); // Default constructor
+        CommandProcessor(GameEngine); // Parameterized constructor
         ~CommandProcessor(); // Destructor
 
         // Accessors
         Command *getCommands();
+        GameEngine *getEngine();
 
         // Mutators
-        void setCommands(Command*, int);
+        void setCommands(Command*, int), setEngine(GameEngine*);
 
-        void readCommand(); // Gets command from console
-        void saveCommand(Command); // Stores the gotten Command in the array
-        Command getCommand(); // Gets the current Command (front of the array)
-        void saveEffect(string); // Stores the result of the current Command in the current Command
+        Command readCommand(); // Gets command from console
+        void saveCommand(const Command &c); // Stores the gotten Command in the array
+        void getCommand(); // Reads and then saves a command from the console
+        void saveEffect(string); // Stores the result of the current Command in the current (last) Command
 
         bool validate(); // Checks if the current Command is in the valid state
 
@@ -54,6 +60,7 @@ class CommandProcessor : public Iloggable, public Subject {
         string stringToLog();
 
     private:
+        GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         Command *commands; // Array of current and past Commands
 };
 
