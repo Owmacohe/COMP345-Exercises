@@ -362,11 +362,10 @@ bool Map::validate() {
     return true;
 }
 
-Territory *Map::getConnectedTerritories(string n) {
+vector<Territory*> Map::getConnectedTerritories(string n) {
     bool hasFound = true;
 
-    int connectedLength = 0;
-    Territory *connected = new Territory[connectedLength];
+    vector<Territory*> connected = vector<Territory*>();
 
     for (int i = 0; i < edgesLength; i++) {
         Territory other;
@@ -380,20 +379,8 @@ Territory *Map::getConnectedTerritories(string n) {
         }
 
         if (other.getName() != "null") {
-            Territory *temp = new Territory[connectedLength + 1]; // Creating a new array (1 size larger)
-
-            // Copying the old elements into the new array
-            for (int j = 0; j < connectedLength; j++) {
-                temp[i] = connected[i];
-            }
-
-            // Freeing the old memory and setting the new address
-            delete[] connected;
-            connected = temp;
-
-            // Setting the new element and incrementing the size variable
-            connected[connectedLength] = other;
-            connectedLength++;
+            Territory *temp = new Territory(other);
+            connected.push_back(temp);
         }
         else {
             hasFound = false;
@@ -405,6 +392,32 @@ Territory *Map::getConnectedTerritories(string n) {
     }
 
     return connected;
+}
+
+vector<Territory*> Map::getContinentTerritories(string c) {
+    vector<Territory*> terrs = vector<Territory*>();
+
+    if (doesContain(continents, continentsLength, c)) {
+        bool hasFound = false;
+
+        for (int i = 0; i < territoriesLength; i++) {
+            if (territories[i].getContinent() == c) {
+                Territory *temp = new Territory(territories[i]);
+                terrs.push_back(temp);
+
+                hasFound = false;
+            }
+        }
+
+        if (!hasFound) {
+            cout << "Continent has no Territories!" << endl;
+        }
+    }
+    else {
+        cout << "Continent does not exist in Map!" << endl;
+    }
+
+    return terrs;
 }
 
 // Free method to split a given string into a pointer array based on a given delimiter
