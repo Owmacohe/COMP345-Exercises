@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include <string>
 #include <fstream>
 using namespace std;
@@ -65,7 +66,8 @@ class Map {
         bool isGoodMap = true;
         bool validate(); // Method to make sure the created Map is valid
 
-        Territory *getConnectedTerritories(string);
+        vector<Territory*> getConnectedTerritories(string);
+        vector<Territory*> getContinentTerritories(string);
     private:
         string name; // Name of the Map
         string *continents; // Array of strings of all the continent names
