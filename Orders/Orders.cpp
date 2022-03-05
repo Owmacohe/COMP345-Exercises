@@ -615,13 +615,13 @@ void OrdersList::addOrder(string orderString) {
         orderObject = new Blockade();
     }
 	else if (orderString == "airlift") {
+        orderObject = new Airlift();
+    }
+
+	else if (orderString == "Negotiate") {
         orderObject = new Negotiate();
     }
-    /*
-	else if (orderString == "diplomacy") {
-        orderObject = new Diplomacy();
-    }
-    */
+
 	else {
         cout << "wrong Order/Card type" << endl;
     }

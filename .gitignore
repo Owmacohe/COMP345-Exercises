@@ -22,3 +22,6 @@ CMakeLists.txt
 .idea/workspace.xml
 .idea/workspace.xml
 LoggingObserver/LoggingObserver.cpp
+.idea/workspace.xml
+cmake-build-debug/CMakeFiles/clion-log.txt
+cmake-build-debug/Testing/Temporary/LastTest.log
