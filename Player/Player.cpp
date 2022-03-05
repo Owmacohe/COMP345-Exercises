@@ -63,11 +63,16 @@ vector<Territory*> Player::toDefend(Map m) {
     for (Territory* territory : territories) {
         int number_surrounding = 0;
         string name = territory->getName();
-        vector<Territory*> t = m.getConnectedTerritories(name);
-
+        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
         //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
+        for (Territory* t : surround_territory) {
+            if (t->getOwner()->getName() != name) {
+                number_surrounding = number_surrounding + 1;
+                
+            }
+        }
 
-        for (Territory* i : t) {
+        for (Territory* i : surround_territory) {
             delete i;
             i = NULL;
         }
@@ -83,11 +88,14 @@ vector<Territory*> Player::toAttack(Map m) {
     for (Territory* i : territories) {
         int number_surrounding = 0;
         string name = i->getName();
-        vector<Territory*> t = m.getConnectedTerritories(name);
-
+        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
         //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
-
-        for (Territory* i : t) {
+        for (Territory* t : surround_territory) {
+            if (t->getOwner()->getName() != name) {
+                number_surrounding = number_surrounding + 1;
+                
+            }
+        for (Territory* i : surround_territory) {
             delete i;
             i = NULL;
         } 
