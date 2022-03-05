@@ -1,9 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
-
 using namespace std;
+
+#include "../LoggingObserver/LoggingObserver.h"
 
 class Player;
 class MapLoader;

@@ -14,13 +14,13 @@ class Territory;
 class Player {
     public:
         Player(); // Default constructor
-        Player(string, vector<Territory*>, Hand*, OrdersList*, int); // Parameterized constructor
+        Player(string, vector<Territory*>, Hand*, OrdersList*); // Parameterized constructor
         Player(const Player &p); // Copy constructor
 
         ~Player(); // Destructor
 
-        vector<Territory*> toDefend(); // Territories for player to defend
-        vector<Territory*> toAttack(); // Territories for player to attack
+        vector<Territory*> toDefend(Map); // Territories for player to defend
+        vector<Territory*> toAttack(Map); // Territories for player to attack
 
         void issueOrder(int); //  Create order and adds order to players order list
 

@@ -1,9 +1,11 @@
 #pragma once
-#include <vector>
-#include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
 
+#include <vector>
+#include <string>
+#include <iostream>
 using namespace std;
+
+#include "../LoggingObserver/LoggingObserver.h"
 
 class Order : public Iloggable, public Subject {
 	public:

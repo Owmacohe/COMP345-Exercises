@@ -136,17 +136,17 @@ Map::Map(const Map &m) {
 
 // Map destructor
 Map::~Map() {
-    continentsLength = 0;
     delete[] continents;
     continents = NULL;
+    continentsLength = 0;
 
-    territoriesLength = 0;
     delete[] territories;
     territories = NULL;
+    territoriesLength = 0;
 
-    edgesLength = 0;
     delete[] edges;
     edges = NULL;
+    edgesLength = 0;
 
     //cout << "[" << name << " Map destructor]" << endl;
 }

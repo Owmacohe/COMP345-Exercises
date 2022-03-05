@@ -3,7 +3,7 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
-#include "../Orders/Orders.cpp"
+#include "../LoggingObserver/LoggingObserver.h"
 
 class OrdersList;
 class Player;
@@ -152,6 +152,7 @@ void GameEngine::endIssueOrderPhase(Player *player) {
 }
 
 void GameEngine::executeOrdersPhase() {
+    /*
     //first , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
     for (int i = 0; i < player_list.size(); i++) {
@@ -203,6 +204,7 @@ void GameEngine::executeOrdersPhase() {
             }
         }else assignReinforcementPhase();
     }
+    */
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {

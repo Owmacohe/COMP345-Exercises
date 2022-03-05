@@ -1,53 +1,15 @@
+#include "../Cards/Cards.h"
 #include "CommandProcessing.h"
 #include "../GameEngine/GameEngine.h"
 #include "../LoggingObserver/LoggingObserver.h"
-
-// Free method to split a given string into a pointer array based on a given delimiter
-string *stringSplit(string s, char delim) {
-    int indexChecker = 0;
-    int splitLength = 1;
-    string *result = new string[splitLength];
-    string temp;
-
-    // Looping through all the characters in the string
-    for (char i : s) {
-        // Adding to the current word if a delimiter has not been reached
-        if (i != delim) {
-            temp += i;
-        }
-
-        // Adding the neew word to the pointer array if a delimiter or the end has been reached
-        if (i == delim || indexChecker == s.length() - 1) {
-            string *tempResult = new string[splitLength + 1];
-            copy(result, result + splitLength, tempResult);
-
-            delete[] result;
-            result = new string[splitLength + 1];
-
-            for (int j = 0; j < splitLength; j++) {
-                result[j] = tempResult[j];
-            }
-
-            result[splitLength] = temp;
-
-            delete[] tempResult;
-
-            splitLength++;
-            temp = "";
-        }
-
-        indexChecker++;
-    }
-
-    result[0] = to_string(splitLength - 1); // Making the first element of the array the length
-
-    return result;
-}
+#include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include "../Player/Player.h"
 
 Command::Command() {
     command = "";
     validInLength = 0;
-    validIn = new string[validInLength];
+    validIn = new int[validInLength];
     transitionsTo = "";
     effect = "";
 
@@ -57,53 +19,53 @@ Command::Command() {
 Command::Command(string c) {
     command = c;
     validInLength = 1;
-    validIn = new string[validInLength];
+    validIn = new int[validInLength];
     effect = "";
 
     if (c == "validatemap") {
-        this->addValidInState("maploaded");
+        this->addValidInState(2);
         transitionsTo = "mapvalidated";
     }
     else if (c == "gamestart") {
-        this->addValidInState("playersadded");
+        this->addValidInState(4);
         transitionsTo = "assignreinforcement";
     }
     else if (c == "replay") {
-        this->addValidInState("win");
+        this->addValidInState(8);
         transitionsTo = "start";
     }
     else if (c == "quit") {
-        this->addValidInState("win");
+        this->addValidInState(8);
         transitionsTo = "exit program";
     }
     else {
         cout << "Invalid command!" << endl;
     }
 
-    cout << "[" + command + " Command parameterized constructor 1]" << endl;
+    cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 Command::Command(string c, string p) {
     command = c + " <" + p + ">";
     validInLength = 2;
-    validIn = new string[validInLength];
+    validIn = new int[validInLength];
     effect = "";
 
     if (c == "loadmap") {
-        this->addValidInState("start");
-        this->addValidInState("maploaded");
+        this->addValidInState(1);
+        this->addValidInState(2);
         transitionsTo = "maploaded";
     }
     else if (c == "addplayer") {
-        this->addValidInState("mapvalidated");
-        this->addValidInState("playersadded");
+        this->addValidInState(3);
+        this->addValidInState(4);
         transitionsTo = "playersadded";
     }
     else {
         cout << "Invalid command!" << endl;
     }
 
-    cout << "[" + command + " Command parameterized constructor 2]" << endl;
+    cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 Command::~Command() {
@@ -115,14 +77,14 @@ Command::~Command() {
 }
 
 string Command::getCommand() { return command; }
-string *Command::getValidIn() { return validIn; }
+int *Command::getValidIn() { return validIn; }
 string Command::getTransitionsTo() { return transitionsTo; }
 string Command::getEffect() { return effect; }
 
 void Command::setCommand(string c) { command = c; }
-void Command::setValidIn(string *v, int l) {
+void Command::setValidIn(int *v, int l) {
     delete[] validIn;
-    validIn = new string[l];
+    validIn = new int[l];
 
     for (int i = 0; i < l; i++) {
         validIn[i] = v[i];
@@ -137,8 +99,8 @@ void Command::saveEffect(string e) {
     notify(this); // FROM SUBJECT ---- IN MY DIAGRAM PART 5 SAVEEFFECT IS IN COMMAND NOT COMMANDPROCESSOR, ERROR ASSIGNMENT? DO YOU HAVE AN EQUIVALENT IN COMMAND? IN FILECOMMAND?
 }
 
-void Command::addValidInState(string s) {
-    string *temp = new string[validInLength + 1]; // Creating a new array (1 size larger)
+void Command::addValidInState(int s) {
+    int *temp = new int[validInLength + 1]; // Creating a new array (1 size larger)
 
     // Copying the old elements into the new array
     for (int i = 0; i < validInLength; i++) {
@@ -179,10 +141,12 @@ CommandProcessor::CommandProcessor(GameEngine e) {
 
 CommandProcessor::~CommandProcessor() {
     delete engine;
+    engine = NULL;
 
-    commandsLength = 0;
     delete[] commands;
     commands = NULL;
+    commandsLength = 0;
+
 
     cout << "[CommandProcessor destructor]" << endl;
 }
@@ -209,14 +173,29 @@ Command CommandProcessor::readCommand() {
     string temp;
     cin >> temp;
 
-    string *split = stringSplit(temp, ' ');
-    int splitLength = stoi(split[0]);
+    string word1 = "";
+    string word2 = "";
+    bool hasReachedSpace = false;
 
-    if (splitLength == 1) {
-        return Command(split[1]);
+    for (char i : temp) {
+        if (!hasReachedSpace) {
+            if (i == ' ') {
+                hasReachedSpace = true;
+            }
+            else {
+                word1 += i;
+            }
+        }
+        else {
+            word2 += i;
+        }
     }
-    else if (splitLength == 2) {
-        return Command(split[1], split[2]);
+
+    if (word1 != "" && word2 == "") {
+        return Command(word1);
+    }
+    else if ( word1 != "" && word2 != "") {
+        return Command(word1, word2);
     }
     else {
         cout << "Invalid command!" << endl;
@@ -253,9 +232,8 @@ void CommandProcessor::getCommand() {
     // Call saveEffects() to save the Command's effects
 }
 
-bool CommandProcessor::validate() {
-    /*
-    Command temp = commands[commandsLength - 1];
+bool CommandProcessor::validate(const Command &c) {
+    Command temp = Command(c);
     bool isValid = false;
 
     for (int i = 0; i < temp.validInLength; i++) {
@@ -268,10 +246,9 @@ bool CommandProcessor::validate() {
         return true;
     }
     else {
-        cout << "INVALID COMMANDPROCESSOR: current Command is invalid!" << endl;
+        cout << "INVALID COMMANDPROCESSOR: given Command is invalid!" << endl;
         return false;
     }
-    */
 }
 
 string CommandProcessor::stringToLog() {
