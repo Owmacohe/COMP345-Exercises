@@ -107,23 +107,23 @@ vector<Territory*> Player::toAttack(Map m) {
 // so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop, 
 // all that issue does is put it in its list of things to do
 void Player::issueOrder(string type) {
-    if (type == "deploy"){
+    if (type == "deploy") {
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
     } 
-    else if (type == "advance"){
+    else if (type == "advance") {
         Advance* o = new Advance;
         orders->addOrder(o);
     } 
-    else if (type == "bomb"){
+    else if (type == "bomb") {
         Bomb* o = new Bomb;
         orders->addOrder(o);
     }
-    else if (type == "blockade"){
+    else if (type == "blockade") {
         Blockade* o = new Blockade;
         orders->addOrder(o);
     } 
-    else if (type == "airlift"){
+    else if (type == "airlift") {
         Airlift* o = new Airlift;
         orders->addOrder(o);
     } 
