@@ -136,19 +136,62 @@ Map::Map(const Map &m) {
 
 // Map destructor
 Map::~Map() {
-    continentsLength = 0;
     delete[] continents;
     continents = NULL;
+    continentsLength = 0;
 
-    territoriesLength = 0;
     delete[] territories;
     territories = NULL;
+    territoriesLength = 0;
 
-    edgesLength = 0;
     delete[] edges;
     edges = NULL;
+    edgesLength = 0;
 
     //cout << "[" << name << " Map destructor]" << endl;
+}
+
+// Map stream insertion operator
+ostream& operator<<(ostream &strm, const Map &m) {
+    string c = "";
+    string t = "";
+    string e = "";
+
+    // Creating a long deliminated string of all the continents
+    string *continents = m.continents;
+    for (int i = 0; i < m.continentsLength; i++) {
+        c += continents[i] + " | ";
+    }
+
+    // Creating a long deliminated string of all the territories
+    Territory *territories = m.territories;
+    for (int j = 0; j < m.territoriesLength; j++) {
+        t += territories[j].getName() + " | ";
+    }
+
+    // Creating a long deliminated string of all the Edges
+    Edge *edges = m.edges;
+    for (int k = 0; k < m.edgesLength; k++) {
+        e += edges[k].a.getName() + " and " + edges[k].b.getName() + " | ";
+    }
+
+    return strm <<
+        "[MAP PRINT: " << m.name << "]" << endl <<
+        endl << "[-------------------------Continents--------------------------]" <<
+        endl << c.substr(0, c.length() - 3) << endl <<
+        endl << "[-------------------------Territories--------------------------]" <<
+        endl << t.substr(0, t.length() - 3) << endl <<
+        endl << "[-------------------------Edges--------------------------]" <<
+        endl << e.substr(0, e.length() - 3);
+}
+
+// Map assignment operator
+Map& Map::operator = (const Map& toAssign){
+    name = toAssign.name;
+    continents = toAssign.continents;
+    territories = toAssign.territories;
+    edges = toAssign.edges;
+    return *this;
 }
 
 // Map accessors
@@ -319,47 +362,62 @@ bool Map::validate() {
     return true;
 }
 
-// Map stream insertion operator
-ostream& operator<<(ostream &strm, const Map &m) {
-    string c = "";
-    string t = "";
-    string e = "";
+vector<Territory*> Map::getConnectedTerritories(string n) {
+    bool hasFound = true;
 
-    // Creating a long deliminated string of all the continents
-    string *continents = m.continents;
-    for (int i = 0; i < m.continentsLength; i++) {
-        c += continents[i] + " | ";
+    vector<Territory*> connected = vector<Territory*>();
+
+    for (int i = 0; i < edgesLength; i++) {
+        Territory other;
+        other.setName("null");
+
+        if (edges[i].a.getName() == n) {
+            other = Territory(edges[i].b);
+        }
+        else if (edges[i].b.getName() == n) {
+            other = Territory(edges[i].a);
+        }
+
+        if (other.getName() != "null") {
+            Territory *temp = new Territory(other);
+            connected.push_back(temp);
+        }
+        else {
+            hasFound = false;
+        }
     }
 
-    // Creating a long deliminated string of all the territories
-    Territory *territories = m.territories;
-    for (int j = 0; j < m.territoriesLength; j++) {
-        t += territories[j].getName() + " | ";
+    if (!hasFound) {
+        cout << "No connected Territories!" << endl;
     }
 
-    // Creating a long deliminated string of all the Edges
-    Edge *edges = m.edges;
-    for (int k = 0; k < m.edgesLength; k++) {
-        e += edges[k].a.getName() + " and " + edges[k].b.getName() + " | ";
-    }
-
-    return strm <<
-        "[MAP PRINT: " << m.name << "]" << endl <<
-        endl << "[-------------------------Continents--------------------------]" <<
-        endl << c.substr(0, c.length() - 3) << endl <<
-        endl << "[-------------------------Territories--------------------------]" <<
-        endl << t.substr(0, t.length() - 3) << endl <<
-        endl << "[-------------------------Edges--------------------------]" <<
-        endl << e.substr(0, e.length() - 3);
+    return connected;
 }
 
-// Map assignment operator
-Map& Map::operator = (const Map& toAssign){
-    name = toAssign.name;
-    continents = toAssign.continents;
-    territories = toAssign.territories;
-    edges = toAssign.edges;
-    return *this;
+vector<Territory*> Map::getContinentTerritories(string c) {
+    vector<Territory*> terrs = vector<Territory*>();
+
+    if (doesContain(continents, continentsLength, c)) {
+        bool hasFound = false;
+
+        for (int i = 0; i < territoriesLength; i++) {
+            if (territories[i].getContinent() == c) {
+                Territory *temp = new Territory(territories[i]);
+                terrs.push_back(temp);
+
+                hasFound = false;
+            }
+        }
+
+        if (!hasFound) {
+            cout << "Continent has no Territories!" << endl;
+        }
+    }
+    else {
+        cout << "Continent does not exist in Map!" << endl;
+    }
+
+    return terrs;
 }
 
 // Free method to split a given string into a pointer array based on a given delimiter

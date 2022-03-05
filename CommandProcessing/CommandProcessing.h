@@ -2,14 +2,13 @@
 
 #include <string>
 #include <iostream>
-#include "LoggingObserver/LoggingObserver.h"
 using namespace std;
 
+#include "../LoggingObserver/LoggingObserver.h"
 
 class GameEngine;
 
 class Command : public Iloggable, public Subject {
-
     public:
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1
@@ -17,21 +16,21 @@ class Command : public Iloggable, public Subject {
         ~Command(); // Destructor
 
         // Accessors
-        string getCommand(), *getValidIn(), getTransitionsTo(), getEffect();
+        string getCommand(), getTransitionsTo(), getEffect();
+        int *getValidIn();
 
         // Mutators
-        void setCommand(string), setValidIn(string*, int), setTransitionsTo(string), setEffect(string);
+        void setCommand(string), setValidIn(int*, int), setTransitionsTo(string), saveEffect(string);
 
-        void addValidInState(string);
+        void addValidInState(int);
 
         int validInLength;
 
         // From Iloggable
         string stringToLog();
-
     private:
-        string command, *validIn, transitionsTo, effect; // Command name, which states it valid in, next state, and dynamic effect of the command
-
+        string command, transitionsTo, effect; // Command name, next state, and dynamic effect of the command
+        int *validIn; // Which states it valid in
 };
 
 class CommandProcessor : public Iloggable, public Subject {
@@ -50,15 +49,13 @@ class CommandProcessor : public Iloggable, public Subject {
         Command readCommand(); // Gets command from console
         void saveCommand(const Command &c); // Stores the gotten Command in the array
         void getCommand(); // Reads and then saves a command from the console
-        void saveEffect(string); // Stores the result of the current Command in the current (last) Command
 
-        bool validate(); // Checks if the current Command is in the valid state
+        bool validate(const Command &c); // Checks if the current Command is in the valid state
 
         int commandsLength;
 
         // From Iloggable
         string stringToLog();
-
     private:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         Command *commands; // Array of current and past Commands
@@ -67,6 +64,7 @@ class CommandProcessor : public Iloggable, public Subject {
 class FileCommandProcessorAdapter : public Iloggable, public Subject {
     public:
         void readFromFile(); // Reads commands sequentially from a file
+
         // From Iloggable
         string stringToLog();
 };

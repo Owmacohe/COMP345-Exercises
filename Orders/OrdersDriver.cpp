@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 int ordersMain() {
 	//	Create OrderList object

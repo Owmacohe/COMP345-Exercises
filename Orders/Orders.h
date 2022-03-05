@@ -1,8 +1,11 @@
 #pragma once
-#include <vector>
-#include <iostream>
 
+#include <vector>
+#include <string>
+#include <iostream>
 using namespace std;
+
+#include "../LoggingObserver/LoggingObserver.h"
 
 class Order : public Iloggable, public Subject {
 	public:
@@ -165,26 +168,6 @@ class Reinforcement : public Order {
 
 		Reinforcement& operator = (const Reinforcement& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
-
-        bool validate();
-		bool execute();
-
-        // From Iloggable
-        string stringToLog();
-};
-
-class Diplomacy : public Order {
-	public:
-		Diplomacy();  // Default constructor
-		Diplomacy(bool v, string s);  // Parameterized constructor
-		Diplomacy(Diplomacy& original); // Copy constructor
-		~Diplomacy(); // Destructor 
-
-		string getDescription(); bool getValidated(); // Accessors
-		void setDescription(string d); void setValidated(bool v); // Mutators
-
-		Diplomacy& operator = (const Diplomacy& D); // Assignment operator 
-		friend ostream& operator<<(ostream& description, const Diplomacy& diplomacy);
 
         bool validate();
 		bool execute();

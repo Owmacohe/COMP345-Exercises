@@ -1,6 +1,5 @@
 #include "Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
-#include <string>
 
 /****************************** Order *******************************/
 
@@ -49,7 +48,7 @@ ostream& operator<<(ostream& os, const Order& order) {
 	return os;
 }
 
-bool Order::validate() {} // Virtual Method
+bool Order::validate() { } // Virtual Method
 
 bool Order::execute() {
     cout << "Executing Order" << endl;
@@ -58,7 +57,7 @@ bool Order::execute() {
 }
 
 // From Iloggable
-string Order::stringToLog(){
+string Order::stringToLog() {
     string logString = "The Order has been executed.\n";
     return logString;}
 
@@ -122,7 +121,7 @@ bool Deploy::execute() {
     return true;
 }
 
-string Deploy::stringToLog(){
+string Deploy::stringToLog() {
     string logString = "Create log string for execution of deploy.\n";
     return logString;}
 
@@ -193,7 +192,7 @@ bool Advance::execute() {
     return true;
 }
 
-string Advance::stringToLog(){
+string Advance::stringToLog() {
     string logString = "Create log string for execution.\n";
     return logString;}
 
@@ -260,7 +259,7 @@ bool Bomb::execute() {
     return true;
 }
 
-string Bomb::stringToLog(){
+string Bomb::stringToLog() {
     string logString = "Create log string for execution.\n";
     return logString;}
 
@@ -328,7 +327,7 @@ bool Blockade::execute() {
     return true;
 }
 
-string Blockade::stringToLog(){
+string Blockade::stringToLog() {
     string logString = "Create log string for execution.\n";
     return logString;}
 
@@ -395,7 +394,7 @@ bool Airlift::execute() {
     return true;
 }
 
-string Airlift::stringToLog(){
+string Airlift::stringToLog() {
     string logString = "Create log string for execution.\n";
     return logString;}
 
@@ -466,9 +465,10 @@ bool Negotiate::execute() {
     return true;
 }
 
-string Negotiate::stringToLog(){
+string Negotiate::stringToLog() {
     string logString = "Create log string for execution.\n";
-    return logString;}
+    return logString;
+}
 
 /****************************** Reinforcement *******************************/ // I THINK WE CAN DELETE THIS
 
@@ -509,16 +509,19 @@ ostream& operator<<(ostream& os, const Reinforcement& o) {
     return os;
 }
 
-
 bool Reinforcement::validate() {
     return validated;
 }
-
 
 bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
     notify(this); // FROM SUBJECT
     return true;
+}
+
+string Reinforcement::stringToLog() {
+    string logString = "Create log string for execution.\n";
+    return logString;
 }
 
 /****************************** OrdersList *******************************/
@@ -614,9 +617,11 @@ void OrdersList::addOrder(string orderString) {
 	else if (orderString == "airlift") {
         orderObject = new Negotiate();
     }
+    /*
 	else if (orderString == "diplomacy") {
         orderObject = new Diplomacy();
     }
+    */
 	else {
         cout << "wrong Order/Card type" << endl;
     }
@@ -648,6 +653,7 @@ void OrdersList::move(int i, int j) {
     }
 }
 
-string OrdersList::stringToLog(){
+string OrdersList::stringToLog() {
     string logString = "Create log string for adding an Order.\n";
-    return logString;}
+    return logString;
+}
