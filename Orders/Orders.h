@@ -18,7 +18,6 @@ class Order : public Iloggable, public Subject {
 		
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
-        static void setGameEngine(GameEngine* gamePlaying); //Audrey: since it's working with a static var. The method should also be static ?
 
 		Order& operator = (const Order& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
@@ -30,12 +29,6 @@ class Order : public Iloggable, public Subject {
         string stringToLog();
         // From Subject but no need to overload it
         //void notify(Iloggable* il);
-
-    public:
-    bool validated;
-    string description;
-    Player* playerIssuing;
-    static GameEngine* game;
 };
 
 class Deploy : public Order {
@@ -99,16 +92,7 @@ class Bomb : public Order {
         // From Iloggable
         string stringToLog();
 
-    public:
-    Territory* origin;
-    Territory* target;
-
-    static GameEngine* game;
-    virtual GameEngine* getGameEngine() { return game;}
-    GameEngine* Bomb::game = new GameEngine();
-
 };
-
 
 class Blockade : public Order {
 	public:

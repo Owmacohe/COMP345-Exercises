@@ -2,11 +2,7 @@
 #include "../LoggingObserver/LoggingObserver.h"
 
 /****************************** Order *******************************/
-GameEngine* Order::game = new GameEngine();
 
-void Order::setGameEngine(GameEngine *gamePlaying) {
-    game = gamePlaying;
-}
 // Default constructor
 Order::Order() {
     validated = false;
