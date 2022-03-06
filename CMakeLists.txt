@@ -23,5 +23,5 @@ add_executable(COMP345-Exercises
 #        Player/PlayerDriver.cpp
         LoggingObserver/LoggingObserver.cpp
         LoggingObserver/LoggingObserver.h
-#        LoggingObserver/LoggingObserverDriver.cpp
+        LoggingObserver/LoggingObserverDriver.cpp
         )

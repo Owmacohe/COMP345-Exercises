@@ -199,7 +199,7 @@ class Reinforcement : public Order {
         string stringToLog();
 };
 
-class OrdersList : public Iloggable, Subject {
+class OrdersList : public Iloggable, public Subject {
 	public: 
 		vector<Order*> playerOrderList;
 		bool allOrdersValidated;
