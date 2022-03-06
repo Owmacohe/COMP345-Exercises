@@ -57,43 +57,43 @@ Player::~Player() {
 
 // Returns a vector list of territories for player to defend in priority
 // Priority is determined by which territories are surrounded by the most enemy territories ??
-vector<Territory*> Player::toDefend(Map m) {
-    vector<Territory*> defend_territories = vector<Territory*>();
+//vector<Territory*> Player::toDefend(Map m) {
+//    vector<Territory*> defend_territories = vector<Territory*>();
+//
+//    for (Territory* territory : territories) {
+//        int number_surrounding = 0;
+//        string name = territory->getName();
+//        vector<Territory*> t = m.getConnectedTerritories(name);
+//
+//        //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
+//
+//        for (Territory* i : t) {
+//            delete i;
+//            i = NULL;
+//        }
+//    }
+//
+//    return defend_territories;
+//}
 
-    for (Territory* territory : territories) {
-        int number_surrounding = 0;
-        string name = territory->getName();
-        vector<Territory*> t = m.getConnectedTerritories(name);
-
-        //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
-
-        for (Territory* i : t) {
-            delete i;
-            i = NULL;
-        }
-    }
-
-    return defend_territories;
-}
-
-// Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
-// Priority is determined by which territories are surrounded by the most player owned territories ??
-vector<Territory*> Player::toAttack(Map m) {
-    vector<Territory*> attack_territories = vector<Territory*>();
-    for (Territory* i : territories) {
-        int number_surrounding = 0;
-        string name = i->getName();
-        vector<Territory*> t = m.getConnectedTerritories(name);
-
-        //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
-
-        for (Territory* i : t) {
-            delete i;
-            i = NULL;
-        } 
-    }
-    return attack_territories;
-}
+//// Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
+//// Priority is determined by which territories are surrounded by the most player owned territories ??
+//vector<Territory*> Player::toAttack(Map m) {
+//    vector<Territory*> attack_territories = vector<Territory*>();
+//    for (Territory* i : territories) {
+//        int number_surrounding = 0;
+//        string name = i->getName();
+//        vector<Territory*> t = m.getConnectedTerritories(name);
+//
+//        //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
+//
+//        for (Territory* i : t) {
+//            delete i;
+//            i = NULL;
+//        }
+//    }
+//    return attack_territories;
+//}
 
 void Player::issueOrder(int reinforcements) {
     //add deploy for all of the territories returned by toDefend() and will be pulled for deploylist ??

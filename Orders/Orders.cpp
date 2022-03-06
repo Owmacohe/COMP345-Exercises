@@ -11,6 +11,7 @@ Order::Order() {
     validated = false;
     description = "";
     playerIssuing = NULL;
+//    game = NULL;
 }
 
 // Parameterized constructor
@@ -44,8 +45,8 @@ void Order::setValidated(bool v) {
     validated = v;
 }
 
-void Order::setGameEngine(GameEngine* gamePlaying){
-    game = gamePlaying;
+void Order::setGameEngine(GameEngine& gamePlaying){
+   // Order::game = new GameEngine(gamePlaying);
 }
 
 Order& Order::operator = (const Order& order) {
@@ -60,9 +61,9 @@ ostream& operator<<(ostream& os, const Order& order) {
 	return os;
 }
 
-bool Order::validate() { } // Virtual Method
+bool Order::validate() {return true;} // Virtual Method
 
-bool Order::execute() {} // Virtual Method
+bool Order::execute() {return true;} // Virtual Method
 
 // From Iloggable
 string Order::stringToLog() {
@@ -125,7 +126,7 @@ bool Deploy::execute() {
      * if false, print out invalid
      * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
      */
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -198,7 +199,7 @@ bool Advance::execute() {
      * if 2 remove armies from Territory A and add them to Territory B
      *  if 3 ATTACK
      */
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -296,7 +297,7 @@ bool Bomb::execute() {
         cout << this->stringToLog();
     }
 
-    notify(this); // FROM SUBJECT
+   //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -384,7 +385,7 @@ bool Blockade::execute() {
         cout << this->stringToLog();
     }
 
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -396,9 +397,6 @@ string Blockade::stringToLog() {
 
 // Default constructor
 Airlift::Airlift() : Order(false, "Airlift", NULL) { };
-
-// Parameterized constructor (player only)
-Airlift::Airlift(Player* p) : Order(p) { }
 
 // Parameterized constructor
 Airlift::Airlift(bool v, string s, Player* p) : Order(v,s,p) { };
@@ -454,7 +452,7 @@ bool Airlift::execute() {
      *if false, order invalid
      * if true, remove armies from Territory A and add them to Territory B
      */
-    notify(this); // FROM SUBJECT
+   // notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -476,7 +474,9 @@ Negotiate::Negotiate(Player* p1, Player* p2) : Order(false, "Negotiate",p1) {
 };
 
 // Parameterized constructor
-Negotiate::Negotiate(bool v, string s, Player* p) : Order(v,s,p) { };
+Negotiate::Negotiate(bool v, string s, Player* p1, Player* p2) : Order(v,s,p1) {
+    targetPlayer = p2;
+};
 
 // Copy constructor
 Negotiate::Negotiate(Negotiate& original) : Order(original) {
@@ -547,7 +547,7 @@ bool Negotiate::execute() {
         // add to the pair list in game playerIssuing and target
         // add to the pair list in game target and playerIssuing
 
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -561,8 +561,6 @@ string Negotiate::stringToLog() {
 // Default constructor
 Reinforcement::Reinforcement() : Order(false, "Reinforcement", NULL) { };
 
-// Parameterized constructor (player only)
-Reinforcement::Reinforcement(Player* p) : Order(p) { };
 
 // Parameterized constructor
 Reinforcement::Reinforcement(bool v, string s, Player* p) : Order(v,s,p) { };
@@ -604,7 +602,7 @@ bool Reinforcement::validate() {
 
 bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 

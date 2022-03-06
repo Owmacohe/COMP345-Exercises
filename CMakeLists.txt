@@ -9,8 +9,8 @@ add_executable(COMP345-Exercises
         Cards/Cards.cpp
         Cards/Cards.h
 #        Cards/CardsDriver.cpp
-#        GameEngine/GameEngine.cpp
-#        GameEngine/GameEngine.h
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngine.h
 #        GameEngine/GameEngineDriver.cpp
         Map/Map.cpp
         Map/Map.h

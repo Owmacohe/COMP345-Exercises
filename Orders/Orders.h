@@ -3,9 +3,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "../LoggingObserver/LoggingObserver.h"
 using namespace std;
 
-#include "../LoggingObserver/LoggingObserver.h"
 
 class Territory;
 class Player;
@@ -20,7 +20,7 @@ class Order : public Iloggable, public Subject {
 		
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
-        void setGameEngine(GameEngine* gamePlaying);
+        void setGameEngine(GameEngine& gamePlaying);
 
 		Order& operator = (const Order& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
@@ -37,8 +37,9 @@ class Order : public Iloggable, public Subject {
     bool validated;
     string description;
     Player* playerIssuing;
-    static GameEngine* game;
+    //static GameEngine* game;
 };
+
 
 class Deploy : public Order {
 	public:
@@ -181,7 +182,6 @@ class Negotiate : public Order {
 class Reinforcement : public Order {
 	public:
 		Reinforcement();  // Default constructor
-        Reinforcement(Player* p);  // Parameterized constructor (Player only)
 		Reinforcement(bool v, string s, Player* p);  // Parameterized constructor
 		Reinforcement(Reinforcement& original); // Copy constructor
 		~Reinforcement(); // Destructor 
