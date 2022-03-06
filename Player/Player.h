@@ -22,7 +22,7 @@ class Player {
         vector<Territory*> toDefend(Map); // Territories for player to defend
         vector<Territory*> toAttack(Map); // Territories for player to attack
 
-        void issueOrder(int); //  Create order and adds order to players order list
+        void issueOrder(string); //  Create order and adds order to players order list
 
         int getNumberOfArmies(); // Get number of armies player owns
 
