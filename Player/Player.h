@@ -19,8 +19,8 @@ class Player {
 
         ~Player(); // Destructor
 
-        vector<Territory*> toDefend(Map); // Territories for player to defend
-        vector<Territory*> toAttack(Map); // Territories for player to attack
+//        vector<Territory*> toDefend(Map); // Territories for player to defend
+//        vector<Territory*> toAttack(Map); // Territories for player to attack
 
         void issueOrder(string); //  Create order and adds order to players order list
 
