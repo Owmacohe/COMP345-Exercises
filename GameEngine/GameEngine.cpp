@@ -327,6 +327,8 @@ void GameEngine::startupPhase() {
         switch the game to the play phase
     */
 
+    // ALSO ADD GameEngine Pointer to Static attribute to each Order subclass
+
     notify(this); // FROM SUBJECT
 }
 
