@@ -57,52 +57,98 @@ Player::~Player() {
 
 // Returns a vector list of territories for player to defend in priority
 // Priority is determined by which territories are surrounded by the most enemy territories ??
-//vector<Territory*> Player::toDefend(Map m) {
-//    vector<Territory*> defend_territories = vector<Territory*>();
-//
-//    for (Territory* territory : territories) {
-//        int number_surrounding = 0;
-//        string name = territory->getName();
-//        vector<Territory*> t = m.getConnectedTerritories(name);
-//
-//        //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
-//
-//        for (Territory* i : t) {
-//            delete i;
-//            i = NULL;
-//        }
-//    }
-//
-//    return defend_territories;
-//}
 
-//// Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
-//// Priority is determined by which territories are surrounded by the most player owned territories ??
-//vector<Territory*> Player::toAttack(Map m) {
-//    vector<Territory*> attack_territories = vector<Territory*>();
-//    for (Territory* i : territories) {
-//        int number_surrounding = 0;
-//        string name = i->getName();
-//        vector<Territory*> t = m.getConnectedTerritories(name);
-//
-//        //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
-//
-//        for (Territory* i : t) {
-//            delete i;
-//            i = NULL;
-//        }
-//    }
-//    return attack_territories;
-//}
+vector<Territory*> Player::toDefend(Map m) {
+    vector<Territory*> defend_territories = vector<Territory*>();
 
-void Player::issueOrder(int reinforcements) {
-    //add deploy for all of the territories returned by toDefend() and will be pulled for deploylist ??
-    //for loo adds deploy to orderlist for the number of armies in reinforcements
-    for (int i = 0; i < reinforcements ; i++) {
+    for (Territory* territory : territories) {
+        int number_surrounding = 0;
+        string name = territory->getName();
+        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
+        //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
+        for (Territory* t : surround_territory) {
+            if (t->getOwner()->getName() != name) {
+                number_surrounding = number_surrounding + 1;
+                
+            }
+        }
+
+        for (Territory* i : surround_territory) {
+            delete i;
+            i = NULL;
+        }
+    }
+
+    return defend_territories;
+}
+
+// Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
+// Priority is determined by which territories are surrounded by the most player owned territories ??
+vector<Territory*> Player::toAttack(Map m) {
+    vector<Territory*> attack_territories = vector<Territory*>();
+    for (Territory* i : territories) {
+        int number_surrounding = 0;
+        string name = i->getName();
+        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
+        //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
+        for (Territory* t : surround_territory) {
+            if (t->getOwner()->getName() != name) {
+                number_surrounding = number_surrounding + 1;
+                
+            }
+        for (Territory* i : surround_territory) {
+            delete i;
+            i = NULL;
+        } 
+    }
+    return attack_territories;
+}
+// NOW I AM THINKING THAT ISSUE ORDER JUST PUTS THEM IN THE LIST 
+// AND SO IN GAMEENGINE WE CHECK THE CARD AND WE CAN STILL ISSUE AN ORDER AS LONG AS THEY HAVE CARD
+// so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop, 
+// all that issue does is put it in its list of things to do
+
+void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
+    if (type == "deploy") {
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
     } 
+    else if (type == "advance") {
+        Advance* o = new Advance;
+        orders->addOrder(o);
+    } 
+    else if (type == "bomb") {
+        Bomb* o = new Bomb;
+        orders->addOrder(o);
+    }
+    else if (type == "blockade") {
+        Blockade* o = new Blockade;
+        orders->addOrder(o);
+    } 
+    else if (type == "airlift") {
+        Airlift* o = new Airlift;
+        orders->addOrder(o);
+    } 
+    else if (type == "negotiate") {
+        Negotiate* o = new Negotiate;
+        orders->addOrder(o);
+    }
+    else if (type == "reinforcement") {
+        Reinforcement* o = new Reinforcement;
+        orders->addOrder(o);
+    } 
+    else {
+        cout << "Invalid order" << endl;
+    }
 }
+// void Player::issueOrder(int reinforcements) {
+//     //add deploy for all of the territories returned by toDefend() and will be pulled for deploylist ??
+//     //for loo adds deploy to orderlist for the number of armies in reinforcements
+//     for (int i = 0; i < reinforcements ; i++) {
+//         Deploy* o = new Deploy; //order type create
+//         orders->addOrder(o); //add order to list
+//     } 
+// }
 
 // Return number of armies player has
 int Player::getNumberOfArmies() {

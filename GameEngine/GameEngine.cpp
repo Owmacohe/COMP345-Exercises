@@ -138,11 +138,37 @@ void GameEngine::assignCountries() {
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
+    /*
+    Players are given a number of armies that depends on the number of territories
+    they own, (# of territories owned divided by 3, rounded down). If the player owns all the territories of an
+    entire continent, the player is given a number of armies corresponding to the continent’s control bonus
+    value. In any case, the minimal number of reinforcement armies per turn for any player is 3. These armies
+    are placed in the player’s reinforcement pool. T
+    */
     cout << "end of assign Reinforcement" << endl;
 }
 
-void GameEngine::issueOrders(Player *player) {
+void GameEngine::issueOrdersPhase(Player *player) {
     *s = issueOrder;
+    /*
+        checks reinforcement pool, if reinforcement pool != 0 then loop issueorder issuing only DEPLOY orders
+        cout << "Issueing Deploy Orders" << endl;
+        while (reinforcement_pool != 0) {
+            issueOrder("deploy");
+        }
+        once the player reinforcement pool is empty : 
+        cout << "Would you like to make an advance ? y/n" << endl;
+        loop issueOrder("advance");
+        • The player issues advance orders to either (1) move armies from one of its own territory to the other in
+            order to defend them (using toDefend() to make the decision), and/or (2) move armies from one of its
+            territories to a neighboring enemy territory to attack them (using toAttack() to make the decision).
+        cout << "Would you like to play a card ? y/n" << endl;
+        loop issueOrder("card type");   
+        • The player uses one of the cards in their hand to issue an order that corresponds to the card in question.
+
+        while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
+        issueOrdersphase should issue the order based on the card played
+    */
     cout << "Issued the order for player " << player->getName() << endl;
 }
 
@@ -250,7 +276,7 @@ void GameEngine::gameStartupTransitions(string str) {
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
     if (str == "issueorder" && (getState() == 5 || getState() == 6)) {
-        issueOrders(p);
+        issueOrdersPhase(p);
     }
     else if (str == "endissueorders" && getState() == 6) {
         endIssueOrderPhase(p);
