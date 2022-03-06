@@ -115,26 +115,6 @@ void Player::issueOrder(string type) {
         Advance* o = new Advance;
         orders->addOrder(o);
     } 
-    else if (type == "bomb") {
-        Bomb* o = new Bomb;
-        orders->addOrder(o);
-    }
-    else if (type == "blockade") {
-        Blockade* o = new Blockade;
-        orders->addOrder(o);
-    } 
-    else if (type == "airlift") {
-        Airlift* o = new Airlift;
-        orders->addOrder(o);
-    } 
-    else if (type == "negotiate") {
-        Negotiate* o = new Negotiate;
-        orders->addOrder(o);
-    }
-    else if (type == "reinforcement") {
-        Reinforcement* o = new Reinforcement;
-        orders->addOrder(o);
-    }  
     else {
         cout << "Invalid order" << endl;
     }
