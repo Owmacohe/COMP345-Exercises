@@ -7,34 +7,43 @@ using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
 
+class Territory;
+class Player;
+class GameEngine;
+
 class Order : public Iloggable, public Subject {
 	public:
-		bool validated;
-		string description;
 		Order(); // Default constructor
-		Order(bool v, string s); // Parameterized constructor
+		Order(bool v, string s, Player* p); // Parameterized constructor
 		Order(Order& o); // Copy constructor
 		~Order(); // Destructor
 		
 		string getDescription(); bool getValidated(); // Accessors
 		void setDescription(string d); void setValidated(bool v); // Mutators
+        void setGameEngine(GameEngine* gamePlaying);
 
 		Order& operator = (const Order& D); // Assignment operator
 		friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
-		bool validate();
+		bool virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
 		bool virtual execute(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS
 
         // From Iloggable
         string stringToLog();
         // From Subject but no need to overload it
         //void notify(Iloggable* il);
+
+    public:
+    bool validated;
+    string description;
+    Player* playerIssuing;
+    static GameEngine* game;
 };
 
 class Deploy : public Order {
 	public:
 		Deploy(); // Default constructor
-		Deploy(bool v, string s);  // Parameterized constructor
+		Deploy(bool v, string s, Player* p);  // Parameterized constructor
 		Deploy(Deploy& original); // Copy constructor
 		~Deploy(); // Destructor
 
@@ -55,7 +64,7 @@ class Deploy : public Order {
 class Advance : public Order {
 	public:
 		Advance(); // Default constructor
-		Advance(bool v, string s);  // Parameterized constructor
+		Advance(bool v, string s, Player* p);  // Parameterized constructor
 		Advance(Advance& original); // Copy constructor
 		~Advance(); // Destructor 
 
@@ -76,7 +85,8 @@ class Advance : public Order {
 class Bomb : public Order {
 	public:
 		Bomb(); // Default constructor
-		Bomb(bool v, string s);  // Parameterized constructor
+		Bomb(bool v, string s, Player* p, Territory* o, Territory* t);  // Parameterized constructor
+        Bomb(Player* p, Territory* o, Territory* t);  // Parameterized constructor For IssueOrders Phase
 		Bomb(Bomb& original); // Copy constructor
 		~Bomb(); // Destructor 
 
@@ -92,12 +102,17 @@ class Bomb : public Order {
         // From Iloggable
         string stringToLog();
 
+    public:
+    Territory* origin;
+    Territory* target;
+
 };
 
 class Blockade : public Order {
 	public:
 		Blockade();  // Default constructor
-		Blockade(bool v, string s);  // Parameterized constructor
+        Blockade(Player* p, Territory* t);  // Parameterized constructor for IssueOrders Phase
+		Blockade(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
 		Blockade(Blockade& original); // Copy constructor
 		~Blockade(); // Destructor 
 
@@ -113,12 +128,15 @@ class Blockade : public Order {
         // From Iloggable
         string stringToLog();
 
+    public:
+        Territory* target;
 };
 
 class Airlift : public Order {
 	public:
 		Airlift();  // Default constructor
-		Airlift(bool v, string s);  // Parameterized constructor
+        Airlift(Player* p);  // Parameterized constructor (Player only)
+		Airlift(bool v, string s, Player* p);  // Parameterized constructor
 		Airlift(Airlift& original); // Copy constructor
 		~Airlift(); // Destructor 
 		
@@ -139,7 +157,8 @@ class Airlift : public Order {
 class Negotiate : public Order {
 	public:
 		Negotiate();  // Default constructor
-		Negotiate(bool v, string s);  // Parameterized constructor
+        Negotiate(Player* p1, Player* p2);  // Parameterized constructor (Player only)
+		Negotiate(bool v, string s, Player* p1, Player* p2);  // Parameterized constructor
 		Negotiate(Negotiate& original); // Copy constructor
 		~Negotiate(); // Destructor 
 
@@ -154,12 +173,16 @@ class Negotiate : public Order {
         // From Iloggable
         string stringToLog();
 
+    public:
+    Player* targetPlayer;
+
 };
 
 class Reinforcement : public Order {
 	public:
 		Reinforcement();  // Default constructor
-		Reinforcement(bool v, string s);  // Parameterized constructor
+        Reinforcement(Player* p);  // Parameterized constructor (Player only)
+		Reinforcement(bool v, string s, Player* p);  // Parameterized constructor
 		Reinforcement(Reinforcement& original); // Copy constructor
 		~Reinforcement(); // Destructor 
 

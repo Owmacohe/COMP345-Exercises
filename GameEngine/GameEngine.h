@@ -65,4 +65,6 @@ class GameEngine : public Iloggable, public Subject{
         bool phaseEnd;
         Deck* deck;
         vector<Player*> player_list;
+        // Needs a Map
+
 };
