@@ -1,7 +1,7 @@
 #include "Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 
-int main() {
+int OrdersMain() {
 	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
