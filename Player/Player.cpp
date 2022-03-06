@@ -106,13 +106,34 @@ vector<Territory*> Player::toAttack(Map m) {
 // AND SO IN GAMEENGINE WE CHECK THE CARD AND WE CAN STILL ISSUE AN ORDER AS LONG AS THEY HAVE CARD
 // so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop, 
 // all that issue does is put it in its list of things to do
-void Player::issueOrder(string type) {
+
+void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
     if (type == "deploy") {
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
     } 
     else if (type == "advance") {
         Advance* o = new Advance;
+        orders->addOrder(o);
+    } 
+    else if (type == "bomb") {
+        Bomb* o = new Bomb;
+        orders->addOrder(o);
+    }
+    else if (type == "blockade") {
+        Blockade* o = new Blockade;
+        orders->addOrder(o);
+    } 
+    else if (type == "airlift") {
+        Airlift* o = new Airlift;
+        orders->addOrder(o);
+    } 
+    else if (type == "negotiate") {
+        Negotiate* o = new Negotiate;
+        orders->addOrder(o);
+    }
+    else if (type == "reinforcement") {
+        Reinforcement* o = new Reinforcement;
         orders->addOrder(o);
     } 
     else {

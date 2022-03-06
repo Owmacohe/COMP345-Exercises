@@ -157,10 +157,13 @@ void GameEngine::issueOrdersPhase(Player *player) {
             issueOrder("deploy");
         }
         once the player reinforcement pool is empty : 
-
+        cout << "Would you like to make an advance ? y/n" << endl;
+        loop issueOrder("advance");
         • The player issues advance orders to either (1) move armies from one of its own territory to the other in
             order to defend them (using toDefend() to make the decision), and/or (2) move armies from one of its
             territories to a neighboring enemy territory to attack them (using toAttack() to make the decision).
+        cout << "Would you like to play a card ? y/n" << endl;
+        loop issueOrder("card type");   
         • The player uses one of the cards in their hand to issue an order that corresponds to the card in question.
 
         while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
