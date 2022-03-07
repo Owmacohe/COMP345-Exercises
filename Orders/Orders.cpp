@@ -5,6 +5,12 @@
 
 
 /****************************** Order *******************************/
+// Static Method to Access static GameEngine*
+GameEngine* Order::game = new GameEngine();
+
+GameEngine* Order::getGameEngine (){
+    return game;
+}
 
 // Default constructor
 Order::Order() {
@@ -45,8 +51,8 @@ void Order::setValidated(bool v) {
     validated = v;
 }
 
-void Order::setGameEngine(GameEngine& gamePlaying){
-   // Order::game = new GameEngine(gamePlaying);
+void Order::setGameEngine(GameEngine* gamePlaying){
+   Order::game = gamePlaying;
 }
 
 Order& Order::operator = (const Order& order) {
@@ -673,8 +679,25 @@ OrdersList::OrdersList() {
 OrdersList::OrdersList(vector<Order*> vo, bool aov) {
     playerOrderList = vector<Order*>();
     
-    for (Order* i : vo) {
-        playerOrderList.push_back(new Order(*i));
+//    for (Order* i : vo) {
+//        Order* objectCopied;
+//        if (dynamic_cast<Deploy*>(i) != nullptr) {
+//            objectCopied = new Deploy(*(dynamic_cast<Deploy*>(i)));
+//            playerOrderList.push_back(objectCopied);
+//        }
+//        else if (dynamic_cast<Advance*>(i) != nullptr) {
+//            //TODO
+//        }
+//        else if (dynamic_cast<Airlift*>(i) != nullptr) {
+//        }
+//        else if (dynamic_cast<Bomb*>(i) != nullptr) {
+//        }
+//        else if (dynamic_cast<Blockade*>(i) != nullptr) {
+//        }
+//        else if (dynamic_cast<Negotiate*>(i) != nullptr) {
+//        }
+
+
     }
     
     allOrdersValidated = aov;

@@ -38,7 +38,5 @@ public:
 
 
     public:
-    list<Observer*> observers;
-    // Does not use collection? Nope...will pass(this) in update method to do a many to one rather than one to many relationship between Subject and Observer
-    // Will still implement it just ot have it and I will ask TA if necessary
+    list<Observer*> observers; // Not used as per model of assignment
 };

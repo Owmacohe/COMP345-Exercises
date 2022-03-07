@@ -18,15 +18,17 @@ public:
     ~Order(); // Destructor
 		
     string getDescription(); bool getValidated(); // Accessors
+    GameEngine* getGameEngine();
     void setDescription(string d); void setValidated(bool v); // Mutators
-    void setGameEngine(GameEngine& gamePlaying);
+    void setGameEngine(GameEngine* gamePlaying);
 
     Order& operator = (const Order& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
     bool virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
     // bool virtual execute();
-    void virtual execute(); // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
+    void virtual execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
+
 
     // From Iloggable
     string stringToLog();
@@ -36,7 +38,7 @@ public:
     bool validated;
     string description;
     Player* playerIssuing;
-    //static GameEngine* game;
+    static GameEngine* game;
 };
 
 
