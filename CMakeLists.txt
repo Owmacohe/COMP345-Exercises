@@ -24,4 +24,7 @@ add_executable(COMP345-Exercises
         LoggingObserver/LoggingObserver.cpp
         LoggingObserver/LoggingObserver.h
 #        LoggingObserver/LoggingObserverDriver.cpp
+        CommandProcessing/CommandProcessing.h
+        CommandProcessing/CommandProcessing.cpp
+#        CommandProcessing/CommandProcessingDriver.cpp
         )

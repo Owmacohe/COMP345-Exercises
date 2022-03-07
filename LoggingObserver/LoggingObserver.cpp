@@ -2,6 +2,7 @@
 
 string Iloggable::stringToLog(){
 // Nothing happens here, must override
+return "";
 };
 
 Subject::Subject(){

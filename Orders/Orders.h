@@ -210,10 +210,9 @@ public:
 class OrdersList /*: public Iloggable, Subject*/ {
 public:
     vector<Order*> playerOrderList;
-    bool allOrdersValidated;
 
     OrdersList(); // Default constructor
-    OrdersList(vector<Order*> vo, bool aov); // Parameterized constructor
+    OrdersList(vector<Order*> vo); // Parameterized constructor
     OrdersList(OrdersList& original);  // Copy constructor
     ~OrdersList(); // Destructor
 
@@ -223,7 +222,7 @@ public:
     OrdersList operator = (const OrdersList& original); // Assignment operator
     friend ostream& operator<<(ostream& os, const OrdersList& ordersList); // Stream insertion operator
 
-    void addOrder(Order order); // Add Method used to add an order of the OrderList.
+//    void addOrder(Order order); // Add Method used to add an order of the OrderList.
     void addOrder(Order* order); // Add Method used to add an order of the OrderList.
     void addOrder(string order); // Add Method used to add an order of the OrderList.
     void remove(int i); // Remove Method used to remove an order of the OrderList.
