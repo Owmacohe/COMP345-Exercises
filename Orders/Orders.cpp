@@ -389,6 +389,7 @@ ostream& operator<<(ostream& os, const Bomb& o) {
 bool Bomb::validate() {
     // Check that Territory A is not the Player's
     if (origin->getOwner() == playerIssuing){
+        cout << "" ;
         validated = false;
     }
 
