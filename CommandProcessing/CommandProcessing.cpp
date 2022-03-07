@@ -227,9 +227,6 @@ void CommandProcessor::getCommand() {
     Command temp = readCommand();
 
     saveCommand(temp);
-
-    // Execute the Command's effects
-    // Call saveEffects() to save the Command's effects
 }
 
 bool CommandProcessor::validate(const Command &c) {
