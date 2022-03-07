@@ -93,8 +93,8 @@ vector<Territory*> Player::toAttack(Map m) {
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_surrounding = number_surrounding + 1;
-                
             }
+        }
         for (Territory* i : surround_territory) {
             delete i;
             i = NULL;
