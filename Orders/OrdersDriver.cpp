@@ -1,7 +1,7 @@
 #include "Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 
-int OrdersMain() {
+int main() {
 	//	Create OrderList object
     OrdersList player1List;
     cout << " Empty Order List: " << player1List << endl;
@@ -25,21 +25,21 @@ int OrdersMain() {
 //	player1List.addOrder(advance1);
 //	cout << player1List << "\n" << endl;
 
-	// Bomb
-	Bomb *bomb1 = new Bomb();
-	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
-    cout << "Checking for validation: " << bomb1->validate() << endl;
-    cout << "Checking for execution: " ; bomb1->execute() ;
-	player1List.addOrder(bomb1);
-	cout << player1List << "\n" << endl;
+//	// Bomb
+//	Bomb *bomb1 = new Bomb();
+//	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
+//    cout << "Checking for validation: " << bomb1->validate() << endl;
+//    cout << "Checking for execution: " ; bomb1->execute() ;
+//	player1List.addOrder(bomb1);
+//	cout << player1List << "\n" << endl;
 
-	// Blockade
-	Blockade *blockade1 = new Blockade();
-	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
-    cout << "Checking for validation: " << blockade1->validate() << endl;
-    cout << "Checking for execution: " ; blockade1->execute() ;
-	player1List.addOrder(blockade1);
-	cout << player1List << "\n" << endl;
+//	// Blockade
+//	Blockade *blockade1 = new Blockade();
+//	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
+//    cout << "Checking for validation: " << blockade1->validate() << endl;
+//    cout << "Checking for execution: " ; blockade1->execute() ;
+//	player1List.addOrder(blockade1);
+//	cout << player1List << "\n" << endl;
 
 //	// Airlift
 //	Airlift *airlift1 = new Airlift();
