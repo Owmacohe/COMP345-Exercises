@@ -10,12 +10,12 @@ Player::Player() {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
-
+    reinforcePool = 0;
     //cout << "[Player default constructor]" << endl;
 }
 
 // Param constructor
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) {
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r): name(n), reinforcePool(r) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
@@ -36,6 +36,7 @@ Player::Player(const Player &p) {
 
     hand = new Hand(*(p.hand));
     orders = new OrdersList(*(p.orders));
+    reinforcePool = p.reinforcePool;
     //cout << "[Player copy constructor]" << endl;
 }
 
@@ -56,50 +57,78 @@ Player::~Player() {
 }
 
 // Returns a vector list of territories for player to defend in priority
-// Priority is determined by which territories are surrounded by the most enemy territories ??
+// Priority is determined by which territories are surrounded by the most enemy territories
 
 vector<Territory*> Player::toDefend(Map m) {
     vector<Territory*> defend_territories = vector<Territory*>();
+    pair<int, Territory*> pairs;
+    vector<pair<int, Territory*>> ordering;
 
     for (Territory* territory : territories) {
         int number_surrounding = 0;
         string name = territory->getName();
         vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 1 check each territories numbers of enemies surrounding step 2 sort by said number and territory pair
+        //step 1 check each territories numbers of enemies surrounding 
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_surrounding = number_surrounding + 1;
-
             }
         }
+        //step 2 pair territory and their number of surrounding territories, add pair to vector
+        pairs.first = number_surrounding;
+        pairs.second = territory;
 
-        for (Territory* i : surround_territory) {
+        ordering.push_back(pairs);
+
+        for (Territory* i : surround_territory) { // delete the vector of the surrounding to avoid memory leak
             delete i;
             i = NULL;
         }
     }
-
+    //step 3 sort and seperate territories in pair 
+    sort(ordering.begin(), ordering.end());
+    for (pair<int, Territory*> p : ordering) {
+        defend_territories.push_back(p.second); //pushes them in one by one because they are already sorted
+        delete p.second; // delete the vector of pairs to avoid memory leak
+        p.second = NULL;
+    }
     return defend_territories;
 }
 
 // Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
-// Priority is determined by which territories are surrounded by the most player owned territories ??
+// Priority is determined by which territories are surrounded by the most player owned territories
 vector<Territory*> Player::toAttack(Map m) {
     vector<Territory*> attack_territories = vector<Territory*>();
-    for (Territory* i : territories) {
+    pair<int, Territory*> pairs;
+    vector<pair<int, Territory*>> ordering;
+
+    for (Territory* territory : territories) {
         int number_surrounding = 0;
-        string name = i->getName();
+        string name = territory->getName();
         vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 1 check each territories numbers of owned territories surrounding an enemy step 2 sort by said number and enemy territory pair
+        //step 1 check each territories numbers of enemies surrounding 
         for (Territory* t : surround_territory) {
-            if (t->getOwner()->getName() != name) {
+            if (t->getOwner()->getName() == name) { //FIX CURRENTLY RETURNS THE PLAYERS OWN TERRITORIES LOL JUST FIX LOGIC
                 number_surrounding = number_surrounding + 1;
             }
         }
-        for (Territory* i : surround_territory) {
+        //step 2 pair territory and their number of surrounding territories, add pair to vector
+        pairs.first = number_surrounding;
+        pairs.second = territory;
+
+        ordering.push_back(pairs);
+
+        for (Territory* i : surround_territory) { // delete the vector of the surrounding to avoid memory leak
             delete i;
             i = NULL;
         }
+    }
+    //step 3 sort and seperate territories in pair 
+    sort(ordering.begin(), ordering.end());
+    for (pair<int, Territory*> p : ordering) {
+        attack_territories.push_back(p.second); //pushes them in one by one because they are already sorted
+        delete p.second; // delete the vector of pairs to avoid memory leak
+        p.second = NULL;
     }
     return attack_territories;
 }
@@ -194,6 +223,7 @@ Player& Player::operator = (const Player& p){
     }
     this->hand = p.hand;
     this->orders = p.orders;
+    this->reinforcePool = p.reinforcePool;
     return *this;
 }
 
@@ -208,6 +238,7 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
                 "PLAYER: " << p.name <<
                 "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
                 "\n    Players hand, " << *p.hand <<
-                "\n    Players orders, " << *p.orders <<endl;
+                "\n    Players orders, " << *p.orders <<
+                "\n    Players reinforcement pool has, " << p.reinforcePool << " armies"<<endl;
 }
 
