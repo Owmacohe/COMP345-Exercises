@@ -387,22 +387,20 @@ ostream& operator<<(ostream& os, const Bomb& o) {
 
 
 bool Bomb::validate() {
+
     // Check that Territory A is not the Player's
     if (origin->getOwner() == playerIssuing){
-        cout << "" ;
+        cout << "invalid Bomb: the Territory belongs to the Player issuing the bomb order" ;
         validated = false;
     }
 
-//  if ( playerIssuing in list of alliance's pair is not the target Player) {
-//  validated = false;
-//  }
-    // Check that Territory A is adjacent to one of the Player's TODO
-//    else if(target is in
-//    vector game.getMap().getConnectedTerritories(origin.getName())){
-//        validated = false;
-//        return validated;
-//    }
+    else if (game->existingAlliance(origin->getOwner(), target->getOwner())) {
+        validated = false;
+    }
 
+//    else if ( ){
+//        validated = false;
+//    }
     else
         validated = true;
 
@@ -699,9 +697,9 @@ OrdersList::OrdersList(vector<Order*> vo, bool aov) {
 //        }
 
 
-    }
-    
-    allOrdersValidated = aov;
+//    }
+//
+    //allOrdersValidated = aov;
 }
 
 // Copy constructor
