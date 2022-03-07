@@ -78,19 +78,27 @@ State GameEngine::getState() { return *s; }
 int GameEngine::getNumberOfPlayers() { return NumberOfPlayers; }
 bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
+CommandProcessor *GameEngine::getProcessor() { return processor; }
+Map *GameEngine::getMap() { return map; }
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
 void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
+void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
+void GameEngine::setMap(const Map &m) { *map = m; }
 
 // Phases, states, and commands
 void GameEngine::startGame() {
+    /*
     *s = start;
     cout << "Welcome to Warzone" << endl;
     cout << "Please enter the number of players" << endl;
     cin >> this->NumberOfPlayers;
     cout << "end of start phase" << endl;
+    */
+
+   startupPhase();
 }
 
 void GameEngine::loadMap() {
@@ -312,20 +320,89 @@ void GameEngine::gameEndTransitions(string str) {
 }
 
 void GameEngine::startupPhase() {
-    // use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+    *s = start;
 
-    // use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
+    cout << "Welcome to Warzone" << endl;
 
-    // use the addplayer <playername> command to enter players in the game (2-6 players)
+    while (*s < 5) {
+        cout << "Enter a command: " << endl;
 
-    /*
-    use the gamestart command to:
-        fairly distribute all the territories to the players
-        determine randomly the order of play of the players in the game
-        give 50 initial armies to the players, which are placed in their respective reinforcement pool
-        let each player draw 2 initial cards from the deck using the deck’s draw() method
-        switch the game to the play phase
-    */
+        processor->getCommand();
+
+        Command temp = processor->getCommands()[processor->commandsLength - 1];
+
+        if (processor->validate(temp)) {
+            string word1 = "";
+            string word2 = "";
+            bool hasReachedSpace = false;
+
+            for (char i : temp.getCommand()) {
+                if (!hasReachedSpace) {
+                    if (i == ' ') {
+                        hasReachedSpace = true;
+                    }
+                    else {
+                        word1 += i;
+                    }
+                }
+                else {
+                    if (i != '<' && i != '>') {
+                        word2 += i;
+                    }
+                }
+            }
+
+            if (word1 == "loadmap") {
+                // use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+
+                MapLoader loader;
+                Map m = Map(loader.load(word2));
+                *map = m;
+
+                if (m.isGoodMap) {
+                    cout << "Map loaded!" << endl;
+                    *s = mapLoaded;
+                }
+            }
+            else if (word1 == "validatemap") {
+                // use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
+
+                if (map->validate()) {
+                    cout << "Map validated!" << endl;
+                    *s = mapValidated;
+                }
+            }
+            else if (word1 == "addplayer"){ 
+                // use the addplayer <playername> command to enter players in the game (2-6 players)
+
+                Player *p;
+                p->setName(word2);
+                player_list.push_back(p);
+
+                cout << "Player added!" << endl;
+
+                *s = playersAdded;
+            }
+            else if (word1 == "gamestart") {
+                /*
+                use the gamestart command to:
+                    fairly distribute all the territories to the players
+                    determine randomly the order of play of the players in the game
+                    give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                    let each player draw 2 initial cards from the deck using the deck’s draw() method
+                    switch the game to the play phase
+                */
+
+                *s = assignReinforcement;
+            }
+            else if (word1 == "replay") {
+
+            }
+            else if (word1 == "quit") {
+                
+            }
+        }
+    }
 
     // ALSO ADD GameEngine Pointer to Static attribute to each Order subclass
 
