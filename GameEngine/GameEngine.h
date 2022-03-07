@@ -9,6 +9,7 @@ using namespace std;
 class Player;
 class MapLoader;
 class Deck;
+class CommandProcessor;
 
 enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
@@ -71,5 +72,6 @@ class GameEngine : public Iloggable, public Subject{
         vector<Player*> player_list;
         CommandProcessor *processor;
         Map *map;
-        // Needs a Map
+        //Alliances to add
+
 };
