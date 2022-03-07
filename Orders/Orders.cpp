@@ -393,14 +393,14 @@ bool Bomb::validate() {
         cout << "invalid Bomb: the Territory belongs to the Player issuing the bomb order" ;
         validated = false;
     }
-
+    // Check for an existing Alliance
     else if (game->existingAlliance(origin->getOwner(), target->getOwner())) {
         validated = false;
     }
-
-//    else if ( ){
-//        validated = false;
-//    }
+    // Check that territories are adjacent
+    else if ( game->getMap()->adjacentTerritories(origin,target)){
+        validated = false;
+    }
     else
         validated = true;
 
@@ -411,7 +411,6 @@ bool Bomb::validate() {
 void Bomb::execute() {
 
     if (!validate()){
-        //if ( playerIssuing in list of alliance's pair is not the target player) TODO
         cout << "Invalid Bomb Order, Truce between players\n";
         cout << "Invalid Bomb Order";
 
@@ -492,21 +491,14 @@ bool Blockade::validate() {
 
 
 void Blockade::execute() {
-    /*
-     *  Can only be played with a CARD so remove it from IssueOrder in Player
-     *  ask the player for a Territory A
-     *  validate()
-     *  if false, invalid order
-     *  if true, make armies in territory x2 and make 'Neutral Player owner of that'
-     *  Maybe create Neutral Player here (or at startup of game)
-     */
+
     if (!validate()){
         cout << "Invalid Blockade Order";
     }
     else {
         int doubleArmies = (target->getArmies())*2;
         target->setArmies(doubleArmies);
-        //target->setOwner(NEUTRAL PLAYER); TODO -- Add neutral at startup?
+        target->setOwner(game->getplayer_list().at(0)); //TODO -- Add neutral at startup
         cout << this->stringToLog();
     }
 
@@ -571,14 +563,9 @@ ostream& operator<<(ostream& os, const Negotiate& o) {
 }
 
 bool Negotiate::validate() {
-    /*
-     * Check if the player name submitted is not the same as the player that issued the order
-     * (Check if its not the neutral player....?)
-     * return true if ok
-     * else false
-     */
     if (playerIssuing == targetPlayer || targetPlayer->getName() == "Neutral"){
         validated = false;
+        cout << "Invalid Negotiate : Negotiate must be done with a different player, excluding the Neutral player\n" ;
     }
     else
         validated = true;
@@ -597,13 +584,13 @@ void Negotiate::execute() {
      * In this case, this adds Player A to Player B's list and vice-versa
      * Lists must be cleared when goes to reinforcement phase
      */
-
     if (!validate()){
         cout << "Invalid Negotiate Order\n" ;
     }
-    else{}
-        // add to the pair list in game playerIssuing and target
-        // add to the pair list in game target and playerIssuing
+    else{
+        game->addAlliances(playerIssuing, targetPlayer);
+        cout << "Executed Negotiate Order\n" ;
+    }
 
     //notify(this); // FROM SUBJECT
 }
