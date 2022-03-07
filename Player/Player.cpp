@@ -10,7 +10,7 @@ Player::Player() {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
-    
+
     //cout << "[Player default constructor]" << endl;
 }
 
@@ -20,7 +20,7 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o): name(n) 
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
     }
-    
+
     hand = new Hand(*h);
     orders = new OrdersList(*o);
     //cout << "[Player param constructor]" << endl;
@@ -69,7 +69,7 @@ vector<Territory*> Player::toDefend(Map m) {
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_surrounding = number_surrounding + 1;
-                
+
             }
         }
 
@@ -99,24 +99,24 @@ vector<Territory*> Player::toAttack(Map m) {
         for (Territory* i : surround_territory) {
             delete i;
             i = NULL;
-        } 
+        }
     }
     return attack_territories;
 }
-// NOW I AM THINKING THAT ISSUE ORDER JUST PUTS THEM IN THE LIST 
+// NOW I AM THINKING THAT ISSUE ORDER JUST PUTS THEM IN THE LIST
 // AND SO IN GAMEENGINE WE CHECK THE CARD AND WE CAN STILL ISSUE AN ORDER AS LONG AS THEY HAVE CARD
-// so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop, 
+// so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop,
 // all that issue does is put it in its list of things to do
 
 void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
     if (type == "deploy") {
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
-    } 
+    }
     else if (type == "advance") {
         Advance* o = new Advance;
         orders->addOrder(o);
-    } 
+    }
     else if (type == "bomb") {
         Bomb* o = new Bomb;
         orders->addOrder(o);
@@ -124,11 +124,11 @@ void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
     else if (type == "blockade") {
         Blockade* o = new Blockade;
         orders->addOrder(o);
-    } 
+    }
     else if (type == "airlift") {
         Airlift* o = new Airlift;
         orders->addOrder(o);
-    } 
+    }
     else if (type == "negotiate") {
         Negotiate* o = new Negotiate;
         orders->addOrder(o);
@@ -136,7 +136,7 @@ void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
     else if (type == "reinforcement") {
         Reinforcement* o = new Reinforcement;
         orders->addOrder(o);
-    } 
+    }
     else {
         cout << "Invalid order" << endl;
     }
@@ -147,7 +147,7 @@ void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
 //     for (int i = 0; i < reinforcements ; i++) {
 //         Deploy* o = new Deploy; //order type create
 //         orders->addOrder(o); //add order to list
-//     } 
+//     }
 // }
 
 // Return number of armies player has
@@ -159,6 +159,14 @@ int Player::getNumberOfArmies() {
     return sum;
 }
 
+void Player::addToReinforcePool(int armies) {
+    reinforcePool += armies;
+}
+
+void Player::removeFromReinforcePool(int armies) {
+    reinforcePool -= armies;
+}
+
 // Mutators and Accessors
 void Player::setName(string n) { name = n; }
 void Player::setTerritory(vector<Territory*> t) {
@@ -168,18 +176,21 @@ void Player::setTerritory(vector<Territory*> t) {
 }
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
+void Player::setReinforcementPool(int armies) {reinforcePool = armies;}
 
 string Player::getName() { return name; }
 vector<Territory*> Player::getTerritory() { return territories; }
 Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
+int Player::getReinforcePool(){ return reinforcePool;}
+
 // End of Mutators and Accessors
 
 // Assignment operator
 Player& Player::operator = (const Player& p){
     this->name = p.name;
     for (Territory* i : p.territories) {
-            this->territories.push_back(i);
+        this->territories.push_back(i);
     }
     this->hand = p.hand;
     this->orders = p.orders;
@@ -194,9 +205,9 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
     }
 
     return strm <<
-        "PLAYER: " << p.name <<
-        "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
-        "\n    Players hand, " << *p.hand <<
-        "\n    Players orders, " << *p.orders <<endl;
+                "PLAYER: " << p.name <<
+                "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
+                "\n    Players hand, " << *p.hand <<
+                "\n    Players orders, " << *p.orders <<endl;
 }
 
