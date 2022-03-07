@@ -1,5 +1,8 @@
 #include "Orders.h"
-#include "../LoggingObserver/LoggingObserver.h"
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+#include "../GameEngine/GameEngine.h"
+
 
 /****************************** Order *******************************/
 
@@ -7,22 +10,28 @@
 Order::Order() {
     validated = false;
     description = "";
+    playerIssuing = NULL;
+//    game = NULL;
 }
 
 // Parameterized constructor
-Order::Order(bool v, string s) {
+Order::Order(bool v, string s, Player* p){
     validated = v;
     description = s;
-};
+    playerIssuing = p;
+}
 
 // Copy constructor
 Order::Order(Order& original) {
     validated = original.validated;
     description = original.description;
+    playerIssuing = new Player(*(original.playerIssuing));
 }
 
 // Destructor
-Order::~Order() { }
+Order::~Order() {
+    playerIssuing = NULL;
+}
 
 // Accessors
 string Order::getDescription() { return description; }
@@ -34,6 +43,10 @@ void Order::setDescription(string d) {
 }
 void Order::setValidated(bool v) {
     validated = v;
+}
+
+void Order::setGameEngine(GameEngine& gamePlaying){
+   // Order::game = new GameEngine(gamePlaying);
 }
 
 Order& Order::operator = (const Order& order) {
@@ -48,13 +61,9 @@ ostream& operator<<(ostream& os, const Order& order) {
 	return os;
 }
 
-bool Order::validate() { } // Virtual Method
+bool Order::validate() {return true;} // Virtual Method
 
-bool Order::execute() {
-    cout << "Executing Order" << endl;
-    notify(this); // FROM SUBJECT
-    return true;
-}
+bool Order::execute() {return true;} // Virtual Method
 
 // From Iloggable
 string Order::stringToLog() {
@@ -64,10 +73,10 @@ string Order::stringToLog() {
 /****************************** Deploy *******************************/
 
 // Default constructor
-Deploy::Deploy() : Order(false, "Deploy") { };
+Deploy::Deploy() : Order(false, "Deploy", NULL) { };
 
 // Parameterized constructor
-Deploy::Deploy(bool v, string s) : Order(v,s) { };
+Deploy::Deploy(bool v, string s, Player* p) : Order(v,s,p) { };
 
 Deploy::Deploy(Deploy& original) : Order(original) {
     description = "Deploy Armies into a territory";
@@ -117,11 +126,11 @@ bool Deploy::execute() {
      * if false, print out invalid
      * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
      */
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
-string Deploy::stringToLog() {
+string Deploy::stringToLog() { //TODO
     string logString = "Create log string for execution of deploy.\n";
     return logString;}
 
@@ -129,10 +138,10 @@ string Deploy::stringToLog() {
 /****************************** Advance *******************************/
 
 // Default constructor
-Advance::Advance() : Order(false, "Advance") { };
+Advance::Advance() : Order(false, "Advance", NULL) { };
 
 // Parameterized constructor
-Advance::Advance(bool v, string s) : Order(v,s) { };
+Advance::Advance(bool v, string s, Player* p) : Order(v,s,p) { };
 
 // Copy constructor
 Advance::Advance(Advance& original) : Order(original) {
@@ -168,6 +177,8 @@ ostream& operator<<(ostream& os, const Advance& o) {
 
 
 bool Advance::validate() { // there are 3 options: valid, invalid and ATTACK
+    //if ( playerIssuing in list of alliance's pair is not the target player)
+
     /*
      * Check if Territory B belongs to player return 1
      * Check if Territory A is adjacent to territory B return 1
@@ -188,21 +199,30 @@ bool Advance::execute() {
      * if 2 remove armies from Territory A and add them to Territory B
      *  if 3 ATTACK
      */
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
 string Advance::stringToLog() {
-    string logString = "Create log string for execution.\n";
+    string logString = "Create log string for execution.\n"; //TODO
     return logString;}
 
 /****************************** Bomb *******************************/
 
 // Default constructor
-Bomb::Bomb() : Order(false, "Bomb") { };
+Bomb::Bomb() : Order(false, "Bomb", NULL) {};
+
+// Parameterized constructor For IssueOrders Phase
+Bomb::Bomb(Player* p, Territory* o, Territory* t) : Order(false, "Bomb", p) {
+    origin = o;
+    target = t;
+}
 
 // Parameterized constructor
-Bomb::Bomb(bool v, string s) : Order(v,s) { };
+Bomb::Bomb(bool v, string s, Player* p, Territory* o, Territory* t) : Order(v,s,p) {
+    origin = o;
+    target = t;
+}
 
 // Copy constructor
 Bomb::Bomb(Bomb& original) : Order(original) {
@@ -210,7 +230,10 @@ Bomb::Bomb(Bomb& original) : Order(original) {
 }
 
 // Destructor
-Bomb::~Bomb() { };
+Bomb::~Bomb() {
+    origin = NULL; // DONT WANT TO DESTROY ACTUAL TERRITORY
+    target = NULL;
+};
 
 // Accessors
 string Bomb::getDescription() { return description; }
@@ -238,38 +261,64 @@ ostream& operator<<(ostream& os, const Bomb& o) {
 
 
 bool Bomb::validate() {
-    /*
-     * Check that Territory A is not the Player's
-     * Check that Territory A is adjacent to one of the Player's
-     * if all good, return true, else false
-     */
+    // Check that Territory A is not the Player's
+    if (origin->getOwner() == playerIssuing){
+        validated = false;
+    }
+
+//  if ( playerIssuing in list of alliance's pair is not the target Player) {
+//  validated = false;
+//  }
+    // Check that Territory A is adjacent to one of the Player's TODO
+//    else if(target is in
+//    vector game.getMap().getConnectedTerritories(origin.getName())){
+//        validated = false;
+//        return validated;
+//    }
+
+    else
+        validated = true;
+
     return validated;
 }
 
 
 bool Bomb::execute() {
-    /*
-     * Can only be played with a CARD so remove it from IssueOrder in Player
-     * Ask player for Territory A
-     * validate()
-     * if false, invalid order
-     * if true, /2 armies in the other Player's Territory A
-     */
-    notify(this); // FROM SUBJECT
+
+    if (!validate()){
+        //if ( playerIssuing in list of alliance's pair is not the target player) TODO
+        cout << "Invalid Bomb Order, Truce between players\n";
+        cout << "Invalid Bomb Order";
+
+    }
+    else{
+        int bombedArmies = (target->getArmies())/2;
+        target->setArmies(bombedArmies);
+        cout << this->stringToLog();
+    }
+
+   //notify(this); // FROM SUBJECT
     return true;
 }
 
 string Bomb::stringToLog() {
-    string logString = "Create log string for execution.\n";
+    string logString = "Create log string for execution.\n"; //TODO
     return logString;}
 
 /****************************** Blockade *******************************/
 
 // Default constructor
-Blockade::Blockade() : Order(false, "Blockade") { };
+Blockade::Blockade() : Order(false, "Blockade", NULL) { };
 
 // Parameterized constructor
-Blockade::Blockade(bool v, string s) : Order(v,s) { };
+Blockade::Blockade(bool v, string s, Player* p, Territory* t) : Order(v,s,p) {
+    target = t;
+};
+
+// Parameterized constructor for Orders Issuing Phase
+Blockade::Blockade(Player* p, Territory* t) : Order(false, "Blockade", p) {
+    target = t;
+}
 
 // Copy constructor
 Blockade::Blockade(Blockade& original) : Order(original) {
@@ -277,7 +326,9 @@ Blockade::Blockade(Blockade& original) : Order(original) {
 }
 
 // Destructor
-Blockade::~Blockade() { };
+Blockade::~Blockade() {
+    target = NULL;
+}
 
 // Accessors
 string Blockade::getDescription() { return description; }
@@ -305,11 +356,12 @@ ostream& operator<<(ostream& os, const Blockade& o) {
 
 
 bool Blockade::validate() {
-    /*
-     * Check if Territory A belong to the player
-     * if no, return false
-     * if yes, return true
-     */
+    if (target->getOwner() == playerIssuing){
+        validated = true;
+    }
+    else
+        validated = false;
+
     return validated;
 }
 
@@ -323,21 +375,31 @@ bool Blockade::execute() {
      *  if true, make armies in territory x2 and make 'Neutral Player owner of that'
      *  Maybe create Neutral Player here (or at startup of game)
      */
-    notify(this); // FROM SUBJECT
+    if (!validate()){
+        cout << "Invalid Blockade Order";
+    }
+    else {
+        int doubleArmies = (target->getArmies())*2;
+        target->setArmies(doubleArmies);
+        //target->setOwner(NEUTRAL PLAYER); TODO -- Add neutral at startup?
+        cout << this->stringToLog();
+    }
+
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
 string Blockade::stringToLog() {
-    string logString = "Create log string for execution.\n";
+    string logString = "Create log string for execution.\n"; //TODO
     return logString;}
 
 /****************************** Airlift *******************************/
 
 // Default constructor
-Airlift::Airlift() : Order(false, "Airlift") { };
+Airlift::Airlift() : Order(false, "Airlift", NULL) { };
 
 // Parameterized constructor
-Airlift::Airlift(bool v, string s): Order(v,s) { };
+Airlift::Airlift(bool v, string s, Player* p) : Order(v,s,p) { };
 
 // Copy constructor
 Airlift::Airlift(Airlift& original) : Order(original) {
@@ -390,7 +452,7 @@ bool Airlift::execute() {
      *if false, order invalid
      * if true, remove armies from Territory A and add them to Territory B
      */
-    notify(this); // FROM SUBJECT
+   // notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -401,10 +463,20 @@ string Airlift::stringToLog() {
 /****************************** Negotiate *******************************/
 
 // Default constructor
-Negotiate::Negotiate() : Order(false, "Negotiate") { };
+Negotiate::Negotiate() : Order(false, "Negotiate", NULL) { };
+
+//// Parameterized constructor (player only)
+//Negotiate::Negotiate(Player* p) : Order(p) { };
+
+// Parameterized constructor for IssueOrders Phase
+Negotiate::Negotiate(Player* p1, Player* p2) : Order(false, "Negotiate",p1) {
+    targetPlayer = p2;
+};
 
 // Parameterized constructor
-Negotiate::Negotiate(bool v, string s) : Order(v,s) { };
+Negotiate::Negotiate(bool v, string s, Player* p1, Player* p2) : Order(v,s,p1) {
+    targetPlayer = p2;
+};
 
 // Copy constructor
 Negotiate::Negotiate(Negotiate& original) : Order(original) {
@@ -412,7 +484,9 @@ Negotiate::Negotiate(Negotiate& original) : Order(original) {
 }
 
 // Destructor
-Negotiate::~Negotiate() { };
+Negotiate::~Negotiate() {
+    targetPlayer = NULL;
+};
 
 // Accessors
 string Negotiate::getDescription() { return description; }
@@ -438,7 +512,6 @@ ostream& operator<<(ostream& os, const Negotiate& o) {
     return os;
 }
 
-
 bool Negotiate::validate() {
     /*
      * Check if the player name submitted is not the same as the player that issued the order
@@ -446,6 +519,11 @@ bool Negotiate::validate() {
      * return true if ok
      * else false
      */
+    if (playerIssuing == targetPlayer || targetPlayer->getName() == "Neutral"){
+        validated = false;
+    }
+    else
+        validated = true;
     return validated;
 }
 
@@ -461,7 +539,15 @@ bool Negotiate::execute() {
      * In this case, this adds Player A to Player B's list and vice-versa
      * Lists must be cleared when goes to reinforcement phase
      */
-    notify(this); // FROM SUBJECT
+
+    if (!validate()){
+        cout << "Invalid Negotiate Order\n" ;
+    }
+    else
+        // add to the pair list in game playerIssuing and target
+        // add to the pair list in game target and playerIssuing
+
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -473,10 +559,11 @@ string Negotiate::stringToLog() {
 /****************************** Reinforcement *******************************/ // I THINK WE CAN DELETE THIS
 
 // Default constructor
-Reinforcement::Reinforcement() : Order(false, "Reinforcement") { };
+Reinforcement::Reinforcement() : Order(false, "Reinforcement", NULL) { };
+
 
 // Parameterized constructor
-Reinforcement::Reinforcement(bool v, string s): Order(v,s) { };
+Reinforcement::Reinforcement(bool v, string s, Player* p) : Order(v,s,p) { };
 
 // Copy constructor
 Reinforcement::Reinforcement(Reinforcement& original) : Order(original) {
@@ -515,7 +602,7 @@ bool Reinforcement::validate() {
 
 bool Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
-    notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT
     return true;
 }
 
@@ -615,13 +702,13 @@ void OrdersList::addOrder(string orderString) {
         orderObject = new Blockade();
     }
 	else if (orderString == "airlift") {
+        orderObject = new Airlift();
+    }
+
+	else if (orderString == "Negotiate") {
         orderObject = new Negotiate();
     }
-    /*
-	else if (orderString == "diplomacy") {
-        orderObject = new Diplomacy();
-    }
-    */
+
 	else {
         cout << "wrong Order/Card type" << endl;
     }

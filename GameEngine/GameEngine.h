@@ -27,11 +27,15 @@ class GameEngine : public Iloggable, public Subject{
         int getNumberOfPlayers();
         bool endOfState ();
         vector<Player*> getplayer_list();
+        CommandProcessor *getProcessor();
+        Map *getMap();
 
         // Mutators
         void setState(State s);
         void setNumberOfPlayers(int x);
         void setEndOfState(bool b);
+        void setProcessor(const CommandProcessor &cp);
+        void setMap(const Map &m);
 
         // Phases, states, and commands
         void startGame();
@@ -65,4 +69,7 @@ class GameEngine : public Iloggable, public Subject{
         bool phaseEnd;
         Deck* deck;
         vector<Player*> player_list;
+        CommandProcessor *processor;
+        Map *map;
+        // Needs a Map
 };
