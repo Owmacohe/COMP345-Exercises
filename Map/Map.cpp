@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "../Player/Player.h"
+#include <algorithm>
 
 // Free method to determine whether a string pointer array contains a given string
 bool doesContain(string* arr, int size, string s) {
@@ -418,6 +419,16 @@ vector<Territory*> Map::getContinentTerritories(string c) {
     }
 
     return terrs;
+}
+
+// Method to check if two territories are adjacent
+bool Map::adjacentTerritories(Territory* t1, Territory* t2) {
+    vector<Territory*> ct = getConnectedTerritories(t1->getName());
+    if(count(ct.begin(), ct.end(), t2)){
+    return true;}
+
+    else
+    return false;
 }
 
 // Free method to split a given string into a pointer array based on a given delimiter
