@@ -121,6 +121,19 @@ vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
 set<pair<Player*, Player*>> GameEngine::getAlliances(){return alliances;};
+bool GameEngine::existingAlliance(Player* p1, Player* p2){
+    for(auto x : alliances){
+        if(x.first == p1) {
+            if (x.second == p2)
+                return true;
+        }
+        else if(x.first == p2) {
+            if (x.second == p1)
+                return true;
+        }
+    }
+    return false;
+}
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }

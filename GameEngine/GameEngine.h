@@ -34,6 +34,7 @@ class GameEngine : public Iloggable, public Subject{
         CommandProcessor *getProcessor();
         Map *getMap();
         set<pair<Player*, Player*>> getAlliances();
+        bool existingAlliance(Player* p1, Player* p2);
 
         // Mutators
         void setState(State s);
