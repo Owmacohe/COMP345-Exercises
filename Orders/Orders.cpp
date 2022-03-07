@@ -662,31 +662,37 @@ OrdersList::OrdersList() {
 }
 
 // Parameterized constructor
-OrdersList::OrdersList(vector<Order*> vo, bool aov) {
+OrdersList::OrdersList(vector<Order*> vo) {
     playerOrderList = vector<Order*>();
     
-//    for (Order* i : vo) {
-//        Order* objectCopied;
-//        if (dynamic_cast<Deploy*>(i) != nullptr) {
-//            objectCopied = new Deploy(*(dynamic_cast<Deploy*>(i)));
-//            playerOrderList.push_back(objectCopied);
-//        }
-//        else if (dynamic_cast<Advance*>(i) != nullptr) {
-//            //TODO
-//        }
-//        else if (dynamic_cast<Airlift*>(i) != nullptr) {
-//        }
-//        else if (dynamic_cast<Bomb*>(i) != nullptr) {
-//        }
-//        else if (dynamic_cast<Blockade*>(i) != nullptr) {
-//        }
-//        else if (dynamic_cast<Negotiate*>(i) != nullptr) {
-//        }
+    for (Order* i : vo) {
+        Order* objectCopied  = NULL;
+        if (dynamic_cast<Deploy*>(i) != nullptr) {
+            objectCopied = new Deploy(*(dynamic_cast<Deploy*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Advance*>(i) != nullptr) {
+            objectCopied = new Advance(*(dynamic_cast<Advance*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Airlift*>(i) != nullptr) {
+            objectCopied = new Airlift(*(dynamic_cast<Airlift*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Bomb*>(i) != nullptr) {
+            objectCopied = new Bomb(*(dynamic_cast<Bomb*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Blockade*>(i) != nullptr) {
+            objectCopied = new Blockade(*(dynamic_cast<Blockade*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Negotiate*>(i) != nullptr) {
+            objectCopied = new Negotiate(*(dynamic_cast<Negotiate*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
 
-
-//    }
-//
-    //allOrdersValidated = aov;
+    }
 }
 
 // Copy constructor
@@ -694,10 +700,34 @@ OrdersList::OrdersList(OrdersList &original) {
     playerOrderList = vector<Order*>();
     
     for (Order* i : original.playerOrderList) {
-        playerOrderList.push_back(new Order(*i));
+        Order* objectCopied  = NULL;
+        if (dynamic_cast<Deploy*>(i) != nullptr) {
+            objectCopied = new Deploy(*(dynamic_cast<Deploy*>(i)));
+            cout << "adding a deploy order\n";
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Advance*>(i) != nullptr) {
+            objectCopied = new Advance(*(dynamic_cast<Advance*>(i)));
+            cout << "adding an advance order\n";
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Airlift*>(i) != nullptr) {
+            objectCopied = new Airlift(*(dynamic_cast<Airlift*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Bomb*>(i) != nullptr) {
+            objectCopied = new Bomb(*(dynamic_cast<Bomb*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Blockade*>(i) != nullptr) {
+            objectCopied = new Blockade(*(dynamic_cast<Blockade*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
+        else if (dynamic_cast<Negotiate*>(i) != nullptr) {
+            objectCopied = new Negotiate(*(dynamic_cast<Negotiate*>(i)));
+            playerOrderList.push_back(objectCopied);
+        }
     }
-
-    allOrdersValidated = original.allOrdersValidated;
 }
 
 // Destructor
@@ -718,10 +748,35 @@ OrdersList::~OrdersList() {
 OrdersList OrdersList::operator = (const OrdersList& original) {
 	OrdersList deepcopy;
 
-    for (Order* i : original.playerOrderList) {
-       deepcopy.playerOrderList.push_back(new Order(*i));
+        for (Order* i : original.playerOrderList) {
+            Order* objectCopied = NULL;
+            if (dynamic_cast<Deploy*>(i) != nullptr) {
+                objectCopied = new Deploy(*(dynamic_cast<Deploy*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+            else if (dynamic_cast<Advance*>(i) != nullptr) {
+                objectCopied = new Advance(*(dynamic_cast<Advance*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+            else if (dynamic_cast<Airlift*>(i) != nullptr) {
+                objectCopied = new Airlift(*(dynamic_cast<Airlift*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+            else if (dynamic_cast<Bomb*>(i) != nullptr) {
+                objectCopied = new Bomb(*(dynamic_cast<Bomb*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+            else if (dynamic_cast<Blockade*>(i) != nullptr) {
+                objectCopied = new Blockade(*(dynamic_cast<Blockade*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+            else if (dynamic_cast<Negotiate*>(i) != nullptr) {
+                objectCopied = new Negotiate(*(dynamic_cast<Negotiate*>(i)));
+                deepcopy.playerOrderList.push_back(objectCopied);
+            }
+        }
        cout << "DEBUG : for loop inside assignment operator" <<endl;
-    }
+
 	return deepcopy;
 }
 
@@ -735,10 +790,10 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
 }
 
 // Add Method used to add an order of the OrderList. The Parameter is an object from a subclass of Order. Overloaded method to increase compatibility with other classes.
-void OrdersList::addOrder(Order order) {
-	playerOrderList.push_back(new Order(order));
-    //notify(this); // FROM SUBJECT
-}
+//void OrdersList::addOrder(Order order) {
+//	playerOrderList.push_back(new Order(order));
+//    //notify(this); // FROM SUBJECT
+//}
 
 void OrdersList::addOrder(Order* order) {
 	playerOrderList.push_back(order);
