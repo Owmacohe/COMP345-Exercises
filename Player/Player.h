@@ -1,9 +1,9 @@
 #pragma once
 
-#include <list>
 #include <vector>
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,7 +15,7 @@ class Map;
 class Player {
     public:
         Player(); // Default constructor
-        Player(string, vector<Territory*>, Hand*, OrdersList*); // Parameterized constructor
+        Player(string, vector<Territory*>, Hand*, OrdersList*, int); // Parameterized constructor
         Player(const Player &p); // Copy constructor
 
         ~Player(); // Destructor
