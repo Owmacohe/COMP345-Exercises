@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <iostream>
+#include <set>
+
 using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
@@ -10,6 +12,7 @@ class Player;
 class MapLoader;
 class Deck;
 class CommandProcessor;
+class Map;
 
 enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
@@ -30,6 +33,8 @@ class GameEngine : public Iloggable, public Subject{
         vector<Player*> getplayer_list();
         CommandProcessor *getProcessor();
         Map *getMap();
+        set<pair<Player*, Player*>> getAlliances();
+        bool existingAlliance(Player* p1, Player* p2);
 
         // Mutators
         void setState(State s);
@@ -37,6 +42,9 @@ class GameEngine : public Iloggable, public Subject{
         void setEndOfState(bool b);
         void setProcessor(const CommandProcessor &cp);
         void setMap(const Map &m);
+        void setAlliances (const  set<pair<Player*, Player*>> all);
+        void addAlliances(Player* p1, Player* p2) ;
+        void resetAlliances() ;
 
         // Phases, states, and commands
         void startGame();
@@ -72,6 +80,6 @@ class GameEngine : public Iloggable, public Subject{
         vector<Player*> player_list;
         CommandProcessor *processor;
         Map *map;
-        //Alliances to add
+        set<pair<Player*, Player*>>alliances;
 
 };

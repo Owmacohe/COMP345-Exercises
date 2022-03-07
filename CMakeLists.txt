@@ -9,8 +9,8 @@ add_executable(COMP345-Exercises
         Cards/Cards.cpp
         Cards/Cards.h
 #        Cards/CardsDriver.cpp
-#        GameEngine/GameEngine.cpp
-#        GameEngine/GameEngine.h
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngine.h
 #        GameEngine/GameEngineDriver.cpp
         Map/Map.cpp
         Map/Map.h
@@ -21,7 +21,7 @@ add_executable(COMP345-Exercises
         Player/Player.cpp
         Player/Player.h
 #        Player/PlayerDriver.cpp
-#        LoggingObserver/LoggingObserver.cpp
-#        LoggingObserver/LoggingObserver.h
+        LoggingObserver/LoggingObserver.cpp
+        LoggingObserver/LoggingObserver.h
 #        LoggingObserver/LoggingObserverDriver.cpp
         )

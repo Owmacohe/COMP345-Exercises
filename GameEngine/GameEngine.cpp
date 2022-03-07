@@ -4,6 +4,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 class OrdersList;
 class Player;
@@ -16,6 +17,14 @@ GameEngine::GameEngine() {
     NumberOfTerritories = 0;
     deck = new Deck();
     player_list = vector<Player*>();
+    Map *map = new Map();
+    alliances = set<pair<Player*, Player*>>();
+
+    // Attributes not initialized, CONFIRM WITH TEAM
+//    MapLoader *ml;
+//    bool phaseEnd;
+//    CommandProcessor *processor;
+
 }
 
 // Copy constructor
@@ -28,6 +37,19 @@ GameEngine::GameEngine(const GameEngine &gm) {
     for (Player* p : gm.player_list) {
         this->player_list.push_back(new Player(*p));
     }
+    Map *map = new Map(*gm.map);
+
+    alliances = set<pair<Player*, Player*>>();
+    for(auto x : gm.alliances) {
+        pair<Player*, Player*> pairCopied = make_pair(new Player(*x.first), new Player(*x.second));
+        alliances.insert(pairCopied);
+    }
+
+    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
+//    MapLoader *ml;
+//    bool phaseEnd;
+//    CommandProcessor *processor;
+
 }
 
 // Destructor
@@ -42,7 +64,19 @@ GameEngine::~GameEngine() {
         delete p;
         p = NULL;
     }
-}
+    // Map *map = NULL; TODO Destroy Map here correct, not just pointer?
+    for(auto x : alliances) {
+        x.first = NULL;
+        x.second = NULL;
+    }
+    alliances.clear();}
+
+    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
+//    MapLoader *ml;
+//    bool phaseEnd;
+//    CommandProcessor *processor;
+
+
 
 // Assignment operator
 GameEngine& GameEngine::operator = (const GameEngine& gm) {
@@ -58,6 +92,12 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     }
     
     return *this;
+    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
+//    MapLoader *ml;
+//    bool phaseEnd;
+//    CommandProcessor *processor;
+//    alliances = set<pair<Player*, Player*>>();
+//    Map *map;
 };
 
 // Stream insertion operator
@@ -80,6 +120,20 @@ bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
+set<pair<Player*, Player*>> GameEngine::getAlliances(){return alliances;};
+bool GameEngine::existingAlliance(Player* p1, Player* p2){
+    for(auto x : alliances){
+        if(x.first == p1) {
+            if (x.second == p2)
+                return true;
+        }
+        else if(x.first == p2) {
+            if (x.second == p1)
+                return true;
+        }
+    }
+    return false;
+}
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
@@ -87,6 +141,15 @@ void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
 void GameEngine::setMap(const Map &m) { *map = m; }
+void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
+void GameEngine::addAlliances(Player* p1, Player* p2) {alliances.insert(make_pair(p1,p2));}
+void GameEngine::resetAlliances() {
+    for(auto x : alliances) {
+        x.first = NULL;
+        x.second = NULL;
+    }
+        alliances.clear();}
+
 
 // Phases, states, and commands
 void GameEngine::startGame() {
@@ -146,6 +209,8 @@ void GameEngine::assignCountries() {
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
+    // Adding the reset of alliances
+    resetAlliances();
     /*
     Players are given a number of armies that depends on the number of territories
     they own, (# of territories owned divided by 3, rounded down). If the player owns all the territories of an
@@ -404,7 +469,7 @@ void GameEngine::startupPhase() {
         }
     }
 
-    // ALSO ADD GameEngine Pointer to Static attribute to each Order subclass
+    // ALSO ADD GameEngine Pointer to  attribute to each Order subclass
 
     notify(this); // FROM SUBJECT
 }

@@ -68,6 +68,8 @@ class Map {
 
         vector<Territory*> getConnectedTerritories(string);
         vector<Territory*> getContinentTerritories(string);
+        bool adjacentTerritories(Territory* t1, Territory* t2); // Method to check if two territories are adjacent
+
     private:
         string name; // Name of the Map
         string *continents; // Array of strings of all the continent names
