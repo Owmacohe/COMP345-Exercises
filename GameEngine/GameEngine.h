@@ -57,7 +57,7 @@ class GameEngine : public Iloggable, public Subject {
         void addPlayer();
         void assignCountries();
         void assignReinforcementPhase();
-        void issueOrdersPhase(Player* player);
+        void issueOrdersPhase();
         void endIssueOrderPhase(Player* player);
         void executeOrdersPhase();
         void endexecuteOrdersPhase(Player* player);
@@ -65,11 +65,18 @@ class GameEngine : public Iloggable, public Subject {
         void endPhase();
         void playAgain();
 
+        void mainGameLoop();
+
         void gameStartupTransitions(string s);
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);
 
         void startupPhase();
+
+        // Checks
+
+        bool checkForWinner();
+        void checkPlayers();
 
         // From Iloggable
         string stringToLog();

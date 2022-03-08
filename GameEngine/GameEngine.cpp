@@ -148,7 +148,6 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
     return false;
 }
 int *GameEngine::getPlayerOrder() { return playerOrder; }
-int GameEngine::getCurrentPlayer() {return currentPlayer; }
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
@@ -169,7 +168,6 @@ void GameEngine::setPlayerOrder(int *po) {
     delete[] playerOrder;
     playerOrder = po;
 }
-void GameEngine::setCurrentPlayer(int p) { currentPlayer = p; }
 
 
 // Phases, states, and commands
@@ -209,7 +207,7 @@ void GameEngine::validateMap() {
     cout << "End of map validated phase" << endl;
 }
 
-void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
+void GameEngine::addPlayer() {
     *s = playersAdded;
 
     for(int i = 0; i < NumberOfPlayers; i++) {
@@ -232,22 +230,26 @@ void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign Reinforcement" << endl;
     // Adding the reset of alliances
-    resetAlliances();
-    // int num = round((player->getNumberOfTerritories())/3);
-    // if (num < 3) player->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
-    // else player->addToReinforcePool(num);
-    // //need an if to check if player owns a whole continent but not sure how to check that
-    // cout << "End of assign Reinforcement" << endl;
+    //resetAlliances();
+    Player* p = player_list.at(currentPlayer);
+    int num = round((p->getNumberOfTerritories())/3);
+    if (num < 3) p->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
+    else p->addToReinforcePool(num);
+    //loop through continenets anad check territories owners
+    //need an if to check if player owns a whole continent
+    cout << "End of assign Reinforcement" << endl;
 }
 
-void GameEngine::issueOrdersPhase(Player *player) {
+void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
-    // cout << "Issuing the orders for player " << player->getName() << endl;
-    // // only issue DEPLOY orders while the players reinforcement pool contains armies
-    // cout << "Issueing Deploy Orders" << endl;
-    // while (player->getReinforcePool() != 0) {
-    //     player->issueOrder("deploy");
-    // }
+    for (Player* p : player_list) {
+        cout << "Issuing the orders for player " << p->getName() << endl;
+        // only issue DEPLOY orders while the players reinforcement pool contains armies
+        cout << "Issueing Deploy Orders" << endl;
+        while (p->getReinforcePool() != 0) {
+            p->issueOrder("deploy");
+        }
+    }
     // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
     // // once reinforcement pool is empty allows player to play advances
     // string console_input;
@@ -477,7 +479,7 @@ void GameEngine::startupPhase() {
                     *s = mapValidated;
                 }
             }
-            else if (word1 == "addplayer") {
+            else if (word1 == "addplayer") { 
                 // use the addplayer <playername> command to enter players in the game (2-6 players)
 
                 Player *p;
@@ -506,37 +508,23 @@ void GameEngine::startupPhase() {
                     }
                 }
 
+                // determine randomly the order of play of the players in the game
+
                 int *tempOrder = new int[player_list.size()];
 
                 for (int j = 0; j < player_list.size(); j++) {
-                    // determine randomly the order of play of the players in the game
-
-                    int tempIndex;
-                    bool isContained = true;
-
-                    while (isContained) {
-                        int tempIndex = rand() % player_list.size();
-                        isContained = false;
-
-                        for (int k = 0; k < player_list.size(); k++) {
-                            if (k == tempIndex) {
-                                isContained = true;
-                            }
-                        }
-                    }
-
-                    tempOrder[j] = tempIndex;
-
-                    // give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                    player_list.at(j)->addToReinforcePool(50);
-
-                    // let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    player_list.at(j)->getHand()->drawCard(*deck);
-                    player_list.at(j)->getHand()->drawCard(*deck);
+                    tempOrder[j] = rand() % (player_list.size() - j) + j;
                 }
 
                 setPlayerOrder(tempOrder);
-                currentPlayer = playerOrder[0];
+
+                // give 50 initial armies to the players, which are placed in their respective reinforcement pool
+
+                for (Player* k : player_list) {
+                    k->addToReinforcePool(50);
+                }
+
+                // let each player draw 2 initial cards from the deck using the deck’s draw() method
 
                 // switch the game to the play phase
 
@@ -549,6 +537,46 @@ void GameEngine::startupPhase() {
     //Order::setGameEngine(new );
 
     notify(this); // FROM SUBJECT
+}
+
+void GameEngine::mainGameLoop() {
+
+// You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
+// reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
+// orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
+// or attack, based on the toAttack() and toDefend() lists; (4) a player can play cards to issue orders; (5) a
+// player that does not control any territory is removed from the game; (6) the game ends when a single player
+// controls all the territories. All of this except the issueOrder() method must be implemented in a single .cpp/.h
+// file duo named GameEngine.cpp/GameEngine.h.
+}
+
+// Check if a player has won by looping through territtories and checking owner
+bool GameEngine::checkForWinner() {
+    int count = ;
+    for (Player* p : player_list) { 
+        string player = p->getName();
+        for (int i = 0; i < NumberOfTerritories; i++) {
+            string territoryowner = map->getTerritories()[i]->getOwner();
+            if (territoryowner != player ) {
+                count = count + 1;
+                break;
+            }
+        }
+    }
+    if (count == NumberOfPlayers) return false;
+    else return true;
+}
+
+// Check that players are still valid, remove players that are not
+// Validity : must own at least on territory
+void GameEngine::checkPlayers() {   
+    for (Player* p : player_list) {
+        if (p->getNumberOfTerritories() == 0) {
+            cout << "Player " << p->getName() << " has been eliminated";
+            NumberOfPlayers = NumberOfPlayers - 1; //lowers player count
+            player_list.erase(std::remove(player_list.begin(), player_list.end(), p*), player_list.end()); //removes player from player_list
+        } 
+    }
 }
 
 // From Iloggable
