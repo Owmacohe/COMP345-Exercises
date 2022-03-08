@@ -25,9 +25,11 @@ class Player {
 
         void issueOrder(string); //  Create order and adds order to players order list
 
-        int getNumberOfArmies(); // Get number of armies player owns
-        void addToReinforcePool(int armies);
-        void removeFromReinforcePool(int armies);
+        int getNumberOfArmies(); // Get number of armies player has
+        int getNumberOfTerritories(); // Get number of territories player owns
+
+        void addToReinforcePool(int armies); // Add to reinforcement pool
+        void removeFromReinforcePool(int armies); // Remove from reinforcement pool
         // Accessors
         void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o), setReinforcementPool(int armies);
 

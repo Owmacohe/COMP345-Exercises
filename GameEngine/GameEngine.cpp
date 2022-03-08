@@ -186,12 +186,12 @@ void GameEngine::loadMap() {
     Map m = ml->load(mapName + ".map");
     */
 
-    cout << "loaded map" << endl;
+    cout << "Loaded map" << endl;
 }
 
 void GameEngine::validateMap() {
     *s = mapValidated;
-    cout << "end of map validated phase" << endl;
+    cout << "End of map validated phase" << endl;
 }
 
 void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
@@ -206,36 +206,53 @@ void GameEngine::addPlayer() { // TODO GABBI (add players one at a time)
         player_list.push_back(p);
     }
 
-    cout << "end of players added phase" << endl;
+    cout << "End of players added phase" << endl;
 }
 
 void GameEngine::assignCountries() {
-    cout << "end of assign countries command" << endl;
+    cout << "End of assign countries command" << endl;
 }
 
-void GameEngine::assignReinforcementPhase() {
+void GameEngine::assignReinforcementPhase(Player *player) {
     *s = assignReinforcement;
+    cout << "Assign Reinforcement" << endl;
     // Adding the reset of alliances
     resetAlliances();
-    /*
-    Players are given a number of armies that depends on the number of territories
-    they own, (# of territories owned divided by 3, rounded down). If the player owns all the territories of an
-    entire continent, the player is given a number of armies corresponding to the continent’s control bonus
-    value. In any case, the minimal number of reinforcement armies per turn for any player is 3. These armies
-    are placed in the player’s reinforcement pool. T
-    */
-    cout << "end of assign Reinforcement" << endl;
+    // int num = round((player->getNumberOfTerritories())/3);
+    // if (num < 3) player->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
+    // else player->addToReinforcePool(num);
+    // //need an if to check if player owns a whole continent but not sure how to check that
+    // cout << "End of assign Reinforcement" << endl;
 }
 
 void GameEngine::issueOrdersPhase(Player *player) {
     *s = issueOrder;
+    // cout << "Issuing the orders for player " << player->getName() << endl;
+    // // only issue DEPLOY orders while the players reinforcement pool contains armies
+    // cout << "Issueing Deploy Orders" << endl;
+    // while (player->getReinforcePool() != 0) {
+    //     player->issueOrder("deploy");
+    // }
+    // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
+    // // once reinforcement pool is empty allows player to play advances
+    // string console_input;
+    // do {
+    //     cout << "Would you like to make an advance ? y/n" << endl;
+    //     cin >> console_input;
+    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("advance");
+    //     else break;
+    // }
+    // while (console_input == "y" || console_input == "Y");
+    // // once player is done advancing, player can use cards to issue orders
+    // do {
+    //     cout << "Would you like to play a card ? y/n" << endl;
+    //     cin >> console_input;
+    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("card thingy magi");
+    //     else break;
+    // }
+    // while (console_input == "y" || console_input == "Y");
     /*
-        checks reinforcement pool, if reinforcement pool != 0 then loop issueorder issuing only DEPLOY orders
-        cout << "Issueing Deploy Orders" << endl;
-        while (reinforcement_pool != 0) {
-            issueOrder("deploy");
-        }
-        once the player reinforcement pool is empty : 
+        do while loop 
         cout << "Would you like to make an advance ? y/n" << endl;
         loop issueOrder("advance");
         • The player issues advance orders to either (1) move armies from one of its own territory to the other in
@@ -248,12 +265,11 @@ void GameEngine::issueOrdersPhase(Player *player) {
         while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
         issueOrdersphase should issue the order based on the card played
     */
-    cout << "Issued the order for player " << player->getName() << endl;
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
-    cout << "ended phase issue Orders for player " << player->getName() << endl;
+    cout << "End phase issue Orders for player " << player->getName() << endl;
 }
 
 void GameEngine::executeOrdersPhase() {
@@ -314,7 +330,7 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
     *s = assignReinforcement;
-    cout << "ended phase execute Order for player " << player->getName() << endl;
+    cout << "End phase execute Order for player " << player->getName() << endl;
 }
 
 void GameEngine::winPhase(Player *p) {

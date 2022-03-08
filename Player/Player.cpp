@@ -131,12 +131,9 @@ vector<Territory*> Player::toAttack(Map m) {
     }
     return attack_territories;
 }
-// NOW I AM THINKING THAT ISSUE ORDER JUST PUTS THEM IN THE LIST
-// AND SO IN GAMEENGINE WE CHECK THE CARD AND WE CAN STILL ISSUE AN ORDER AS LONG AS THEY HAVE CARD
-// so in game engine it will loop issue order for deploy and in game engine it will check card and check advacne loop,
-// all that issue does is put it in its list of things to do
 
-void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
+//maybe we can have this one just place objects, and then in execute or in gamenegine they are reassigned to have required parameters
+void Player::issueOrder(string type) { 
     if (type == "deploy") {
         Deploy* o = new Deploy; //order type create
         orders->addOrder(o); //add order to list
@@ -169,20 +166,21 @@ void Player::issueOrder(string type) { // HAVE IT GIVE PLAYER THIS->PLAYER
         cout << "Invalid order" << endl;
     }
 }
-// void Player::issueOrder(int reinforcements) {
-//     //add deploy for all of the territories returned by toDefend() and will be pulled for deploylist ??
-//     //for loo adds deploy to orderlist for the number of armies in reinforcements
-//     for (int i = 0; i < reinforcements ; i++) {
-//         Deploy* o = new Deploy; //order type create
-//         orders->addOrder(o); //add order to list
-//     }
-// }
 
 // Return number of armies player has
 int Player::getNumberOfArmies() {
     int sum = 0;
     for (Territory* i : territories) {
         sum = sum + i->getArmies();
+    }
+    return sum;
+}
+
+// Return number of territories player has
+int Player::getNumberOfTerritories() {
+    int sum = 0;
+    for (Territory* i : territories) {
+        sum = sum + 1;
     }
     return sum;
 }
