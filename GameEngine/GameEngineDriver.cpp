@@ -16,6 +16,8 @@ int gameEngineMain() {
     bool isPlaying = true;
 
     while (isPlaying) {
+
+        // ### The following block will be replaced with startupPhase()
         gameEngine.startGame();
 
         while (gameEngine.getState() < 5) {
@@ -23,6 +25,7 @@ int gameEngineMain() {
             cin >> input;
             gameEngine.gameStartupTransitions(input);
         }
+        // ###
 
         while (gameEngine.getState() != 8) {
             for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {

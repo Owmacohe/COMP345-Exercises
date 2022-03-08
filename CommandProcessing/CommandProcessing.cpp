@@ -96,7 +96,7 @@ void Command::setTransitionsTo(string t) { transitionsTo = t; }
 void Command::saveEffect(string e) {
     effect = e;
 
-    notify(this); // FROM SUBJECT ---- IN MY DIAGRAM PART 5 SAVEEFFECT IS IN COMMAND NOT COMMANDPROCESSOR, ERROR ASSIGNMENT? DO YOU HAVE AN EQUIVALENT IN COMMAND? IN FILECOMMAND?
+    notify(this);
 }
 
 void Command::addValidInState(int s) {
