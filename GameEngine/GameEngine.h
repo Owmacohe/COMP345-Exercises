@@ -36,6 +36,7 @@ class GameEngine : public Iloggable, public Subject {
         set<pair<Player*, Player*>> getAlliances();
         bool existingAlliance(Player* p1, Player* p2);
         int *getPlayerOrder();
+        int getCurrentPlayer();
 
         // Mutators
         void setState(State s);
@@ -47,6 +48,7 @@ class GameEngine : public Iloggable, public Subject {
         void addAlliances(Player* p1, Player* p2);
         void resetAlliances();
         void setPlayerOrder(int*);
+        void setCurrentPlayer(int);
 
         // Phases, states, and commands
         void startGame();
@@ -81,6 +83,7 @@ class GameEngine : public Iloggable, public Subject {
         vector<Player*> player_list;
         CommandProcessor *processor;
         Map *map;
-        set<pair<Player*, Player*>>alliances;
+        set<pair<Player*, Player*>> alliances;
         int *playerOrder;
+        int currentPlayer;
 };

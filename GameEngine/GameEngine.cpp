@@ -148,6 +148,7 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
     return false;
 }
 int *GameEngine::getPlayerOrder() { return playerOrder; }
+int GameEngine::getCurrentPlayer() {return currentPlayer; }
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
@@ -168,6 +169,7 @@ void GameEngine::setPlayerOrder(int *po) {
     delete[] playerOrder;
     playerOrder = po;
 }
+void GameEngine::setCurrentPlayer(int p) { currentPlayer = p; }
 
 
 // Phases, states, and commands
@@ -475,7 +477,7 @@ void GameEngine::startupPhase() {
                     *s = mapValidated;
                 }
             }
-            else if (word1 == "addplayer") { 
+            else if (word1 == "addplayer") {
                 // use the addplayer <playername> command to enter players in the game (2-6 players)
 
                 Player *p;
@@ -504,23 +506,37 @@ void GameEngine::startupPhase() {
                     }
                 }
 
-                // determine randomly the order of play of the players in the game
-
                 int *tempOrder = new int[player_list.size()];
 
                 for (int j = 0; j < player_list.size(); j++) {
-                    tempOrder[j] = rand() % (player_list.size() - j) + j;
+                    // determine randomly the order of play of the players in the game
+
+                    int tempIndex;
+                    bool isContained = true;
+
+                    while (isContained) {
+                        int tempIndex = rand() % player_list.size();
+                        isContained = false;
+
+                        for (int k = 0; k < player_list.size(); k++) {
+                            if (k == tempIndex) {
+                                isContained = true;
+                            }
+                        }
+                    }
+
+                    tempOrder[j] = tempIndex;
+
+                    // give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                    player_list.at(j)->addToReinforcePool(50);
+
+                    // let each player draw 2 initial cards from the deck using the deck’s draw() method
+                    player_list.at(j)->getHand()->drawCard(*deck);
+                    player_list.at(j)->getHand()->drawCard(*deck);
                 }
 
                 setPlayerOrder(tempOrder);
-
-                // give 50 initial armies to the players, which are placed in their respective reinforcement pool
-
-                for (Player* k : player_list) {
-                    k->addToReinforcePool(50);
-                }
-
-                // let each player draw 2 initial cards from the deck using the deck’s draw() method
+                currentPlayer = playerOrder[0];
 
                 // switch the game to the play phase
 
