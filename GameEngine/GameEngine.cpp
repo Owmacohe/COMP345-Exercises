@@ -20,6 +20,12 @@ GameEngine::GameEngine() {
     Map *map = new Map();
     alliances = set<pair<Player*, Player*>>();
 
+    // Add Neutral Player to Game
+    Player* neutralPlayer = new Player();
+    neutralPlayer->setName("Neutral");
+    player_list.push_back(neutralPlayer);
+    // Does not increasing number of players int make something break?
+
     // Attributes not initialized, CONFIRM WITH TEAM
 //    MapLoader *ml;
 //    bool phaseEnd;
@@ -469,7 +475,8 @@ void GameEngine::startupPhase() {
         }
     }
 
-    // ALSO ADD GameEngine Pointer to  attribute to each Order subclass
+    // ALSO ADD GameEngine Pointer to  attribute to Order Class
+    //Order::setGameEngine(new );
 
     notify(this); // FROM SUBJECT
 }
