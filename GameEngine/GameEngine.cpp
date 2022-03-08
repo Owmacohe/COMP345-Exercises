@@ -229,13 +229,32 @@ void GameEngine::assignReinforcementPhase() {
 
 void GameEngine::issueOrdersPhase(Player *player) {
     *s = issueOrder;
+    // cout << "Issuing the orders for player " << player->getName() << endl;
+    // // only issue DEPLOY orders while the players reinforcement pool contains armies
+    // cout << "Issueing Deploy Orders" << endl;
+    // while (player->getReinforcePool() != 0) {
+    //     player->issueOrder("deploy");
+    // }
+    // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
+    // // once reinforcement pool is empty allows player to play advances
+    // string console_input;
+    // do {
+    //     cout << "Would you like to make an advance ? y/n" << endl;
+    //     cin >> console_input;
+    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("advance");
+    //     else break;
+    // }
+    // while (console_input == "y" || console_input == "Y");
+    // // once player is done advancing, player can use cards to issue orders
+    // do {
+    //     cout << "Would you like to play a card ? y/n" << endl;
+    //     cin >> console_input;
+    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("card thingy magi");
+    //     else break;
+    // }
+    // while (console_input == "y" || console_input == "Y");
     /*
-        checks reinforcement pool, if reinforcement pool != 0 then loop issueorder issuing only DEPLOY orders
-        cout << "Issueing Deploy Orders" << endl;
-        while (reinforcement_pool != 0) {
-            issueOrder("deploy");
-        }
-        once the player reinforcement pool is empty : 
+        do while loop 
         cout << "Would you like to make an advance ? y/n" << endl;
         loop issueOrder("advance");
         • The player issues advance orders to either (1) move armies from one of its own territory to the other in
@@ -248,7 +267,6 @@ void GameEngine::issueOrdersPhase(Player *player) {
         while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
         issueOrdersphase should issue the order based on the card played
     */
-    cout << "Issued the order for player " << player->getName() << endl;
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
