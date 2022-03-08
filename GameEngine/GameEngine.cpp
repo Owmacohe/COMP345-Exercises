@@ -213,7 +213,7 @@ void GameEngine::assignCountries() {
     cout << "End of assign countries command" << endl;
 }
 
-void GameEngine::assignReinforcementPhase(Player *player) {
+void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign Reinforcement" << endl;
     // Adding the reset of alliances
