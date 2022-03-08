@@ -52,7 +52,7 @@ class GameEngine : public Iloggable, public Subject{
         void validateMap();
         void addPlayer();
         void assignCountries();
-        void assignReinforcementPhase();
+        void assignReinforcementPhase(Player *player);
         void issueOrdersPhase(Player* player);
         void endIssueOrderPhase(Player* player);
         void executeOrdersPhase();

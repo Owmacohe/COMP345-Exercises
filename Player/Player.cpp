@@ -176,6 +176,15 @@ int Player::getNumberOfArmies() {
     return sum;
 }
 
+// Return number of territories player has
+int Player::getNumberOfTerritories() {
+    int sum = 0;
+    for (Territory* i : territories) {
+        sum = sum + 1;
+    }
+    return sum;
+}
+
 void Player::addToReinforcePool(int armies) {
     reinforcePool += armies;
 }
