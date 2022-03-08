@@ -18,7 +18,7 @@ enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
 
-class GameEngine : public Iloggable, public Subject{
+class GameEngine : public Iloggable, public Subject {
     public:
         GameEngine() ; // Constructor
         GameEngine(const GameEngine &gm); // Copy constructor
@@ -35,6 +35,7 @@ class GameEngine : public Iloggable, public Subject{
         Map *getMap();
         set<pair<Player*, Player*>> getAlliances();
         bool existingAlliance(Player* p1, Player* p2);
+        int *getPlayerOrder();
 
         // Mutators
         void setState(State s);
@@ -43,8 +44,9 @@ class GameEngine : public Iloggable, public Subject{
         void setProcessor(const CommandProcessor &cp);
         void setMap(const Map &m);
         void setAlliances (const  set<pair<Player*, Player*>> all);
-        void addAlliances(Player* p1, Player* p2) ;
-        void resetAlliances() ;
+        void addAlliances(Player* p1, Player* p2);
+        void resetAlliances();
+        void setPlayerOrder(int*);
 
         // Phases, states, and commands
         void startGame();
@@ -69,7 +71,6 @@ class GameEngine : public Iloggable, public Subject{
 
         // From Iloggable
         string stringToLog();
-
     private:
         State* s;
         int NumberOfPlayers;
@@ -81,5 +82,5 @@ class GameEngine : public Iloggable, public Subject{
         CommandProcessor *processor;
         Map *map;
         set<pair<Player*, Player*>>alliances;
-
+        int *playerOrder;
 };

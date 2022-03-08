@@ -70,17 +70,28 @@ GameEngine::~GameEngine() {
         delete p;
         p = NULL;
     }
-    // Map *map = NULL; TODO Destroy Map here correct, not just pointer?
+
+    delete[] map;
+    map = NULL;
+
     for(auto x : alliances) {
         x.first = NULL;
         x.second = NULL;
     }
-    alliances.clear();}
+    alliances.clear();
+
+    delete ml;
+    ml = NULL;
+
+    delete processor;
+    processor = NULL;
+
+    delete playerOrder;
+    playerOrder = NULL;
+}
 
     // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
-//    MapLoader *ml;
 //    bool phaseEnd;
-//    CommandProcessor *processor;
 
 
 
@@ -126,9 +137,9 @@ bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
-set<pair<Player*, Player*>> GameEngine::getAlliances(){return alliances;};
-bool GameEngine::existingAlliance(Player* p1, Player* p2){
-    for(auto x : alliances){
+set<pair<Player*, Player*>> GameEngine::getAlliances() {return alliances;};
+bool GameEngine::existingAlliance(Player* p1, Player* p2) {
+    for(auto x : alliances) {
         if(x.first == p1) {
             if (x.second == p2)
                 return true;
@@ -140,6 +151,7 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2){
     }
     return false;
 }
+int *GameEngine::getPlayerOrder() { return playerOrder; }
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
@@ -154,7 +166,12 @@ void GameEngine::resetAlliances() {
         x.first = NULL;
         x.second = NULL;
     }
-        alliances.clear();}
+    alliances.clear();
+}
+void GameEngine::setPlayerOrder(int *po) {
+    delete[] playerOrder;
+    playerOrder = po;
+}
 
 
 // Phases, states, and commands
@@ -286,7 +303,7 @@ void GameEngine::executeOrdersPhase() {
     }
     // to execute and remove the deploy orders
     int  deployDoneCount =0;
-    while(deployDoneCount < NumberOfPlayers){
+    while(deployDoneCount < NumberOfPlayers) {
         deployDoneCount =0;
         for (int i = 0; i < player_list.size(); i++) {
             if (!player_list[i]->getDeployList()->getOrderList().empty()) {
@@ -298,7 +315,7 @@ void GameEngine::executeOrdersPhase() {
     }
     // to execute the rest of the orders on each player's list
     int  playersDone =0;
-    while(playersDone < NumberOfPlayers){
+    while(playersDone < NumberOfPlayers) {
         playersDone =0;
         for (int i = 0; i < player_list.size(); i++) {
             if (!player_list[i]->getOrder()->getOrderList().empty()) {
@@ -312,12 +329,12 @@ void GameEngine::executeOrdersPhase() {
         }
     }
     int lost = 0;
-    for (int i = 0 ; i<NumberOfPlayers; i++){
+    for (int i = 0 ; i<NumberOfPlayers; i++) {
         if(player_list[i]->getTerritory().size() == 0)
             lost ++ ;
-        if (lost == NumberOfPlayers-1){
+        if (lost == NumberOfPlayers-1) {
             for (int j = 0; j < NumberOfPlayers; j++) {
-                if(player_list[j]->getTerritory().size()>0){
+                if(player_list[j]->getTerritory().size()>0) {
                     winPhase(player_list[j]);
                     break;
                 }
@@ -355,10 +372,10 @@ void GameEngine::gameStartupTransitions(string str) {
     else if (str == "validatemap" && getState() == 2) {
         validateMap();
     }
-    else if (str == "addplayer" && (getState() ==3 || getState() == 4)){
+    else if (str == "addplayer" && (getState() ==3 || getState() == 4)) {
        addPlayer();
     }
-    else if (str == "assigncountries" && getState() ==4){
+    else if (str == "assigncountries" && getState() ==4) {
         assignCountries();
         assignReinforcementPhase();
     }
@@ -444,11 +461,14 @@ void GameEngine::startupPhase() {
 
                 MapLoader loader;
                 Map m = Map(loader.load(word2));
-                *map = m;
 
                 if (m.isGoodMap) {
+                    *map = m;
                     cout << "Map loaded!" << endl;
                     *s = mapLoaded;
+                }
+                else {
+                    cout << "Bad map file!" << endl;
                 }
             }
             else if (word1 == "validatemap") {
@@ -459,7 +479,7 @@ void GameEngine::startupPhase() {
                     *s = mapValidated;
                 }
             }
-            else if (word1 == "addplayer"){ 
+            else if (word1 == "addplayer") { 
                 // use the addplayer <playername> command to enter players in the game (2-6 players)
 
                 Player *p;
@@ -471,27 +491,49 @@ void GameEngine::startupPhase() {
                 *s = playersAdded;
             }
             else if (word1 == "gamestart") {
-                /*
-                use the gamestart command to:
-                    fairly distribute all the territories to the players
-                    determine randomly the order of play of the players in the game
-                    give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                    let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    switch the game to the play phase
-                */
+               // fairly distribute all the territories to the players
+
+                int playerIndex = 0;
+
+                for (int i = 0; i < map->territoriesLength; i++) {
+                    Player *tempPlayer = player_list.at(playerIndex);
+                    map->getTerritories()[i].setOwner(tempPlayer);
+                    Territory *tempTerr = new Territory(map->getTerritories()[i]);
+                    tempPlayer->getTerritory().push_back(tempTerr);
+
+                    playerIndex++;
+
+                    if (playerIndex >= player_list.size()) {
+                        playerIndex = 0;
+                    }
+                }
+
+                // determine randomly the order of play of the players in the game
+
+                int *tempOrder = new int[player_list.size()];
+
+                for (int j = 0; j < player_list.size(); j++) {
+                    tempOrder[j] = rand() % (player_list.size() - j) + j;
+                }
+
+                setPlayerOrder(tempOrder);
+
+                // give 50 initial armies to the players, which are placed in their respective reinforcement pool
+
+                for (Player* k : player_list) {
+                    k->addToReinforcePool(50);
+                }
+
+                // let each player draw 2 initial cards from the deck using the deck’s draw() method
+
+                // switch the game to the play phase
 
                 *s = assignReinforcement;
-            }
-            else if (word1 == "replay") {
-
-            }
-            else if (word1 == "quit") {
-                
             }
         }
     }
 
-    // ALSO ADD GameEngine Pointer to  attribute to Order Class
+    // ALSO ADD GameEngine Pointer to attribute to Order Class
     //Order::setGameEngine(new );
 
     notify(this); // FROM SUBJECT

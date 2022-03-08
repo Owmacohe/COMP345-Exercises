@@ -243,7 +243,7 @@ bool CommandProcessor::validate(const Command &c) {
         return true;
     }
     else {
-        cout << "INVALID COMMANDPROCESSOR: given Command is invalid!" << endl;
+        cout << "Command " + temp.getCommand() + " is invalid in the current state!" << endl;
         return false;
     }
 }
@@ -254,7 +254,7 @@ string CommandProcessor::stringToLog() {
 }
 
 void FileCommandProcessorAdapter::readFromFile() {
-    // Uses CommandProcessor methods (readCommand() (or variant) in particular)
+    // Uses CommandProcessor methods
     // Does the same as if reading from console
     // But instead reads line by line in a file
 }

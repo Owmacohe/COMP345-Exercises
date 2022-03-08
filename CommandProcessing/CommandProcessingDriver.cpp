@@ -14,9 +14,6 @@
 #include "../Orders/Orders.cpp"
 #include "../Player/Player.cpp"
 
-int main() {
-    CommandProcessor cp;
-    //cout << cp.validate(Command("test")) << endl;
-
+int commandProcessingMain() {
     return 0;
 }
