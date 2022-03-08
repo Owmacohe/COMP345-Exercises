@@ -55,13 +55,15 @@ GameEngine::GameEngine(const GameEngine &gm) {
 //    MapLoader *ml;
 //    bool phaseEnd;
 //    CommandProcessor *processor;
-
 }
 
 // Destructor
 GameEngine::~GameEngine() {
     delete s;
     s = NULL;
+
+    delete ml;
+    ml = NULL;
 
     delete deck;
     deck = NULL;
@@ -70,6 +72,9 @@ GameEngine::~GameEngine() {
         delete p;
         p = NULL;
     }
+
+    delete processor;
+    processor = NULL;
 
     delete[] map;
     map = NULL;
@@ -80,20 +85,11 @@ GameEngine::~GameEngine() {
     }
     alliances.clear();
 
-    delete ml;
-    ml = NULL;
-
-    delete processor;
-    processor = NULL;
-
     delete playerOrder;
     playerOrder = NULL;
 }
-
-    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
+// Attributes not initialized / Destroyed, CONFIRM WITH TEAM
 //    bool phaseEnd;
-
-
 
 // Assignment operator
 GameEngine& GameEngine::operator = (const GameEngine& gm) {
