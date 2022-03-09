@@ -235,6 +235,7 @@ void GameEngine::assignReinforcementPhase() {
     int num = round((p->getNumberOfTerritories())/3);
     if (num < 3) p->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
+    map->getContinents()
     //loop through continenets anad check territories owners
     //need an if to check if player owns a whole continent
     cout << "End of assign Reinforcement" << endl;
@@ -540,7 +541,6 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
-
 // You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
 // reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
 // orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
@@ -574,7 +574,7 @@ void GameEngine::checkPlayers() {
         if (p->getNumberOfTerritories() == 0) {
             cout << "Player " << p->getName() << " has been eliminated";
             NumberOfPlayers = NumberOfPlayers - 1; //lowers player count
-            player_list.erase(std::remove(player_list.begin(), player_list.end(), p*), player_list.end()); //removes player from player_list
+            player_list.erase(std::remove(player_list.begin(), player_list.end(), p), player_list.end()); //removes player from player_list
         } 
     }
 }
