@@ -74,7 +74,6 @@ class GameEngine : public Iloggable, public Subject {
         void startupPhase();
 
         // Checks
-
         bool checkForWinner();
         void checkPlayers();
 
