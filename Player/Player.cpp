@@ -69,13 +69,13 @@ vector<Territory*> Player::toDefend(Map m) {
         int number_surrounding = 0;
         string name = territory->getName();
         vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 1 check each territories numbers of enemies surrounding 
+        // step 1 check each territories numbers of enemies surrounding 
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_surrounding = number_surrounding + 1;
             }
         }
-        //step 2 pair territory and their number of surrounding territories, add pair to vector
+        // step 2 pair territory and their number of surrounding territories, add pair to vector
         pairs.first = number_surrounding;
         pairs.second = territory;
 
@@ -86,10 +86,10 @@ vector<Territory*> Player::toDefend(Map m) {
             i = NULL;
         }
     }
-    //step 3 sort and seperate territories in pair 
+    // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
-        defend_territories.insert(defend_territories.begin(), p.second); //pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+        defend_territories.insert(defend_territories.begin(), p.second); // pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         delete p.second; // delete the vector of pairs to avoid memory leak
         p.second = NULL;
     }
@@ -106,9 +106,9 @@ vector<Territory*> Player::toAttack(Map m) {
     for (Territory* territory : territories) {
         int number_armies = 0;
         string name = territory->getName();
-        //step 1 get connected territories
+        // step 1 get connected territories
         vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 2 for each connected territory thats an enemy count the number armies
+        // step 2 for each connected territory thats an enemy count the number armies
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_armies = t->getArmies();
@@ -123,10 +123,10 @@ vector<Territory*> Player::toAttack(Map m) {
             i = NULL;
         }
     }
-    //step 3 sort and seperate territories in pair 
+    // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
-        attack_territories.insert(attack_territories.begin(), p.second);; //pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+        attack_territories.insert(attack_territories.begin(), p.second);; // pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         delete p.second; // delete the vector of pairs to avoid memory leak
         p.second = NULL;
     }
