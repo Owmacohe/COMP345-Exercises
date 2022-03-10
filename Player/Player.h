@@ -39,6 +39,7 @@ class Player {
         Hand* getHand();
         OrdersList* getOrder();
         int getReinforcePool();
+        OrdersList* getDeployList();
 
         Player& operator = (const Player& player); 	// Assignment Operator
         friend ostream& operator<<(ostream& os, const Player& player); // Stream insertion operator
@@ -49,4 +50,6 @@ class Player {
         Hand* hand; // Player hand
         OrdersList* orders; // Player list of orders
         int reinforcePool;
+        OrdersList* deployList;
+
 };

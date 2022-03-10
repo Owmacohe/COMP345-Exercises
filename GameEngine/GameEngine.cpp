@@ -5,6 +5,7 @@
 #include "../Orders/Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "math.h"
 
 class OrdersList;
 class Player;
@@ -232,11 +233,66 @@ void GameEngine::assignReinforcementPhase() {
     // Adding the reset of alliances
     //resetAlliances();
     Player* p = player_list.at(currentPlayer);
-    int num = round((p->getNumberOfTerritories())/3);
+    int num = floor((p->getNumberOfTerritories())/3);
     if (num < 3) p->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
-    map->getContinents()
+
+    vector<Territory*> territoriesByContinent ;
+    string* Continents = map->getContinents();
+    for (int i = 0; i < Continents->size(); i++){
+        bool flag = true;
+        territoriesByContinent = map->getContinentTerritories(Continents[i]);
+        for (Territory * t : territoriesByContinent){
+            if(!(t->getOwner()->getName() == p->getName())){
+                flag = false;
+                break;
+            }
+        }
+        if (flag == false){
+            continue;
+        }else{
+
+            // Bonus Calculation
+            p->addToReinforcePool(1);
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    //string * continents = map->getContinents();
+   // map->getContinents();
+
     //loop through continenets anad check territories owners
+//    int territoriesOwned=0 , continentsOwned =0;
+//    vector<Territory*>  playerOwnedTerritoriesByContinent,Continents;
+//    for (int i =0; i<player_list.size();i++){
+//        for(int k =0;k<player_list[i]->getTerritory().size();k++) {
+//            string currentContinent = player_list[i]->getTerritory()[i]->getContinent();
+//            Continents = map->getContinentTerritories(currentContinent);
+//            for (int j = 0; j < player_list[i]->getTerritory().size(); j++) {
+//                if(player_list[i]->getTerritory()[j]->getContinent() == currentContinent ){
+//                    territoriesOwned++;
+//                }
+//                if (territoriesOwned == Continents.size()){
+//                    //Bonus calculation
+//                }else{
+//                    territoriesOwned = 0; //no bonus for current continent
+//                }
+//            }
+//        }
+//    }
     //need an if to check if player owns a whole continent
     cout << "End of assign Reinforcement" << endl;
 }
@@ -291,7 +347,7 @@ void GameEngine::endIssueOrderPhase(Player *player) {
 }
 
 void GameEngine::executeOrdersPhase() {
-    /*
+
     //first , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
     for (int i = 0; i < player_list.size(); i++) {
@@ -343,7 +399,7 @@ void GameEngine::executeOrdersPhase() {
             }
         }else assignReinforcementPhase();
     }
-    */
+
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {

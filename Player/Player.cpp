@@ -11,6 +11,7 @@ Player::Player() {
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
+    deployList = new OrdersList;
     //cout << "[Player default constructor]" << endl;
 }
 
@@ -185,6 +186,11 @@ int Player::getNumberOfTerritories() {
     return sum;
 }
 
+// Return deploy list
+OrdersList* Player::getDeployList() {
+    return deployList;
+}
+
 void Player::addToReinforcePool(int armies) {
     reinforcePool += armies;
 }
@@ -200,6 +206,7 @@ void Player::setTerritory(vector<Territory*> t) {
         territories.push_back(i);
     }
 }
+
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
 void Player::setReinforcementPool(int armies) {reinforcePool = armies;}
