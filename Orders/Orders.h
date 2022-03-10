@@ -60,8 +60,9 @@ public:
     void execute();
     Territory* target;
     int numToDeploy;
+
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
 };
 
@@ -111,7 +112,7 @@ public:
     int numOfArmies;
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 };
 
 class Bomb : public Order {
@@ -132,7 +133,7 @@ public:
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
     Territory* origin;
     Territory* target;
@@ -157,7 +158,7 @@ public:
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
     Territory* target;
 };
@@ -181,7 +182,7 @@ public:
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
     Player* targetPlayer;
 

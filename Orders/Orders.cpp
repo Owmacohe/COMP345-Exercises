@@ -163,12 +163,19 @@ void Deploy::execute() {
     */
     //notify(this); // FROM SUBJECT
 }
-
-//string Deploy::stringToLog() { //TODO
-//    string logString = "Create log string for execution of deploy.\n";
-//    return logString;
+// Second version is more compatible with OrderList log
+//string Deploy::stringToLog() {
+//    string logStringPlayer = "- Player " + playerIssuing->getName() + " executed a " + to_string(validate()) + " ";
+//    string logStringOrder = "Deploy order : Deployed " + to_string(numToDeploy) + " soldiers to " + target->getName() + "\n";
+//    return logStringPlayer + logStringOrder;
 //}
 
+string Deploy::stringToLog() {
+    string validation = (validated)? "executed": "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder = "Deploy order "+ validation +" : Deployment " + to_string(numToDeploy) + " soldiers to " + target->getName() + "\n";
+    return logStringPlayer + logStringOrder;
+}
 /****************************** Advance *******************************/
 
 // Default constructor
@@ -247,7 +254,7 @@ void Advance::execute() {
      * if 2 remove armies from Territory A and add them to Territory B
      *  if 3 ATTACK
      */
-    //notify(this); // FROM SUBJECT
+    //notify(this); // FROM SUBJECT LET ME KNOW HOW YOU ARE GOING TO STORE THE ACTION (ATTACK OR NOT) so I can output it in the log
 }
 
 //string Advance::stringToLog() {
@@ -328,10 +335,12 @@ void Airlift::execute() {
     // notify(this); // FROM SUBJECT
 }
 
-//string Airlift::stringToLog() {
-//    string logString = "Create log string for execution.\n";
-//    return logString;
-//}
+string Airlift::stringToLog() {
+    string validation = (validated)? "executed": "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder = "Airlift order " + validation +": Airlifting " + to_string(numOfArmies) + " soldiers from " + origin->getName()+ " to " + target->getName() + ".\n";
+    return logStringPlayer + logStringOrder;
+}
 
 /****************************** Bomb *******************************/
 
@@ -424,10 +433,12 @@ void Bomb::execute() {
    //notify(this); // FROM SUBJECT
 }
 
-//string Bomb::stringToLog() {
-//    string logString = "Create log string for execution.\n"; //TODO
-//    return logString;
-//}
+string Bomb::stringToLog() {
+    string validation = (validated)? "executed": "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder = "Bomb order" + validation +": Bomb from " + origin->getName()+ " to " + target->getName() + ".\n";
+    return logStringPlayer + logStringOrder;
+}
 
 /****************************** Blockade *******************************/
 
@@ -505,10 +516,12 @@ void Blockade::execute() {
     //notify(this); // FROM SUBJECT
 }
 
-//string Blockade::stringToLog() {
-//    string logString = "Create log string for execution.\n"; //TODO
-//    return logString;
-//}
+string Blockade::stringToLog() {
+    string validation = (validated)? "executed": "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder = "blockade order " + validation +": transfer of the ownership of " +target->getName() + " to the Neutral Player.\n";
+    return logStringPlayer + logStringOrder;
+}
 
 /****************************** Negotiate *******************************/
 
@@ -595,12 +608,14 @@ void Negotiate::execute() {
     //notify(this); // FROM SUBJECT
 }
 
-//string Negotiate::stringToLog() {
-//    string logString = "Create log string for execution.\n";
-//    return logString;
-//}
+string Negotiate::stringToLog() {
+    string validation = (validated)? "executed": "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ")";
+    string logStringOrder = "Negotiate order " +validation+": " + playerIssuing->getName() + " and "  + targetPlayer->getName()+ " are in a truce until the end of this round of turns." "\n";
+    return logStringPlayer + logStringOrder;
+}
 
-/****************************** Reinforcement *******************************/ // I THINK WE CAN DELETE THIS
+/****************************** Reinforcement *******************************/
 
 // Default constructor
 Reinforcement::Reinforcement() : Order(false, "Reinforcement", NULL) { };
@@ -797,7 +812,7 @@ ostream& operator<<(ostream& os, const OrdersList& ordersList) {
 
 void OrdersList::addOrder(Order* order) {
 	playerOrderList.push_back(order);
-    //notify(this); // FROM SUBJECT
+    //notify(this);
 }
 
 void OrdersList::addOrder(string orderString) {
@@ -856,6 +871,7 @@ void OrdersList::move(int i, int j) {
 }
 
 string OrdersList::stringToLog() {
-    string logString = "Create log string for adding an Order.\n";
+    Order* lastOrderAdded = playerOrderList.at(playerOrderList.size() - 1);
+    string logString = lastOrderAdded->stringToLog() + ".\n";
     return logString;
 }
