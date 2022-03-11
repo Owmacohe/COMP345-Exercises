@@ -15,12 +15,12 @@ public:
     Order(); // Default constructor
     Order(bool v, string s, Player* p); // Parameterized constructor
     Order(Order& o); // Copy constructor
-    ~Order(); // Destructor
+    virtual ~Order(); // Destructor
 		
     string getDescription(); bool getValidated(); // Accessors
-    GameEngine* getGameEngine();
+    static GameEngine* getGameEngine();
     void setDescription(string d); void setValidated(bool v); // Mutators
-    void setGameEngine(GameEngine* gamePlaying);
+    static void setGameEngine(GameEngine* gamePlaying);
 
     Order& operator = (const Order& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
@@ -211,11 +211,12 @@ public:
 class OrdersList /*: public Iloggable, Subject*/ {
 public:
     vector<Order*> playerOrderList;
+    bool aov;   // TODO ??? For AllOrdersValidated Method
 
     OrdersList(); // Default constructor
     OrdersList(vector<Order*> vo); // Parameterized constructor
     OrdersList(OrdersList& original);  // Copy constructor
-    ~OrdersList(); // Destructor
+    virtual ~OrdersList(); // Destructor
 
     vector<Order*> getOrderList(); bool getAllOrdersValidated(); // Accessors
     void setOrderList(vector<Order*> vo); void setAllOrdersValidated(bool v); // Mutators

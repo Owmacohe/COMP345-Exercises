@@ -445,7 +445,7 @@ void GameEngine::gameStartupTransitions(string str) {
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
     if (str == "issueorder" && (getState() == 5 || getState() == 6)) {
-        issueOrdersPhase(p);
+        issueOrdersPhase();
     }
     else if (str == "endissueorders" && getState() == 6) {
         endIssueOrderPhase(p);
@@ -608,11 +608,11 @@ void GameEngine::mainGameLoop() {
 
 // Check if a player has won by looping through territtories and checking owner
 bool GameEngine::checkForWinner() {
-    int count = ;
-    for (Player* p : player_list) { 
+    int count;
+    for (Player* p : player_list) {
         string player = p->getName();
         for (int i = 0; i < NumberOfTerritories; i++) {
-            string territoryowner = map->getTerritories()[i]->getOwner();
+            string territoryowner = map->getTerritories()[i].getOwner()->getName();
             if (territoryowner != player ) {
                 count = count + 1;
                 break;
