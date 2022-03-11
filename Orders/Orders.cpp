@@ -28,7 +28,7 @@ Order::Order(bool v, string s, Player *p) {
 }
 
 // Copy constructor
-Order::Order(Order& original) {
+Order::Order(Order &original) {
     validated = original.validated;
     description = original.description;
     playerIssuing = new Player(*(original.playerIssuing));
@@ -69,7 +69,7 @@ ostream &operator<<(ostream &os, const Order &order) {
     return os;
 }
 
-bool Order::validate() { return true; } // Virtual Method
+void Order::validate() {} // Virtual Method
 
 void Order::execute() {} // Virtual Method
 
@@ -80,23 +80,22 @@ string Order::stringToLog() {
 }
 
 /****************************** Deploy *******************************/
-
 // Default constructor
-Deploy::Deploy() : Order(false, "Deploy", new Player()) {}
+Deploy::Deploy()
+        : Order(false, "Deploy", new Player()),
+          target{new Territory()} {}
 
 // Parameterized constructor
-Deploy::Deploy(bool v, string s, Player *p, Territory *t, int armies)
+Deploy::Deploy(bool v, string s, Player *p, Territory *t)
         : Order(v, s, p),
-          target{t},
-          numToDeploy{armies} {}
+          target{t} {}
 
 // Parameterized constructor for IssueOrders Phase
-Deploy::Deploy(Player *p, Territory *t, int armies)
-        : Order(false, "Deploy", nullptr),
-          target{t},
-          numToDeploy{armies} {}
+Deploy::Deploy(Player *p, Territory *t)
+        : Order(false, "Deploy", p),
+          target{t} {}
 
-Deploy::Deploy(Deploy& original) : Order(original) {}
+Deploy::Deploy(Deploy &original) : Order(original) {}
 
 // Destructor
 Deploy::~Deploy() {
@@ -129,46 +128,38 @@ ostream &operator<<(ostream &os, const Deploy &o) {
     return os;
 }
 
-bool Deploy::validate() {
-    vector<Territory *> ownTerritory = playerIssuing->getTerritory();
-    if (numToDeploy > 0 and numToDeploy <= playerIssuing->getReinforcePool()) {
-        cout << "Valid number of armies to deploy" << endl;
-        for (auto aTerritory: ownTerritory) {
-            if (target->getName() == aTerritory->getName()) {
-                validated = true;
-            }
-        }
-        // Check if the method is working - will be deleted after
-        if (validated) { cout << "Deploy order is VALID" << endl; }
-        else { cout << "Cannot Deploy to other player's territory" << endl; }
+void Deploy::validate() {
+    // Check if Territory belongs to the Player
+    if (target->getOwner() == playerIssuing) {
+        cout << "Valid!" << endl;
+        validated = true;
     } else {
-        cout << "Invalid number of armies to deploy." << endl;
+        cout << "Invalid! - You don't own this territory " << endl;
         validated = false;
     }
-    return validated;
 }
 
 void Deploy::execute() {
     if (validated) {
+        // Prompt player for number of Armies to deploy
+        numToDeploy = 0;
+        cout << playerIssuing->getName() << " reinforcement Pool: " << playerIssuing->getReinforcePool() << " armies" << endl;
+        cout << "Number of armies to deploy: ";
+        cin >> numToDeploy;
+        // Check if number of Armies to Deploy < Reinforcement Pool
+        while (numToDeploy > playerIssuing->getReinforcePool()) {
+            cout << "Re-enter number of Armies to deploy: ";
+            cin >> numToDeploy;
+        }
+
         target->setArmies(target->getArmies() + numToDeploy); // add deployed armies to territory;
-        playerIssuing->removeFromReinforcePool(numToDeploy);
+        playerIssuing->removeFromReinforcePool(numToDeploy);    // substract numTo
     } else {
         cout << "Can't execute Deploy order!" << endl;
     }
-    /* Maybe ask for input of the player for the number of armies for deployment or is it a standard number?
-    * Validate number here? make sure its <= than the Player's reinforcement pool Or Change Validate to receive int armies and Territory
-    * will call validate() to check Territory
-    * if false, print out invalid
-    * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
-    */
+
     //notify(this); // FROM SUBJECT
 }
-// Second version is more compatible with OrderList log
-//string Deploy::stringToLog() {
-//    string logStringPlayer = "- Player " + playerIssuing->getName() + " executed a " + to_string(validate()) + " ";
-//    string logStringOrder = "Deploy order : Deployed " + to_string(numToDeploy) + " soldiers to " + target->getName() + "\n";
-//    return logStringPlayer + logStringOrder;
-//}
 
 string Deploy::stringToLog() {
     string validation = (validated) ? "executed" : "to be validated";
@@ -180,7 +171,9 @@ string Deploy::stringToLog() {
 /****************************** Advance *******************************/
 
 // Default constructor
-Advance::Advance() : Order(false, "Advance", new Player()) {}
+Advance::Advance()
+        : Order(false, "Advance", new Player()),
+          target{new Territory()} {}
 
 // Parameterized constructor
 Advance::Advance(bool v, string s, Player *p, Territory *o, Territory *t, int armies)
@@ -191,7 +184,7 @@ Advance::Advance(bool v, string s, Player *p, Territory *o, Territory *t, int ar
 
 // Parameterized constructor for IssueOrders Phase
 Advance::Advance(Player *p, Territory *o, Territory *t, int armies)
-        : Order(false, "Advance", nullptr),
+        : Order(false, "Advance", p),
           origin{o},
           target{t},
           numOfArmies{armies} {}
@@ -232,7 +225,7 @@ ostream &operator<<(ostream &os, const Advance &o) {
 }
 
 
-bool Advance::validate() { // there are 3 options: valid, invalid and ATTACK
+void Advance::validate() { // there are 3 options: valid, invalid and ATTACK
     //if ( playerIssuing in list of alliance's pair is not the target player)
 
 
@@ -244,7 +237,6 @@ bool Advance::validate() { // there are 3 options: valid, invalid and ATTACK
      *
      * If Territory B is another Player's return 3
      */
-    return validated;
 }
 
 void Advance::execute() {
@@ -266,7 +258,9 @@ void Advance::execute() {
 /****************************** Airlift *******************************/
 
 // Default constructor
-Airlift::Airlift() : Order(false, "Airlift", new Player()) {}
+Airlift::Airlift()
+        : Order(false, "Airlift", new Player()),
+          target{new Territory()} {}
 
 // Parameterized constructor
 Airlift::Airlift(bool v, string s, Player *p, Territory *o, Territory *t, int armies)
@@ -277,7 +271,7 @@ Airlift::Airlift(bool v, string s, Player *p, Territory *o, Territory *t, int ar
 
 // Parameterized constructor for IssueOrders Phase
 Airlift::Airlift(Player *p, Territory *o, Territory *t, int armies)
-        : Order(false, "Airlift", nullptr),
+        : Order(false, "Airlift", p),
           origin{o},
           target{t},
           numOfArmies{armies} {}
@@ -317,13 +311,12 @@ ostream &operator<<(ostream &os, const Airlift &o) {
     return os;
 }
 
-bool Airlift::validate() {
+void Airlift::validate() {
     /*
      * check that A and B are the Player's territories
      * return true
      * else false
      */
-    return validated;
 }
 
 void Airlift::execute() {
@@ -349,7 +342,9 @@ string Airlift::stringToLog() {
 /****************************** Bomb *******************************/
 
 // Default constructor
-Bomb::Bomb() : Order(false, "Bomb", new Player()) {};
+Bomb::Bomb()
+        : Order(false, "Bomb", new Player()),
+          target{new Territory()} {}
 
 // Parameterized constructor For IssueOrders Phase
 Bomb::Bomb(Player *p, Territory *o, Territory *t) : Order(false, "Bomb", p) {
@@ -398,8 +393,7 @@ ostream &operator<<(ostream &os, const Bomb &o) {
     return os;
 }
 
-
-bool Bomb::validate() {
+void Bomb::validate() {
 
     // Check that Territory A is not the Player's
     if (origin->getOwner() == playerIssuing) {
@@ -416,13 +410,11 @@ bool Bomb::validate() {
     } else
         validated = true;
 
-    return validated;
 }
-
 
 void Bomb::execute() {
 
-    if (!validate()) {
+    if (!validated) {
         cout << "Invalid Bomb Order, Truce between players\n";
         cout << "Invalid Bomb Order";
 
@@ -446,7 +438,9 @@ string Bomb::stringToLog() {
 /****************************** Blockade *******************************/
 
 // Default constructor
-Blockade::Blockade() : Order(false, "Blockade", new Player()) {};
+Blockade::Blockade()
+        : Order(false, "Deploy", new Player()),
+          target{new Territory()} {}
 
 // Parameterized constructor
 Blockade::Blockade(bool v, string s, Player *p, Territory *t) : Order(v, s, p) {
@@ -493,19 +487,17 @@ ostream &operator<<(ostream &os, const Blockade &o) {
 }
 
 
-bool Blockade::validate() {
+void Blockade::validate() {
     if (target->getOwner() == playerIssuing) {
         validated = true;
     } else
         validated = false;
-
-    return validated;
 }
 
 
 void Blockade::execute() {
 
-    if (!validate()) {
+    if (!validated) {
         cout << "Invalid Blockade Order";
     } else {
         int doubleArmies = (target->getArmies()) * 2;
@@ -528,7 +520,8 @@ string Blockade::stringToLog() {
 /****************************** Negotiate *******************************/
 
 // Default constructor
-Negotiate::Negotiate() : Order(false, "Negotiate", new Player()) {};
+Negotiate::Negotiate()
+        : Order(false, "Deploy", new Player()) {}
 
 //// Parameterized constructor (player only)
 //Negotiate::Negotiate(Player* p) : Order(p) { };
@@ -577,13 +570,12 @@ ostream &operator<<(ostream &os, const Negotiate &o) {
     return os;
 }
 
-bool Negotiate::validate() {
+void Negotiate::validate() {
     if (playerIssuing == targetPlayer || targetPlayer->getName() == "Neutral") {
         validated = false;
         cout << "Invalid Negotiate : Negotiate must be done with a different player, excluding the Neutral player\n";
     } else
         validated = true;
-    return validated;
 }
 
 
@@ -598,7 +590,7 @@ void Negotiate::execute() {
      * In this case, this adds Player A to Player B's list and vice-versa
      * Lists must be cleared when goes to reinforcement phase
      */
-    if (!validate()) {
+    if (!validated) {
         cout << "Invalid Negotiate Order\n";
     } else {
         game->addAlliances(playerIssuing, targetPlayer);
@@ -660,9 +652,7 @@ ostream &operator<<(ostream &os, const Reinforcement &o) {
     return os;
 }
 
-bool Reinforcement::validate() {
-    return validated;
-}
+void Reinforcement::validate() {}
 
 void Reinforcement::execute() {
     cout << "Executing Order Reinforcement" << endl;
@@ -749,7 +739,7 @@ OrdersList::OrdersList(OrdersList &original) {
 OrdersList::~OrdersList() {
     // Iterate through all pointed orders and delete the content in heap of each
     for (Order *i: playerOrderList) {
-        if(i != nullptr){
+        if (i != nullptr) {
             free(i);
             i = nullptr;
         }
@@ -875,3 +865,20 @@ string OrdersList::stringToLog() {
     string logString = lastOrderAdded->stringToLog() + ".\n";
     return logString;
 }
+
+/******************************* DRAFT *******************************/
+// Second version is more compatible with OrderList log
+//string Deploy::stringToLog() {
+//    string logStringPlayer = "- Player " + playerIssuing->getName() + " executed a " + to_string(validate()) + " ";
+//    string logStringOrder = "Deploy order : Deployed " + to_string(numToDeploy) + " soldiers to " + target->getName() + "\n";
+//    return logStringPlayer + logStringOrder;
+//}
+
+
+/* Deploy
+   * Maybe ask for input of the player for the number of armies for deployment or is it a standard number?
+   * Validate number here? make sure its <= than the Player's reinforcement pool Or Change Validate to receive int armies and Territory
+   * will call validate() to check Territory
+   * if false, print out invalid
+   * if true, add armiesForDeployment to the Territory and remove it from the Player's Reinforcement pool
+*/

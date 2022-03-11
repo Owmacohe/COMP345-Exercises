@@ -25,7 +25,7 @@ public:
     Order& operator = (const Order& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
-    bool virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
+    void virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
     // bool virtual execute();
     void virtual execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
 
@@ -45,8 +45,8 @@ public:
 class Deploy : public Order {
 public:
     Deploy(); // Default constructor
-    Deploy(bool v, string s, Player* p, Territory* t, int armies);  // Parameterized constructor
-    Deploy(Player* p, Territory* t, int armies);  // Parameterized constructor For IssueOrders Phase
+    Deploy(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
+    Deploy(Player* p, Territory* t);  // Parameterized constructor For IssueOrders Phase
     Deploy(Deploy& original); // Copy constructor
     ~Deploy(); // Destructor
 
@@ -56,7 +56,7 @@ public:
     Deploy& operator = (const Deploy& D); 	// Assignment operator
     friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     int numToDeploy;
@@ -80,7 +80,7 @@ public:
     Advance& operator = (const Advance& d); // Assignment operator
     friend ostream& operator<<(ostream& os, const Advance& advance); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     Territory* origin;
@@ -105,7 +105,7 @@ public:
     Airlift& operator = (const Airlift &D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Airlift& airflit); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     Territory* origin;
@@ -129,7 +129,7 @@ public:
     Bomb& operator = (const Bomb& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Bomb& bomb); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
@@ -154,7 +154,7 @@ public:
     Blockade& operator = (const Blockade& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Blockade& blockade); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
@@ -178,7 +178,7 @@ public:
     Negotiate& operator = (const Negotiate& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
@@ -201,7 +201,7 @@ public:
     Reinforcement& operator = (const Reinforcement& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
