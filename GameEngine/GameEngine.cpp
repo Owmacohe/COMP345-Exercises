@@ -5,6 +5,7 @@
 #include "../Orders/Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
+
 #include "math.h"
 
 class OrdersList;
@@ -234,66 +235,27 @@ void GameEngine::assignReinforcementPhase() {
     //resetAlliances();
     Player* p = player_list.at(currentPlayer);
     int num = floor((p->getNumberOfTerritories())/3);
-    if (num < 3) p->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
+    if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
 
-    vector<Territory*> territoriesByContinent ;
+    vector<Territory*> territoriesByContinent;
+
     string* Continents = map->getContinents();
-    for (int i = 0; i < Continents->size(); i++){
+    for (int i = 0; i < Continents->size(); i++) { // Loop through all continents
         bool flag = true;
         territoriesByContinent = map->getContinentTerritories(Continents[i]);
-        for (Territory * t : territoriesByContinent){
-            if(!(t->getOwner()->getName() == p->getName())){
-                flag = false;
+        for (Territory * t : territoriesByContinent){ // Loop through territories in each continent to check if they belong to player
+            if(!(t->getOwner()->getName() == p->getName())) {
+                flag = false; // Break and set flag false if player does not own territory
                 break;
             }
         }
-        if (flag == false){
-            continue;
-        }else{
-
+        if (flag == false) { continue; }
+        else {
             // Bonus Calculation
-            p->addToReinforcePool(1);
-
+            p->addToReinforcePool(1); // The one value should be bonus calculation based on continent
         }
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    //string * continents = map->getContinents();
-   // map->getContinents();
-
-    //loop through continenets anad check territories owners
-//    int territoriesOwned=0 , continentsOwned =0;
-//    vector<Territory*>  playerOwnedTerritoriesByContinent,Continents;
-//    for (int i =0; i<player_list.size();i++){
-//        for(int k =0;k<player_list[i]->getTerritory().size();k++) {
-//            string currentContinent = player_list[i]->getTerritory()[i]->getContinent();
-//            Continents = map->getContinentTerritories(currentContinent);
-//            for (int j = 0; j < player_list[i]->getTerritory().size(); j++) {
-//                if(player_list[i]->getTerritory()[j]->getContinent() == currentContinent ){
-//                    territoriesOwned++;
-//                }
-//                if (territoriesOwned == Continents.size()){
-//                    //Bonus calculation
-//                }else{
-//                    territoriesOwned = 0; //no bonus for current continent
-//                }
-//            }
-//        }
-//    }
-    //need an if to check if player owns a whole continent
     cout << "End of assign Reinforcement" << endl;
 }
 
@@ -301,11 +263,13 @@ void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     for (Player* p : player_list) {
         cout << "Issuing the orders for player " << p->getName() << endl;
-        // only issue DEPLOY orders while the players reinforcement pool contains armies
+        // Only issue DEPLOY orders while the players reinforcement pool contains armies
         cout << "Issueing Deploy Orders" << endl;
         while (p->getReinforcePool() != 0) {
             p->issueOrder("deploy");
         }
+
+        endIssueOrderPhase(p);
     }
     // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
     // // once reinforcement pool is empty allows player to play advances
@@ -385,21 +349,6 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
-    int lost = 0;
-    for (int i = 0 ; i<NumberOfPlayers; i++) {
-        if(player_list[i]->getTerritory().size() == 0)
-            lost ++ ;
-        if (lost == NumberOfPlayers-1) {
-            for (int j = 0; j < NumberOfPlayers; j++) {
-                if(player_list[j]->getTerritory().size()>0) {
-                    winPhase(player_list[j]);
-                    break;
-                }
-                break;
-            }
-        }else assignReinforcementPhase();
-    }
-
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
@@ -597,6 +546,15 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
+    bool playing = true;
+    while (playing == true) {
+        assignReinforcementPhase(); //begin reinforcement phase
+        issueOrdersPhase(); //begin issue orders phase
+        executeOrdersPhase(); //begin execute orders phase
+        checkPlayers(); //check if any players need to be removed
+        playing = checkForWinner(); //check for winner
+
+    }
 // You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
 // reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
 // orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
@@ -604,23 +562,42 @@ void GameEngine::mainGameLoop() {
 // player that does not control any territory is removed from the game; (6) the game ends when a single player
 // controls all the territories. All of this except the issueOrder() method must be implemented in a single .cpp/.h
 // file duo named GameEngine.cpp/GameEngine.h.
+/*
+    int lost = 0;
+    for (int i = 0 ; i<NumberOfPlayers; i++) {
+        if(player_list[i]->getTerritory().size() == 0)
+            lost ++ ;
+        if (lost == NumberOfPlayers-1) {
+            for (int j = 0; j < NumberOfPlayers; j++) {
+                if(player_list[j]->getTerritory().size()>0) {
+                    winPhase(player_list[j]);
+                    break;
+                }
+                break;
+            }
+        }else assignReinforcementPhase();
+    }
+*/
 }
 
 // Check if a player has won by looping through territtories and checking owner
 bool GameEngine::checkForWinner() {
-    int count;
-    for (Player* p : player_list) {
+    int lost = 0;
+    for (Player* p : player_list) { 
         string player = p->getName();
-        for (int i = 0; i < NumberOfTerritories; i++) {
-            string territoryowner = map->getTerritories()[i].getOwner()->getName();
-            if (territoryowner != player ) {
-                count = count + 1;
-                break;
+        for (int i = 0; i < map->territoriesLength; i++) {
+            string owner = map->getTerritories()[i].getOwner()->getName();
+            if (owner != player ) {
+                lost = lost + 1;
+                break; 
             }
         }
+        if (lost == 0) {
+            winPhase(p);
+            return true;
+        }
     }
-    if (count == NumberOfPlayers) return false;
-    else return true;
+    return false;
 }
 
 // Check that players are still valid, remove players that are not
