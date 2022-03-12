@@ -230,7 +230,7 @@ void GameEngine::assignCountries() {
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
-    cout << "Assign Reinforcement" << endl;
+    cout << "Assign reinforcement phase" << endl;
     // Adding the reset of alliances
     //resetAlliances();
     Player* p = player_list.at(currentPlayer);
@@ -253,42 +253,56 @@ void GameEngine::assignReinforcementPhase() {
         if (flag == false) { continue; }
         else {
             // Bonus Calculation
-            p->addToReinforcePool(1); // The one value should be bonus calculation based on continent
+            p->addToReinforcePool(1);
         }
     }
-    cout << "End of assign Reinforcement" << endl;
+    cout << "End of assign reinforcement" << endl;
 }
 
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     for (Player* p : player_list) {
         cout << "Issuing the orders for player " << p->getName() << endl;
-        // Only issue DEPLOY orders while the players reinforcement pool contains armies
+        // Only issue deploy orders while the players reinforcement pool contains armies
         cout << "Issueing Deploy Orders" << endl;
         while (p->getReinforcePool() != 0) {
-            p->issueOrder("deploy");
+            p->issueOrder("deploy", map);
         }
+        do { //-----HAS NO INPUT VALIDATION-------//
+            cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
+            cin >> input >> endl;
+            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
+                cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
+                cin >> reponse >> endl;
+                if (reponse.equalsIgnoreCase("d") || reponse.equalsIgnoreCase("defend")) {
+
+                }
+                else if (reponse.equalsIgnoreCase("a") || reponse.equalsIgnoreCase("attack") {
+
+                }
+            }
+            else break;
+        } while (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"));
+
+        do {
+            cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
+            cin >> input >> endl;
+            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
+                cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
+                cin >> reponse >> endl;
+                if (reponse.equalsIgnoreCase("d") || reponse.equalsIgnoreCase("defend")) {
+
+                }
+                else if (reponse.equalsIgnoreCase("a") || reponse.equalsIgnoreCase("attack") {
+
+                }
+            }
+            else break;
+        } while (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"));
 
         endIssueOrderPhase(p);
     }
-    // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
-    // // once reinforcement pool is empty allows player to play advances
-    // string console_input;
-    // do {
-    //     cout << "Would you like to make an advance ? y/n" << endl;
-    //     cin >> console_input;
-    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("advance");
-    //     else break;
-    // }
-    // while (console_input == "y" || console_input == "Y");
-    // // once player is done advancing, player can use cards to issue orders
-    // do {
-    //     cout << "Would you like to play a card ? y/n" << endl;
-    //     cin >> console_input;
-    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("card thingy magi");
-    //     else break;
-    // }
-    // while (console_input == "y" || console_input == "Y");
+
     /*
         do while loop 
         cout << "Would you like to make an advance ? y/n" << endl;
@@ -307,7 +321,7 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
-    cout << "End phase issue Orders for player " << player->getName() << endl;
+    cout << "End phase issue orders for player " << player->getName() << endl;
 }
 
 void GameEngine::executeOrdersPhase() {
@@ -358,7 +372,7 @@ void GameEngine::endexecuteOrdersPhase(Player *player) {
 
 void GameEngine::winPhase(Player *p) {
     *s = win;
-    cout << "victory for player: " << p->getName() << endl;
+    cout << "Victory for player: " << p->getName() << endl;
 }
 
 void GameEngine::endPhase() {
@@ -368,7 +382,7 @@ void GameEngine::endPhase() {
 
 void GameEngine::playAgain() {
     *s = null;
-    cout << "the Game will restart soon" << endl;
+    cout << "The Game will restart soon" << endl;
 }
 
 void GameEngine::gameStartupTransitions(string str) {
@@ -552,9 +566,10 @@ void GameEngine::mainGameLoop() {
         issueOrdersPhase(); //begin issue orders phase
         executeOrdersPhase(); //begin execute orders phase
         checkPlayers(); //check if any players need to be removed
-        playing = checkForWinner(); //check for winner
+        playing = !checkForWinner(); //check for winner
 
     }
+    //check play again
 // You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
 // reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
 // orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
@@ -562,22 +577,6 @@ void GameEngine::mainGameLoop() {
 // player that does not control any territory is removed from the game; (6) the game ends when a single player
 // controls all the territories. All of this except the issueOrder() method must be implemented in a single .cpp/.h
 // file duo named GameEngine.cpp/GameEngine.h.
-/*
-    int lost = 0;
-    for (int i = 0 ; i<NumberOfPlayers; i++) {
-        if(player_list[i]->getTerritory().size() == 0)
-            lost ++ ;
-        if (lost == NumberOfPlayers-1) {
-            for (int j = 0; j < NumberOfPlayers; j++) {
-                if(player_list[j]->getTerritory().size()>0) {
-                    winPhase(player_list[j]);
-                    break;
-                }
-                break;
-            }
-        }else assignReinforcementPhase();
-    }
-*/
 }
 
 // Check if a player has won by looping through territtories and checking owner
