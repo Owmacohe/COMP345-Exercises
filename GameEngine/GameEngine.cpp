@@ -585,16 +585,19 @@ bool GameEngine::checkForWinner() {
     int lost = 0;
     for (Player* p : player_list) { 
         string player = p->getName();
-        for (int i = 0; i < NumberOfTerritories; i++) {
+        for (int i = 0; i < map->territoriesLength; i++) {
             string owner = map->getTerritories()[i].getOwner()->getName();
             if (owner != player ) {
                 lost = lost + 1;
-                break;
+                break; 
             }
         }
+        if (lost == 0) {
+            winPhase(p);
+            return true;
+        }
     }
-    if (lost == NumberOfPlayers) return false;
-    else return true;
+    return false;
 }
 
 // Check that players are still valid, remove players that are not
