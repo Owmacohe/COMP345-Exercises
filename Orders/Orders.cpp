@@ -2,7 +2,7 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 #include "../GameEngine/GameEngine.h"
-
+#include "../Cards/Cards.h"
 
 /****************************** Order *******************************/
 // Static Method to Access static GameEngine*
@@ -152,8 +152,8 @@ void Deploy::execute() {
             cin >> numToDeploy;
         }
 
-        target->setArmies(target->getArmies() + numToDeploy); // add deployed armies to territory;
-        playerIssuing->removeFromReinforcePool(numToDeploy);    // substract numTo
+        target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
+        playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
     } else {
         cout << "Can't execute Deploy order!" << endl;
     }
@@ -176,18 +176,18 @@ Advance::Advance()
           target{new Territory()} {}
 
 // Parameterized constructor
-Advance::Advance(bool v, string s, Player *p, Territory *o, Territory *t, int armies)
+Advance::Advance(bool v, string s, Player *p, Territory *o, Territory *t)
         : Order(v, s, p),
           origin{o},
-          target{t},
-          numOfArmies{armies} {}
+          target{t}
+          {}
 
 // Parameterized constructor for IssueOrders Phase
-Advance::Advance(Player *p, Territory *o, Territory *t, int armies)
+Advance::Advance(Player *p, Territory *o, Territory *t)
         : Order(false, "Advance", p),
           origin{o},
-          target{t},
-          numOfArmies{armies} {}
+          target{t}
+          {}
 
 // Copy constructor
 Advance::Advance(Advance &original) : Order(original) {}
@@ -225,21 +225,76 @@ ostream &operator<<(ostream &os, const Advance &o) {
 }
 
 
-void Advance::validate() { // there are 3 options: valid, invalid and ATTACK
-    //if ( playerIssuing in list of alliance's pair is not the target player)
+void Advance::validate() {
+    validateResult = "";
 
-
-    /*
-     * Check if Territory B belongs to player return 1
-     * Check if Territory A is adjacent to territory B return 1
-     *
-     * If territory B belong to player and is adjacent return 2
-     *
-     * If Territory B is another Player's return 3
-     */
+    // Check if Territory belongs to the Player
+    if (origin->getOwner() != playerIssuing) {
+        cout << "Invalid! - You don't own this territory" << endl;
+        validated = false;
+    }
+    // Check if 2 Territories are adjacent
+    else if(!(game->getMap()->adjacentTerritories(origin, target))){
+        cout << "Invalid! - Two territories are not adjacent" << endl;
+        validated = false;
+    }
+    // Condition: If Source territory is owned by Player && Target territory and Source territory are adjacent
+    // Sub-condition: If Target Territory is owned by Player (Yes: Advance || No: Attack)
+    else{
+        if(target->getOwner() == playerIssuing){
+            cout << "Valid! ** Type advance" << endl;
+            validateResult = "Advance";
+            validated = true;
+        }
+        // Condition: If target territory is not owned by player
+        // Sub-condition: If there exist alliance (Yes: attack is invalid || No: attack is valid)
+        else if (!(game->existingAlliance(origin->getOwner(), target->getOwner()))){
+            cout << "Valid! ** Type attack" << endl;
+            validated = true;
+        }
+        else{
+            cout << "Invalid! - Cannot attack Territory in Negotiation";
+            validated = false;
+        }
+    }
 }
 
 void Advance::execute() {
+    if (validated) {
+        // Prompt player for number of Armies to Advance or Attack
+        numToAdvance = 0;
+        cout << playerIssuing->getName() << " reinforcement Pool: " << playerIssuing->getReinforcePool() << " armies" << endl;
+        cout << "Number of armies to deploy: ";
+        cin >> numToAdvance;
+        // Check if number of Armies to Deploy < Reinforcement Pool
+        while (numToAdvance > playerIssuing->getReinforcePool()) {
+            cout << "Re-enter number of Armies to deploy: ";
+            cin >> numToAdvance;
+        }
+        if(target->getOwner() == playerIssuing) {
+            origin->setArmies(origin->getArmies() - numToAdvance);    // subtract armies from source territory;
+            target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
+        } else if ((target->getOwner() == playerIssuing) && !(game->existingAlliance(origin->getOwner(), target->getOwner()))){
+            origin->setArmies(origin->getArmies()-numToAdvance);
+
+            // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
+            // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
+            int attackPower = origin->getArmies()*0.6;
+            int defendPower = target->getArmies()*0.7;
+            if (attackPower == defendPower) {
+                target->setArmies(0);
+            }
+            else if (attackPower > defendPower){
+                target->setArmies((attackPower - defendPower)/0.6);
+                target->setOwner(playerIssuing);
+//                playerIssuing->getHand()->drawCard(game->getDeck()); // TODO
+            }
+            else{}
+
+        }
+    } else
+        cout << "Can't execute Advance order!" << endl;
+}
     /*
      * ask input from the player for number of armies moved, Territory A and Territory B
      * call validate() --> Change method to accept armies, Territory A and Territory B ?
@@ -248,7 +303,7 @@ void Advance::execute() {
      *  if 3 ATTACK
      */
     //notify(this); // FROM SUBJECT LET ME KNOW HOW YOU ARE GOING TO STORE THE ACTION (ATTACK OR NOT) so I can output it in the log
-}
+
 
 //string Advance::stringToLog() {
 //    string logString = "Create log string for execution.\n"; //TODO
@@ -493,7 +548,6 @@ void Blockade::validate() {
     } else
         validated = false;
 }
-
 
 void Blockade::execute() {
 
