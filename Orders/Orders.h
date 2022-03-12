@@ -25,9 +25,10 @@ public:
     Order& operator = (const Order& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
-    void virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
-    // bool virtual execute();
-    void virtual execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
+    virtual void validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
+                               // validate() return string for compatibility with Loggable
+
+    virtual void execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
 
 
     // From Iloggable
@@ -62,20 +63,23 @@ public:
     int numToDeploy;
 
     // From Iloggable
-     string stringToLog();
+    string stringToLog();
+    string validateResult;
 
 };
 
 class Advance : public Order {
 public:
     Advance(); // Default constructor
-    Advance(bool v, string s, Player* p, Territory* t, Territory* o, int armies);  // Parameterized constructor
-    Advance(Player* p, Territory* t, Territory* o, int armies);  // Parameterized constructor For IssueOrders Phase
+    Advance(bool v, string s, Player* p, Territory* t, Territory* o);  // Parameterized constructor
+    Advance(Player* p, Territory* t, Territory* o);  // Parameterized constructor For IssueOrders Phase
     Advance(Advance& original); // Copy constructor
     ~Advance(); // Destructor
 
     string getDescription(); bool getValidated(); // Accessors
     void setDescription(string d); void setValidated(bool v); // Mutators
+
+    friend int getToMoveArmies();
 
     Advance& operator = (const Advance& d); // Assignment operator
     friend ostream& operator<<(ostream& os, const Advance& advance); // Stream insertion operator
@@ -84,10 +88,11 @@ public:
     void execute();
     Territory* target;
     Territory* origin;
-    int numOfArmies;
+    int numToAdvance;
 
     // From Iloggable
-    // string stringToLog();
+    string validateResult;
+    string stringToLog();
 
 };
 
@@ -182,6 +187,7 @@ public:
     void execute();
 
     // From Iloggable
+     string* validateResult;
      string stringToLog();
 
     Player* targetPlayer;
@@ -233,3 +239,5 @@ public:
     // From Iloggable
     string stringToLog();
 };
+
+
