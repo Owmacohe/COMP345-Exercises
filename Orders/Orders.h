@@ -15,19 +15,20 @@ public:
     Order(); // Default constructor
     Order(bool v, string s, Player* p); // Parameterized constructor
     Order(Order& o); // Copy constructor
-    ~Order(); // Destructor
+    virtual ~Order(); // Destructor
 		
     string getDescription(); bool getValidated(); // Accessors
-    GameEngine* getGameEngine();
+    static GameEngine* getGameEngine();
     void setDescription(string d); void setValidated(bool v); // Mutators
-    void setGameEngine(GameEngine* gamePlaying);
+    static void setGameEngine(GameEngine* gamePlaying);
 
     Order& operator = (const Order& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Order& order); // Stream insertion operator
 
-    bool virtual validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
-    // bool virtual execute();
-    void virtual execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
+    virtual void validate(); // ADDED THIS TO MAKE IT AN ABSTRACT CLASS - not required in assignment but makes sense
+                               // validate() return string for compatibility with Loggable
+
+    virtual void execute() = 0; // CHANGE RETURN TYPE BOOL->VOID Assignment requirement: execute is a pure virtual method
 
 
     // From Iloggable
@@ -45,8 +46,8 @@ public:
 class Deploy : public Order {
 public:
     Deploy(); // Default constructor
-    Deploy(bool v, string s, Player* p, Territory* t, int armies);  // Parameterized constructor
-    Deploy(Player* p, Territory* t, int armies);  // Parameterized constructor For IssueOrders Phase
+    Deploy(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
+    Deploy(Player* p, Territory* t);  // Parameterized constructor For IssueOrders Phase
     Deploy(Deploy& original); // Copy constructor
     ~Deploy(); // Destructor
 
@@ -56,37 +57,42 @@ public:
     Deploy& operator = (const Deploy& D); 	// Assignment operator
     friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     int numToDeploy;
+
     // From Iloggable
-    // string stringToLog();
+    string stringToLog();
+    string validateResult;
 
 };
 
 class Advance : public Order {
 public:
     Advance(); // Default constructor
-    Advance(bool v, string s, Player* p, Territory* t, Territory* o, int armies);  // Parameterized constructor
-    Advance(Player* p, Territory* t, Territory* o, int armies);  // Parameterized constructor For IssueOrders Phase
+    Advance(bool v, string s, Player* p, Territory* t, Territory* o);  // Parameterized constructor
+    Advance(Player* p, Territory* t, Territory* o);  // Parameterized constructor For IssueOrders Phase
     Advance(Advance& original); // Copy constructor
     ~Advance(); // Destructor
 
     string getDescription(); bool getValidated(); // Accessors
     void setDescription(string d); void setValidated(bool v); // Mutators
 
+    friend int getToMoveArmies();
+
     Advance& operator = (const Advance& d); // Assignment operator
     friend ostream& operator<<(ostream& os, const Advance& advance); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     Territory* origin;
-    int numOfArmies;
+    int numToAdvance;
 
     // From Iloggable
-    // string stringToLog();
+    string validateResult;
+    string stringToLog();
 
 };
 
@@ -104,14 +110,14 @@ public:
     Airlift& operator = (const Airlift &D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Airlift& airflit); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
     Territory* target;
     Territory* origin;
     int numOfArmies;
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 };
 
 class Bomb : public Order {
@@ -128,11 +134,11 @@ public:
     Bomb& operator = (const Bomb& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Bomb& bomb); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
     Territory* origin;
     Territory* target;
@@ -153,11 +159,11 @@ public:
     Blockade& operator = (const Blockade& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Blockade& blockade); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string stringToLog();
 
     Territory* target;
 };
@@ -177,11 +183,12 @@ public:
     Negotiate& operator = (const Negotiate& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Negotiate& negotiate); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
-    // string stringToLog();
+     string* validateResult;
+     string stringToLog();
 
     Player* targetPlayer;
 
@@ -200,7 +207,7 @@ public:
     Reinforcement& operator = (const Reinforcement& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
 
-    bool validate();
+    void validate();
     void execute();
 
     // From Iloggable
@@ -210,11 +217,12 @@ public:
 class OrdersList /*: public Iloggable, Subject*/ {
 public:
     vector<Order*> playerOrderList;
+    bool aov;   // TODO ??? For AllOrdersValidated Method
 
     OrdersList(); // Default constructor
     OrdersList(vector<Order*> vo); // Parameterized constructor
     OrdersList(OrdersList& original);  // Copy constructor
-    ~OrdersList(); // Destructor
+    virtual ~OrdersList(); // Destructor
 
     vector<Order*> getOrderList(); bool getAllOrdersValidated(); // Accessors
     void setOrderList(vector<Order*> vo); void setAllOrdersValidated(bool v); // Mutators
@@ -231,3 +239,5 @@ public:
     // From Iloggable
     string stringToLog();
 };
+
+
