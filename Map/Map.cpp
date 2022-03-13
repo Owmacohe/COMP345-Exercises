@@ -557,7 +557,8 @@ Map MapLoader::load(string f) {
                         else if (section == 3) {
                             if (stoi(lineSplit[0]) > 1) {
                                 int len = stoi(lineSplit[0]);
-                                
+
+                                // TODO: this can be optimized greatly
                                 // Comparing each Territory with the others on the line, and adding the new Edge if it doesn't yet exist
                                 for (int i = 1; i <= len; i++) {
                                     for (int j = i+1; j <= len; j++) {

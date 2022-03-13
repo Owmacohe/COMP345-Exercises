@@ -147,7 +147,6 @@ CommandProcessor::~CommandProcessor() {
     commands = NULL;
     commandsLength = 0;
 
-
     cout << "[CommandProcessor destructor]" << endl;
 }
 
@@ -225,7 +224,6 @@ void CommandProcessor::saveCommand(const Command &c) {
 
 void CommandProcessor::getCommand() {
     Command temp = readCommand();
-
     saveCommand(temp);
 }
 
@@ -253,10 +251,32 @@ string CommandProcessor::stringToLog() {
     return logString;
 }
 
-void FileCommandProcessorAdapter::readFromFile() {
-    // Uses CommandProcessor methods
-    // Does the same as if reading from console
-    // But instead reads line by line in a file
+void FileCommandProcessorAdapter::getCommand() {
+    ifstream input(currentFile);
+    string line;
+
+    // Checking to see if the file can even be read from
+    if (!getline(input, line)) {
+        cout << "Unable to read file: " << currentFile << endl;
+    }
+    else {
+        for (int i = 0; i < currentLine; i++) {
+            getline(input, line);
+        }
+
+        currentLine++;
+    }
+
+    input.close();
+
+    Command temp = Command(line);
+    saveCommand(temp);
+}
+
+void FileCommandProcessorAdapter::readFromFile(string f) {
+    currentFile = f;
+
+    getEngine()->startupPhase();
 }
 
 string FileCommandProcessorAdapter::stringToLog() {
