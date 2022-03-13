@@ -126,22 +126,22 @@ vector<Territory*> Player::toAttack(Map* m) {
     // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
-        attack_territories.insert(attack_territories.begin(), p.second);; // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+        attack_territories.insert(attack_territories.begin(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         delete p.second; // Delete the vector of pairs to avoid memory leak
         p.second = NULL;
     }
     return attack_territories;
 }
 
-void Player::issueOrder(string type, Map* m) {   
+void Player::issueOrder(string type, Territory* t, Territory* o) {   
     if (type == "deploy") {
         // Issues deploy orders based on toDefend()
-        Deploy* o = new Deploy(this, toDefend(m).front());
-        orders->addOrder(o); // Add order to list
+        Deploy* d = new Deploy(this, t);
+        orders->addOrder(d); // Add order to list
     }
     else if (type == "advance") {
-        Advance* o = new Advance;
-        orders->addOrder(o);
+        Advance* a = new Advance(this, t, o);
+        orders->addOrder(a);
     }
     else if (type == "bomb") {
         Bomb* o = new Bomb;

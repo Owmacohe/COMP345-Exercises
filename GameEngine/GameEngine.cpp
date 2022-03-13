@@ -261,62 +261,56 @@ void GameEngine::assignReinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
+    string input;
+    string response;
+
     for (Player* p : player_list) {
         cout << "Issuing the orders for player " << p->getName() << endl;
         // Only issue deploy orders while the players reinforcement pool contains armies
-        cout << "Issueing Deploy Orders" << endl;
+        cout << "Issueing deploy orders" << endl;
         while (p->getReinforcePool() != 0) {
-            p->issueOrder("deploy", map);
+            p->issueOrder("deploy", p->toDefend(map).front(), NULL);
         }
+        // Issue advance orders
+        cout << "Issueing advance orders" << endl;
         do { //-----HAS NO INPUT VALIDATION-------//
             cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
-            cin >> input >> endl;
-            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
-                cin >> reponse >> endl;
-                if (reponse.equalsIgnoreCase("d") || reponse.equalsIgnoreCase("defend")) {
-
+                cin >> response;
+                if (equalsIgnoreCase(response, "d") || equalsIgnoreCase(response, "defense")) {
+                    vector<Territory*> defends = p->toDefend(map);
+                    //loop through to find closest to last territory to have armies to move to the front territory ?
                 }
-                else if (reponse.equalsIgnoreCase("a") || reponse.equalsIgnoreCase("attack") {
-
+                else if (equalsIgnoreCase(response, "a") || equalsIgnoreCase(response, "attack")) {
+                    vector<Territory*> defends = p->toDefend(map);
+                    vector<Territory*> attackS = p->toAttack(map);
+                    //lowest to defend move to attack ?
                 }
             }
             else break;
-        } while (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"));
-
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+ 
+        // Issue card orders
+        cout << "Issueing card orders" << endl;
         do {
             cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
-            cin >> input >> endl;
-            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes")) {
-                cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
-                cin >> reponse >> endl;
-                if (reponse.equalsIgnoreCase("d") || reponse.equalsIgnoreCase("defend")) {
-
-                }
-                else if (reponse.equalsIgnoreCase("a") || reponse.equalsIgnoreCase("attack") {
-
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                cout << "The following is " << p->getName() << " hand" << endl;
+                cout << p->getHand() << endl;
+                cout << "Which card would you like to play ?" << endl;
+                cin >> response;
+                if (checkCardInHand(response, p->getHand())) {
+                    p->issueOrder(response); // NEEDS TO INCLUDE REQUIRE PARAM FOR CARDS
                 }
             }
             else break;
-        } while (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"));
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
 
         endIssueOrderPhase(p);
     }
-
-    /*
-        do while loop 
-        cout << "Would you like to make an advance ? y/n" << endl;
-        loop issueOrder("advance");
-        • The player issues advance orders to either (1) move armies from one of its own territory to the other in
-            order to defend them (using toDefend() to make the decision), and/or (2) move armies from one of its
-            territories to a neighboring enemy territory to attack them (using toAttack() to make the decision).
-        cout << "Would you like to play a card ? y/n" << endl;
-        loop issueOrder("card type");   
-        • The player uses one of the cards in their hand to issue an order that corresponds to the card in question.
-
-        while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
-        issueOrdersphase should issue the order based on the card played
-    */
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
@@ -609,6 +603,23 @@ void GameEngine::checkPlayers() {
             player_list.erase(std::remove(player_list.begin(), player_list.end(), p), player_list.end()); //removes player from player_list
         } 
     }
+}
+
+// Check that a card type is in a specific hand
+bool GameEngine::checkCardInHand(string type, Hand* h) {
+    bool flag = false;
+    for (Card* c : h->hand) {
+        if (c->getType() == type) flag = true;
+    }
+    return flag;
+}
+
+bool GameEngine::equalsIgnoreCase(string s1, string s2) {
+   // Change to lower case
+   transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+   transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
+   if (s1 == s2) return true;
+   else return false;
 }
 
 // From Iloggable
