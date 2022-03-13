@@ -50,6 +50,7 @@ class Map {
         // Accessors
         string getName();
         string *getContinents();
+        string *getContinentBonuses();
         Territory *getTerritories();
         Edge *getEdges();
 
@@ -57,9 +58,10 @@ class Map {
         int continentsLength, territoriesLength, edgesLength;
 
         // Mutators
-        void setName(string), setContinents(string*, int), setTerritories(Territory*, int), setEdges(Edge*, int);
+        void setName(string), setContinents(string*, int), setContinentBonuses(string*), setTerritories(Territory*, int), setEdges(Edge*, int);
 
         void addContinent(string); // Method to add a new Territory
+        void addContinentBonus(string);
         void addTerritory(const Territory &t); // Method to add a new Territory
         void addEdge(const Edge &e); // Method to add a new Edge between Territories
 
@@ -73,6 +75,7 @@ class Map {
     private:
         string name; // Name of the Map
         string *continents; // Array of strings of all the continent names
+        string *continentBonuses;
         Territory *territories; // Array of Territories
         Edge *edges; // Array of edges between the Territories
 };
