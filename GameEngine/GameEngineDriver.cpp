@@ -17,7 +17,7 @@ int gameEngineMain() {
 
     while (isPlaying) {
 
-        // ### The following block will be replaced with startupPhase()
+        // ### TODO: the following block will be replaced with startupPhase()
         gameEngine.startGame();
 
         while (gameEngine.getState() < 5) {

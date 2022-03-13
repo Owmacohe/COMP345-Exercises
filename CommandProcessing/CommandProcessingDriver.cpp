@@ -6,14 +6,14 @@
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
 
-#include "../Cards/Cards.cpp"
-#include "CommandProcessing.cpp"
-#include "../GameEngine/GameEngine.cpp"
-#include "../LoggingObserver/LoggingObserver.cpp"
-#include "../Map/Map.cpp"
-#include "../Orders/Orders.cpp"
-#include "../Player/Player.cpp"
-
 int commandProcessingMain() {
+    // TODO: initialize a couple Commands and a CommandProcessor
+
+    // TODO: try using readCommand(), saveCommand(), and getCommand()
+
+    // TODO: validate() CommandProcessor
+
+    // TODO: do the above ^, but with a FileCommandProcessorAdapter
+
     return 0;
 }
