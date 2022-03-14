@@ -288,6 +288,7 @@ void GameEngine::issueOrdersPhase() {
                     vector<Territory*> attackS = p->toAttack(map);
                     //lowest to defend move to attack ?
                 }
+                else cout << "Invalid input" << endl;
             }
             else break;
         } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
@@ -555,15 +556,21 @@ void GameEngine::startupPhase() {
 
 void GameEngine::mainGameLoop() {
     bool playing = true;
+    string input;
     while (playing == true) {
         assignReinforcementPhase(); //begin reinforcement phase
         issueOrdersPhase(); //begin issue orders phase
         executeOrdersPhase(); //begin execute orders phase
         checkPlayers(); //check if any players need to be removed
         playing = !checkForWinner(); //check for winner
-
     }
-    //check play again
+    cout << "Would you like to play again ? y/n " << endl;
+    cin >> input;
+    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
+        playAgain();
+        startupPhase();
+    }
+    else endPhase();
 // You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
 // reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
 // orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
