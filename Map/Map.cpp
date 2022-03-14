@@ -105,6 +105,7 @@ Map::Map() {
     name = "";
     continentsLength = 0;
     continents = new string[continentsLength];
+    continentBonuses = new string[continentsLength];
     territoriesLength = 0;
     territories = new Territory[territoriesLength];
     edgesLength = 0;
@@ -117,6 +118,7 @@ Map::Map() {
 Map::Map(string n) : name(n) {
     continentsLength = 0;
     continents = new string[continentsLength];
+    continentBonuses = new string[continentsLength];
     territoriesLength = 0;
     territories = new Territory[territoriesLength];
     edgesLength = 0;
@@ -129,6 +131,7 @@ Map::Map(string n) : name(n) {
 Map::Map(const Map &m) {
     name = m.name;
     setContinents(m.continents, m.continentsLength);
+    setContinentBonuses(m.continentBonuses);
     setTerritories(m.territories, m.territoriesLength);
     setEdges(m.edges, m.edgesLength);
 
@@ -139,6 +142,10 @@ Map::Map(const Map &m) {
 Map::~Map() {
     delete[] continents;
     continents = NULL;
+
+    delete[] continentBonuses;
+    continentBonuses = NULL;
+
     continentsLength = 0;
 
     delete[] territories;
@@ -190,6 +197,7 @@ ostream& operator<<(ostream &strm, const Map &m) {
 Map& Map::operator = (const Map& toAssign){
     name = toAssign.name;
     continents = toAssign.continents;
+    continentBonuses = toAssign.continentBonuses;
     territories = toAssign.territories;
     edges = toAssign.edges;
     return *this;
@@ -198,6 +206,7 @@ Map& Map::operator = (const Map& toAssign){
 // Map accessors
 string Map::getName() { return name; }
 string *Map::getContinents() { return continents; }
+string *Map::getContinentBonuses() { return continentBonuses; }
 Territory *Map::getTerritories() { return territories; }
 Edge *Map::getEdges() { return edges; }
 
@@ -212,6 +221,14 @@ void Map::setContinents(string *c, int l) {
     }
 
     continentsLength = l;
+}
+void Map::setContinentBonuses(string *b) {
+    delete[] continentBonuses;
+    continentBonuses = new string[continentsLength];
+
+    for (int i = 0; i < continentsLength; i++) {
+        continentBonuses[i] = c[i];
+    }
 }
 void Map::setTerritories(Territory *t, int l) {
     delete[] territories;
@@ -250,6 +267,22 @@ void Map::addContinent(string c) {
     // Setting the new element and incrementing the size variable
     continents[continentsLength] = c;
     continentsLength++;
+}
+
+void Map::addContinentBonus(string b) {
+    string *temp = new string[continentsLength + 1]; // Creating a new array (1 size larger)
+
+    // Copying the old elements into the new array
+    for (int i = 0; i < continentsLength; i++) {
+        temp[i] = continentBonuses[i];
+    }
+
+    // Freeing the old memory and setting the new address
+    delete[] continentBonuses;
+    continentBonuses = temp;
+
+    // Setting the new element and incrementing the size variable
+    continentBonuses[continentsLength] = b;
 }
 
 // Method to add a Territory to a Map
@@ -538,6 +571,7 @@ Map MapLoader::load(string f) {
                         if (section == 1) {
                             if (stoi(lineSplit[0]) == 3) {
                                 m.addContinent(lineSplit[1]);
+                                m.addContinentBonus(lineSplit[2]);
                             }
                             else {
                                 throw "INVALID MAP: improper continent!";
@@ -557,7 +591,8 @@ Map MapLoader::load(string f) {
                         else if (section == 3) {
                             if (stoi(lineSplit[0]) > 1) {
                                 int len = stoi(lineSplit[0]);
-                                
+
+                                // TODO: this can be optimized greatly
                                 // Comparing each Territory with the others on the line, and adding the new Edge if it doesn't yet exist
                                 for (int i = 1; i <= len; i++) {
                                     for (int j = i+1; j <= len; j++) {

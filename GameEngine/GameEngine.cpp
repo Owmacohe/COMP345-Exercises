@@ -5,6 +5,7 @@
 #include "../Orders/Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
+
 #include "math.h"
 
 class OrdersList;
@@ -229,121 +230,93 @@ void GameEngine::assignCountries() {
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
-    cout << "Assign Reinforcement" << endl;
+    cout << "Assign reinforcement phase" << endl;
     // Adding the reset of alliances
     //resetAlliances();
     Player* p = player_list.at(currentPlayer);
     int num = floor((p->getNumberOfTerritories())/3);
-    if (num < 3) p->addToReinforcePool(3); //minimal number of armies per turn for any player is 3
+    if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
 
-    vector<Territory*> territoriesByContinent ;
+    vector<Territory*> territoriesByContinent;
+
     string* Continents = map->getContinents();
-    for (int i = 0; i < Continents->size(); i++){
+    for (int i = 0; i < Continents->size(); i++) { // Loop through all continents
         bool flag = true;
         territoriesByContinent = map->getContinentTerritories(Continents[i]);
-        for (Territory * t : territoriesByContinent){
-            if(!(t->getOwner()->getName() == p->getName())){
-                flag = false;
+        for (Territory * t : territoriesByContinent){ // Loop through territories in each continent to check if they belong to player
+            if(!(t->getOwner()->getName() == p->getName())) {
+                flag = false; // Break and set flag false if player does not own territory
                 break;
             }
         }
-        if (flag == false){
-            continue;
-        }else{
-
+        if (flag == false) { continue; }
+        else {
             // Bonus Calculation
             p->addToReinforcePool(1);
-
         }
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    //string * continents = map->getContinents();
-   // map->getContinents();
-
-    //loop through continenets anad check territories owners
-//    int territoriesOwned=0 , continentsOwned =0;
-//    vector<Territory*>  playerOwnedTerritoriesByContinent,Continents;
-//    for (int i =0; i<player_list.size();i++){
-//        for(int k =0;k<player_list[i]->getTerritory().size();k++) {
-//            string currentContinent = player_list[i]->getTerritory()[i]->getContinent();
-//            Continents = map->getContinentTerritories(currentContinent);
-//            for (int j = 0; j < player_list[i]->getTerritory().size(); j++) {
-//                if(player_list[i]->getTerritory()[j]->getContinent() == currentContinent ){
-//                    territoriesOwned++;
-//                }
-//                if (territoriesOwned == Continents.size()){
-//                    //Bonus calculation
-//                }else{
-//                    territoriesOwned = 0; //no bonus for current continent
-//                }
-//            }
-//        }
-//    }
-    //need an if to check if player owns a whole continent
-    cout << "End of assign Reinforcement" << endl;
+    cout << "End of assign reinforcement" << endl;
 }
 
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
+    string input;
+    string response;
+
     for (Player* p : player_list) {
         cout << "Issuing the orders for player " << p->getName() << endl;
-        // only issue DEPLOY orders while the players reinforcement pool contains armies
-        cout << "Issueing Deploy Orders" << endl;
+        // Only issue deploy orders while the players reinforcement pool contains armies
+        cout << "Issueing deploy orders" << endl;
         while (p->getReinforcePool() != 0) {
-            p->issueOrder("deploy");
+            p->issueOrder("deploy", p->toDefend(map).front(), NULL);
         }
-    }
-    // cout << "Reinforcement Pool Empty, All Armies Deployed" << endl;
-    // // once reinforcement pool is empty allows player to play advances
-    // string console_input;
-    // do {
-    //     cout << "Would you like to make an advance ? y/n" << endl;
-    //     cin >> console_input;
-    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("advance");
-    //     else break;
-    // }
-    // while (console_input == "y" || console_input == "Y");
-    // // once player is done advancing, player can use cards to issue orders
-    // do {
-    //     cout << "Would you like to play a card ? y/n" << endl;
-    //     cin >> console_input;
-    //     if (console_input == "y" || console_input == "Y") player-> issueOrder("card thingy magi");
-    //     else break;
-    // }
-    // while (console_input == "y" || console_input == "Y");
-    /*
-        do while loop 
-        cout << "Would you like to make an advance ? y/n" << endl;
-        loop issueOrder("advance");
-        • The player issues advance orders to either (1) move armies from one of its own territory to the other in
-            order to defend them (using toDefend() to make the decision), and/or (2) move armies from one of its
-            territories to a neighboring enemy territory to attack them (using toAttack() to make the decision).
-        cout << "Would you like to play a card ? y/n" << endl;
-        loop issueOrder("card type");   
-        • The player uses one of the cards in their hand to issue an order that corresponds to the card in question.
+        // Issue advance orders
+        cout << "Issueing advance orders" << endl;
+        do { //-----HAS NO INPUT VALIDATION-------//
+            cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
+                cin >> response;
+                if (equalsIgnoreCase(response, "d") || equalsIgnoreCase(response, "defense")) {
+                    vector<Territory*> defends = p->toDefend(map);
+                    //loop through to find closest to last territory to have armies to move to the front territory ?
+                }
+                else if (equalsIgnoreCase(response, "a") || equalsIgnoreCase(response, "attack")) {
+                    vector<Territory*> defends = p->toDefend(map);
+                    vector<Territory*> attackS = p->toAttack(map);
+                    //lowest to defend move to attack ?
+                }
+                else cout << "Invalid input" << endl;
+            }
+            else break;
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+ 
+        // Issue card orders
+        cout << "Issueing card orders" << endl;
+        do {
+            cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                cout << "The following is " << p->getName() << " hand" << endl;
+                cout << p->getHand() << endl;
+                cout << "Which card would you like to play ?" << endl;
+                cin >> response;
+                if (checkCardInHand(response, p->getHand())) {
+                    p->issueOrder(response); // NEEDS TO INCLUDE REQUIRE PARAM FOR CARDS
+                }
+            }
+            else break;
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
 
-        while player wants to advance we keep issueing advance orders, once the player is done using advance orders then play cards
-        issueOrdersphase should issue the order based on the card played
-    */
+        endIssueOrderPhase(p);
+    }
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
-    cout << "End phase issue Orders for player " << player->getName() << endl;
+    cout << "End phase issue orders for player " << player->getName() << endl;
 }
 
 void GameEngine::executeOrdersPhase() {
@@ -385,21 +358,6 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
-    int lost = 0;
-    for (int i = 0 ; i<NumberOfPlayers; i++) {
-        if(player_list[i]->getTerritory().size() == 0)
-            lost ++ ;
-        if (lost == NumberOfPlayers-1) {
-            for (int j = 0; j < NumberOfPlayers; j++) {
-                if(player_list[j]->getTerritory().size()>0) {
-                    winPhase(player_list[j]);
-                    break;
-                }
-                break;
-            }
-        }else assignReinforcementPhase();
-    }
-
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
@@ -409,7 +367,7 @@ void GameEngine::endexecuteOrdersPhase(Player *player) {
 
 void GameEngine::winPhase(Player *p) {
     *s = win;
-    cout << "victory for player: " << p->getName() << endl;
+    cout << "Victory for player: " << p->getName() << endl;
 }
 
 void GameEngine::endPhase() {
@@ -419,7 +377,7 @@ void GameEngine::endPhase() {
 
 void GameEngine::playAgain() {
     *s = null;
-    cout << "the Game will restart soon" << endl;
+    cout << "The Game will restart soon" << endl;
 }
 
 void GameEngine::gameStartupTransitions(string str) {
@@ -597,6 +555,22 @@ void GameEngine::startupPhase() {
 }
 
 void GameEngine::mainGameLoop() {
+    bool playing = true;
+    string input;
+    while (playing == true) {
+        assignReinforcementPhase(); //begin reinforcement phase
+        issueOrdersPhase(); //begin issue orders phase
+        executeOrdersPhase(); //begin execute orders phase
+        checkPlayers(); //check if any players need to be removed
+        playing = !checkForWinner(); //check for winner
+    }
+    cout << "Would you like to play again ? y/n " << endl;
+    cin >> input;
+    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
+        playAgain();
+        startupPhase();
+    }
+    else endPhase();
 // You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
 // reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
 // orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
@@ -608,19 +582,22 @@ void GameEngine::mainGameLoop() {
 
 // Check if a player has won by looping through territtories and checking owner
 bool GameEngine::checkForWinner() {
-    int count;
-    for (Player* p : player_list) {
+    int lost = 0;
+    for (Player* p : player_list) { 
         string player = p->getName();
-        for (int i = 0; i < NumberOfTerritories; i++) {
-            string territoryowner = map->getTerritories()[i].getOwner()->getName();
-            if (territoryowner != player ) {
-                count = count + 1;
-                break;
+        for (int i = 0; i < map->territoriesLength; i++) {
+            string owner = map->getTerritories()[i].getOwner()->getName();
+            if (owner != player ) {
+                lost = lost + 1;
+                break; 
             }
         }
+        if (lost == 0) {
+            winPhase(p);
+            return true;
+        }
     }
-    if (count == NumberOfPlayers) return false;
-    else return true;
+    return false;
 }
 
 // Check that players are still valid, remove players that are not
@@ -633,6 +610,23 @@ void GameEngine::checkPlayers() {
             player_list.erase(std::remove(player_list.begin(), player_list.end(), p), player_list.end()); //removes player from player_list
         } 
     }
+}
+
+// Check that a card type is in a specific hand
+bool GameEngine::checkCardInHand(string type, Hand* h) {
+    bool flag = false;
+    for (Card* c : h->hand) {
+        if (c->getType() == type) flag = true;
+    }
+    return flag;
+}
+
+bool GameEngine::equalsIgnoreCase(string s1, string s2) {
+   // Change to lower case
+   transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+   transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
+   if (s1 == s2) return true;
+   else return false;
 }
 
 // From Iloggable

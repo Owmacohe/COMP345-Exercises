@@ -60,7 +60,7 @@ Player::~Player() {
 // Returns a vector list of territories for player to defend in priority
 // Priority is determined by which territories are surrounded by the most enemy territories
 
-vector<Territory*> Player::toDefend(Map m) {
+vector<Territory*> Player::toDefend(Map* m) {
     vector<Territory*> defend_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
@@ -68,29 +68,29 @@ vector<Territory*> Player::toDefend(Map m) {
     for (Territory* territory : territories) {
         int number_surrounding = 0;
         string name = territory->getName();
-        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 1 check each territories numbers of enemies surrounding 
+        vector<Territory*> surround_territory = m->getConnectedTerritories(name);
+        // step 1 check each territories numbers of enemies surrounding 
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_surrounding = number_surrounding + 1;
             }
         }
-        //step 2 pair territory and their number of surrounding territories, add pair to vector
+        // step 2 pair territory and their number of surrounding territories, add pair to vector
         pairs.first = number_surrounding;
         pairs.second = territory;
 
         ordering.push_back(pairs);
 
-        for (Territory* i : surround_territory) { // delete the vector of the surrounding to avoid memory leak
+        for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
             delete i;
             i = NULL;
         }
     }
-    //step 3 sort and seperate territories in pair 
+    // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
-        defend_territories.insert(defend_territories.begin(), p.second); //pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
-        delete p.second; // delete the vector of pairs to avoid memory leak
+        defend_territories.insert(defend_territories.begin(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+        delete p.second; // Delete the vector of pairs to avoid memory leak
         p.second = NULL;
     }
     return defend_territories;
@@ -98,7 +98,7 @@ vector<Territory*> Player::toDefend(Map m) {
 
 // Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
 // Priority is determined by which enemy territories connected have most armies
-vector<Territory*> Player::toAttack(Map m) {
+vector<Territory*> Player::toAttack(Map* m) {
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
@@ -106,42 +106,42 @@ vector<Territory*> Player::toAttack(Map m) {
     for (Territory* territory : territories) {
         int number_armies = 0;
         string name = territory->getName();
-        //step 1 get connected territories
-        vector<Territory*> surround_territory = m.getConnectedTerritories(name);
-        //step 2 for each connected territory thats an enemy count the number armies
+        // step 1 get connected territories
+        vector<Territory*> surround_territory = m->getConnectedTerritories(name);
+        // step 2 for each connected territory thats an enemy count the number armies
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
                 number_armies = t->getArmies();
-                //step 3 pair enemy territory and their number of armies, add pair to vector
+                // step 3 pair enemy territory and their number of armies, add pair to vector
                 pairs.first = number_armies;
                 pairs.second = t;
                 ordering.push_back(pairs);
             }
         }
-        for (Territory* i : surround_territory) { // delete the vector of the surrounding to avoid memory leak
+        for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
             delete i;
             i = NULL;
         }
     }
-    //step 3 sort and seperate territories in pair 
+    // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
-        attack_territories.insert(attack_territories.begin(), p.second);; //pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
-        delete p.second; // delete the vector of pairs to avoid memory leak
+        attack_territories.insert(attack_territories.begin(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+        delete p.second; // Delete the vector of pairs to avoid memory leak
         p.second = NULL;
     }
     return attack_territories;
 }
 
-//maybe we can have this one just place objects, and then in execute or in gamenegine they are reassigned to have required parameters
-void Player::issueOrder(string type) { 
+void Player::issueOrder(string type, Territory* t, Territory* o) {   
     if (type == "deploy") {
-        Deploy* o = new Deploy; //order type create
-        orders->addOrder(o); //add order to list
+        // Issues deploy orders based on toDefend()
+        Deploy* d = new Deploy(this, t);
+        orders->addOrder(d); // Add order to list
     }
     else if (type == "advance") {
-        Advance* o = new Advance;
-        orders->addOrder(o);
+        Advance* a = new Advance(this, t, o);
+        orders->addOrder(a);
     }
     else if (type == "bomb") {
         Bomb* o = new Bomb;

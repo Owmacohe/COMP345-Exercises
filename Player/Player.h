@@ -20,10 +20,10 @@ class Player {
 
         ~Player(); // Destructor
 
-        vector<Territory*> toDefend(Map m); // Territories for player to defend
-        vector<Territory*> toAttack(Map m); // Territories for player to attack
+        vector<Territory*> toDefend(Map* m); // Territories for player to defend
+        vector<Territory*> toAttack(Map* m); // Territories for player to attack
 
-        void issueOrder(string); //  Create order and adds order to players order list
+        void issueOrder(string type, Territory* t, Territory* o); //  Create order and adds order to players order list
 
         int getNumberOfArmies(); // Get number of armies player has
         int getNumberOfTerritories(); // Get number of territories player owns
