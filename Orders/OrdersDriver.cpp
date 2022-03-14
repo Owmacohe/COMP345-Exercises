@@ -2,6 +2,7 @@
 #include "Player/Player.h"
 #include "Map/Map.h"
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../GameEngine/GameEngine.h"
 
 int main() {
 	//	Create OrderList object
@@ -13,51 +14,61 @@ int main() {
     player2->setReinforcementPool(12);
     player2->setName("MJ");
 
-    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
-    Territory* canada = new Territory("Canada", "North America", player2, 4);
+    GameEngine game;
+    cout << game << endl;
+//
+//    game->addAlliances(player1,player2);
+//
+//    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
+//    Territory* canada = new Territory("Canada", "North America", player2, 4);
+//
+//    cout << "Player 1" << " - name: " << player1->getName() << endl;
+//    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
+//
+//    cout << "Player 2" << " - name: " << player2->getName() << endl;
+//    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
+//
+//    cout << "Territories:" << endl;
+//    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
+//    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
 
-    cout << "Player 1" << " - name: " << player1->getName() << endl;
-    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
-
-    cout << "Player 2" << " - name: " << player2->getName() << endl;
-    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
-
-    cout << "Territories:" << endl;
-    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
-    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
-
-    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
+//    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
 //	//Deploy
-	Deploy *deploy1 = new Deploy(player1,vietnam);
-	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
-    cout << "Deploy validation: ";
-    deploy1->validate();
-    cout << "----- Deploy execution ----- " << endl;
-    deploy1->execute();
+//	Deploy *deploy1 = new Deploy(player1,vietnam);
+//	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
+//  cout << "Deploy validation: ";
+//  deploy1->validate();
+//  cout << "Deploy execution: " << endl;
+//  deploy1->execute();
+//
+//  cout << player1->getName() << " reinforcement pool: " << player1->getReinforcePool() << " armies" << endl; //Check if player1 reinforcement pool decreases
+//  cout << vietnam->getName() << " armies: " << vietnam->getArmies() << " armies" << endl; //Check if numArmies in territory increases
+//
+//	player1List.addOrder(deploy1);
+//	cout << player1List << "\n" << endl;
 
-    cout << player1->getName() << " reinforcement pool: " << player1->getReinforcePool() << " armies" << endl; //Check if player1 reinforcement pool decreases
-    cout << vietnam->getName() << " armies: " << vietnam->getArmies() << " armies" << endl; //Check if numArmies in territory increases
-
-	player1List.addOrder(deploy1);
-	cout << player1List << "\n" << endl;
-
-	// Advance
-//	Advance *advance1 = new Advance( );
+//	 Advance
+//	Advance *advance1 = new Advance(player1, vietnam, canada);
 //	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
-//    cout << "Checking for validation: " << advance1->validate() << endl;
-//    cout << "Checking for execution: " ; advance1->execute() ;
+//    cout << "Advance validation: " << endl;
+//    advance1->validate();
+//    cout << "Advance execution: " ;
+//    advance1->execute();
 //	player1List.addOrder(advance1);
 //	cout << player1List << "\n" << endl;
 
-	// Bomb
-//	Bomb *bomb1 = new Bomb();
+//	 Bomb
+//	Bomb *bomb1 = new Bomb(player1, canada, vietnam);
 //	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
-//    cout << "Checking for validation: " << bomb1->validate() << endl;
-//    cout << "Checking for execution: " ; bomb1->execute() ;
+//    cout << "Bomb validation: ";
+//    bomb1->validate();
+//    cout << "Bomb execution: " ;
+//    bomb1->execute() ;
+//
 //	player1List.addOrder(bomb1);
 //	cout << player1List << "\n" << endl;
 
-	// Blockade
+//	// Blockade
 //	Blockade *blockade1 = new Blockade();
 //	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
 //    cout << "Checking for validation: " << blockade1->validate() << endl;
@@ -65,7 +76,7 @@ int main() {
 //	player1List.addOrder(blockade1);
 //	cout << player1List << "\n" << endl;
 
-	// Airlift
+//	// Airlift
 //	Airlift *airlift1 = new Airlift();
 //	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
 //    cout << "Checking for validation: " << airlift1->validate() << endl;
@@ -123,6 +134,18 @@ int main() {
 //
 //	cout << "Copy through the assignment operator" << endl;
 //	cout << player1List3 << "\n" <<endl;
+
+//cout << "****************************** Advance idea testing ******************************" << endl;
+//int attackPower = 0 , defendPower = 0, defendSurvived =0, attackSurvived =0;
+//int numToAdvance = 0 , targetArmies = 0;
+//attackPower = numToAdvance*0.6;
+//defendPower = targetArmies*0.7;
+//defendSurvived = targetArmies - attackPower;
+//attackSurvived = numToAdvance - defendPower;
+//
+//cout << attackPower << " || " << defendPower << endl;
+//cout << attackSurvived << " || " << defendSurvived << endl;
+
 	return 0;
 }
 
