@@ -253,7 +253,7 @@ void Advance::validate() {
             validated = true;
         }
         else{
-            cout << "Invalid! - Cannot attack Territory in Negotiation" << endl;
+            cout << "Invalid! - Cannot attack Territory in Negotiation";
             validated = false;
         }
     }
@@ -271,38 +271,30 @@ void Advance::execute() {
             cout << "Re-enter number of Armies to deploy: ";
             cin >> numToAdvance;
         }
-        // Advance: Target & Source both belong to player
         if(target->getOwner() == playerIssuing) {
-            origin->setArmies(origin->getArmies() - numToAdvance);    // --numToAdvance from source terri
-            target->setArmies(target->getArmies() + numToAdvance); // ++numToAdvance to target terri
-        }
-        // Attack:
-        else if ((target->getOwner() != playerIssuing) && !(game->existingAlliance(origin->getOwner(), target->getOwner()))){
+            origin->setArmies(origin->getArmies() - numToAdvance);    // subtract armies from source territory;
+            target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
+        } else if ((target->getOwner() == playerIssuing) && !(game->existingAlliance(origin->getOwner(), target->getOwner()))){
+            origin->setArmies(origin->getArmies()-numToAdvance);
+
             // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
             // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
-            int attackPower = numToAdvance*0.6;
+            int attackPower = origin->getArmies()*0.6;
             int defendPower = target->getArmies()*0.7;
-            int attackSurvived = numToAdvance - defendPower;
-            int defendSurvived = target->getArmies() - attackPower;
-
-            origin->setArmies(origin->getArmies()-numToAdvance); // --numToAdvance from source terri
-
-            if (attackSurvived > 0 && defendSurvived <= 0){  // Attacker wins
-                target->setOwner(playerIssuing);
-                target->setArmies(attackSurvived);
-            } else if (attackSurvived > 0 && defendSurvived > 0){   // Both tie
-                target->setArmies(target->getArmies()-defendPower);
-                
-            } else { // Attacker lose
-                target->setArmies(defendSurvived);
+            if (attackPower == defendPower) {
+                target->setArmies(0);
             }
-
+            else if (attackPower > defendPower){
+                target->setArmies((attackPower - defendPower)/0.6);
+                target->setOwner(playerIssuing);
+//                playerIssuing->getHand()->drawCard(game->getDeck()); // TODO
+            }
+            else{}
 
         }
     } else
         cout << "Can't execute Advance order!" << endl;
 }
-//  playerIssuing->getHand()->drawCard(game->getDeck()); // TODO
     /*
      * ask input from the player for number of armies moved, Territory A and Territory B
      * call validate() --> Change method to accept armies, Territory A and Territory B ?

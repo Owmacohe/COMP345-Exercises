@@ -4,6 +4,12 @@
 #include "../Player/Player.h"
 #include "GameEngine.h"
 
+#include "../Cards/Cards.cpp"
+#include "../Orders/Orders.cpp"
+#include "../Map/Map.cpp"
+#include "../Player/Player.cpp"
+#include "GameEngine.cpp"
+
 int gameEngineMain() {
     GameEngine gameEngine;
     string input;
