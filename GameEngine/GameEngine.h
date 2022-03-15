@@ -80,7 +80,7 @@ class GameEngine : public Iloggable, public Subject {
         // Checks
         bool checkForWinner();
         void checkPlayers();
-        bool checkCardInHand(string type, Hand* h);
+        int checkCardInHand(string type, Hand* h);
         bool equalsIgnoreCase(string s1, string s2);
 
         // From Iloggable

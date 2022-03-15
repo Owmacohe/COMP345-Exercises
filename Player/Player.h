@@ -23,13 +23,14 @@ class Player {
         vector<Territory*> toDefend(Map* m); // Territories for player to defend
         vector<Territory*> toAttack(Map* m); // Territories for player to attack
 
-        void issueOrder(string type, Territory* t, Territory* o); //  Create order and adds order to players order list
+        void issueOrder(string type); //  Create order and adds order to players order list
 
         int getNumberOfArmies(); // Get number of armies player has
         int getNumberOfTerritories(); // Get number of territories player owns
 
         void addToReinforcePool(int armies); // Add to reinforcement pool
         void removeFromReinforcePool(int armies); // Remove from reinforcement pool
+        
         // Accessors
         void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o), setReinforcementPool(int armies);
 
@@ -49,7 +50,7 @@ class Player {
         vector<Territory*> territories; // List of players territories
         Hand* hand; // Player hand
         OrdersList* orders; // Player list of orders
-        int reinforcePool;
-        OrdersList* deployList;
+        int reinforcePool; // Number of reinforcements player has
+        OrdersList* deployList; // List of deploy orders to be executed before the other orders
 
 };
