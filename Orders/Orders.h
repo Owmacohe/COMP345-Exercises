@@ -3,14 +3,15 @@
 #include <vector>
 #include <string>
 #include <iostream>
-//#include "../LoggingObserver/LoggingObserver.h"
+
+#include "../LoggingObserver/LoggingObserver.h"
 using namespace std;
 
 class Territory;
 class Player;
 class GameEngine;
 
-class Order /*:public Iloggable, public Subject*/ {
+class Order :public Iloggable, public Subject {
 public:
     Order(); // Default constructor
     Order(bool v, string s, Player* p); // Parameterized constructor
@@ -193,31 +194,31 @@ public:
     Player* targetPlayer;
 
 };
+// AUDREY WE CAN DELETE THIS
+//class Reinforcement : public Order {
+//public:
+//    Reinforcement();  // Default constructor
+//    Reinforcement(bool v, string s, Player* p);  // Parameterized constructor
+//    Reinforcement(Reinforcement& original); // Copy constructor
+//    ~Reinforcement(); // Destructor
+//
+//    string getDescription(); bool getValidated(); // Accessors
+//    void setDescription(string d); void setValidated(bool v); // Mutators
+//
+//    Reinforcement& operator = (const Reinforcement& D); // Assignment operator
+//    friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
+//
+//    void validate();
+//    void execute();
+//
+//    // From Iloggable
+//    // string stringToLog();
+//};
 
-class Reinforcement : public Order {
-public:
-    Reinforcement();  // Default constructor
-    Reinforcement(bool v, string s, Player* p);  // Parameterized constructor
-    Reinforcement(Reinforcement& original); // Copy constructor
-    ~Reinforcement(); // Destructor
-
-    string getDescription(); bool getValidated(); // Accessors
-    void setDescription(string d); void setValidated(bool v); // Mutators
-
-    Reinforcement& operator = (const Reinforcement& D); // Assignment operator
-    friend ostream& operator<<(ostream& os, const Reinforcement& reinforcement); // Stream insertion operator
-
-    void validate();
-    void execute();
-
-    // From Iloggable
-    // string stringToLog();
-};
-
-class OrdersList /*: public Iloggable, Subject*/ {
+class OrdersList : public Iloggable, public Subject {
 public:
     vector<Order*> playerOrderList;
-    bool aov;   // TODO ??? For AllOrdersValidated Method
+    //bool aov;   // TODO ??? For AllOrdersValidated Method --- We can delete this I think, no need
 
     OrdersList(); // Default constructor
     OrdersList(vector<Order*> vo); // Parameterized constructor
