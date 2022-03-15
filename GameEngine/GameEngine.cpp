@@ -314,7 +314,7 @@ void GameEngine::endIssueOrderPhase(Player *player) {
 
 void GameEngine::executeOrdersPhase() {
 
-    //first , adding all deploy orders into a separate list and removing them from the original player's lists
+    // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
     for (int i = 0; i < player_list.size(); i++) {
         for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
@@ -324,7 +324,7 @@ void GameEngine::executeOrdersPhase() {
             }
         }
     }
-    // to execute and remove the deploy orders
+    // To execute and remove the deploy orders
     int  deployDoneCount =0;
     while(deployDoneCount < NumberOfPlayers) {
         deployDoneCount =0;
@@ -336,7 +336,7 @@ void GameEngine::executeOrdersPhase() {
             } else deployDoneCount++;
         }
     }
-    // to execute the rest of the orders on each player's list
+    // To execute the rest of the orders on each player's list
     int  playersDone =0;
     while(playersDone < NumberOfPlayers) {
         playersDone =0;
@@ -465,7 +465,7 @@ void GameEngine::startupPhase() {
             }
 
             if (word1 == "loadmap") {
-                // use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+                // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
 
                 MapLoader loader;
                 Map m = Map(loader.load(word2));
@@ -480,7 +480,7 @@ void GameEngine::startupPhase() {
                 }
             }
             else if (word1 == "validatemap") {
-                // use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
+                // Use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
 
                 if (map->validate()) {
                     cout << "Map validated!" << endl;
@@ -488,7 +488,7 @@ void GameEngine::startupPhase() {
                 }
             }
             else if (word1 == "addplayer") { 
-                // use the addplayer <playername> command to enter players in the game (2-6 players)
+                // Use the addplayer <playername> command to enter players in the game (2-6 players)
 
                 Player *p;
                 p->setName(word2);
@@ -499,7 +499,7 @@ void GameEngine::startupPhase() {
                 *s = playersAdded;
             }
             else if (word1 == "gamestart") {
-               // fairly distribute all the territories to the players
+               // Fairly distribute all the territories to the players
 
                 int playerIndex = 0;
 
@@ -516,7 +516,7 @@ void GameEngine::startupPhase() {
                     }
                 }
 
-                // determine randomly the order of play of the players in the game
+                // Determine randomly the order of play of the players in the game
 
                 int *tempOrder = new int[player_list.size()];
 
@@ -526,15 +526,15 @@ void GameEngine::startupPhase() {
 
                 setPlayerOrder(tempOrder);
 
-                // give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
 
                 for (Player* k : player_list) {
                     k->addToReinforcePool(50);
                 }
 
-                // let each player draw 2 initial cards from the deck using the deck’s draw() method
+                // Let each player draw 2 initial cards from the deck using the deck’s draw() method
 
-                // switch the game to the play phase
+                // Switch the game to the play phase
 
                 *s = assignReinforcement;
             }
@@ -542,7 +542,7 @@ void GameEngine::startupPhase() {
     }
 
     // ALSO ADD GameEngine Pointer to attribute to Order Class
-    //Order::setGameEngine(new );
+    // Order::setGameEngine(new );
 
     notify(this); // FROM SUBJECT
 }
