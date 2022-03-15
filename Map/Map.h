@@ -37,6 +37,9 @@ struct Edge {
     bool visited; // Whether the edge has been visited (when validating)
 };
 
+bool doesContain(string*, int, string); // Free method to determine whether a string pointer array contains a given string
+bool doesContain(Edge*, int, Territory, Territory); // Free method to determine whether an Edge pointer array contains an Edge between the given Territories
+
 // Class representing the graph data structure
 class Map {
     public:
@@ -50,7 +53,7 @@ class Map {
         // Accessors
         string getName();
         string *getContinents();
-        string *getContinentBonuses();
+        int *getContinentBonuses();
         Territory *getTerritories();
         Edge *getEdges();
 
@@ -58,24 +61,23 @@ class Map {
         int continentsLength, territoriesLength, edgesLength;
 
         // Mutators
-        void setName(string), setContinents(string*, int), setContinentBonuses(string*), setTerritories(Territory*, int), setEdges(Edge*, int);
+        void setName(string), setContinents(string*, int), setContinentBonuses(int*), setTerritories(Territory*, int), setEdges(Edge*, int);
 
-        void addContinent(string); // Method to add a new Territory
-        void addContinentBonus(string);
+        void addContinent(string); // Method to add a new continent
+        void addContinentBonus(int); // Method to add a new continent bonus
         void addTerritory(const Territory &t); // Method to add a new Territory
         void addEdge(const Edge &e); // Method to add a new Edge between Territories
 
-        bool isGoodMap = true;
+        bool isGoodMap = true; // Whether the Map that has been attempted to be loaded is from a proper file
         bool validate(); // Method to make sure the created Map is valid
 
-        vector<Territory*> getConnectedTerritories(string);
-        vector<Territory*> getContinentTerritories(string);
+        vector<Territory*> getConnectedTerritories(string); // Method to get all Territories that are connected to a given Territory
+        vector<Territory*> getContinentTerritories(string); // Method to get all Territories that are a part of a given Ccntinent
         bool adjacentTerritories(Territory* t1, Territory* t2); // Method to check if two territories are adjacent
-
     private:
         string name; // Name of the Map
         string *continents; // Array of strings of all the continent names
-        string *continentBonuses;
+        int *continentBonuses; // Array of strings of all the continent names
         Territory *territories; // Array of Territories
         Edge *edges; // Array of edges between the Territories
 };

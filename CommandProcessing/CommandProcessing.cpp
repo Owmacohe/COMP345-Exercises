@@ -6,6 +6,7 @@
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
 
+// Default constructor
 Command::Command() {
     command = "";
     validInLength = 0;
@@ -16,6 +17,7 @@ Command::Command() {
     cout << "[Command default constructor]" << endl;
 }
 
+// Parameterized constructor 1 (unparemeterized Commands)
 Command::Command(string c) {
     command = c;
     validInLength = 1;
@@ -45,6 +47,7 @@ Command::Command(string c) {
     cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
+// Parameterized constructor 2 (paremeterized Commands)
 Command::Command(string c, string p) {
     command = c + " <" + p + ">";
     validInLength = 2;
@@ -68,6 +71,7 @@ Command::Command(string c, string p) {
     cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
+// Destructor
 Command::~Command() {
     validInLength = 0;
     delete[] validIn;
@@ -76,11 +80,13 @@ Command::~Command() {
     cout << "[" + command + " Command destructor]" << endl;
 }
 
+// Accessors
 string Command::getCommand() { return command; }
 int *Command::getValidIn() { return validIn; }
 string Command::getTransitionsTo() { return transitionsTo; }
 string Command::getEffect() { return effect; }
 
+// Mutators
 void Command::setCommand(string c) { command = c; }
 void Command::setValidIn(int *v, int l) {
     delete[] validIn;
@@ -99,6 +105,7 @@ void Command::saveEffect(string e) {
     notify(this);
 }
 
+// Method to add a new state in which the Command is valid
 void Command::addValidInState(int s) {
     int *temp = new int[validInLength + 1]; // Creating a new array (1 size larger)
 
@@ -121,6 +128,7 @@ string Command::stringToLog() {
     return logString;
 }
 
+// Default constructor
 CommandProcessor::CommandProcessor() {
     engine = new GameEngine;
 
@@ -130,6 +138,7 @@ CommandProcessor::CommandProcessor() {
     cout << "[CommandProcessor default constructor]" << endl;
 }
 
+// Parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine e) {
     engine = new GameEngine(e);
 
@@ -139,6 +148,7 @@ CommandProcessor::CommandProcessor(GameEngine e) {
     cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
+// Destructor
 CommandProcessor::~CommandProcessor() {
     delete engine;
     engine = NULL;
@@ -150,9 +160,11 @@ CommandProcessor::~CommandProcessor() {
     cout << "[CommandProcessor destructor]" << endl;
 }
 
+// Accessors
 Command *CommandProcessor::getCommands() { return commands; }
 GameEngine *CommandProcessor::getEngine() { return engine; }
 
+// Mutators
 void CommandProcessor::setCommands(Command *c, int l) {
     delete[] commands;
     commands = new Command[l];
@@ -168,6 +180,7 @@ void CommandProcessor::setEngine(GameEngine *e) {
     engine = e;
 }
 
+// Gets command from console
 Command CommandProcessor::readCommand() {
     string temp;
     cin >> temp;
@@ -203,6 +216,7 @@ Command CommandProcessor::readCommand() {
     }
 }
 
+// Stores the gotten Command in the array
 void CommandProcessor::saveCommand(const Command &c) {
     Command *temp = new Command[commandsLength + 1]; // Creating a new array (1 size larger)
 
@@ -222,11 +236,13 @@ void CommandProcessor::saveCommand(const Command &c) {
     notify(this); // FROM SUBJECT
 }
 
+// Reads and then saves a command from the console
 void CommandProcessor::getCommand() {
     Command temp = readCommand();
     saveCommand(temp);
 }
 
+// Checks if the current Command is in the valid state
 bool CommandProcessor::validate(const Command &c) {
     Command temp = Command(c);
     bool isValid = false;
@@ -251,6 +267,7 @@ string CommandProcessor::stringToLog() {
     return logString;
 }
 
+// Reads and then saves a command from a file
 void FileCommandProcessorAdapter::getCommand() {
     ifstream input(currentFile);
     string line;
@@ -273,6 +290,7 @@ void FileCommandProcessorAdapter::getCommand() {
     saveCommand(temp);
 }
 
+// Reads (startup) commands sequentially from a file
 void FileCommandProcessorAdapter::readFromFile(string f) {
     currentFile = f;
 

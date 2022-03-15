@@ -175,16 +175,16 @@ void GameEngine::setPlayerOrder(int *po) {
 }
 void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
 
+// THE FOLLOWING METHODS ARE UNNECESSARY NOW, BUT WE SHOULD KEEP THEM COMMENTED JUST IN CASE
 
+/*
 // Phases, states, and commands
 void GameEngine::startGame() {
-    /*
     *s = start;
     cout << "Welcome to Warzone" << endl;
     cout << "Please enter the number of players" << endl;
     cin >> this->NumberOfPlayers;
     cout << "end of start phase" << endl;
-    */
 
    startupPhase();
 }
@@ -192,7 +192,6 @@ void GameEngine::startGame() {
 void GameEngine::loadMap() {
     *s = mapLoaded;
 
-    /*
     string mapName;
     cout << "enter map name" << endl;
     cin >> mapName;
@@ -203,7 +202,6 @@ void GameEngine::loadMap() {
     }
     
     Map m = ml->load(mapName + ".map");
-    */
 
     cout << "Loaded map" << endl;
 }
@@ -231,6 +229,7 @@ void GameEngine::addPlayer() {
 void GameEngine::assignCountries() {
     cout << "End of assign countries command" << endl;
 }
+*/
 
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
@@ -313,7 +312,6 @@ void GameEngine::endIssueOrderPhase(Player *player) {
 }
 
 void GameEngine::executeOrdersPhase() {
-
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
     for (int i = 0; i < player_list.size(); i++) {
@@ -373,6 +371,9 @@ void GameEngine::playAgain() {
     cout << "The Game will restart soon" << endl;
 }
 
+// THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
+
+/*
 void GameEngine::gameStartupTransitions(string str) {
     if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
         loadMap();
@@ -393,6 +394,7 @@ void GameEngine::gameStartupTransitions(string str) {
 
     notify(this); // FROM SUBJECT
 }
+*/
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
     if (str == "issueorder" && (getState() == 5 || getState() == 6)) {
@@ -431,6 +433,7 @@ void GameEngine::gameEndTransitions(string str) {
     notify(this); // FROM SUBJECT
 }
 
+// Reads (startup) commands sequentially from the console
 void GameEngine::startupPhase() {
     *s = start;
 
@@ -442,6 +445,8 @@ void GameEngine::startupPhase() {
         processor->getCommand();
 
         Command temp = processor->getCommands()[processor->commandsLength - 1];
+
+        string effect = "";
 
         if (processor->validate(temp)) {
             string word1 = "";
@@ -472,31 +477,45 @@ void GameEngine::startupPhase() {
 
                 if (m.isGoodMap) {
                     *map = m;
-                    cout << "Map loaded!" << endl;
+                    effect = "Loaded Map: " + map->getName();
+                    cout << effect << "!" << endl;
                     *s = mapLoaded;
                 }
                 else {
-                    cout << "Bad map file!" << endl;
+                    effect = "Unable to load Map";
+                    cout << effect << "!" << endl;
                 }
             }
             else if (word1 == "validatemap") {
                 // Use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
 
                 if (map->validate()) {
-                    cout << "Map validated!" << endl;
+                    effect = "Validated Map: " + map->getName();
+                    cout << effect << "!" << endl;
                     *s = mapValidated;
                 }
+                else {
+                    effect = "Unable to validate Map";
+                    cout << effect << "!" << endl;
+                }
             }
-            else if (word1 == "addplayer") { 
+            else if (word1 == "addplayer") {
                 // Use the addplayer <playername> command to enter players in the game (2-6 players)
 
-                Player *p;
-                p->setName(word2);
-                player_list.push_back(p);
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
+                    Player *p;
+                    p->setName(word2);
+                    player_list.push_back(p);
 
-                cout << "Player added!" << endl;
+                    effect = "Added Player: " + p->getName();
+                    cout << effect << "!" << endl;
 
-                *s = playersAdded;
+                    *s = playersAdded;
+                }
+                else {
+                    effect = "Unable to add Player";
+                    cout << effect << "!" << endl;
+                }
             }
             else if (word1 == "gamestart") {
                // Fairly distribute all the territories to the players
@@ -516,6 +535,8 @@ void GameEngine::startupPhase() {
                     }
                 }
 
+                effect = "Distributed Territories to Players";
+
                 // Determine randomly the order of play of the players in the game
 
                 int *tempOrder = new int[player_list.size()];
@@ -526,19 +547,32 @@ void GameEngine::startupPhase() {
 
                 setPlayerOrder(tempOrder);
 
-                // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                effect += ", randomly determined the order of playing order";
 
                 for (Player* k : player_list) {
+                    // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
                     k->addToReinforcePool(50);
+
+                    // Let each player draw 2 initial cards from the deck using the deck’s draw() method
+                    k->getHand()->drawCard(*deck);
+                    k->getHand()->drawCard(*deck);
                 }
 
-                // Let each player draw 2 initial cards from the deck using the deck’s draw() method
+                effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";
 
                 // Switch the game to the play phase
 
                 *s = assignReinforcement;
             }
+            else if (word1 == "replay") {
+                // TODO restart the game
+            }
+            else if (word1 == "win") {
+                // TODO end the game
+            }
         }
+
+        temp.saveEffect(effect);
     }
 
     // ALSO ADD GameEngine Pointer to attribute to Order Class
@@ -558,6 +592,9 @@ void GameEngine::mainGameLoop() {
         checkPlayers(); // Check if any players need to be removed
         playing = !checkForWinner(); // Check for winner
     }
+
+    // TODO need to use Commands to check for "replay" and "win"
+
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
     if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
@@ -567,7 +604,7 @@ void GameEngine::mainGameLoop() {
     else endPhase();
 }
 
-// Check if a player has won by looping through territtories and checking owner
+// Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     int lost = 0;
     for (Player* p : player_list) { 

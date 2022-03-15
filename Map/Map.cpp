@@ -2,7 +2,6 @@
 #include "../Player/Player.h"
 #include <algorithm>
 
-// Free method to determine whether a string pointer array contains a given string
 bool doesContain(string* arr, int size, string s) {
     for (int i = 0; i < size; i++) {
         if (arr[i] == s) {
@@ -13,7 +12,6 @@ bool doesContain(string* arr, int size, string s) {
     return false;
 }
 
-// Free method to determine whether an Edge pointer array contains an Edge between the given Territories
 bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
     for (int i = 0; i < size; i++) {
         string n1 = arr[i].a.getName();
@@ -105,7 +103,7 @@ Map::Map() {
     name = "";
     continentsLength = 0;
     continents = new string[continentsLength];
-    continentBonuses = new string[continentsLength];
+    continentBonuses = new int[continentsLength];
     territoriesLength = 0;
     territories = new Territory[territoriesLength];
     edgesLength = 0;
@@ -118,7 +116,7 @@ Map::Map() {
 Map::Map(string n) : name(n) {
     continentsLength = 0;
     continents = new string[continentsLength];
-    continentBonuses = new string[continentsLength];
+    continentBonuses = new int[continentsLength];
     territoriesLength = 0;
     territories = new Territory[territoriesLength];
     edgesLength = 0;
@@ -206,7 +204,7 @@ Map& Map::operator = (const Map& toAssign){
 // Map accessors
 string Map::getName() { return name; }
 string *Map::getContinents() { return continents; }
-string *Map::getContinentBonuses() { return continentBonuses; }
+int *Map::getContinentBonuses() { return continentBonuses; }
 Territory *Map::getTerritories() { return territories; }
 Edge *Map::getEdges() { return edges; }
 
@@ -222,9 +220,9 @@ void Map::setContinents(string *c, int l) {
 
     continentsLength = l;
 }
-void Map::setContinentBonuses(string *b) {
+void Map::setContinentBonuses(int *b) {
     delete[] continentBonuses;
-    continentBonuses = new string[continentsLength];
+    continentBonuses = new int[continentsLength];
 
     for (int i = 0; i < continentsLength; i++) {
         //continentBonuses[i] = c[i]; SORRY UNCOMMENTED THIS, WHAT IS C?
@@ -269,8 +267,8 @@ void Map::addContinent(string c) {
     continentsLength++;
 }
 
-void Map::addContinentBonus(string b) {
-    string *temp = new string[continentsLength + 1]; // Creating a new array (1 size larger)
+void Map::addContinentBonus(int b) {
+    int *temp = new int[continentsLength + 1]; // Creating a new array (1 size larger)
 
     // Copying the old elements into the new array
     for (int i = 0; i < continentsLength; i++) {
@@ -571,7 +569,7 @@ Map MapLoader::load(string f) {
                         if (section == 1) {
                             if (stoi(lineSplit[0]) == 3) {
                                 m.addContinent(lineSplit[1]);
-                                m.addContinentBonus(lineSplit[2]);
+                                m.addContinentBonus(stoi(lineSplit[2]));
                             }
                             else {
                                 throw "INVALID MAP: improper continent!";
