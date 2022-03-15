@@ -235,10 +235,12 @@ void GameEngine::assignCountries() {
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign reinforcement phase" << endl;
+
     // Adding the reset of alliances
     //resetAlliances();
+
     Player* p = player_list.at(currentPlayer);
-    
+
     int num = floor((p->getNumberOfTerritories())/3);
     if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
@@ -300,7 +302,7 @@ void GameEngine::issueOrdersPhase() {
             cout << "Which card would you like to play ?" << endl;
             cin >> response;
             int index = checkCardInHand(response, p->getHand());
-            if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder()); // ASK AUDREY 
+            if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
         }
         else break;
     } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
@@ -562,6 +564,7 @@ void GameEngine::mainGameLoop() {
             checkPlayers(); // Check if any players need to be removed
             playing = !checkForWinner(); // Check for winner
         }
+        resetAlliances(); // Reset Alliances
     }
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
