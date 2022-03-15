@@ -68,7 +68,6 @@ class FileCommandProcessorAdapter : public CommandProcessor {
 
         void readFromFile(string); // Reads (startup) commands sequentially from a file
 
-        string stringToLog(); // From Iloggable
     private:
         string currentFile;
         int currentLine;

@@ -158,15 +158,16 @@ void Deploy::execute() {
         cout << "Can't execute Deploy order!" << endl;
     }
 
-    //notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 
 string Deploy::stringToLog() {
     string validation = (validated) ? "executed" : "to be validated";
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder = "Deploy order " + validation + " : Deployment " + to_string(numToDeploy) + " soldiers to " +
+    string logStringOrder = "Deploy order " + validation + " : Deployment " + to_string(numToDeploy) + " armies to " +
                             target->getName() + "\n";
-    return logStringPlayer + logStringOrder;
+    string logStringEffect =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
+    return logStringPlayer + logStringOrder + logStringEffect;
 }
 /****************************** Advance *******************************/
 
@@ -250,6 +251,7 @@ void Advance::validate() {
         // Sub-condition: If there exist alliance (Yes: attack is invalid || No: attack is valid)
         else if (!(game->existingAlliance(origin->getOwner(), target->getOwner()))){
             cout << "Valid! ** Type attack" << endl;
+            validateResult = "Advance";
             validated = true;
         }
         else{
@@ -305,10 +307,22 @@ void Advance::execute() {
     //notify(this); // FROM SUBJECT LET ME KNOW HOW YOU ARE GOING TO STORE THE ACTION (ATTACK OR NOT) so I can output it in the log
 
 
-//string Advance::stringToLog() {
-//    string logString = "Create log string for execution.\n"; //TODO
-//    return logString;
-//}
+string Advance::stringToLog() {
+    string validation = (validated) ? "executed" : "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder;
+
+    if (validateResult == "Attack"){
+        logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
+    }
+
+    else if (validateResult == "Advance"){
+        logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
+    }
+    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+
+    return logStringPlayer + logStringOrder + logStringEffect;
+}
 
 /****************************** Airlift *******************************/
 
@@ -389,9 +403,12 @@ string Airlift::stringToLog() {
     string validation = (validated) ? "executed" : "to be validated";
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
     string logStringOrder =
-            "Airlift order " + validation + ": Airlifting " + to_string(numOfArmies) + " soldiers from " +
+            "Airlift order " + validation + ": Airlifting " + to_string(numOfArmies) + " armies from " +
             origin->getName() + " to " + target->getName() + ".\n";
-    return logStringPlayer + logStringOrder;
+
+    string logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + ". \n";
+    string logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
+    return logStringPlayer + logStringOrder + logStringEffect1 + logStringEffect2;
 }
 
 /****************************** Bomb *******************************/
@@ -487,7 +504,8 @@ string Bomb::stringToLog() {
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
     string logStringOrder =
             "Bomb order" + validation + ": Bomb from " + origin->getName() + " to " + target->getName() + ".\n";
-    return logStringPlayer + logStringOrder;
+    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+    return logStringPlayer + logStringOrder + logStringEffect;
 }
 
 /****************************** Blockade *******************************/
@@ -556,7 +574,7 @@ void Blockade::execute() {
     } else {
         int doubleArmies = (target->getArmies()) * 2;
         target->setArmies(doubleArmies);
-        target->setOwner(game->getplayer_list().at(0)); //TODO -- Add neutral at startup
+        target->setOwner(game->getNeutralPlayer());
         cout << this->stringToLog();
     }
 
@@ -568,6 +586,7 @@ string Blockade::stringToLog() {
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
     string logStringOrder = "blockade order " + validation + ": transfer of the ownership of " + target->getName() +
                             " to the Neutral Player.\n";
+    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
     return logStringPlayer + logStringOrder;
 }
 
@@ -664,54 +683,54 @@ string Negotiate::stringToLog() {
 }
 
 /****************************** Reinforcement *******************************/
-
-// Default constructor
-Reinforcement::Reinforcement() : Order(false, "Reinforcement", nullptr) {};
-
-
-// Parameterized constructor
-Reinforcement::Reinforcement(bool v, string s, Player *p) : Order(v, s, p) {};
-
-// Copy constructor
-Reinforcement::Reinforcement(Reinforcement &original) : Order(original) {
-    description = "Send reinforcement into a territory";
-}
-
-// Destructor
-Reinforcement::~Reinforcement() {};
-
-// Accessors
-string Reinforcement::getDescription() { return description; }
-
-bool Reinforcement::getValidated() { return validated; }
-
-// Mutators
-void Reinforcement::setDescription(string d) {
-    description = d;
-}
-
-void Reinforcement::setValidated(bool v) {
-    validated = v;
-}
-
-Reinforcement &Reinforcement::operator=(const Reinforcement &o) {
-    validated = o.validated;
-    description = o.description;
-    return *this;
-}
-
-ostream &operator<<(ostream &os, const Reinforcement &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
-    return os;
-}
-
-void Reinforcement::validate() {}
-
-void Reinforcement::execute() {
-    cout << "Executing Order Reinforcement" << endl;
-    //notify(this); // FROM SUBJECT
-}
+//
+//// Default constructor
+//Reinforcement::Reinforcement() : Order(false, "Reinforcement", nullptr) {};
+//
+//
+//// Parameterized constructor
+//Reinforcement::Reinforcement(bool v, string s, Player *p) : Order(v, s, p) {};
+//
+//// Copy constructor
+//Reinforcement::Reinforcement(Reinforcement &original) : Order(original) {
+//    description = "Send reinforcement into a territory";
+//}
+//
+//// Destructor
+//Reinforcement::~Reinforcement() {};
+//
+//// Accessors
+//string Reinforcement::getDescription() { return description; }
+//
+//bool Reinforcement::getValidated() { return validated; }
+//
+//// Mutators
+//void Reinforcement::setDescription(string d) {
+//    description = d;
+//}
+//
+//void Reinforcement::setValidated(bool v) {
+//    validated = v;
+//}
+//
+//Reinforcement &Reinforcement::operator=(const Reinforcement &o) {
+//    validated = o.validated;
+//    description = o.description;
+//    return *this;
+//}
+//
+//ostream &operator<<(ostream &os, const Reinforcement &o) {
+//    string validated = (o.validated) ? " (validated)" : " (not validated)";
+//    os << o.description;
+//    return os;
+//}
+//
+//void Reinforcement::validate() {}
+//
+//void Reinforcement::execute() {
+//    cout << "Executing Order Reinforcement" << endl;
+//    //notify(this); // FROM SUBJECT
+//}
 
 //string Reinforcement::stringToLog() {
 //    string logString = "Create log string for execution.\n";
@@ -808,12 +827,12 @@ OrdersList::~OrdersList() {
 // Accessors
 vector<Order *> OrdersList::getOrderList() { return playerOrderList; }
 
-bool OrdersList::getAllOrdersValidated() { return false; } // TODO ??? Audrey: I'm not sure what this one's for
+//bool OrdersList::getAllOrdersValidated() { return false; } // WE can delete
 
 // Mutators
 void OrdersList::setOrderList(vector<Order *> vo) { playerOrderList = vo; }
 
-void OrdersList::setAllOrdersValidated(bool v) { aov = v; }
+//void OrdersList::setAllOrdersValidated(bool v) { aov = v; } Can be deleted
 
 // Assignment Operator overloading, will have the same behavior as the Copy constructor. Deep copy of Vector through = operator.
 OrdersList OrdersList::operator=(const OrdersList &original) {

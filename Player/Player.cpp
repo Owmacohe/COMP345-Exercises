@@ -159,10 +159,10 @@ void Player::issueOrder(string type, Territory* t, Territory* o) {
         Negotiate* o = new Negotiate;
         orders->addOrder(o);
     }
-    else if (type == "reinforcement") {
+    /*else if (type == "reinforcement") {
         Reinforcement* o = new Reinforcement;
         orders->addOrder(o);
-    }
+    }*/
     else {
         cout << "Invalid order" << endl;
     }
