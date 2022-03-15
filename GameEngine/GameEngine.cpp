@@ -558,30 +558,24 @@ void GameEngine::startupPhase() {
     notify(this); // FROM SUBJECT
 }
 
+// Main game loop, includes reinforcement phase, issue order phase, execute order phase
 void GameEngine::mainGameLoop() {
     bool playing = true;
     string input;
     while (playing == true) {
-        assignReinforcementPhase(); //begin reinforcement phase
-        issueOrdersPhase(); //begin issue orders phase
-        executeOrdersPhase(); //begin execute orders phase
-        checkPlayers(); //check if any players need to be removed
-        playing = !checkForWinner(); //check for winner
+        assignReinforcementPhase(); // Begin reinforcement phase
+        issueOrdersPhase(); // Begin issue orders phase
+        executeOrdersPhase(); // Begin execute orders phase
+        checkPlayers(); // Check if any players need to be removed
+        playing = !checkForWinner(); // Check for winner
     }
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
     if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
         playAgain();
-        startupPhase();
+        *s = start; // Switch to start up for replay
     }
     else endPhase();
-// You must deliver a driver that demonstrates that (1) a player receives the correct number of armies in the
-// reinforcement phase (showing different cases); (2) a player will only issue deploy orders and no other kind of
-// orders if they still have armies in their reinforcement pool; (3) a player can issue advance orders to either defend
-// or attack, based on the toAttack() and toDefend() lists; (4) a player can play cards to issue orders; (5) a
-// player that does not control any territory is removed from the game; (6) the game ends when a single player
-// controls all the territories. All of this except the issueOrder() method must be implemented in a single .cpp/.h
-// file duo named GameEngine.cpp/GameEngine.h.
 }
 
 // Check if a player has won by looping through territtories and checking owner
