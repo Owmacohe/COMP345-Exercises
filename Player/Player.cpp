@@ -133,36 +133,20 @@ vector<Territory*> Player::toAttack(Map* m) {
     return attack_territories;
 }
 
-void Player::issueOrder(string type, Territory* t, Territory* o) {   
+void Player::issueOrder(string type) { 
+    // Set to all lowercase
+    transform(type.begin(), type.end(), type.begin(), ::tolower); 
+
     if (type == "deploy") {
         // Issues deploy orders based on toDefend()
-        Deploy* d = new Deploy(this, t);
+        Deploy* d = new Deploy(this);
         orders->addOrder(d); // Add order to list
     }
     else if (type == "advance") {
-        Advance* a = new Advance(this, t, o);
+        Advance* a = new Advance(this);
         orders->addOrder(a);
     }
-    else if (type == "bomb") {
-        Bomb* o = new Bomb;
-        orders->addOrder(o);
-    }
-    else if (type == "blockade") {
-        Blockade* o = new Blockade;
-        orders->addOrder(o);
-    }
-    else if (type == "airlift") {
-        Airlift* o = new Airlift;
-        orders->addOrder(o);
-    }
-    else if (type == "negotiate") {
-        Negotiate* o = new Negotiate;
-        orders->addOrder(o);
-    }
-    /*else if (type == "reinforcement") {
-        Reinforcement* o = new Reinforcement;
-        orders->addOrder(o);
-    }*/
+    // Orders that involve card will be issued using playCard()
     else {
         cout << "Invalid order" << endl;
     }

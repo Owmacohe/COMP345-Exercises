@@ -273,26 +273,16 @@ void GameEngine::issueOrdersPhase() {
         // Only issue deploy orders while the players reinforcement pool contains armies
         cout << "Issueing deploy orders" << endl;
         while (p->getReinforcePool() != 0) {
-            p->issueOrder("deploy", p->toDefend(map).front(), NULL);
+            p->issueOrder("deploy");
         }
         // Issue advance orders
         cout << "Issueing advance orders" << endl;
-        do { //-----HAS NO INPUT VALIDATION-------//
+        do {
             cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                cout << "Would " << p->getName() << " like to defend or attack ? d/a " << endl;
-                cin >> response;
-                if (equalsIgnoreCase(response, "d") || equalsIgnoreCase(response, "defense")) {
-                    vector<Territory*> defends = p->toDefend(map);
-                    //loop through to find closest to last territory to have armies to move to the front territory ?
-                }
-                else if (equalsIgnoreCase(response, "a") || equalsIgnoreCase(response, "attack")) {
-                    vector<Territory*> defends = p->toDefend(map);
-                    vector<Territory*> attackS = p->toAttack(map);
-                    //lowest to defend move to attack ?
-                }
-                else cout << "Invalid input" << endl;
+                p->issueOrder("advance");
+                // MJ said that checking if an advance is attacking or defending is done in orders
             }
             else break;
         } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
@@ -307,9 +297,8 @@ void GameEngine::issueOrdersPhase() {
                 cout << p->getHand() << endl;
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
-                if (checkCardInHand(response, p->getHand())) {
-                   // p->issueOrder(response); // NEEDS TO INCLUDE REQUIRE PARAM FOR CARDS -- COMMENTED IT OUT BECAUSE OF ERRORS - MJ
-                }
+                int index = checkCardInHand(response, p->getHand());
+                if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder()); // ASK AUDREY 
             }
             else break;
         } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
@@ -611,12 +600,13 @@ void GameEngine::checkPlayers() {
 }
 
 // Check that a card type is in a specific hand
-bool GameEngine::checkCardInHand(string type, Hand* h) {
-    bool flag = false;
+int GameEngine::checkCardInHand(string type, Hand* h) {
+    int index = 0; //returns index of card in hand, -1 if card is not in hand
     for (Card* c : h->hand) {
-        if (c->getType() == type) flag = true;
+        if (equalsIgnoreCase(c->getType(), type)) return index;
+        index = index + 1;
     }
-    return flag;
+    return -1;
 }
 
 bool GameEngine::equalsIgnoreCase(string s1, string s2) {
