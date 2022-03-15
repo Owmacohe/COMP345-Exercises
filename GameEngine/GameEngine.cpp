@@ -268,7 +268,9 @@ void GameEngine::issueOrdersPhase() {
     string input;
     string response;
 
-    for (Player* p : player_list) {
+    for (int i = 0; i < NumberOfPlayers; i++) {
+        Player *p = player_list.at(playerOrder[i]);
+        
         cout << "Issuing the orders for player " << p->getName() << endl;
         // Only issue deploy orders while the players reinforcement pool contains armies
         cout << "Issueing deploy orders" << endl;
@@ -553,6 +555,7 @@ void GameEngine::mainGameLoop() {
     string input;
     while (playing == true) {
         assignReinforcementPhase(); // Begin reinforcement phase
+        //ADD PLAYER LOOP
         issueOrdersPhase(); // Begin issue orders phase
         executeOrdersPhase(); // Begin execute orders phase
         checkPlayers(); // Check if any players need to be removed
