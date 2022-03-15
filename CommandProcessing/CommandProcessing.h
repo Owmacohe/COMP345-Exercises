@@ -9,31 +9,32 @@ using namespace std;
 
 class GameEngine;
 
+// Class representing one Command that gets executed in (primarily) the startup phase
 class Command : public Iloggable, public Subject {
     public:
         Command(); // Default constructor
-        Command(string); // Parameterized constructor 1
-        Command(string, string); // Parameterized constructor 2
+        Command(string); // Parameterized constructor 1 (unparemeterized Commands)
+        Command(string, string); // Parameterized constructor 2 (paremeterized Commands)
         ~Command(); // Destructor
 
         // Accessors
         string getCommand(), getTransitionsTo(), getEffect();
         int *getValidIn();
 
-        // TODO: find out when saveEffect() gets called
         // Mutators
         void setCommand(string), setValidIn(int*, int), setTransitionsTo(string), saveEffect(string);
 
-        void addValidInState(int);
+        void addValidInState(int); // Method to add a new state in which the Command is valid
 
-        int validInLength;
+        int validInLength; // Array length
 
         string stringToLog(); // From Iloggable
     private:
-        string command, transitionsTo, effect; // Command name, next state, and dynamic effect of the command
+        string command, transitionsTo, effect; // Command name, next state, and effect of the command
         int *validIn; // Which states it valid in
 };
 
+// Class to get and store Commands from the console for use in drivers and phases
 class CommandProcessor : public Iloggable, public Subject {
     public:
         CommandProcessor(); // Default constructor
@@ -53,7 +54,7 @@ class CommandProcessor : public Iloggable, public Subject {
 
         bool validate(const Command &c); // Checks if the current Command is in the valid state
 
-        int commandsLength;
+        int commandsLength; // Array length
 
         string stringToLog(); // From Iloggable
     private:
@@ -61,14 +62,13 @@ class CommandProcessor : public Iloggable, public Subject {
         Command *commands; // Array of current and past Commands
 };
 
+// Modified CommandProcessor that instead gets Commands from a file
 class FileCommandProcessorAdapter : public CommandProcessor {
     public:
-        // TODO: did I do this overriding properly?
-        void getCommand() override; // Reads and then saves a command from the console
+        void getCommand() override; // Reads and then saves a command from a file
 
         void readFromFile(string); // Reads (startup) commands sequentially from a file
-
     private:
-        string currentFile;
-        int currentLine;
+        string currentFile; // The current file of commands that is being read from
+        int currentLine; // The current line being read in the current file
 };

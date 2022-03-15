@@ -75,7 +75,7 @@ class GameEngine : public Iloggable, public Subject {
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);
 
-        void startupPhase();
+        void startupPhase(); // Reads (startup) commands sequentially from the console
 
         // Checks
         bool checkForWinner();
