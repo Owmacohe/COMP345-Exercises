@@ -59,7 +59,6 @@ Player::~Player() {
 
 // Returns a vector list of territories for player to defend in priority
 // Priority is determined by which territories are surrounded by the most enemy territories
-
 vector<Territory*> Player::toDefend(Map* m) {
     vector<Territory*> defend_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
