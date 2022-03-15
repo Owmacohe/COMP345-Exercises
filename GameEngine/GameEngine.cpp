@@ -258,8 +258,8 @@ void GameEngine::assignReinforcementPhase() {
         }
         if (flag == false) { continue; }
         else {
-            string bonus = map->getContinentBonuses()[i];
-            p->addToReinforcePool(stoi(bonus));
+            int bonus = map->getContinentBonuses()[i];
+            p->addToReinforcePool(bonus);
         }
     }
     cout << "End of assign reinforcement" << endl;
