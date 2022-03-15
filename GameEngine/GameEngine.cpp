@@ -23,10 +23,8 @@ GameEngine::GameEngine() {
     alliances = set<pair<Player*, Player*>>();
 
     // Add Neutral Player to Game
-    Player* neutralPlayer = new Player();
+    neutralPlayer = new Player();
     neutralPlayer->setName("Neutral");
-    player_list.push_back(neutralPlayer);
-    // Does not increasing number of players int make something break?
 
     // Attributes not initialized, CONFIRM WITH TEAM
 //    MapLoader *ml;
@@ -89,6 +87,9 @@ GameEngine::~GameEngine() {
 
     delete playerOrder;
     playerOrder = NULL;
+
+    delete neutralPlayer;
+    neutralPlayer = NULL;
 }
 // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
 //    bool phaseEnd;
@@ -150,11 +151,13 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
     return false;
 }
 int *GameEngine::getPlayerOrder() { return playerOrder; }
+Player* GameEngine::getNeutralPlayer() {return neutralPlayer;}
 
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
 void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
+void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
 void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
 void GameEngine::setMap(const Map &m) { *map = m; }
 void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
@@ -170,6 +173,7 @@ void GameEngine::setPlayerOrder(int *po) {
     delete[] playerOrder;
     playerOrder = po;
 }
+void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
 
 
 // Phases, states, and commands
@@ -304,7 +308,7 @@ void GameEngine::issueOrdersPhase() {
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
                 if (checkCardInHand(response, p->getHand())) {
-                    p->issueOrder(response); // NEEDS TO INCLUDE REQUIRE PARAM FOR CARDS
+                   // p->issueOrder(response); // NEEDS TO INCLUDE REQUIRE PARAM FOR CARDS -- COMMENTED IT OUT BECAUSE OF ERRORS - MJ
                 }
             }
             else break;
@@ -625,6 +629,7 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
 
 // From Iloggable
 string GameEngine::stringToLog() {
-    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement", "issueOrder", "executeOrder", "win"};
+    string logString = "Game Engine now at the " + enumStates[*s] + "state. \n";
     return logString;
 };

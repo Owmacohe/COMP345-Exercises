@@ -27,11 +27,11 @@ void Card::play(OrdersList &playerOrdersList) const {
         cout << "Play Bomb card" << endl;
         Bomb* myBomb = new Bomb(); // Create a Bomb object and play as an order
         playerOrdersList.addOrder(myBomb); // Place it in the OrdersList
-    } else if (type == "reinforcement") {
+    } /*else if (type == "reinforcement") {
         cout << "Play Reinforcement card" << endl;
         Reinforcement* myReinforcement = new Reinforcement();
         playerOrdersList.addOrder(myReinforcement);
-    } else if (type == "blockade") {
+    }*/ else if (type == "blockade") {
         cout << "Play Blockade card" << endl;
         Blockade* myBlockade = new Blockade();
         playerOrdersList.addOrder(myBlockade);

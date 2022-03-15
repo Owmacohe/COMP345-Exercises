@@ -117,7 +117,7 @@ void Command::addValidInState(int s) {
 }
 
 string Command::stringToLog() {
-    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    string logString = "Command entered: " + command + " leading to " + transitionsTo + " and creating the effect of " + effect +"\n";
     return logString;
 }
 
@@ -247,7 +247,7 @@ bool CommandProcessor::validate(const Command &c) {
 }
 
 string CommandProcessor::stringToLog() {
-    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
+    string logString = " Saved the following command to the CommandProcessor: " + commands[commandsLength-1].getEffect() +"\n";
     return logString;
 }
 
@@ -277,9 +277,4 @@ void FileCommandProcessorAdapter::readFromFile(string f) {
     currentFile = f;
 
     getEngine()->startupPhase();
-}
-
-string FileCommandProcessorAdapter::stringToLog() {
-    string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
-    return logString;
 }

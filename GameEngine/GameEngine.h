@@ -11,6 +11,7 @@ using namespace std;
 class Player;
 class MapLoader;
 class Deck;
+class Hand;
 class CommandProcessor;
 class Map;
 
@@ -37,11 +38,13 @@ class GameEngine : public Iloggable, public Subject {
         bool existingAlliance(Player* p1, Player* p2);
         int *getPlayerOrder();
         int getCurrentPlayer();
+        Player* getNeutralPlayer();
 
         // Mutators
         void setState(State s);
         void setNumberOfPlayers(int x);
         void setEndOfState(bool b);
+        void setplayer_list(vector<Player*>);
         void setProcessor(const CommandProcessor &cp);
         void setMap(const Map &m);
         void setAlliances (const  set<pair<Player*, Player*>> all);
@@ -49,6 +52,7 @@ class GameEngine : public Iloggable, public Subject {
         void resetAlliances();
         void setPlayerOrder(int*);
         void setCurrentPlayer(int);
+        void setNeutralPlayer(Player* np);
 
         // Phases, states, and commands
         void startGame();
@@ -94,4 +98,5 @@ class GameEngine : public Iloggable, public Subject {
         set<pair<Player*, Player*>> alliances;
         int *playerOrder;
         int currentPlayer;
+        Player* neutralPlayer;
 };
