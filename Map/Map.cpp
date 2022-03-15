@@ -225,7 +225,7 @@ void Map::setContinentBonuses(int *b) {
     continentBonuses = new int[continentsLength];
 
     for (int i = 0; i < continentsLength; i++) {
-        //continentBonuses[i] = c[i]; SORRY UNCOMMENTED THIS, WHAT IS C?
+        continentBonuses[i] = b[i];
     }
 }
 void Map::setTerritories(Territory *t, int l) {
