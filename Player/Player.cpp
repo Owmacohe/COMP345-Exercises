@@ -134,7 +134,7 @@ vector<Territory*> Player::toAttack(Map* m) {
 
 void Player::issueOrder(string type) { 
     // Set to all lowercase
-    transform(type.begin(), type.end(), type.begin(), ::tolower); 
+    transform(type.begin(), type.end(), type.begin(), ::tolower);
 
     if (type == "deploy") {
         // Issues deploy orders based on toDefend()

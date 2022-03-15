@@ -4,7 +4,7 @@
 #include "../LoggingObserver/LoggingObserver.h"
 #include "GameEngine/GameEngine.h"
 
-int Ordersmain() {
+int main() {
 	//	Create OrderList object
 //    OrdersList player1List;
 //    Player* player1 = new Player();
@@ -44,12 +44,12 @@ int Ordersmain() {
 
     // ****************************** CREATING A GAME *******************************
 
-    GameEngine game;
+    GameEngine* game;
 
         // Create Map
-        game.gameStartupTransitions("loadmap");
-        MapLoader loader;
-        Map m = Map(loader.load("canada.map"));
+//        game->gameStartupTransitions("loadmap");
+//        MapLoader* loader;
+//        Map* m = new Map(loader->load("canada.map"));
 
         // Create Players
         vector<Player*> player_list;
@@ -61,39 +61,39 @@ int Ordersmain() {
         player2->setReinforcementPool(12);
         player2->setName("MJ");
         player_list.push_back(player2);
-        game.setplayer_list(player_list);
+        game->setplayer_list(player_list);
 
         // Assign Territories to Player 1
-        game.getMap()->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
-        Territory *NewBrunswick= new Territory(game.getMap()->getTerritories()[0]);
+        game->getMap()->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
+        Territory *NewBrunswick= new Territory(game->getMap()->getTerritories()[0]);
         player1->getTerritory().push_back(NewBrunswick);
 
-        game.getMap()->getTerritories()[5].setOwner(player1); // Quebec North
-        Territory *QuebecNorth = new Territory(game.getMap()->getTerritories()[5]);
+        game->getMap()->getTerritories()[5].setOwner(player1); // Quebec North
+        Territory *QuebecNorth = new Territory(game->getMap()->getTerritories()[5]);
         player1->getTerritory().push_back(QuebecNorth);
 
-        game.getMap()->getTerritories()[6].setOwner(player1); // Quebec Central -- Adjacent with the previous one
-        Territory *QuebecCentral = new Territory(game.getMap()->getTerritories()[6]);
+        game->getMap()->getTerritories()[6].setOwner(player1); // Quebec Central -- Adjacent with the previous one
+        Territory *QuebecCentral = new Territory(game->getMap()->getTerritories()[6]);
         player1->getTerritory().push_back(QuebecCentral);
 
         // Assign Territories to Player 2
-        game.getMap()->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
-        Territory *Yukon = new Territory(game.getMap()->getTerritories()[30]);
+        game->getMap()->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
+        Territory *Yukon = new Territory(game->getMap()->getTerritories()[30]);
         player1->getTerritory().push_back(Yukon);
 
-        game.getMap()->getTerritories()[7].setOwner(player1); // Quebec South
-        Territory *QuebecSouth = new Territory(game.getMap()->getTerritories()[7]);
+        game->getMap()->getTerritories()[7].setOwner(player1); // Quebec South
+        Territory *QuebecSouth = new Territory(game->getMap()->getTerritories()[7]);
         player1->getTerritory().push_back(QuebecSouth);
 
-        game.getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
-        Territory *OntarioSouth = new Territory(game.getMap()->getTerritories()[9]);
+        game->getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
+        Territory *OntarioSouth = new Territory(game->getMap()->getTerritories()[9]);
         player1->getTerritory().push_back(OntarioSouth);
 
         // Assign Territories to Neutral Player
 
-        game.getMap()->getTerritories()[9].setOwner(game.getNeutralPlayer()); // Ontario west -- Adjacent with the previous one
-        Territory *OntarioWest = new Territory(game.getMap()->getTerritories()[9]);
-        game.getNeutralPlayer()->getTerritory().push_back(OntarioWest);
+        game->getMap()->getTerritories()[9].setOwner(game->getNeutralPlayer()); // Ontario west -- Adjacent with the previous one
+        Territory *OntarioWest = new Territory(game->getMap()->getTerritories()[9]);
+        game->getNeutralPlayer()->getTerritory().push_back(OntarioWest);
 
 
     	Deploy *deploy1 = new Deploy(player1, QuebecNorth);
