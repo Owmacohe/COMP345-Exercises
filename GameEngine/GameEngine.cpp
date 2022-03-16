@@ -235,9 +235,12 @@ void GameEngine::assignCountries() {
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign reinforcement phase" << endl;
+
     // Adding the reset of alliances
     //resetAlliances();
+
     Player* p = player_list.at(currentPlayer);
+
     int num = floor((p->getNumberOfTerritories())/3);
     if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
     else p->addToReinforcePool(num);
@@ -268,45 +271,43 @@ void GameEngine::issueOrdersPhase() {
     string input;
     string response;
 
-    for (int i = 0; i < NumberOfPlayers; i++) {
-        Player *p = player_list.at(playerOrder[i]);
-        
-        cout << "Issuing the orders for player " << p->getName() << endl;
-        // Only issue deploy orders while the players reinforcement pool contains armies
-        cout << "Issueing deploy orders" << endl;
-        while (p->getReinforcePool() != 0) {
-            p->issueOrder("deploy");
-        }
-        // Issue advance orders
-        cout << "Issueing advance orders" << endl;
-        do {
-            cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                p->issueOrder("advance");
-                // MJ said that checking if an advance is attacking or defending is done in orders
-            }
-            else break;
-        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
- 
-        // Issue card orders
-        cout << "Issueing card orders" << endl;
-        do {
-            cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                cout << "The following is " << p->getName() << " hand" << endl;
-                cout << p->getHand() << endl;
-                cout << "Which card would you like to play ?" << endl;
-                cin >> response;
-                int index = checkCardInHand(response, p->getHand());
-                if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder()); // ASK AUDREY 
-            }
-            else break;
-        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+    Player* p = player_list.at(currentPlayer);
 
-        endIssueOrderPhase(p);
+    cout << "Issuing the orders for player " << p->getName() << endl;
+    // Only issue deploy orders while the players reinforcement pool contains armies
+    cout << "Issueing deploy orders" << endl;
+    while (p->getReinforcePool() != 0) {
+        p->issueOrder("deploy");
     }
+    // Issue advance orders
+    cout << "Issueing advance orders" << endl;
+    do {
+        cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
+        cin >> input;
+        if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+            p->issueOrder("advance");
+            // MJ said that checking if an advance is attacking or defending is done in orders
+        }
+        else break;
+    } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+ 
+    // Issue card orders
+    cout << "Issueing card orders" << endl;
+    do {
+        cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
+        cin >> input;
+        if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+            cout << "The following is " << p->getName() << " hand" << endl;
+            cout << p->getHand() << endl;
+            cout << "Which card would you like to play ?" << endl;
+            cin >> response;
+            int index = checkCardInHand(response, p->getHand());
+            if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
+        }
+        else break;
+    } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+
+    endIssueOrderPhase(p);
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
@@ -554,12 +555,16 @@ void GameEngine::mainGameLoop() {
     bool playing = true;
     string input;
     while (playing == true) {
-        assignReinforcementPhase(); // Begin reinforcement phase
-        //ADD PLAYER LOOP
-        issueOrdersPhase(); // Begin issue orders phase
-        executeOrdersPhase(); // Begin execute orders phase
-        checkPlayers(); // Check if any players need to be removed
-        playing = !checkForWinner(); // Check for winner
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder[i]);
+        
+            assignReinforcementPhase(); // Begin reinforcement phase
+            issueOrdersPhase(); // Begin issue orders phase
+            executeOrdersPhase(); // Begin execute orders phase
+            checkPlayers(); // Check if any players need to be removed
+            playing = !checkForWinner(); // Check for winner
+        }
+        resetAlliances(); // Reset Alliances
     }
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
