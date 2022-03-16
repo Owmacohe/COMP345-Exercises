@@ -12,7 +12,7 @@ using namespace std;
 
 class GameEngine;
 
-class Order :public Iloggable, public Subject {
+class Order /*:public Iloggable, public Subject*/ {
 public:
     // Constructor
     Order();
@@ -311,7 +311,7 @@ private:
 
 };
 
-class OrdersList : public Iloggable, public Subject {
+class OrdersList : /*public Iloggable, public Subject*/ {
 public:
     // Constructor
     OrdersList();
