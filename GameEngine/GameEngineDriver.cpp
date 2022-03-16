@@ -12,11 +12,11 @@
 
 int gameEngineMain() {
     GameEngine gameEngine;
+    // TODO create a new CommandProcessor and set it to the "processor" attribute
     string input;
     bool isPlaying = true;
 
     while (isPlaying) {
-
         // ### TODO: the following block will be replaced with startupPhase()
         gameEngine.startGame();
 
