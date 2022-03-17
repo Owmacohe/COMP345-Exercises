@@ -5,20 +5,27 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(COMP345-Exercises
-        Cards/Cards.cpp
+add_executable(
+        COMP345-Exercises
         Cards/Cards.h
+        Cards/Cards.cpp
+        Cards/CardsDriver.cpp
         CommandProcessing/CommandProcessing.h
         CommandProcessing/CommandProcessing.cpp
-        GameEngine/GameEngine.cpp
+        CommandProcessing/CommandProcessingDriver.cpp
         GameEngine/GameEngine.h
-        LoggingObserver/LoggingObserver.cpp
+        GameEngine/GameEngine.cpp
+        GameEngine/GameEngineDriver.cpp
         LoggingObserver/LoggingObserver.h
-        Map/Map.cpp
+        LoggingObserver/LoggingObserver.cpp
+        LoggingObserver/LoggingObserverDriver.cpp
         Map/Map.h
-        Orders/Orders.cpp
+        Map/Map.cpp
+        Map/MapDriver.cpp
         Orders/Orders.h
+        Orders/Orders.cpp
         Orders/OrdersDriver.cpp
-        Player/Player.cpp
         Player/Player.h
+        Player/Player.cpp
+        Player/PlayerDriver.cpp
         )

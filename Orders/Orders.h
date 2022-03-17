@@ -311,7 +311,7 @@ private:
 
 };
 
-class OrdersList : /*public Iloggable, public Subject*/ {
+class OrdersList/* : public Iloggable, public Subject*/ {
 public:
     // Constructor
     OrdersList();

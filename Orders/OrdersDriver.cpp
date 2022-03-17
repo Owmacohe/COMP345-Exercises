@@ -2,7 +2,7 @@
 #include "../LoggingObserver/LoggingObserver.h"
 #include "GameEngine/GameEngine.h"
 
-int main() {
+int ordersMain() {
 //		Create OrderList object
     OrdersList player1List;
     Player* player1 = new Player();

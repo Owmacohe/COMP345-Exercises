@@ -130,8 +130,6 @@ string Command::stringToLog() {
 
 // Default constructor
 CommandProcessor::CommandProcessor() {
-    engine = new GameEngine;
-
     commandsLength = 0;
     commands = new Command[commandsLength];
 
@@ -139,8 +137,8 @@ CommandProcessor::CommandProcessor() {
 }
 
 // Parameterized constructor
-CommandProcessor::CommandProcessor(GameEngine e) {
-    engine = new GameEngine(e);
+CommandProcessor::CommandProcessor(GameEngine *e) {
+    engine = e;
 
     commandsLength = 0;
     commands = new Command[commandsLength];
@@ -150,9 +148,6 @@ CommandProcessor::CommandProcessor(GameEngine e) {
 
 // Destructor
 CommandProcessor::~CommandProcessor() {
-    delete engine;
-    engine = NULL;
-
     delete[] commands;
     commands = NULL;
     commandsLength = 0;
