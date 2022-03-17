@@ -4,12 +4,6 @@
 #include "../Player/Player.h"
 #include "GameEngine.h"
 
-#include "../Cards/Cards.cpp"
-#include "../Orders/Orders.cpp"
-#include "../Map/Map.cpp"
-#include "../Player/Player.cpp"
-#include "GameEngine.cpp"
-
 int gameEngineMain() {
     GameEngine gameEngine;
     // TODO create a new CommandProcessor and set it to the "processor" attribute
@@ -18,12 +12,12 @@ int gameEngineMain() {
 
     while (isPlaying) {
         // ### TODO: the following block will be replaced with startupPhase()
-        gameEngine.startGame();
+        //gameEngine.startGame();
 
         while (gameEngine.getState() < 5) {
             cout << "Enter a command: " << endl;
             cin >> input;
-            gameEngine.gameStartupTransitions(input);
+            //gameEngine.gameStartupTransitions(input);
         }
         // ###
 

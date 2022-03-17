@@ -55,11 +55,13 @@ class GameEngine : public Iloggable, public Subject {
         void setNeutralPlayer(Player* np);
 
         // Phases, states, and commands
+        /*
         void startGame();
         void loadMap();
         void validateMap();
         void addPlayer();
         void assignCountries();
+        */
         void assignReinforcementPhase();
         void issueOrdersPhase();
         void endIssueOrderPhase(Player* player);
@@ -71,7 +73,7 @@ class GameEngine : public Iloggable, public Subject {
 
         void mainGameLoop();
 
-        void gameStartupTransitions(string s);
+        //void gameStartupTransitions(string s);
         void gamePlayTransitions(string s, Player *p);
         void gameEndTransitions(string s);
 

@@ -15,7 +15,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8e921a3-24b9-4148-a330-d3f4a34c9f38" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Orders/Orders.h" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +75,7 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunManager">
     <configuration name="COMP345-Exercises" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="COMP345_Assignment" TARGET_NAME="COMP345-Exercises" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="COMP345_Assignment" RUN_TARGET_NAME="COMP345-Exercises">
@@ -96,6 +107,9 @@
       <workItem from="1647370219231" duration="2013000" />
       <workItem from="1647372284474" duration="2767000" />
       <workItem from="1647377299645" duration="667000" />
+      <workItem from="1647552744289" duration="7000" />
+      <workItem from="1647552766627" duration="622000" />
+      <workItem from="1647553409755" duration="6000" />
     </task>
     <servers />
   </component>
