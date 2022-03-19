@@ -21,6 +21,8 @@ int gameEngineMain() {
         }
         // ###
 
+        // ### TODO: main game loop
+
         while (gameEngine.getState() != 8) {
             for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
                 while (true) {

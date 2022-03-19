@@ -289,7 +289,6 @@ void GameEngine::issueOrdersPhase() {
         }
         else break;
     } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
- 
     // Issue card orders
     cout << "Issueing card orders" << endl;
     do {
@@ -302,10 +301,10 @@ void GameEngine::issueOrdersPhase() {
             cin >> response;
             int index = checkCardInHand(response, p->getHand());
             if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
+            else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played"
         }
         else break;
     } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
-
     endIssueOrderPhase(p);
 }
 
