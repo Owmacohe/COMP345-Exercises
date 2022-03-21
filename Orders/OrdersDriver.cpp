@@ -37,15 +37,15 @@ int main() {
     player1->getTerritory().push_back(QuebecCentral);
 
     // Assign Territories to Player 2
-    Order::game->getMap()->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
+    Order::game->getMap()->getTerritories()[30].setOwner(player2); // Yukon -- Not adjacent to any of the others
     Territory *Yukon = new Territory(Order::game->getMap()->getTerritories()[30]);
     player1->getTerritory().push_back(Yukon);
 
-    Order::game->getMap()->getTerritories()[7].setOwner(player1); // Quebec South
+    Order::game->getMap()->getTerritories()[7].setOwner(player2); // Quebec South
     Territory *QuebecSouth = new Territory(Order::game->getMap()->getTerritories()[7]);
     player1->getTerritory().push_back(QuebecSouth);
 
-    Order::game->getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
+    Order::game->getMap()->getTerritories()[9].setOwner(player2); // Ontario South -- Adjacent with the previous one
     Territory *OntarioSouth = new Territory(Order::game->getMap()->getTerritories()[9]);
     player1->getTerritory().push_back(OntarioSouth);
 

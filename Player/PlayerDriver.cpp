@@ -72,5 +72,5 @@ int PlayerMain() {
 	// cout<<p1<<endl;
 	// cout<<p3<<endl;
 
-	// return 0;
+	 return 0;
 }
