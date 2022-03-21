@@ -1,162 +1,104 @@
 #include "Orders.h"
-#include "../LoggingObserver/LoggingObserver.h"
-#include "GameEngine/GameEngine.h"
-#include "../Map/Map.h"
 
-int Ordermain() {
+#include <iostream>
+using namespace std;
 
-    Player* player1 = new Player();
-    player1->setReinforcementPool(10);
-    player1->setName("Audrey");
-    Player* player2 = new Player();
-    player2->setReinforcementPool(12);
-    player2->setName("MJ");
+int main() {
+    /****************************** CREATING A GAME *******************************/
+    // Create Map Loader
+    MapLoader* loader = new MapLoader();
 
-//    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
-//    Territory* canada = new Territory("Canada", "North America", player2, 4);
+    // Create Players List
+    vector<Player*> player_list;
+    Player* player1 = new Player(); player1->setReinforcementPool(10); player1->setName("Audrey");
+    Player* player2 = new Player(); player2->setReinforcementPool(12); player2->setName("MJ");
+    player_list.push_back(player1); player_list.push_back(player2);
 
-//    cout << "Player 1" << " - name: " << player1->getName() << endl;
-//    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
+    // Create && set up gameEngine
+    GameEngine* mainGE = new GameEngine();
+    mainGE->setplayer_list(player_list);
+    mainGE->setDeck(*(new Deck(10)));
+    mainGE->setMap(*(new Map(loader->load("/Users/Amelia/Documents/COMP345-Exercises/Orders/canada.map"))));
 
-//    cout << "Player 2" << " - name: " << player2->getName() << endl;
-//    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
+    // Set up Order gameEngine
+    Order::game = mainGE;
 
-//    cout << "Territories:" << endl;
-//    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
-//    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
+    // Assign Territories to Player 1
+    Order::game->getMap()->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
+    Territory *NewBrunswick= new Territory(Order::game->getMap()->getTerritories()[0]);
+    player1->getTerritory().push_back(NewBrunswick);
 
-//		Create OrderList object
-//    OrdersList player1List;
-//    Player* player1 = new Player();
-//    player1->setReinforcementPool(10);
-//    player1->setName("Audrey");
-//    Player* player2 = new Player();
-//    player2->setReinforcementPool(12);
-//    player2->setName("MJ");
-//
-//    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
-//    Territory* canada = new Territory("Canada", "North America", player2, 4);
-//
-//    cout << "Player 1" << " - name: " << player1->getName() << endl;
-//    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
-//
-//    cout << "Player 2" << " - name: " << player2->getName() << endl;
-//    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
-//
-//    cout << "Territories:" << endl;
-//    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
-//    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
-//
-//    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
-//	Deploy
-	Deploy *deploy1 = new Deploy(player1);
-	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
-//    cout << "Deploy validation: " << endl;
+    Order::game->getMap()->getTerritories()[5].setOwner(player1); // Quebec North
+    Territory *QuebecNorth = new Territory(Order::game->getMap()->getTerritories()[5]);
+    player1->getTerritory().push_back(QuebecNorth);
+
+    Order::game->getMap()->getTerritories()[6].setOwner(player1); // Quebec Central -- Adjacent with the previous one
+    Territory *QuebecCentral = new Territory(Order::game->getMap()->getTerritories()[6]);
+    player1->getTerritory().push_back(QuebecCentral);
+
+    // Assign Territories to Player 2
+    Order::game->getMap()->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
+    Territory *Yukon = new Territory(Order::game->getMap()->getTerritories()[30]);
+    player1->getTerritory().push_back(Yukon);
+
+    Order::game->getMap()->getTerritories()[7].setOwner(player1); // Quebec South
+    Territory *QuebecSouth = new Territory(Order::game->getMap()->getTerritories()[7]);
+    player1->getTerritory().push_back(QuebecSouth);
+
+    Order::game->getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
+    Territory *OntarioSouth = new Territory(Order::game->getMap()->getTerritories()[9]);
+    player1->getTerritory().push_back(OntarioSouth);
+
+    // Assign Territories to Neutral Player
+    Order::game->getMap()->getTerritories()[9].setOwner(Order::game->getNeutralPlayer()); // Ontario west -- Adjacent with the previous one
+    Territory *OntarioWest = new Territory(Order::game->getMap()->getTerritories()[9]);
+    Order::game->getNeutralPlayer()->getTerritory().push_back(OntarioWest);
+
+
+
+    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
+
+    //	Deploy
+    Deploy *deploy1 = new Deploy(player1);
+    cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
+    cout << "Deploy validation: " << endl;
 //    deploy1->validate();
 //    cout << "----- Deploy execution ----- " << endl;
 //    deploy1->execute();
-
-//    cout << player1->getName() << " reinforcement pool: " << player1->getReinforcePool() << " armies" << endl; //Check if player1 reinforcement pool decreases
-//    cout << vietnam->getName() << " armies: " << vietnam->getArmies() << " armies" << endl; //Check if numArmies in territory increases
 	player1->getOrder()->addOrder(deploy1);
 	cout << *player1->getOrder() << "\n" << endl;
 
-     /****************************** CREATING A GAME *******************************/
-//
-//    GameEngine* game;
-//
-//     //Create Map
-//        MapLoader loader;
-//        Map m = Map();
-//        m = loader.load("canada.map");
-//
-//        // Create Players
-//        vector<Player*> player_list;
-//        Player* player1 = new Player();
-//        player1->setReinforcementPool(10);
-//        player1->setName("Audrey");
-//
-//        Player* player2 = new Player();
-//        player2->setReinforcementPool(12);
-//        player2->setName("MJ");
-//
-//        player_list.push_back(player1);
-//        player_list.push_back(player2);
-//
-//        game->setplayer_list(player_list);
-//
-//        // Assign Territories to Player 1
-//        game->getMap()->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
-//        Territory *NewBrunswick= new Territory(game->getMap()->getTerritories()[0]);
-//        player1->getTerritory().push_back(NewBrunswick);
-//
-//        game->getMap()->getTerritories()[5].setOwner(player1); // Quebec North
-//        Territory *QuebecNorth = new Territory(game->getMap()->getTerritories()[5]);
-//        player1->getTerritory().push_back(QuebecNorth);
-//
-//        game->getMap()->getTerritories()[6].setOwner(player1); // Quebec Central -- Adjacent with the previous one
-//        Territory *QuebecCentral = new Territory(game->getMap()->getTerritories()[6]);
-//        player1->getTerritory().push_back(QuebecCentral);
-//
-//        // Assign Territories to Player 2
-//        game->getMap()->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
-//        Territory *Yukon = new Territory(game->getMap()->getTerritories()[30]);
-//        player1->getTerritory().push_back(Yukon);
-//
-//        game->getMap()->getTerritories()[7].setOwner(player1); // Quebec South
-//        Territory *QuebecSouth = new Territory(game->getMap()->getTerritories()[7]);
-//        player1->getTerritory().push_back(QuebecSouth);
-//
-//        game->getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
-//        Territory *OntarioSouth = new Territory(game->getMap()->getTerritories()[9]);
-//        player1->getTerritory().push_back(OntarioSouth);
-//
-//        // Assign Territories to Neutral Player
-//
-//        game->getMap()->getTerritories()[9].setOwner(game->getNeutralPlayer()); // Ontario west -- Adjacent with the previous one
-//        Territory *OntarioWest = new Territory(game->getMap()->getTerritories()[9]);
-//        game->getNeutralPlayer()->getTerritory().push_back(OntarioWest);
-//
-
-//    	Deploy *deploy1 = new Deploy(player1, QuebecNorth);
-//	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
-//    cout << "Deploy validation: ";
-//    deploy1->validate();
-//    cout << "----- Deploy execution ----- " << endl;
-//    deploy1->execute();
-//    cout << deploy1->stringToLog(); // we can use this to print a summary of what happened
-
 	// Advance
-	Advance *advance1 = new Advance(player1);
-	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
+//	Advance *advance1 = new Advance(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
 //    cout << "Checking for validation: " << advance1->validate() << endl;
 //    cout << "Checking for execution: " ; advance1->execute() ;
-	player1->getOrder()->addOrder(advance1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	player1->getOrder()->addOrder(advance1);
+//	cout << *player1->getOrder() << "\n" << endl;
 
     // Airlift
-	Airlift *airlift1 = new Airlift(player1);
-	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
+//	Airlift *airlift1 = new Airlift(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
 //    cout << "Checking for validation: " << airlift1->validate() << endl;
 //    cout << "Checking for execution: " ; airlift1->execute() ;
-	player1->getOrder()->addOrder(airlift1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	player1->getOrder()->addOrder(airlift1);
+//	cout << *player1->getOrder() << "\n" << endl;
 
     // Bomb
-	Bomb *bomb1 = new Bomb(player1);
-	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
+//	Bomb *bomb1 = new Bomb(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
 //    cout << "Checking for validation: " << bomb1->validate() << endl;
 //    cout << "Checking for execution: " ; bomb1->execute() ;
-	player1->getOrder()->addOrder(bomb1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	player1->getOrder()->addOrder(bomb1);
+//	cout << *player1->getOrder() << "\n" << endl;
 
 	// Blockade
-	Blockade *blockade1 = new Blockade(player1);
-	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
+//	Blockade *blockade1 = new Blockade(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
 //    cout << "Checking for validation: " << blockade1->validate() << endl;
 //    cout << "Checking for execution: " ; blockade1->execute() ;
-	player1->getOrder()->addOrder(blockade1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	player1->getOrder()->addOrder(blockade1);
+//	cout << *player1->getOrder() << "\n" << endl;
 
 
 	// Negotiate
@@ -216,3 +158,11 @@ int Ordermain() {
 	return 0;
 }
 
+// Create Map
+//    MapLoader* loader = new MapLoader();
+//    Map* mainMap = new Map(loader->load("/Users/Amelia/Documents/COMP345-Exercises/Orders/canada.map"));
+//    cout << *mainMap << endl;
+
+// Create Deck
+//    Deck *mainDeck = new Deck(10);
+//    cout << mainDeck << endl;

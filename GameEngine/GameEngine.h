@@ -7,7 +7,6 @@
 using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
-
 class Player;
 class MapLoader;
 class Deck;
@@ -34,6 +33,7 @@ class GameEngine : public Iloggable, public Subject {
         vector<Player*> getplayer_list();
         CommandProcessor *getProcessor();
         Map *getMap();
+        Deck *getDeck();
         set<pair<Player*, Player*>> getAlliances();
         bool existingAlliance(Player* p1, Player* p2);
         int *getPlayerOrder();
@@ -47,6 +47,7 @@ class GameEngine : public Iloggable, public Subject {
         void setplayer_list(vector<Player*>);
         void setProcessor(const CommandProcessor &cp);
         void setMap(const Map &m);
+        void setDeck(const Deck &d);
         void setAlliances (const  set<pair<Player*, Player*>> all);
         void addAlliances(Player* p1, Player* p2);
         void resetAlliances();
@@ -87,6 +88,7 @@ class GameEngine : public Iloggable, public Subject {
 
         // From Iloggable
         string stringToLog();
+
     private:
         State* s;
         int NumberOfPlayers;

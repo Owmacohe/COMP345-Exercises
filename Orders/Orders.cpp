@@ -1,12 +1,17 @@
 #include "Orders.h"
 #include "../GameEngine/GameEngine.h"
-
-// Static Method to Access static GameEngine*
+#include "../Cards/Cards.h"
+// Static GameEngine*
 GameEngine *Order::game = new GameEngine();
 
-GameEngine *Order::getGameEngine() {
-    return game;
-}
+// We don't need accessor and mutator for public variable -> Can delete this one
+//GameEngine *Order::getGameEngine() {
+//    return game;
+//}
+//
+//void Order::setGameEngine(GameEngine *gamePlaying) {
+//    Order::game = gamePlaying;
+//}
 /****************************** Order *******************************/
 
 // Default constructor
@@ -58,10 +63,6 @@ void Order::setValidated(bool v) {
     validated = v;
 }
 
-void Order::setGameEngine(GameEngine *gamePlaying) {
-    Order::game = gamePlaying;
-}
-
 void Order::validate() {} // Virtual Method
 
 void Order::execute() {} // Virtual Method
@@ -84,7 +85,7 @@ Deploy::Deploy() : Order(false, "deploy"){
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     target = nullptr;
-//    target = p->toDefend(game->getMap()).at(0);   TODO: ask Gabbi - the out of range problems
+//    target = p->toDefend(this->game->getMap()).at(0);   //TODO: ask Gabbi - the out of range problems
     numToDeploy = rand() % p->getReinforcePool() + 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
         numToDeploy = rand() % p->getReinforcePool() + 1;
@@ -293,6 +294,8 @@ void Advance::execute() {
             else if (attackPower > defendPower){
                 target->setArmies((attackPower - defendPower)/0.6);
                 target->setOwner(playerIssuing);
+
+                playerIssuing->getHand()->drawCard(*game->getDeck());
                 // TODO player draw a card from the Deck
             }
             else{}
