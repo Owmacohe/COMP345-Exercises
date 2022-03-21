@@ -85,7 +85,7 @@ Deploy::Deploy() : Order(false, "deploy"){
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     //target = nullptr;
-    target = p->toDefend(this->game->getMap()).at(0);   //TODO: ask Gabbi - the out of range problems
+    target = p->toDefend(this->game->getMap()).at(0);
     numToDeploy = rand() % p->getReinforcePool() + 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
         numToDeploy = rand() % p->getReinforcePool() + 1;
@@ -178,14 +178,14 @@ Advance::Advance() : Order(false, "advance"){
 // Parameterize Constructor
 Advance::Advance(Player* p) : Order(false, "advance"){
     playerIssuing = p;
-    origin = nullptr;
+//    origin = nullptr;
     target = nullptr;
-//    origin = p->toDefend();   //TODO: ask Gabbi - the out of range problems && Audrey do you want to ask the player if they want to advance or attack?
+    origin = p->toDefend(game->getMap()).at(0);
 //    target = p->toAttack(game->getMap()).at(0);
-//    numToAdvance = rand() % origin->getArmies() + 1;
-//    while (numToAdvance > origin->getArmies()){
-//        numToAdvance = rand() % origin->getArmies() + 1;
-//    }
+    numToAdvance = rand() % origin->getArmies() + 1;
+    while (numToAdvance > origin->getArmies()){
+        numToAdvance = rand() % origin->getArmies() + 1;
+    }
 
 }
 
@@ -339,12 +339,12 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
     origin = nullptr;
     target = nullptr;
-//    origin = p->toDefend(game->getMap()).at(0);     //TODO: out of range - ask Gabbi
-//    target = p->toAttack(game->getMap()).at(0);
-//    numToAirlift = rand() % origin->getArmies() + 1;
-//    while (numToAirlift > origin->getArmies()){
-//        numToAirlift = rand() % origin->getArmies() + 1;
-//    }
+    origin = p->toDefend(game->getMap()).at(0);
+    target = p->toAttack(game->getMap()).at(0);
+    numToAirlift = rand() % origin->getArmies() + 1;
+    while (numToAirlift > origin->getArmies()){
+        numToAirlift = rand() % origin->getArmies() + 1;
+    }
 }
 
 // Copy constructor
