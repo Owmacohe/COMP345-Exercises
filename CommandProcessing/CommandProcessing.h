@@ -38,7 +38,7 @@ class Command : public Iloggable, public Subject {
 class CommandProcessor : public Iloggable, public Subject {
     public:
         CommandProcessor(); // Default constructor
-        CommandProcessor(GameEngine); // Parameterized constructor
+        CommandProcessor(GameEngine*); // Parameterized constructor
         ~CommandProcessor(); // Destructor
 
         // Accessors

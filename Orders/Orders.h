@@ -258,6 +258,7 @@ private:
 
 /****************************** OrdersList *******************************/
 class OrdersList /* : public Iloggable, public Subject*/ {
+
 public:
     OrdersList();  // Constructor
     OrdersList(vector<Order*> vo); // Parameterized Constructor
