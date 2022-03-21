@@ -1,7 +1,6 @@
 #include "LoggingObserver.h"
 
 string Iloggable::stringToLog(){
-// Nothing happens here, must override
 return "";
 };
 
@@ -49,31 +48,3 @@ LogObserver::~LogObserver(){};
 void LogObserver::update(Iloggable* il){
     outputFile << (*il).stringToLog() << "\n";
 };
-
-/**
-* Subjects of logging mechanism that will have to inherit interfaces Iloggable and Subject:
-* Command -- DONE .h and .cpp
-* CommandProcessor -- DONE .h and .cpp
-* FileCommandProcessorAdapter -- DONE .h and .cpp
-* OrderList -- DONE .h and .cpp
-* Order  -- DONE .h and .cpp
-* GameEngine -- DONE .h and .cpp
-*
-*/
-
-/**
- * In Each Subject
- * Add in Class Declaration of each Subject ----------------------------------------
- *  : public Iloggable, public Subject
- *
- *  Add in h file of each Subject ----------------------------------------
- *  string stringToLog();
- *
- *  Add in ccp file of each Subject ----------------------------------------
- *  string Class::stringToLog(){
- *  string logString = "STRING FORMED FROM ATTRIBUTES OR STATE OF SUBJECT FOR IT TO BE THE RETURN STRING OF THIS METHOD";
- *  return logString;}
- *
- *  add
- *  Notify(This); in each triggering method
- */
