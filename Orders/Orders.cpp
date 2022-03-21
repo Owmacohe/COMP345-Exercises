@@ -32,6 +32,18 @@ Order::~Order() {
     game = nullptr;
 }
 
+Order &Order::operator=(const Order &order) {
+    validated = order.validated;
+    description = order.description;
+    return *this;
+}
+
+ostream &operator<<(ostream &os, const Order &order) {
+    string validated = (order.validated) ? "(validated)" : "(not validated)";
+    os << order.description;
+    return os;
+}
+
 // Accessors
 string Order::getDescription() { return description; }
 
@@ -48,18 +60,6 @@ void Order::setValidated(bool v) {
 
 void Order::setGameEngine(GameEngine *gamePlaying) {
     Order::game = gamePlaying;
-}
-
-Order &Order::operator=(const Order &order) {
-    validated = order.validated;
-    description = order.description;
-    return *this;
-}
-
-ostream &operator<<(ostream &os, const Order &order) {
-    string validated = (order.validated) ? "(validated)" : "(not validated)";
-    os << order.description;
-    return os;
 }
 
 void Order::validate() {} // Virtual Method
@@ -103,6 +103,20 @@ Deploy::~Deploy() {
     playerIssuing = nullptr;
 }
 
+Deploy &Deploy::operator=(const Deploy &o) {
+    Order::operator=(o);
+    playerIssuing = o.playerIssuing;
+    target = o.target;
+    numToDeploy = o.numToDeploy;
+    return *this;
+}
+
+ostream &operator<<(ostream &os, const Deploy &o) {
+    string validated = (o.validated) ? " (validated)" : " (not validated)";
+    os << o.description;
+    return os;
+}
+
 // Accessors
 string Deploy::getDescription() { return description; }
 bool Deploy::getValidated() { return validated; }
@@ -116,22 +130,6 @@ void Deploy::setDescription(string d) {
 }
 void Deploy::setValidated(bool v) {
     validated = v;
-}
-
-Deploy &Deploy::operator=(const Deploy &o) {
-    Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
-    playerIssuing = o.playerIssuing;
-    target = o.target;
-    numToDeploy = o.numToDeploy;
-    return *this;
-}
-
-ostream &operator<<(ostream &os, const Deploy &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
-    return os;
 }
 
 void Deploy::validate() {
@@ -163,6 +161,7 @@ string Deploy::stringToLog() {
     string logStringEffect =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
     return logStringPlayer + logStringOrder + logStringEffect;
 }
+
 /****************************** Advance *******************************/
 
 // Default constructor
@@ -176,7 +175,7 @@ Advance::Advance() : Order(false, "advance"){
 // Parameterize Constructor
 Advance::Advance(Player* p) : Order(false, "advance"){
     playerIssuing = p;
-    origin = p->toDefend(game->getMap()).at(0);
+    origin = p->toDefend(game->getMap()).at(0); // TODO : Audrey do you want to ask the player if they want to advance or attack?
     target = p->toAttack(game->getMap()).at(0);
     numToAdvance = rand() % origin->getArmies();
     while (numToAdvance > origin->getArmies()){
@@ -200,23 +199,6 @@ Advance::~Advance() {
     target = nullptr;
 }
 
-// Accessors
-string Advance::getDescription() { return description; }
-bool Advance::getValidated() { return validated; }
-Player *Advance::getPlayerIssuing() { return playerIssuing; }
-Territory* Advance::getOrigin() { return origin; }
-Territory *Advance::getTarget() { return target; }
-int Advance::getNumToAdvance() { return numToAdvance; }
-
-// Mutators
-void Advance::setDescription(string d) {
-    description = d;
-}
-
-void Advance::setValidated(bool v) {
-    validated = v;
-}
-
 Advance &Advance::operator=(const Advance &o) {
     Order::operator=(o);
 //    validated = o.validated;
@@ -232,6 +214,23 @@ ostream &operator<<(ostream &os, const Advance &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
     os << o.description;
     return os;
+}
+
+// Accessors
+string Advance::getDescription() { return description; }
+bool Advance::getValidated() { return validated; }
+Player *Advance::getPlayerIssuing() { return playerIssuing; }
+Territory* Advance::getOrigin() { return origin; }
+Territory *Advance::getTarget() { return target; }
+int Advance::getNumToAdvance() { return numToAdvance; }
+
+// Mutators
+void Advance::setDescription(string d) {
+    description = d;
+}
+
+void Advance::setValidated(bool v) {
+    validated = v;
 }
 
 void Advance::validate() {
@@ -310,7 +309,6 @@ string Advance::stringToLog() {
     if (validateResult == "Attack"){
         logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
     }
-
     else if (validateResult == "Advance"){
         logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
     }
@@ -356,23 +354,6 @@ Airlift::~Airlift() {
     target = nullptr;
 }
 
-// Accessors
-string Airlift::getDescription() { return description; }
-bool Airlift::getValidated() { return validated; }
-Player *Airlift::getPlayerIssuing() { return playerIssuing; }
-Territory* Airlift::getOrigin() { return origin; }
-Territory *Airlift::getTarget() { return target; }
-int Airlift::getNumToAirlift() { return numToAirlift; }
-
-// Mutators
-void Airlift::setDescription(string d) {
-    description = d;
-}
-
-void Airlift::setValidated(bool v) {
-    validated = v;
-}
-
 Airlift &Airlift::operator=(const Airlift &o) {
     Order::operator=(o);
 //    validated = o.validated;
@@ -388,6 +369,23 @@ ostream &operator<<(ostream &os, const Airlift &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
     os << o.description;
     return os;
+}
+
+// Accessors
+string Airlift::getDescription() { return description; }
+bool Airlift::getValidated() { return validated; }
+Player *Airlift::getPlayerIssuing() { return playerIssuing; }
+Territory* Airlift::getOrigin() { return origin; }
+Territory *Airlift::getTarget() { return target; }
+int Airlift::getNumToAirlift() { return numToAirlift; }
+
+// Mutators
+void Airlift::setDescription(string d) {
+    description = d;
+}
+
+void Airlift::setValidated(bool v) {
+    validated = v;
 }
 
 void Airlift::validate() {
@@ -453,22 +451,6 @@ Bomb::~Bomb() {
     target = nullptr;
 }
 
-// Accessors
-string Bomb::getDescription() { return description; }
-bool Bomb::getValidated() { return validated; }
-Player* Bomb::getPlayerIssuing() { return playerIssuing; }
-Territory* Bomb::getOrigin() { return origin; }
-Territory *Bomb::getTarget() { return target; }
-
-// Mutators
-void Bomb::setDescription(string d) {
-    description = d;
-}
-
-void Bomb::setValidated(bool v) {
-    validated = v;
-}
-
 Bomb &Bomb::operator=(const Bomb &o) {
     Order::operator=(o);
 //    validated = o.validated;
@@ -483,6 +465,22 @@ ostream &operator<<(ostream &os, const Bomb &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
     os << o.description;
     return os;
+}
+
+// Accessors
+string Bomb::getDescription() { return description; }
+bool Bomb::getValidated() { return validated; }
+Player* Bomb::getPlayerIssuing() { return playerIssuing; }
+Territory* Bomb::getOrigin() { return origin; }
+Territory *Bomb::getTarget() { return target; }
+
+// Mutators
+void Bomb::setDescription(string d) {
+    description = d;
+}
+
+void Bomb::setValidated(bool v) {
+    validated = v;
 }
 
 void Bomb::validate() {
@@ -551,6 +549,20 @@ Blockade::~Blockade() {
     playerIssuing = nullptr;
     target = nullptr;
 }
+Blockade &Blockade::operator=(const Blockade &o) {
+    Order::operator=(o);
+//    validated = o.validated;
+//    description = o.description;
+    playerIssuing = o.playerIssuing;
+    target = o.target;
+    return *this;
+}
+
+ostream &operator<<(ostream &os, const Blockade &o) {
+    string validated = (o.validated) ? " (validated)" : " (not validated)";
+    os << o.description;
+    return os;
+}
 
 // Accessors
 string Blockade::getDescription() { return description; }
@@ -565,21 +577,6 @@ void Blockade::setDescription(string d) {
 
 void Blockade::setValidated(bool v) {
     validated = v;
-}
-
-Blockade &Blockade::operator=(const Blockade &o) {
-    Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
-    playerIssuing = o.playerIssuing;
-    target = o.target;
-    return *this;
-}
-
-ostream &operator<<(ostream &os, const Blockade &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
-    return os;
 }
 
 void Blockade::validate() {
@@ -621,13 +618,21 @@ Negotiate::Negotiate() : Order(false, "negotiate"){
 // Parameterize Constructor
 Negotiate::Negotiate(Player* p) : Order(false, "negotiate"){
     playerIssuing = p;
-    // TODO: initialize targetPlayer; ??? any criteria to be a target Player
+    // TODO: initialize targetPlayer; ??? any criteria to be a target Player -- Just to exist :) I will validate that its not a Neutral player in validate()
+    cout << "which player would you like to negotiate with?" << endl;
+    string playerTargetName;
+    cin >> playerTargetName;
+
+    for (int i = 0; i < game->getplayer_list().size(); i++){
+        if (game->getplayer_list().at(i)->getName() == playerTargetName)
+        { targetPlayer = game->getplayer_list().at(i);}
+    }
 }
 
 // Copy constructor
 Negotiate::Negotiate(const Negotiate &original) : Order(original) {
-    playerIssuing = original.playerIssuing;
-    // TODO: initialize targetPlayer
+    playerIssuing = new Player(*original.playerIssuing);
+    targetPlayer = new Player(*original.targetPlayer);
     cout << "Copy constructor for Negotiate class has been called" << endl;
 }
 
@@ -635,21 +640,6 @@ Negotiate::Negotiate(const Negotiate &original) : Order(original) {
 Negotiate::~Negotiate() {
     playerIssuing = nullptr;
     targetPlayer = nullptr;
-}
-
-// Accessors
-string Negotiate::getDescription() { return description; }
-bool Negotiate::getValidated() { return validated; }
-Player* Negotiate::getPlayerIssuing() { return playerIssuing; }
-Player* Negotiate::getTargetPlayer() { return targetPlayer; }
-
-// Mutators
-void Negotiate::setDescription(string d) {
-    description = d;
-}
-
-void Negotiate::setValidated(bool v) {
-    validated = v;
 }
 
 Negotiate &Negotiate::operator=(const Negotiate &o) {
@@ -667,6 +657,21 @@ ostream &operator<<(ostream &os, const Negotiate &o) {
     return os;
 }
 
+// Accessors
+string Negotiate::getDescription() { return description; }
+bool Negotiate::getValidated() { return validated; }
+Player* Negotiate::getPlayerIssuing() { return playerIssuing; }
+Player* Negotiate::getTargetPlayer() { return targetPlayer; }
+
+// Mutators
+void Negotiate::setDescription(string d) {
+    description = d;
+}
+
+void Negotiate::setValidated(bool v) {
+    validated = v;
+}
+
 void Negotiate::validate() {
     if (playerIssuing == targetPlayer || targetPlayer->getName() == "Neutral") {
         validated = false;
@@ -674,7 +679,6 @@ void Negotiate::validate() {
     } else
         validated = true;
 }
-
 
 void Negotiate::execute() {
     if (!validated) {

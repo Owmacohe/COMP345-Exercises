@@ -11,14 +11,15 @@
 using namespace std;
 
 class GameEngine;
-
+/****************************** Order *******************************/
 class Order /*:public Iloggable, public Subject*/ {
 public:
-    // Constructor
-    Order();
-    Order(bool v, string s);
-    Order(const Order& o);
-    virtual ~Order();
+    Order(); // Default Constructor
+    Order(bool v, string s); // parameterized Constructor
+    Order(const Order& o); // Copy Constructor
+    virtual ~Order(); // Destructor
+    Order& operator = (const Order& D);    // Assignment operator
+    friend ostream& operator<<(ostream& os, const Order& order);   // Stream insertion operator
 
     // Accessors
     virtual string getDescription();
@@ -30,40 +31,27 @@ public:
     void setValidated(bool v);
     static void setGameEngine(GameEngine* gamePlaying);
 
-    // Assignment operator
-    Order& operator = (const Order& D);
-
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Order& order);
-
-    // Pure virtual validate function;
-    virtual void validate() = 0;
-
-    //Pure virtual execute function
-    virtual void execute() = 0;
-
+    virtual void validate() = 0; // Pure virtual validate function;
+    virtual void execute() = 0; //Pure virtual execute function
 
     // From Iloggable
      string stringToLog();
-    // From Subject but no need to overload it
-    //void notify(Iloggable* il);
 
-    bool validated;
-    string description;
-    static GameEngine* game;
+    bool validated; // Status of validation
+    string description; // Description of the Order
+    static GameEngine* game; // Game Engine pointer for Order subclasses execution and validation
 };
 
-
+/****************************** Deploy *******************************/
 class Deploy : public Order {
 
 public:
-    // Constructor
-    Deploy();
-    Deploy(Player* p);
-    Deploy(const Deploy& original);
-
-    //Destructor
-    ~Deploy();
+    Deploy(); // Constructor
+    Deploy(Player* p); // parameterized Constructor
+    Deploy(const Deploy& original);  // Copy Constructor
+    ~Deploy();     //Destructor
+    Deploy& operator = (const Deploy& D); // Assignment operator
+    friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -76,38 +64,30 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Deploy& operator = (const Deploy& D);
+    void validate();     //Method to validate if an order is valid
+    void execute();     //Method to execute the order
 
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Deploy& deploy);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    string validateResult; // TODO WHAT IS THIS ONE FOR AUDREY?
 
     // From Iloggable
     string stringToLog();
-    string validateResult;
 
 private:
-    Player* playerIssuing;
-    Territory* target;
-    int numToDeploy;
+    Player* playerIssuing; // Player issuing the current Order subclass object
+    Territory* target; // Territory targeted by the Order subclass object
+    int numToDeploy; // Number of armies to Deploy to the target territory
 };
 
+/****************************** Advance *******************************/
 class Advance : public Order {
 
 public:
-    // Constructor
-    Advance();
-    Advance(Player* p);
-    Advance(const Advance& original);
-
-    //Destructor
-    ~Advance();
+    Advance(); // Constructor
+    Advance(Player* p);  // Parameterized Constructor
+    Advance(const Advance& original);  // Copy Constructor
+    ~Advance(); //Destructor
+    Advance& operator = (const Advance& d);  // Assignment operator
+    friend ostream& operator<<(ostream& os, const Advance& advance);  // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -121,38 +101,31 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Advance& operator = (const Advance& d);
-
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Advance& advance);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    void validate();  //Method to validate if an order is valid
+    void execute();  //Method to execute the order
 
     // From Iloggable
     string validateResult;
-    string stringToLog();
+
+    string stringToLog(); // Method to determine the effect of the Advance order after validation
 
 private:
-    Player* playerIssuing;
-    Territory* origin;
-    Territory* target;
-    int numToAdvance;
+    Player* playerIssuing; // Player issuing the current Order subclass object
+    Territory* origin; // Territory where the Order subclass object takes origin from
+    Territory* target; // Territory targeted by the Order subclass object
+    int numToAdvance; // Number of Armies to Advance
 };
+
+/****************************** Airlift *******************************/
 
 class Airlift : public Order {
 public:
-    // Constructor
-    Airlift();
-    Airlift(Player* p);
-    Airlift(const Airlift& original);
-
-    //Destructor
-    ~Airlift();
+    Airlift();  // Constructor
+    Airlift(Player* p); // Parameterized Constructor
+    Airlift(const Airlift& original); // Copy Constructor
+    ~Airlift();  //Destructor
+    Airlift& operator = (const Airlift &D);  // Assignment operator
+    friend ostream& operator<<(ostream& os, const Airlift& airflit);    // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -166,37 +139,30 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Airlift& operator = (const Airlift &D);
-
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Airlift& airflit);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    void validate();  //Method to validate if an order is valid
+    void execute();   //Method to execute the order
 
     // From Iloggable
     string stringToLog();
 
 private:
-    Player* playerIssuing;
-    Territory* target;
-    Territory* origin;
-    int numToAirlift;
+    Player* playerIssuing; // Player issuing the current Order subclass object
+    Territory* target; // Territory targeted by the Order subclass object
+    Territory* origin; // Territory where the Order subclass object takes origin from
+    int numToAirlift; // Number of Armies to Airlift from the origin to the target
+
 };
+
+/****************************** Bomb *******************************/
 
 class Bomb : public Order {
 public:
-    // Constructor
-    Bomb();
-    Bomb(Player* p);
-    Bomb(const Bomb& original);
-
-    //Destructor
-    ~Bomb();
+    Bomb();  // Constructor
+    Bomb(Player* p); // Parameterized Constructor
+    Bomb(const Bomb& original);  // Copy Constructor
+    ~Bomb();   //Destructor
+    Bomb& operator = (const Bomb& D);  // Assignment operator
+    friend ostream& operator<<(ostream& os, const Bomb& bomb);  // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -209,35 +175,30 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Bomb& operator = (const Bomb& D);
 
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Bomb& bomb);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    void validate(); //Method to validate if an order is valid
+    void execute();  //Method to execute the order
 
     // From Iloggable
      string stringToLog();
 
 private:
-    Player* playerIssuing;
-    Territory* origin;
-    Territory* target;
+    Player* playerIssuing;  // Player issuing the current Order subclass object
+    Territory* origin; // Territory where the Order subclass object takes origin from
+    Territory* target; // Territory targeted by the Order subclass object
+
 };
+
+/****************************** Blockade *******************************/
 
 class Blockade : public Order {
 public:
-    Blockade();
-    Blockade(Player* p);
-    Blockade(const Blockade& original);
-
-    //Destructor
-    ~Blockade();
+    Blockade(); // Constructor
+    Blockade(Player* p); // Parameterized Constructor
+    Blockade(const Blockade& original); // Copy Constructor
+    ~Blockade();   //Destructor
+    Blockade& operator = (const Blockade& D);   // Assignment operator
+    friend ostream& operator<<(ostream& os, const Blockade& blockade);  // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -249,35 +210,28 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Blockade& operator = (const Blockade& D);
-
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Blockade& blockade);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    void validate();  //Method to validate if an order is valid
+    void execute();   //Method to execute the order
 
     // From Iloggable
      string stringToLog();
 
 private:
-    Player* playerIssuing;
-    Territory* target;
+    Player* playerIssuing; // Player issuing the current Order subclass object
+    Territory* target; // Territory targeted by the Order subclass object
+
 };
+
+/****************************** Negotiate *******************************/
 
 class Negotiate : public Order {
 public:
-    // Constructor
-    Negotiate();
-    Negotiate(Player* p);
-    Negotiate(const Negotiate& original);
-
-    //Destructor
-    ~Negotiate();
+    Negotiate();  // Constructor
+    Negotiate(Player* p); // Parameterized Constructor
+    Negotiate(const Negotiate& original); // Copy Constructor
+    ~Negotiate(); //Destructor
+    Negotiate& operator = (const Negotiate& D);  // Assignment operator
+    friend ostream& operator<<(ostream& os, const Negotiate& negotiate);  // Stream insertion operator
 
     // Accessors
     string getDescription();
@@ -289,49 +243,31 @@ public:
     void setDescription(string d);
     void setValidated(bool v);
 
-    // Assignment operator
-    Negotiate& operator = (const Negotiate& D);
+    void validate();  //Method to validate if an order is valid
+    void execute();   //Method to execute the order
 
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const Negotiate& negotiate);
-
-    //Method to validate if an order is valid
-    void validate();
-
-    //Method to execute the order
-    void execute();
+    string* validateResult; // TODO DID YOU ADD THIS AUDREY?
 
     // From Iloggable
-     string* validateResult;
      string stringToLog();
 
 private:
-    Player* playerIssuing;
-    Player* targetPlayer;
-
+    Player* playerIssuing; // Player issuing the current Order subclass object
+    Player* targetPlayer; // Player targeted by the current Order subclass object
 };
 
-class OrdersList : /*public Iloggable, public Subject*/ {
+/****************************** OrdersList *******************************/
+class OrdersList /* : public Iloggable, public Subject*/ {
 public:
-    // Constructor
-    OrdersList();
-    OrdersList(vector<Order*> vo);
-    OrdersList(const OrdersList& original);
+    OrdersList();  // Constructor
+    OrdersList(vector<Order*> vo); // Parameterized Constructor
+    OrdersList(const OrdersList& original); // Copy Constructor
+    virtual ~OrdersList();     // Destructor TODO : VIRTUAL???
+    vector<Order*> getOrderList();  // Accessors
+    void setOrderList(vector<Order*> vo);  // Mutators
 
-    // Destructor
-    virtual ~OrdersList();
-
-    // Accessors
-    vector<Order*> getOrderList();
-
-    // Mutators
-    void setOrderList(vector<Order*> vo);
-
-    // Assignment operator
-    OrdersList operator = (const OrdersList& original);
-
-    // Stream insertion operator
-    friend ostream& operator<<(ostream& os, const OrdersList& ordersList);
+    OrdersList operator = (const OrdersList& original);   // Assignment operator
+    friend ostream& operator<<(ostream& os, const OrdersList& ordersList);   // Stream insertion operator
 
     // Method used to add an order of the OrderList.
     void addOrder(Order* order);
@@ -344,6 +280,7 @@ public:
 
     // From Iloggable
     string stringToLog();
+
     vector<Order*> playerOrderList;
 };
 

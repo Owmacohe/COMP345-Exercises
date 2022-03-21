@@ -2,30 +2,30 @@
 #include "../LoggingObserver/LoggingObserver.h"
 #include "GameEngine/GameEngine.h"
 
-int main() {
+int Ordersmain() {
 //		Create OrderList object
-    OrdersList player1List;
-    Player* player1 = new Player();
-    player1->setReinforcementPool(10);
-    player1->setName("Audrey");
-    Player* player2 = new Player();
-    player2->setReinforcementPool(12);
-    player2->setName("MJ");
-
-    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
-    Territory* canada = new Territory("Canada", "North America", player2, 4);
-
-    cout << "Player 1" << " - name: " << player1->getName() << endl;
-    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
-
-    cout << "Player 2" << " - name: " << player2->getName() << endl;
-    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
-
-    cout << "Territories:" << endl;
-    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
-    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
-
-    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
+//    OrdersList player1List;
+//    Player* player1 = new Player();
+//    player1->setReinforcementPool(10);
+//    player1->setName("Audrey");
+//    Player* player2 = new Player();
+//    player2->setReinforcementPool(12);
+//    player2->setName("MJ");
+//
+//    Territory* vietnam = new Territory("Vietnam", "Asia", player1, 2);
+//    Territory* canada = new Territory("Canada", "North America", player2, 4);
+//
+//    cout << "Player 1" << " - name: " << player1->getName() << endl;
+//    cout << "reinforcement pool: " << player1->getReinforcePool() << endl;
+//
+//    cout << "Player 2" << " - name: " << player2->getName() << endl;
+//    cout << "reinforcement pool: " << player2->getReinforcePool() << endl;
+//
+//    cout << "Territories:" << endl;
+//    cout << vietnam->getName() << " - armies: " << vietnam->getArmies() << endl;
+//    cout << canada->getName() << " - armies: " << canada->getArmies() << endl;
+//
+//    cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
 //	Deploy
 //	Deploy *deploy1 = new Deploy(player1);
 //	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
@@ -40,11 +40,11 @@ int main() {
 //	player1List.addOrder(deploy1);
 //	cout << player1List << "\n" << endl;
 
-    // ****************************** CREATING A GAME *******************************
-
+     /****************************** CREATING A GAME *******************************/
+//
 //    GameEngine* game;
-
-//         Create Map
+//
+//     //Create Map
 //        MapLoader loader;
 //        Map m = Map();
 //        m = loader.load("canada.map");
@@ -68,7 +68,7 @@ int main() {
 //        game->getMap()->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
 //        Territory *NewBrunswick= new Territory(game->getMap()->getTerritories()[0]);
 //        player1->getTerritory().push_back(NewBrunswick);
-
+//
 //        game->getMap()->getTerritories()[5].setOwner(player1); // Quebec North
 //        Territory *QuebecNorth = new Territory(game->getMap()->getTerritories()[5]);
 //        player1->getTerritory().push_back(QuebecNorth);
@@ -96,7 +96,7 @@ int main() {
 //        Territory *OntarioWest = new Territory(game->getMap()->getTerritories()[9]);
 //        game->getNeutralPlayer()->getTerritory().push_back(OntarioWest);
 //
-//
+
 //    	Deploy *deploy1 = new Deploy(player1, QuebecNorth);
 //	cout << "Adding to the OrdersList the Order: "<< *deploy1 << endl;
 //    cout << "Deploy validation: ";
