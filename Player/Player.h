@@ -30,6 +30,7 @@ class Player {
 
         void addToReinforcePool(int armies); // Add to reinforcement pool
         void removeFromReinforcePool(int armies); // Remove from reinforcement pool
+        void assignTerritory(Territory* t); // Add territory to territories vector list
         
         // Accessors
         void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o), setReinforcementPool(int armies);
