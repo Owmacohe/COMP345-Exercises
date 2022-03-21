@@ -6,7 +6,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "../CommandProcessing//CommandProcessing.h"
 
-//int LoggingObservermain() {
+////int LoggingObservermain() {
 //    int main() {
 //
 //        LogObserver("gamelog.txt");
@@ -14,14 +14,14 @@
 //        Command *command1 = new Command();
 //        CommandProcessor *commandProcessor1 = new CommandProcessor();
 //        OrdersList *orderList1 = new OrdersList();
-//        Order *order1 = new Order();
+//        Negotiate *negotiate1 = new Negotiate();
 //
-//        //            (1) Show that classes inherit from subject and Iloggable
+//        //   (1) Show that classes inherit from subject and Iloggable
 //        Subject* subjectGameEngine = dynamic_cast<Subject*> (game);
 //        Subject* subjectCommand = dynamic_cast<Subject*> (command1);
 //        Subject* subjectCommandProcessor = dynamic_cast<Subject*> (commandProcessor1);
 //        Subject* subjectOrdersList = dynamic_cast<Subject*> (orderList1);
-//        Subject* subjectOrder = dynamic_cast<Subject*> (order1);
+//        Subject* subjectOrder = dynamic_cast<Subject*> (negotiate1);
 //
 //        if (subjectGameEngine != NULL) { cout << "GameEngine inherits from Subject\n";}
 //        if (subjectCommand!= NULL) { cout << "Command inherits from Subject\n";}
@@ -33,7 +33,7 @@
 //        Iloggable* iloggableCommand = dynamic_cast<Iloggable*> (command1);
 //        Iloggable* iloggableCommandProcessor = dynamic_cast<Iloggable*> (commandProcessor1);
 //        Iloggable* iloggableOrdersList = dynamic_cast<Iloggable*> (orderList1);
-//        Iloggable* iloggableOrder = dynamic_cast<Iloggable*> (order1);
+//        Iloggable* iloggableOrder = dynamic_cast<Iloggable*> (negotiate1);
 //
 //        if (iloggableGameEngine != NULL) { cout << "GameEngine inherits from Iloggable\n";}
 //        if (iloggableCommand != NULL) { cout << "Command inherits from Iloggable\n";}
