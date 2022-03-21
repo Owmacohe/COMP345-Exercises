@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
     // Create Map Loader
     MapLoader* loader = new MapLoader();
@@ -20,12 +20,10 @@ int main() {
     cout << mainmap->territoriesLength<<endl;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
         Player *tempPlayer = player_list.at(playerIndex);
-        cout << tempPlayer->getName()<<endl;
 
         mainmap->getTerritories()[i].setOwner(tempPlayer);
         Territory *tempTerr = new Territory(mainmap->getTerritories()[i]);
         tempPlayer->assignTerritory(tempTerr);
-        cout << tempTerr->getName()<<endl;
         playerIndex++;
 
         if (playerIndex >= player_list.size()) {
@@ -89,20 +87,22 @@ int main() {
 	cout << *player1->getOrder() << "\n" << endl;
 
 	// Advance
-//	Advance *advance1 = new Advance(player1);
-//	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
-//    cout << "Checking for validation: " << advance1->validate() << endl;
-//    cout << "Checking for execution: " ; advance1->execute() ;
-//	player1->getOrder()->addOrder(advance1);
-//	cout << *player1->getOrder() << "\n" << endl;
+	Advance *advance1 = new Advance(player1);
+	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
+    cout << "Checking for validation: " << endl;
+    advance1->validate();
+    cout << "Checking for execution: " ; advance1->execute() ;
+	player1->getOrder()->addOrder(advance1);
+	cout << *player1->getOrder() << "\n" << endl;
 
     // Airlift
-//	Airlift *airlift1 = new Airlift(player1);
-//	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
-//    cout << "Checking for validation: " << airlift1->validate() << endl;
-//    cout << "Checking for execution: " ; airlift1->execute() ;
-//	player1->getOrder()->addOrder(airlift1);
-//	cout << *player1->getOrder() << "\n" << endl;
+	Airlift *airlift1 = new Airlift(player1);
+	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
+    cout << "Checking for validation: "  << endl;
+    airlift1->validate();
+    cout << "Checking for execution: " ; airlift1->execute() ;
+	player1->getOrder()->addOrder(airlift1);
+	cout << *player1->getOrder() << "\n" << endl;
 
     // Bomb
 //	Bomb *bomb1 = new Bomb(player1);
