@@ -83,10 +83,11 @@ Deploy::Deploy() : Order(false, "deploy"){
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
-    target = p->toDefend(game->getMap()).at(0);
-    numToDeploy = rand() % p->getReinforcePool();
+    target = nullptr;
+//    target = p->toDefend(game->getMap()).at(0);   TODO: ask Gabbi - the out of range problems
+    numToDeploy = rand() % p->getReinforcePool() + 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
-        numToDeploy = rand() % p->getReinforcePool();
+        numToDeploy = rand() % p->getReinforcePool() + 1;
     }
 }
 
@@ -113,7 +114,8 @@ Deploy &Deploy::operator=(const Deploy &o) {
 
 ostream &operator<<(ostream &os, const Deploy &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() << " " /*<< o.target->getName() << " "*/ << o.numToDeploy << ") ";
     return os;
 }
 
@@ -175,12 +177,15 @@ Advance::Advance() : Order(false, "advance"){
 // Parameterize Constructor
 Advance::Advance(Player* p) : Order(false, "advance"){
     playerIssuing = p;
-    origin = p->toDefend(game->getMap()).at(0); // TODO : Audrey do you want to ask the player if they want to advance or attack?
-    target = p->toAttack(game->getMap()).at(0);
-    numToAdvance = rand() % origin->getArmies();
-    while (numToAdvance > origin->getArmies()){
-        numToAdvance = rand() % origin->getArmies();
-    }
+    origin = nullptr;
+    target = nullptr;
+//    origin = p->toDefend();   //TODO: ask Gabbi - the out of range problems && Audrey do you want to ask the player if they want to advance or attack?
+//    target = p->toAttack(game->getMap()).at(0);
+//    numToAdvance = rand() % origin->getArmies() + 1;
+//    while (numToAdvance > origin->getArmies()){
+//        numToAdvance = rand() % origin->getArmies() + 1;
+//    }
+
 }
 
 // Copy constructor
@@ -201,8 +206,6 @@ Advance::~Advance() {
 
 Advance &Advance::operator=(const Advance &o) {
     Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
     playerIssuing = o.playerIssuing;
     origin = o.origin;
     target = o.target;
@@ -212,7 +215,8 @@ Advance &Advance::operator=(const Advance &o) {
 
 ostream &operator<<(ostream &os, const Advance &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() << " " /*<< o.origin->getName() << " " << o.target->getName() << " "*/ << o.numToAdvance << ")";
     return os;
 }
 
@@ -330,12 +334,14 @@ Airlift::Airlift() : Order(false, "airlift"){
 // Parameterize Constructor
 Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
-    origin = p->toDefend(game->getMap()).at(0);
-    target = p->toAttack(game->getMap()).at(0);
-    numToAirlift = rand() % origin->getArmies();
-    while (numToAirlift > origin->getArmies()){
-        numToAirlift = rand() % origin->getArmies();
-    }
+    origin = nullptr;
+    target = nullptr;
+//    origin = p->toDefend(game->getMap()).at(0);     //TODO: out of range - ask Gabbi
+//    target = p->toAttack(game->getMap()).at(0);
+//    numToAirlift = rand() % origin->getArmies() + 1;
+//    while (numToAirlift > origin->getArmies()){
+//        numToAirlift = rand() % origin->getArmies() + 1;
+//    }
 }
 
 // Copy constructor
@@ -356,8 +362,6 @@ Airlift::~Airlift() {
 
 Airlift &Airlift::operator=(const Airlift &o) {
     Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
     playerIssuing = o.playerIssuing;
     origin = o.origin;
     target = o.target;
@@ -367,7 +371,8 @@ Airlift &Airlift::operator=(const Airlift &o) {
 
 ostream &operator<<(ostream &os, const Airlift &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() << " " /*<< o.origin->getName() << " " << o.target->getName() << " "*/ << o.numToAirlift << ") ";
     return os;
 }
 
@@ -432,8 +437,10 @@ Bomb::Bomb() : Order(false, "bomb"){
 // Parameterize Constructor
 Bomb::Bomb(Player* p) : Order(false, "bomb"){
     playerIssuing = p;
-    origin = p->toDefend(game->getMap()).at(0);
-    target = p->toAttack(game->getMap()).at(0);
+    origin = nullptr;
+    target = nullptr;
+//    origin = p->toDefend(game->getMap()).at(0);   //TODO: out of range - ask Gabbi
+//    target = p->toAttack(game->getMap()).at(0);
 }
 
 // Copy constructor
@@ -453,8 +460,6 @@ Bomb::~Bomb() {
 
 Bomb &Bomb::operator=(const Bomb &o) {
     Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
     playerIssuing = o.playerIssuing;
     origin = o.origin;
     target = o.target;
@@ -463,7 +468,8 @@ Bomb &Bomb::operator=(const Bomb &o) {
 
 ostream &operator<<(ostream &os, const Bomb &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() /*<< " " << o.origin->getName() << " " << o.target->getName()*/ << ") ";
     return os;
 }
 
@@ -534,7 +540,8 @@ Blockade::Blockade() : Order(false, "blockade"){
 // Parameterize Constructor
 Blockade::Blockade(Player* p) : Order(false, "blockade"){
     playerIssuing = p;
-    target = p->toAttack(game->getMap()).at(0);
+    target = nullptr;
+//    target = p->toAttack(game->getMap()).at(0);   //TODO: out of range - ask Gabbi
 }
 
 // Copy constructor
@@ -551,8 +558,6 @@ Blockade::~Blockade() {
 }
 Blockade &Blockade::operator=(const Blockade &o) {
     Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
     playerIssuing = o.playerIssuing;
     target = o.target;
     return *this;
@@ -560,7 +565,8 @@ Blockade &Blockade::operator=(const Blockade &o) {
 
 ostream &operator<<(ostream &os, const Blockade &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() /*<< " " << o.target->getName() << " "*/ << ") ";
     return os;
 }
 
@@ -644,8 +650,6 @@ Negotiate::~Negotiate() {
 
 Negotiate &Negotiate::operator=(const Negotiate &o) {
     Order::operator=(o);
-//    validated = o.validated;
-//    description = o.description;
     playerIssuing = o.playerIssuing;
     targetPlayer = o.targetPlayer;
     return *this;
@@ -653,7 +657,8 @@ Negotiate &Negotiate::operator=(const Negotiate &o) {
 
 ostream &operator<<(ostream &os, const Negotiate &o) {
     string validated = (o.validated) ? "(validated)" : "(not validated)";
-    os << o.description;
+    os << o.description << " (" << std::boolalpha << o.validated << " "
+       << o.playerIssuing->getName() << " " << o.targetPlayer->getName() << ") ";
     return os;
 }
 
@@ -800,7 +805,7 @@ OrdersList OrdersList::operator=(const OrdersList &original) {
 
 // stream insertion operator that outputs the OrdersList's vector
 ostream &operator<<(ostream &os, const OrdersList &ordersList) {
-    os << "Order List (size: " << ordersList.playerOrderList.size() << " ): \n";
+    os << "Order List (size: " << ordersList.playerOrderList.size() << ") \n";
     for (int i = 0; i < ordersList.playerOrderList.size(); i++) {
         os << i << " - " << *(ordersList.playerOrderList.at(i)) << " | ";
     }
