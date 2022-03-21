@@ -19,7 +19,7 @@ GameEngine::GameEngine() {
     NumberOfTerritories = 0;
     deck = new Deck();
     player_list = vector<Player*>();
-    Map *map = new Map();
+    map = new Map();
     alliances = set<pair<Player*, Player*>>();
 
     // Add Neutral Player to Game
@@ -136,6 +136,7 @@ bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
+Deck *GameEngine::getDeck() { return deck; }
 set<pair<Player*, Player*>> GameEngine::getAlliances() {return alliances;};
 bool GameEngine::existingAlliance(Player* p1, Player* p2) {
     for(auto x : alliances) {
@@ -160,6 +161,7 @@ void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
 void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
 void GameEngine::setMap(const Map &m) { *map = m; }
+void GameEngine::setDeck(const Deck& d){ *deck = d;}
 void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
 void GameEngine::addAlliances(Player* p1, Player* p2) {alliances.insert(make_pair(p1,p2));}
 void GameEngine::resetAlliances() {
@@ -663,7 +665,9 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
 
 // From Iloggable
 string GameEngine::stringToLog() {
-    string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement", "issueOrder", "executeOrder", "win"};
+    string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
+                           "issueOrder", "executeOrder", "win"};
     string logString = "Game Engine now at the " + enumStates[*s] + "state. \n";
     return logString;
-};
+}
+
