@@ -7,8 +7,8 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 #include "../LoggingObserver/LoggingObserver.h"
-
-using namespace std;
+#include "../Cards/Cards.h"
+#include "../GameEngine/GameEngine.h"
 
 class GameEngine;
 /****************************** Order *******************************/
@@ -49,7 +49,7 @@ public:
     Deploy(); // Constructor
     Deploy(Player* p); // parameterized Constructor
     Deploy(const Deploy& original);  // Copy Constructor
-    ~Deploy();     //Destructor
+    ~Deploy();  //Destructor
     Deploy& operator = (const Deploy& D); // Assignment operator
     friend ostream& operator<<(ostream& os, const Deploy& deploy); // Stream insertion operator
 
@@ -67,7 +67,7 @@ public:
     void validate();     //Method to validate if an order is valid
     void execute();     //Method to execute the order
 
-    string validateResult; // TODO WHAT IS THIS ONE FOR AUDREY?
+    string validateResult; // TODO WHAT IS THIS ONE FOR AUDREY? - string stores type of advance (attack || advance)
 
     // From Iloggable
     string stringToLog();
@@ -246,7 +246,7 @@ public:
     void validate();  //Method to validate if an order is valid
     void execute();   //Method to execute the order
 
-    string* validateResult; // TODO DID YOU ADD THIS AUDREY?
+    string* validateResult; // TODO DID YOU ADD THIS AUDREY? - OOPs, I did but no need to
 
     // From Iloggable
      string stringToLog();
@@ -263,7 +263,7 @@ public:
     OrdersList();  // Constructor
     OrdersList(vector<Order*> vo); // Parameterized Constructor
     OrdersList(const OrdersList& original); // Copy Constructor
-    virtual ~OrdersList();     // Destructor TODO : VIRTUAL???
+    virtual ~OrdersList();     // Destructor TODO : VIRTUAL??? - I though it would be good to put virtual since ~Order() is virtual?
     vector<Order*> getOrderList();  // Accessors
     void setOrderList(vector<Order*> vo);  // Mutators
 
@@ -286,8 +286,6 @@ public:
 };
 
 /**************
-
-
 
 Deploy(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
 Deploy(Player* p, Territory* t);  // Parameterized constructor For IssueOrders Phase
