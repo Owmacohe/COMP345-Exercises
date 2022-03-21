@@ -84,8 +84,8 @@ Deploy::Deploy() : Order(false, "deploy"){
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
-    target = nullptr;
-//    target = p->toDefend(this->game->getMap()).at(0);   //TODO: ask Gabbi - the out of range problems
+    //target = nullptr;
+    target = p->toDefend(this->game->getMap()).at(0);   //TODO: ask Gabbi - the out of range problems
     numToDeploy = rand() % p->getReinforcePool() + 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
         numToDeploy = rand() % p->getReinforcePool() + 1;
@@ -116,7 +116,7 @@ Deploy &Deploy::operator=(const Deploy &o) {
 ostream &operator<<(ostream &os, const Deploy &o) {
     string validated = (o.validated) ? " (validated)" : " (not validated)";
     os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() << " " /*<< o.target->getName() << " "*/ << o.numToDeploy << ") ";
+       << o.playerIssuing->getName() << " " << o.target->getName() << " " << o.numToDeploy << ") ";
     return os;
 }
 

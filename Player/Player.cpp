@@ -67,7 +67,11 @@ vector<Territory*> Player::toDefend(Map* m) {
     for (Territory* territory : territories) {
         int number_surrounding = 0;
         string name = territory->getName();
+
         vector<Territory*> surround_territory = m->getConnectedTerritories(name);
+        if (surround_territory.empty()) {
+            number_surrounding = 0;
+        }
         // step 1 check each territories numbers of enemies surrounding 
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
@@ -107,6 +111,7 @@ vector<Territory*> Player::toAttack(Map* m) {
         string name = territory->getName();
         // step 1 get connected territories
         vector<Territory*> surround_territory = m->getConnectedTerritories(name);
+        if (surround_territory.empty()) number_armies = 0;
         // step 2 for each connected territory thats an enemy count the number armies
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
@@ -188,6 +193,9 @@ void Player::setTerritory(vector<Territory*> t) {
     for (Territory* i : t) {
         territories.push_back(i);
     }
+}
+void Player::assignTerritory(Territory *t) {
+    territories.push_back(t);
 }
 
 void Player::setHand(Hand* h) { hand = h; }

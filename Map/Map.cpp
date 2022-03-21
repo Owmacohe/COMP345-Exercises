@@ -420,7 +420,8 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
     }
 
     if (!hasFound) {
-        cout << "No connected Territories!" << endl;
+        //cout << "No connected Territories!" << endl;
+        connected.clear();
     }
 
     return connected;
