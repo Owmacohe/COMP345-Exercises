@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int OrderMain() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
     // Create Map Loader
     MapLoader* loader = new MapLoader();
@@ -33,10 +33,6 @@ int OrderMain() {
         }
     }
 
-    vector<Territory*> teri = player1->toDefend(mainmap);
-    for (Territory* t : teri){
-        cout <<*t<<endl;
-    }
 
     //cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
 
@@ -51,6 +47,13 @@ int OrderMain() {
 	cout << *player1->getOrder() << "\n" << endl;
     cout << deploy1->stringToLog() << endl;
 
+//    vector<Territory*> teri = player1->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+    cout << "STARTING DEPLOY 2" <<endl;
+
     Deploy *deploy2 = new Deploy(player1);
     deploy2->validate();
     deploy2->execute();
@@ -58,6 +61,11 @@ int OrderMain() {
     cout << *player1->getOrder() << "\n" << endl;
     cout << deploy2->stringToLog() << endl;
 
+//    teri = player1->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+    cout << "STARTING DEPLOY 3" <<endl;
     //	Deploy
     cout << "----- Deploy for Player 2 ----- " << endl;
     Deploy *deploy3 = new Deploy(player2);
@@ -67,6 +75,13 @@ int OrderMain() {
     cout << *player2->getOrder() << "\n" << endl;
     cout << deploy3->stringToLog() << endl;
 
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+    cout << "STARTING DEPLOY 4" <<endl;
+
     Deploy *deploy4 = new Deploy(player2);
     deploy4->validate();
     deploy4->execute();
@@ -74,10 +89,18 @@ int OrderMain() {
     cout << *player2->getOrder() << "\n" << endl;
     cout << deploy4->stringToLog() << endl;
 
-    vector<Territory*> terri = player2->toDefend(mainmap);
-    for (Territory* t : terri){
-        cout <<*t<<endl;
-    }
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+//    cout << "TESTING TO ATTACK" <<endl;
+//    vector<Territory*> terri = player1->toAttack(mainmap);
+//    cout << terri.empty()<<endl;
+//    for (Territory* t : terri){
+//        cout <<*t<<endl;
+//    }
+
 	// Advance
 //	Advance *advance1 = new Advance(player1);
 //	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
