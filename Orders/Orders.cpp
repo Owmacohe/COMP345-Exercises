@@ -178,10 +178,10 @@ Advance::Advance() : Order(false, "advance"){
 // Parameterize Constructor
 Advance::Advance(Player* p) : Order(false, "advance"){
     playerIssuing = p;
-//    origin = nullptr;
-    target = nullptr;
-    origin = p->toDefend(game->getMap()).at(0);
-//    target = p->toAttack(game->getMap()).at(0);
+    // TODO : add a if else that accepts user input
+    target = p->toAttack(game->getMap()).at(0); // IF PLAYER WANTS TO ATTACK
+    target = p->toDefend(game->getMap()).at(0); // IF PLAYER WANTS TO DEFEND
+    origin = p->getOriginTerritory(target,game->getMap());
     numToAdvance = rand() % origin->getArmies() + 1;
     while (numToAdvance > origin->getArmies()){
         numToAdvance = rand() % origin->getArmies() + 1;
@@ -337,10 +337,16 @@ Airlift::Airlift() : Order(false, "airlift"){
 // Parameterize Constructor
 Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
-    origin = nullptr;
-    target = nullptr;
-    origin = p->toDefend(game->getMap()).at(0);
-    target = p->toAttack(game->getMap()).at(0);
+    Territory* territory_most_armies;
+    int max_armies = 0 ;
+    for (Territory* t : p->getTerritory()) {
+        if (t->getArmies() > max_armies) {
+            territory_most_armies = t;
+            max_armies = t->getArmies();
+        }
+    }
+    origin = territory_most_armies;
+    target = p->toDefend(game->getMap()).at(0);
     numToAirlift = rand() % origin->getArmies() + 1;
     while (numToAirlift > origin->getArmies()){
         numToAirlift = rand() % origin->getArmies() + 1;

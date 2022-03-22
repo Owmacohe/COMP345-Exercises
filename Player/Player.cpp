@@ -112,12 +112,6 @@ vector<Territory*> Player::toAttack(Map* m) {
         cout << "getting Territory Name" << name << endl;
         // step 1 get connected territories
         vector<Territory*> surround_territory = m->getConnectedTerritories(name);
-
-        if (surround_territory.empty()) number_armies = 0;
-
-        else
-            cout << surround_territory.at(0) << endl;
-
         // step 2 for each connected territory thats an enemy count the number armies
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name) {
@@ -179,6 +173,14 @@ int Player::getNumberOfTerritories() {
         sum = sum + 1;
     }
     return sum;
+}
+
+// Return an origin territory adjacent to a target territory
+Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
+    vector<Territory*> surround_territory = m->getConnectedTerritories(target_territory->getName());
+    for (Territory* t : surround_territory) {
+        if (t->getOwner()->getName() == name) return t;
+    }
 }
 
 // Return deploy list
