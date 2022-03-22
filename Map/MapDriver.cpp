@@ -4,11 +4,9 @@
 #include "Map.h"
 
 int mapMain() {
-    // TODO: make sure this is all working
-
     // Creating an array of file names and a MapLoader
     const int len = 5;
-    string *files = new string[len]{ "canada.map", "europe.map", "LOTR2.map", "usa8regions.map", "solar.map" };
+    string *files = new string[len]{ "canada.map", "europe.map", "LOTR2.map", "usa8regions.map", "solar.map"};
     MapLoader loader;
 
     // Looping through the files and creating a Map for each

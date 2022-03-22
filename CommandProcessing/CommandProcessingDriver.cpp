@@ -6,19 +6,11 @@
 #include "../Player/Player.h"
 
 int commandProcessingMain() {
-    // TODO: initialize a couple Commands and a CommandProcessor
+    // TODO: Driver demonstrates that commands can be read from the console using the CommandProcessor class.
 
-    // TODO: try using readCommand(), saveCommand(), and getCommand()
+    // TODO: Driver demonstrates that commands can be read from a saved text file using the FileCommandProcessorAdapter class.
 
-    GameEngine *e = new GameEngine;
-    e->setState(start);
-    CommandProcessor cp = CommandProcessor(e);
-    cp.getCommand();
-    cout << cp << endl;
-
-    // TODO: validate() CommandProcessor
-
-    // TODO: do the above ^, but with a FileCommandProcessorAdapter
+    // TODO: Driver demonstrates that commands that commands that are invalid in the current game state are rejected and valid commands result in the correct effect and state change.
 
     return 0;
 }

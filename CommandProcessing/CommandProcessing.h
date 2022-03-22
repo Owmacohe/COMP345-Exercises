@@ -66,22 +66,25 @@ class CommandProcessor : public Iloggable, public Subject {
         Command *commands; // Array of current and past Commands
 };
 
+// Class used by FileCommandProcessorAdapter to read sequential lines from a file
 class FileLineReader {
-    void readLineFromFile(); // TODO
+    public:
+        Command readLineFromFile(string, int); // Reads the given line from the given file and creates a Command out of it
 };
 
 // Modified CommandProcessor that instead gets Commands from a file
 class FileCommandProcessorAdapter : public CommandProcessor {
     public:
+        FileCommandProcessorAdapter(); // Default constructor
+        FileCommandProcessorAdapter(string); // Parameterized constructor
+        ~FileCommandProcessorAdapter(); // Destructor
+
         friend ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa); // Stream insertion operator
         FileCommandProcessorAdapter& operator = (const FileCommandProcessorAdapter& toAssign);  // Assignment operator
 
         void getCommand() override; // Reads and then saves a command from a file
-
-        void readFromFile(string); // Reads (startup) commands sequentially from a file
     private:
-        FileLineReader flr; // TODO
-
+        FileLineReader *flr; // FileLineReader used to each line sequentially
         string currentFile; // The current file of commands that is being read from
         int currentLine; // The current line being read in the current file
 };
