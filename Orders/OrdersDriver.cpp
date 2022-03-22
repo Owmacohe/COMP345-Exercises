@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int Ordersmain() {
+int OrderMain() {
     /****************************** CREATING A GAME *******************************/
     // Create Map Loader
     MapLoader* loader = new MapLoader();
@@ -19,7 +19,7 @@ int Ordersmain() {
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
     int playerIndex = 0;
-    cout << mainmap->territoriesLength<<endl;
+    //cout << mainmap->territoriesLength<<endl;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
         Player *tempPlayer = player_list.at(playerIndex);
 
@@ -33,6 +33,10 @@ int Ordersmain() {
         }
     }
 
+    vector<Territory*> teri = player1->toDefend(mainmap);
+    for (Territory* t : teri){
+        cout <<*t<<endl;
+    }
 
     //cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
 
@@ -70,6 +74,10 @@ int Ordersmain() {
     cout << *player2->getOrder() << "\n" << endl;
     cout << deploy4->stringToLog() << endl;
 
+    vector<Territory*> terri = player2->toDefend(mainmap);
+    for (Territory* t : terri){
+        cout <<*t<<endl;
+    }
 	// Advance
 //	Advance *advance1 = new Advance(player1);
 //	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
