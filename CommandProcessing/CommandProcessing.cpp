@@ -291,6 +291,10 @@ string CommandProcessor::stringToLog() {
     return logString;
 }
 
+void FileLineReader::readLineFromFile() {
+    // TODO
+}
+
 // FileCommandProcessorAdapter stream insertion operator
 ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa) {
     string temp = "";
