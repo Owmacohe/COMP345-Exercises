@@ -34,7 +34,6 @@ class Deck {
 
         vector <Card*> deck; // Deck is a vector of Card object
         int numCardInDeck;
-
 };
 
 class Hand {

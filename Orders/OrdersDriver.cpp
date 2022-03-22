@@ -1,7 +1,9 @@
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+#include "../LoggingObserver/LoggingObserver.h"
+#include "../Cards/Cards.h"
+#include "../GameEngine/GameEngine.h"
 #include "Orders.h"
-
-#include <iostream>
-using namespace std;
 
 int Ordersmain() {
     /****************************** CREATING A GAME *******************************/

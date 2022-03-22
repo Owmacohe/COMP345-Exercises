@@ -3,6 +3,12 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "GameEngine.h"
+#include "../Cards/Cards.h"
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+#include "../Orders/Orders.h"
+#include "../LoggingObserver/LoggingObserver.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 int gameEngineMain() {
     GameEngine gameEngine;
