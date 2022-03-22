@@ -4,11 +4,7 @@
 #include <string>
 #include <iostream>
 
-#include "../Player/Player.h"
-#include "../Map/Map.h"
-#include "../LoggingObserver/LoggingObserver.h"
-#include "../Cards/Cards.h"
-#include "../GameEngine/GameEngine.h"
+using namespace std;
 
 class GameEngine;
 /****************************** Order *******************************/

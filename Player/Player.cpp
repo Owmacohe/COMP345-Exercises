@@ -1,7 +1,6 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../Cards/Cards.h"
-
 #include "Player.h"
 
 // Default constructor
@@ -181,8 +180,9 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     for (Territory* t : surround_territory) {
         if (t->getOwner()->getName() == name) return t;
     }
-}
 
+    return NULL;
+}
 
 // Return deploy list
 OrdersList* Player::getDeployList() {

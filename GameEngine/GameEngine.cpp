@@ -6,8 +6,6 @@
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
-#include "math.h"
-
 class OrdersList;
 class Player;
 
@@ -314,6 +312,7 @@ void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
     cout << "End phase issue orders for player " << player->getName() << endl;
 }
+
 bool GameEngine::hasMoreDeploy(Player *p) {
     for (Order * o : p->getOrder()->getOrderList()){
         if (o->getDescription() == "Deploy")
@@ -321,6 +320,7 @@ bool GameEngine::hasMoreDeploy(Player *p) {
     }
     return false;
 }
+
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
@@ -538,7 +538,7 @@ void GameEngine::startupPhase() {
                 MapLoader loader;
                 Map m = Map(loader.load(word2));
 
-                if (m.isGoodMap) {
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ' && m.isGoodMap) {
                     *map = m;
                     effect = "Loaded Map: " + map->getName();
                     cout << effect << "!" << endl;
@@ -627,12 +627,6 @@ void GameEngine::startupPhase() {
 
                 *s = assignReinforcement;
             }
-            else if (word1 == "replay") {
-                // TODO restart the game
-            }
-            else if (word1 == "win") {
-                // TODO end the game
-            }
         }
 
         temp.saveEffect(effect);
@@ -661,8 +655,34 @@ void GameEngine::mainGameLoop() {
         resetAlliances(); // Reset Alliances
     }
 
-    // TODO need to use Commands to check for "replay" and "win"
+    while (*s == 8) {
+        cout << "Replay or quit? " << endl;
 
+        processor->getCommand();
+
+        Command temp = processor->getCommands()[processor->commandsLength - 1];
+
+        string command = temp.getCommand();
+        string effect = "";
+
+        if (command == "replay") {
+            playAgain();
+            *s = start; // Switch to start up for replay
+
+            effect = "Replaying game";
+            cout << effect << "!" << endl;
+        }
+        else if (command == "quit") {
+            endPhase();
+
+            effect = "Quitting game";
+            cout << effect << "!" << endl;
+        }
+
+        temp.saveEffect(effect);
+    }
+
+    /*
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
     if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
@@ -670,6 +690,7 @@ void GameEngine::mainGameLoop() {
         *s = start; // Switch to start up for replay
     }
     else endPhase();
+     */
 }
 
 // Check if a player has won by looping through territories and checking owner
