@@ -1,5 +1,6 @@
 #include "Cards.h"
 #include "../Orders/Orders.h"
+#include "../Player/Player.h"
 
 /*********************************** CARD ***********************************/
 Card::Card() {

@@ -1,6 +1,7 @@
 #include "../Cards/Cards.h"
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
+#include "Map.h"
 
 bool doesContain(string* arr, int size, string s) {
     for (int i = 0; i < size; i++) {
