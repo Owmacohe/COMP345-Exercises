@@ -314,45 +314,104 @@ void GameEngine::endIssueOrderPhase(Player *player) {
     *s = executeOrder;
     cout << "End phase issue orders for player " << player->getName() << endl;
 }
-
+bool GameEngine::hasMoreDeploy(Player *p) {
+    for (Order * o : p->getOrder()->getOrderList()){
+        if (o->getDescription() == "Deploy")
+            return true;
+    }
+    return false;
+}
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
-    for (int i = 0; i < player_list.size(); i++) {
-        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
-            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
-                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
-                  player_list.at(i)->getOrder()->remove(j);
+
+
+
+    int playersWithoutDeploy = 0;
+    int playersWithoutOrders = 0;
+    bool hasMoreDeployOrders = true;
+    bool allOrdersDone = false;
+
+    // avoiding the extra deploy list in player waiting on testing
+    while (hasMoreDeployOrders == true ){
+        for(Player * p : player_list){
+            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+                if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
+                    p->getOrder()->getOrderList().at(i)->execute();
+                    p->getOrder()->remove(i);
+                    break;
+                }
+
+            }
+
+        }
+        for(Player * p : player_list) {
+            if (!hasMoreDeploy(p))
+                playersWithoutDeploy++;
+        }
+        if (playersWithoutDeploy == player_list.size())
+            hasMoreDeployOrders = false;
+        else
+            playersWithoutDeploy = 0;
+    }
+    while (allOrdersDone == false ){
+        for(Player * p : player_list){
+            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+                    p->getOrder()->getOrderList().at(i)->execute();
+                    p->getOrder()->remove(i);
+                    break;
             }
         }
-    }
-    // To execute and remove the deploy orders
-    int  deployDoneCount =0;
-    while(deployDoneCount < NumberOfPlayers) {
-        deployDoneCount =0;
-        for (int i = 0; i < player_list.size(); i++) {
-            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
-                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
-                player_list[i]->getOrder()->remove(i);
-
-            } else deployDoneCount++;
+        for(Player * p : player_list) {
+            if (p->getOrder()->getOrderList().empty())
+                playersWithoutOrders ++;
         }
+        if (playersWithoutOrders == player_list.size())
+            allOrdersDone = true;
+        else
+            playersWithoutOrders = 0;
     }
-    // To execute the rest of the orders on each player's list
-    int  playersDone =0;
-    while(playersDone < NumberOfPlayers) {
-        playersDone =0;
-        for (int i = 0; i < player_list.size(); i++) {
-            if (!player_list[i]->getOrder()->getOrderList().empty()) {
-                player_list[i]->getOrder()->getOrderList().at(i)->execute();
-                player_list[i]->getOrder()->remove(i);
 
-            } else {
 
-                playersDone++;
-            }
-        }
-    }
+
+
+
+
+//    for (int i = 0; i < player_list.size(); i++) {
+//        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
+//            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
+//                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
+//                  player_list.at(i)->getOrder()->remove(j);
+//            }
+//        }
+//    }
+//    // To execute and remove the deploy orders
+//    int  deployDoneCount =0;
+//    while(deployDoneCount < NumberOfPlayers) {
+//        deployDoneCount =0;
+//        for (int i = 0; i < player_list.size(); i++) {
+//            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
+//                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
+//                player_list[i]->getOrder()->remove(i);
+//
+//            } else deployDoneCount++;
+//        }
+//    }
+//    // To execute the rest of the orders on each player's list
+//    int  playersDone =0;
+//    while(playersDone < NumberOfPlayers) {
+//        playersDone =0;
+//        for (int i = 0; i < player_list.size(); i++) {
+//            if (!player_list[i]->getOrder()->getOrderList().empty()) {
+//                player_list[i]->getOrder()->getOrderList().at(i)->execute();
+//                player_list[i]->getOrder()->remove(i);
+//
+//            } else {
+//
+//                playersDone++;
+//            }
+//        }
+//    }
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
