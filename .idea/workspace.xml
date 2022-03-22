@@ -18,11 +18,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Map/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Map/Map.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map/MapDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Map/MapDriver.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +110,7 @@
       <workItem from="1647552766627" duration="622000" />
       <workItem from="1647553409755" duration="6000" />
       <workItem from="1647956822502" duration="6091000" />
-      <workItem from="1647975041689" duration="293000" />
+      <workItem from="1647975041689" duration="1958000" />
     </task>
     <servers />
   </component>

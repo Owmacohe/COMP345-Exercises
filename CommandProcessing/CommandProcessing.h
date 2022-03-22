@@ -66,6 +66,10 @@ class CommandProcessor : public Iloggable, public Subject {
         Command *commands; // Array of current and past Commands
 };
 
+class FileLineReader {
+    void readLineFromFile(); // TODO
+};
+
 // Modified CommandProcessor that instead gets Commands from a file
 class FileCommandProcessorAdapter : public CommandProcessor {
     public:
@@ -76,6 +80,8 @@ class FileCommandProcessorAdapter : public CommandProcessor {
 
         void readFromFile(string); // Reads (startup) commands sequentially from a file
     private:
+        FileLineReader flr; // TODO
+
         string currentFile; // The current file of commands that is being read from
         int currentLine; // The current line being read in the current file
 };
