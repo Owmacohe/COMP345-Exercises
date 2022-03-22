@@ -31,50 +31,8 @@ int Ordersmain() {
         }
     }
 
-//    // Create && set up gameEngine
-//    GameEngine* mainGE = new GameEngine();
-//    mainGE->setplayer_list(player_list);
-//    mainGE->setDeck(*(new Deck(10)));
-//    mainGE->setMap(*(new Map(loader->load("../Orders/canada.map"))));
-
-    // Set up Order gameEngine
-    // Order::game = mainGE;
-
-    // Assign Territories to Player 1
-//    mainmap->getTerritories()[0].setOwner(player1); // New Brunswick -- Not adjacent to any of the others
-//    Territory *NewBrunswick= new Territory(mainmap->getTerritories()[0]);
-//    player1->assignTerritory(NewBrunswick);
-//
-//    mainmap->getTerritories()[5].setOwner(player1); // Quebec North
-//    Territory *QuebecNorth = new Territory(mainmap->getTerritories()[5]);
-//    player1->assignTerritory(QuebecNorth);
-
-//    Order::game->getMap()->getTerritories()[6].setOwner(player1); // Quebec Central -- Adjacent with the previous one
-//    Territory *QuebecCentral = new Territory(Order::game->getMap()->getTerritories()[6]);
-//    player1->getTerritory().push_back(QuebecCentral);
-
-    // Assign Territories to Player 2
-//    mainmap->getTerritories()[30].setOwner(player1); // Yukon -- Not adjacent to any of the others
-//    Territory *Yukon = new Territory(mainmap->getTerritories()[30]);
-//    player2->assignTerritory(Yukon);
-//
-//    mainmap->getTerritories()[7].setOwner(player1); // Quebec South
-//    Territory *QuebecSouth = new Territory(mainmap->getTerritories()[7]);
-//    player2->assignTerritory(QuebecSouth);
-//
-//    Order::game->getMap()->getTerritories()[9].setOwner(player1); // Ontario South -- Adjacent with the previous one
-//    Territory *OntarioSouth = new Territory(Order::game->getMap()->getTerritories()[9]);
-//    player2->getTerritory().push_back(OntarioSouth);
-//
-//    // Assign Territories to Neutral Player
-//    Order::game->getMap()->getTerritories()[9].setOwner(Order::game->getNeutralPlayer()); // Ontario west -- Adjacent with the previous one
-//    Territory *OntarioWest = new Territory(Order::game->getMap()->getTerritories()[9]);
-//    Order::game->getNeutralPlayer()->getTerritory().push_back(OntarioWest);
-
-
 
     //cout << "****************************** Creating Orders, validate(), execute() and inserting them *******************************" <<endl;
-
 
     //	Deploy
     Deploy *deploy1 = new Deploy(player1);
@@ -85,47 +43,81 @@ int Ordersmain() {
     deploy1->execute();
 	player1->getOrder()->addOrder(deploy1);
 	cout << *player1->getOrder() << "\n" << endl;
+    cout << deploy1->stringToLog() << endl;
+
+    Deploy *deploy2 = new Deploy(player1);
+    deploy2->validate();
+    deploy2->execute();
+    player1->getOrder()->addOrder(deploy2);
+    cout << *player1->getOrder() << "\n" << endl;
+    cout << deploy2->stringToLog() << endl;
+
+    //	Deploy
+    cout << "----- Deploy for Player 2 ----- " << endl;
+    Deploy *deploy3 = new Deploy(player2);
+    deploy3->validate();
+    deploy3->execute();
+    player2->getOrder()->addOrder(deploy3);
+    cout << *player2->getOrder() << "\n" << endl;
+    cout << deploy3->stringToLog() << endl;
+
+    Deploy *deploy4 = new Deploy(player2);
+    deploy4->validate();
+    deploy4->execute();
+    player2->getOrder()->addOrder(deploy4);
+    cout << *player2->getOrder() << "\n" << endl;
+    cout << deploy4->stringToLog() << endl;
 
 	// Advance
-	Advance *advance1 = new Advance(player1);
-	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
-    cout << "Checking for validation: " << endl;
-    advance1->validate();
-    cout << "Checking for execution: " ; advance1->execute() ;
-	player1->getOrder()->addOrder(advance1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	Advance *advance1 = new Advance(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *advance1 << endl;
+//    cout << "Checking for validation: " << endl;
+//    advance1->validate();
+//    cout << "Checking for execution: " ; advance1->execute() ;
+//	player1->getOrder()->addOrder(advance1);
+//	cout << *player1->getOrder() << "\n" << endl;
+//    cout << advance1->stringToLog() <<endl;
 
     // Airlift
-	Airlift *airlift1 = new Airlift(player1);
-	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
-    cout << "Checking for validation: "  << endl;
-    airlift1->validate();
-    cout << "Checking for execution: " ; airlift1->execute() ;
-	player1->getOrder()->addOrder(airlift1);
-	cout << *player1->getOrder() << "\n" << endl;
+//	Airlift *airlift1 = new Airlift(player1);
+//	cout << "Adding to the OrdersList the Order: "<< *airlift1 << endl;
+//    cout << "Checking for validation: "  << endl;
+//    airlift1->validate();
+//    cout << "Checking for execution: " ; airlift1->execute() ;
+//	player1->getOrder()->addOrder(airlift1);
+//	cout << *player1->getOrder() << "\n" << endl;
+//    cout << airlift1->stringToLog() <<endl;
 
     // Bomb
 //	Bomb *bomb1 = new Bomb(player1);
 //	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
-//    cout << "Checking for validation: " << bomb1->validate() << endl;
-//    cout << "Checking for execution: " ; bomb1->execute() ;
+//    cout << "Checking for validation: " << endl;
+//    bomb1->validate();
+//    cout << "Checking for execution: " ;
+//    bomb1->execute() ;
 //	player1->getOrder()->addOrder(bomb1);
 //	cout << *player1->getOrder() << "\n" << endl;
+//    cout << bomb1->stringToLog();
 
 	// Blockade
+//    cout << "----- Blockade ----- " << endl;
 //	Blockade *blockade1 = new Blockade(player1);
-//	cout << "Adding to the OrdersList the Order: "<< *blockade1 << endl;
-//    cout << "Checking for validation: " << blockade1->validate() << endl;
-//    cout << "Checking for execution: " ; blockade1->execute() ;
-//	player1->getOrder()->addOrder(blockade1);
-//	cout << *player1->getOrder() << "\n" << endl;
+//    cout << "Validation of Blockade" << endl;
+//    blockade1->validate();
+//    cout << "Execution of Blockade" << endl;
+//    blockade1->execute() ;
+//    cout << blockade1->stringToLog() <<endl;
 
 
 	// Negotiate
+//    cout << "----- Negotiate ----- " << endl;
 //	Negotiate *negotiate1 = new Negotiate(player1);
-//	cout << "Adding to the OrdersList the Order: "<< *negotiate1 << endl;
-//    cout << "Checking for validation: " << negotiate1->validate() << endl;
-//    cout << "Checking for execution: " ; negotiate1->execute() ;
+////	cout << "Adding to the OrdersList the Order: "<< *negotiate1 << endl;
+//    cout << "Validation of Negotiate." << endl;
+//    negotiate1->validate();
+//    cout << "Execution of Negotiate." ;
+//    negotiate1->execute() ;
+//    cout<< negotiate1->stringToLog();
 //	player1->getOrder()->addOrder(negotiate1);
 //	cout << *player1->getOrder() << "\n" << endl;
 

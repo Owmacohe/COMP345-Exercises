@@ -183,6 +183,7 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     }
 }
 
+
 // Return deploy list
 OrdersList* Player::getDeployList() {
     return deployList;

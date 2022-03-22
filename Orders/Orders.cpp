@@ -84,8 +84,8 @@ Deploy::Deploy() : Order(false, "deploy"){
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
-    //target = nullptr;
     target = p->toDefend(this->game->getMap()).at(0);
+    cout << target->getName() << endl;
     numToDeploy = rand() % p->getReinforcePool() + 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
         numToDeploy = rand() % p->getReinforcePool() + 1;
@@ -159,8 +159,7 @@ void Deploy::execute() {
 string Deploy::stringToLog() {
     string validation = (validated) ? "executed" : "to be validated";
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder = "Deploy order " + validation + " : Deployment " + to_string(numToDeploy) + " armies to " +
-                            target->getName() + "\n";
+    string logStringOrder = "Deploy order " + validation + " : Deployment " + to_string(numToDeploy) + " armies to " + target->getName() + "\n";
     string logStringEffect =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
     return logStringPlayer + logStringOrder + logStringEffect;
 }
@@ -173,16 +172,31 @@ Advance::Advance() : Order(false, "advance"){
     origin = nullptr;
     target = nullptr;
     numToAdvance = 0;
+    validateResult = " ";
 }
 
 // Parameterize Constructor
 Advance::Advance(Player* p) : Order(false, "advance"){
     playerIssuing = p;
-    // TODO : add a if else that accepts user input
-    target = p->toAttack(game->getMap()).at(0); // IF PLAYER WANTS TO ATTACK
-    target = p->toDefend(game->getMap()).at(0); // IF PLAYER WANTS TO DEFEND
+
+    string input = "advance";
+    validateResult = input;
+
+    if (input == "advance") {
+    target = p->toDefend(game->getMap()).at(0);
+
+    }
+    else if (input == "attack")
+    target = p->toAttack(game->getMap()).at(0);
+
     origin = p->getOriginTerritory(target,game->getMap());
+
+    cout << "Target : " <<target->getName() << " " << target->getOwner()->getName() << endl;
+   // cout  << "Origin : "<< origin->getName() << " " << origin->getOwner()->getName() << endl;
+    cout << to_string(origin->getArmies()) <<endl;
+
     numToAdvance = rand() % origin->getArmies() + 1;
+
     while (numToAdvance > origin->getArmies()){
         numToAdvance = rand() % origin->getArmies() + 1;
     }
@@ -242,7 +256,7 @@ void Advance::validate() {
     validateResult = "";
 
     // Check if Territory belongs to the Player
-    if (origin->getOwner() != playerIssuing) {
+    if (origin->getOwner()->getName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own this territory" << endl;
         validated = false;
     }
@@ -254,7 +268,7 @@ void Advance::validate() {
     // Condition: If Source territory is owned by Player && Target territory and Source territory are adjacent
     // Sub-condition: If Target Territory is owned by Player (Yes: Advance || No: Attack)
     else{
-        if(target->getOwner() == playerIssuing){
+        if(target->getOwner()->getName() == playerIssuing->getName()){
             cout << "Valid! ** Type advance" << endl;
             validateResult = "Advance";
             validated = true;
@@ -347,6 +361,9 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     }
     origin = territory_most_armies;
     target = p->toDefend(game->getMap()).at(0);
+    if (origin->getName() == target->getName()) {
+        target = p->toDefend(game->getMap()).at(1);
+    }
     numToAirlift = rand() % origin->getArmies() + 1;
     while (numToAirlift > origin->getArmies()){
         numToAirlift = rand() % origin->getArmies() + 1;
@@ -446,10 +463,8 @@ Bomb::Bomb() : Order(false, "bomb"){
 // Parameterize Constructor
 Bomb::Bomb(Player* p) : Order(false, "bomb"){
     playerIssuing = p;
-    origin = nullptr;
-    target = nullptr;
-//    origin = p->toDefend(game->getMap()).at(0);   //TODO: out of range - ask Gabbi
-//    target = p->toAttack(game->getMap()).at(0);
+    target = p->toAttack(game->getMap()).at(0);
+    origin = p->getOriginTerritory(target,game->getMap());
 }
 
 // Copy constructor
@@ -549,8 +564,7 @@ Blockade::Blockade() : Order(false, "blockade"){
 // Parameterize Constructor
 Blockade::Blockade(Player* p) : Order(false, "blockade"){
     playerIssuing = p;
-    target = nullptr;
-//    target = p->toAttack(game->getMap()).at(0);   //TODO: out of range - ask Gabbi
+    target = p->toDefend(game->getMap()).at(0);
 }
 
 // Copy constructor
@@ -595,7 +609,7 @@ void Blockade::setValidated(bool v) {
 }
 
 void Blockade::validate() {
-    if (target->getOwner() == playerIssuing) {
+    if (target->getOwner()->getName() == playerIssuing->getName()) {
         validated = true;
     } else
         validated = false;
@@ -608,7 +622,6 @@ void Blockade::execute() {
         int doubleArmies = (target->getArmies()) * 2;
         target->setArmies(doubleArmies);
         target->setOwner(game->getNeutralPlayer());
-        cout << this->stringToLog();
     }
     //notify(this); // FROM SUBJECT
 }
@@ -618,8 +631,8 @@ string Blockade::stringToLog() {
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
     string logStringOrder = "blockade order " + validation + ": transfer of the ownership of " + target->getName() +
                             " to the Neutral Player.\n";
-    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
-    return logStringPlayer + logStringOrder;
+    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of the " + target->getOwner()->getName() + "player .\n";
+    return logStringPlayer + logStringOrder + logStringEffect;
 }
 
 /****************************** Negotiate *******************************/
@@ -633,10 +646,9 @@ Negotiate::Negotiate() : Order(false, "negotiate"){
 // Parameterize Constructor
 Negotiate::Negotiate(Player* p) : Order(false, "negotiate"){
     playerIssuing = p;
-    // TODO: initialize targetPlayer; ??? any criteria to be a target Player -- Just to exist :) I will validate that its not a Neutral player in validate()
     cout << "which player would you like to negotiate with?" << endl;
-    string playerTargetName;
-    cin >> playerTargetName;
+    string playerTargetName = "MJ";
+    //cin >> playerTargetName;
 
     for (int i = 0; i < game->getplayer_list().size(); i++){
         if (game->getplayer_list().at(i)->getName() == playerTargetName)
@@ -687,7 +699,7 @@ void Negotiate::setValidated(bool v) {
 }
 
 void Negotiate::validate() {
-    if (playerIssuing == targetPlayer || targetPlayer->getName() == "Neutral") {
+    if (playerIssuing->getName() == targetPlayer->getName() || targetPlayer->getName() == "Neutral") {
         validated = false;
         cout << "Invalid Negotiate : Negotiate must be done with a different player, excluding the Neutral player\n";
     } else
