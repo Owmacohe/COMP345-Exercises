@@ -1,10 +1,7 @@
-#include "Map.h"
+#include "../Cards/Cards.h"
+#include "../Orders/Orders.h"
 #include "../Player/Player.h"
-
-#include "../Cards/Cards.cpp"
-#include "Map.cpp"
-#include "../Orders/Orders.cpp"
-#include "../Player/Player.cpp"
+#include "Map.h"
 
 int mapMain() {
     // Creating an array of file names and a MapLoader

@@ -3,10 +3,7 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
-#include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
-
-#include "math.h"
 
 class OrdersList;
 class Player;
@@ -315,44 +312,105 @@ void GameEngine::endIssueOrderPhase(Player *player) {
     cout << "End phase issue orders for player " << player->getName() << endl;
 }
 
+bool GameEngine::hasMoreDeploy(Player *p) {
+    for (Order * o : p->getOrder()->getOrderList()){
+        if (o->getDescription() == "Deploy")
+            return true;
+    }
+    return false;
+}
+
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
-    for (int i = 0; i < player_list.size(); i++) {
-        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
-            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
-                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
-                  player_list.at(i)->getOrder()->remove(j);
+
+
+
+    int playersWithoutDeploy = 0;
+    int playersWithoutOrders = 0;
+    bool hasMoreDeployOrders = true;
+    bool allOrdersDone = false;
+
+    // avoiding the extra deploy list in player waiting on testing
+    while (hasMoreDeployOrders == true ){
+        for(Player * p : player_list){
+            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+                if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
+                    p->getOrder()->getOrderList().at(i)->execute();
+                    p->getOrder()->remove(i);
+                    break;
+                }
+
+            }
+
+        }
+        for(Player * p : player_list) {
+            if (!hasMoreDeploy(p))
+                playersWithoutDeploy++;
+        }
+        if (playersWithoutDeploy == player_list.size())
+            hasMoreDeployOrders = false;
+        else
+            playersWithoutDeploy = 0;
+    }
+    while (allOrdersDone == false ){
+        for(Player * p : player_list){
+            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+                    p->getOrder()->getOrderList().at(i)->execute();
+                    p->getOrder()->remove(i);
+                    break;
             }
         }
-    }
-    // To execute and remove the deploy orders
-    int  deployDoneCount =0;
-    while(deployDoneCount < NumberOfPlayers) {
-        deployDoneCount =0;
-        for (int i = 0; i < player_list.size(); i++) {
-            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
-                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
-                player_list[i]->getOrder()->remove(i);
-
-            } else deployDoneCount++;
+        for(Player * p : player_list) {
+            if (p->getOrder()->getOrderList().empty())
+                playersWithoutOrders ++;
         }
+        if (playersWithoutOrders == player_list.size())
+            allOrdersDone = true;
+        else
+            playersWithoutOrders = 0;
     }
-    // To execute the rest of the orders on each player's list
-    int  playersDone =0;
-    while(playersDone < NumberOfPlayers) {
-        playersDone =0;
-        for (int i = 0; i < player_list.size(); i++) {
-            if (!player_list[i]->getOrder()->getOrderList().empty()) {
-                player_list[i]->getOrder()->getOrderList().at(i)->execute();
-                player_list[i]->getOrder()->remove(i);
 
-            } else {
 
-                playersDone++;
-            }
-        }
-    }
+
+
+
+
+//    for (int i = 0; i < player_list.size(); i++) {
+//        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
+//            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
+//                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
+//                  player_list.at(i)->getOrder()->remove(j);
+//            }
+//        }
+//    }
+//    // To execute and remove the deploy orders
+//    int  deployDoneCount =0;
+//    while(deployDoneCount < NumberOfPlayers) {
+//        deployDoneCount =0;
+//        for (int i = 0; i < player_list.size(); i++) {
+//            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
+//                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
+//                player_list[i]->getOrder()->remove(i);
+//
+//            } else deployDoneCount++;
+//        }
+//    }
+//    // To execute the rest of the orders on each player's list
+//    int  playersDone =0;
+//    while(playersDone < NumberOfPlayers) {
+//        playersDone =0;
+//        for (int i = 0; i < player_list.size(); i++) {
+//            if (!player_list[i]->getOrder()->getOrderList().empty()) {
+//                player_list[i]->getOrder()->getOrderList().at(i)->execute();
+//                player_list[i]->getOrder()->remove(i);
+//
+//            } else {
+//
+//                playersDone++;
+//            }
+//        }
+//    }
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {
@@ -479,7 +537,7 @@ void GameEngine::startupPhase() {
                 MapLoader loader;
                 Map m = Map(loader.load(word2));
 
-                if (m.isGoodMap) {
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ' && m.isGoodMap) {
                     *map = m;
                     effect = "Loaded Map: " + map->getName();
                     cout << effect << "!" << endl;
@@ -568,12 +626,6 @@ void GameEngine::startupPhase() {
 
                 *s = assignReinforcement;
             }
-            else if (word1 == "replay") {
-                // TODO restart the game
-            }
-            else if (word1 == "win") {
-                // TODO end the game
-            }
         }
 
         temp.saveEffect(effect);
@@ -602,8 +654,34 @@ void GameEngine::mainGameLoop() {
         resetAlliances(); // Reset Alliances
     }
 
-    // TODO need to use Commands to check for "replay" and "win"
+    while (*s == 8) {
+        cout << "Replay or quit? " << endl;
 
+        processor->getCommand();
+
+        Command temp = processor->getCommands()[processor->commandsLength - 1];
+
+        string command = temp.getCommand();
+        string effect = "";
+
+        if (command == "replay") {
+            playAgain();
+            *s = start; // Switch to start up for replay
+
+            effect = "Replaying game";
+            cout << effect << "!" << endl;
+        }
+        else if (command == "quit") {
+            endPhase();
+
+            effect = "Quitting game";
+            cout << effect << "!" << endl;
+        }
+
+        temp.saveEffect(effect);
+    }
+
+    /*
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
     if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
@@ -611,6 +689,7 @@ void GameEngine::mainGameLoop() {
         *s = start; // Switch to start up for replay
     }
     else endPhase();
+     */
 }
 
 // Check if a player has won by looping through territories and checking owner

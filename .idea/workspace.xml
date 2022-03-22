@@ -16,15 +16,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a8e921a3-24b9-4148-a330-d3f4a34c9f38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.h" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Map/Map.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,6 +80,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -110,6 +112,8 @@
       <workItem from="1647552744289" duration="7000" />
       <workItem from="1647552766627" duration="622000" />
       <workItem from="1647553409755" duration="6000" />
+      <workItem from="1647956822502" duration="6091000" />
+      <workItem from="1647975041689" duration="293000" />
     </task>
     <servers />
   </component>

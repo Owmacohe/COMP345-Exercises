@@ -3,10 +3,12 @@
 #include <vector>
 #include <iostream>
 #include <set>
+#include <cmath>
 
 using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
+
 class Player;
 class MapLoader;
 class Deck;
@@ -35,7 +37,7 @@ class GameEngine : public Iloggable, public Subject {
         Map *getMap();
         Deck *getDeck();
         set<pair<Player*, Player*>> getAlliances();
-        bool existingAlliance(Player* p1, Player* p2);
+        bool existingAlliance(Player*, Player*);
         int *getPlayerOrder();
         int getCurrentPlayer();
         Player* getNeutralPlayer();
@@ -49,7 +51,7 @@ class GameEngine : public Iloggable, public Subject {
         void setMap(const Map &m);
         void setDeck(const Deck &d);
         void setAlliances (const  set<pair<Player*, Player*>> all);
-        void addAlliances(Player* p1, Player* p2);
+        void addAlliances(Player*, Player*);
         void resetAlliances();
         void setPlayerOrder(int*);
         void setCurrentPlayer(int);
@@ -65,30 +67,30 @@ class GameEngine : public Iloggable, public Subject {
         */
         void assignReinforcementPhase();
         void issueOrdersPhase();
-        void endIssueOrderPhase(Player* player);
+        void endIssueOrderPhase(Player*);
+        bool hasMoreDeploy(Player*);
         void executeOrdersPhase();
-        void endexecuteOrdersPhase(Player* player);
-        void winPhase(Player *p);
+        void endexecuteOrdersPhase(Player*);
+        void winPhase(Player*);
         void endPhase();
         void playAgain();
 
         void mainGameLoop();
 
         //void gameStartupTransitions(string s);
-        void gamePlayTransitions(string s, Player *p);
-        void gameEndTransitions(string s);
+        void gamePlayTransitions(string, Player*);
+        void gameEndTransitions(string);
 
         void startupPhase(); // Reads (startup) commands sequentially from the console
 
         // Checks
         bool checkForWinner();
         void checkPlayers();
-        int checkCardInHand(string type, Hand* h);
-        bool equalsIgnoreCase(string s1, string s2);
+        int checkCardInHand(string, Hand*);
+        bool equalsIgnoreCase(string, string);
 
         // From Iloggable
         string stringToLog();
-
     private:
         State* s;
         int NumberOfPlayers;

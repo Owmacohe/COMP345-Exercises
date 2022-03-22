@@ -1,7 +1,6 @@
 #include "../Cards/Cards.h"
 #include "CommandProcessing.h"
 #include "../GameEngine/GameEngine.h"
-#include "../LoggingObserver/LoggingObserver.h"
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
@@ -20,7 +19,7 @@ Command::Command() {
 // Parameterized constructor 1 (unparemeterized Commands)
 Command::Command(string c) {
     command = c;
-    validInLength = 1;
+    validInLength = 0;
     validIn = new int[validInLength];
     effect = "";
 
@@ -50,7 +49,7 @@ Command::Command(string c) {
 // Parameterized constructor 2 (paremeterized Commands)
 Command::Command(string c, string p) {
     command = c + " <" + p + ">";
-    validInLength = 2;
+    validInLength = 0;
     validIn = new int[validInLength];
     effect = "";
 
@@ -78,6 +77,30 @@ Command::~Command() {
     validIn = NULL;
 
     cout << "[" + command + " Command destructor]" << endl;
+}
+
+// Command stream insertion operator
+ostream& operator<<(ostream &strm, const Command &c) {
+    string temp = "";
+
+    for (int i = 0; i < c.validInLength; i++) {
+        temp += to_string(c.validIn[i]) + " | ";
+    }
+
+    return strm <<
+        "[COMMAND PRINT: " << c.command << "]" <<
+        endl << "[--- Transitions to: " << c.transitionsTo << " ---]" <<
+        endl << "[--- Effect: " << c.effect << " ---]" <<
+        endl << "[--- Valid in: " << temp.substr(0, temp.length() - 3) << " ---]";
+}
+
+// Command assignment operator
+Command& Command::operator = (const Command& toAssign) {
+    command = toAssign.command;
+    transitionsTo = toAssign.transitionsTo;
+    effect = toAssign.effect;
+    validIn = toAssign.validIn;
+    return *this;
 }
 
 // Accessors
@@ -148,11 +171,32 @@ CommandProcessor::CommandProcessor(GameEngine *e) {
 
 // Destructor
 CommandProcessor::~CommandProcessor() {
-    delete[] commands;
+    delete[] commands; // TODO: for some reason, this causes errors...
     commands = NULL;
     commandsLength = 0;
 
     cout << "[CommandProcessor destructor]" << endl;
+}
+
+// CommandProcessor stream insertion operator
+ostream& operator<<(ostream &strm, const CommandProcessor &cp) {
+    string temp = "";
+
+    for (int i = 0; i < cp.commandsLength; i++) {
+        temp += cp.commands[i].getCommand() + " | ";
+    }
+
+    return strm <<
+        "[COMMANDPROCESSOR PRINT]" <<
+        endl << "[--- Engine: " << cp.engine->getState() << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]";
+}
+
+// CommandProcessor assignment operator
+CommandProcessor& CommandProcessor::operator = (const CommandProcessor& toAssign) {
+    engine = toAssign.engine;
+    commands = toAssign.commands;
+    return *this;
 }
 
 // Accessors
@@ -177,26 +221,8 @@ void CommandProcessor::setEngine(GameEngine *e) {
 
 // Gets command from console
 Command CommandProcessor::readCommand() {
-    string temp;
-    cin >> temp;
-
-    string word1 = "";
-    string word2 = "";
-    bool hasReachedSpace = false;
-
-    for (char i : temp) {
-        if (!hasReachedSpace) {
-            if (i == ' ') {
-                hasReachedSpace = true;
-            }
-            else {
-                word1 += i;
-            }
-        }
-        else {
-            word2 += i;
-        }
-    }
+    string word1, word2;
+    cin >> word1 >> word2;
 
     if (word1 != "" && word2 == "") {
         return Command(word1);
@@ -242,9 +268,12 @@ bool CommandProcessor::validate(const Command &c) {
     Command temp = Command(c);
     bool isValid = false;
 
+    cout << engine->getState() << endl;
+
     for (int i = 0; i < temp.validInLength; i++) {
         if (temp.getValidIn()[i] == engine->getState()) {
             isValid = true;
+            break;
         }
     }
 
@@ -260,6 +289,31 @@ bool CommandProcessor::validate(const Command &c) {
 string CommandProcessor::stringToLog() {
     string logString = " Saved the following command to the CommandProcessor: " + commands[commandsLength-1].getEffect() +"\n";
     return logString;
+}
+
+// FileCommandProcessorAdapter stream insertion operator
+ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa) {
+    string temp = "";
+
+    for (int i = 0; i < fcpa.commandsLength; i++) {
+        temp += fcpa.commands[i].getCommand() + " | ";
+    }
+
+    return strm <<
+        "[FILECOMMANDPROCESSORADAPTER PRINT]" <<
+        endl << "[--- Engine: " << fcpa.engine->getState() << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]" <<
+        endl << "[--- Current file: " << fcpa.currentFile << " ---]" <<
+        endl << "[--- Current line: " << fcpa.currentLine << " ---]";
+}
+
+// FileCommandProcessorAdapter assignment operator
+FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator = (const FileCommandProcessorAdapter& toAssign) {
+    engine = toAssign.engine;
+    commands = toAssign.commands;
+    currentFile = toAssign.currentFile;
+    currentLine = toAssign.currentLine;
+    return *this;
 }
 
 // Reads and then saves a command from a file

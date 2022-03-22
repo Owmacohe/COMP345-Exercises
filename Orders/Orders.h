@@ -4,13 +4,12 @@
 #include <string>
 #include <iostream>
 
-#include "../Player/Player.h"
-#include "../Map/Map.h"
-#include "../LoggingObserver/LoggingObserver.h"
-#include "../Cards/Cards.h"
-#include "../GameEngine/GameEngine.h"
+using namespace std;
 
 class GameEngine;
+class Player;
+class Territory;
+
 /****************************** Order *******************************/
 class Order /*:public Iloggable, public Subject*/ {
 public:
@@ -47,7 +46,7 @@ class Deploy : public Order {
 
 public:
     Deploy(); // Constructor
-    Deploy(Player* p); // parameterized Constructor
+    Deploy(Player*); // parameterized Constructor
     Deploy(const Deploy& original);  // Copy Constructor
     ~Deploy();  //Destructor
     Deploy& operator = (const Deploy& D); // Assignment operator
