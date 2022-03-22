@@ -60,18 +60,6 @@ Territory::~Territory() {
     //cout << "[" << name << " Territory destructor]" << endl;
 }
 
-// Territory accessors
-string Territory::getName() { return name; }
-string Territory::getContinent() { return continent; }
-Player *Territory::getOwner() { return owner; }
-int Territory::getArmies() { return armies; }
-
-// Territory mutators
-void Territory::setName(string n) { name = n; }
-void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(Player *o) { owner = o; }
-void Territory::setArmies(int a) { armies = a; }
-
 // Territory stream insertion operator
 ostream& operator<<(ostream &strm, const Territory &t) {
     string temp;
@@ -98,6 +86,18 @@ Territory& Territory::operator = (const Territory& toAssign){
     armies = toAssign.armies;
     return *this;
 }
+
+// Territory accessors
+string Territory::getName() { return name; }
+string Territory::getContinent() { return continent; }
+Player *Territory::getOwner() { return owner; }
+int Territory::getArmies() { return armies; }
+
+// Territory mutators
+void Territory::setName(string n) { name = n; }
+void Territory::setContinent(string c) { continent = c; }
+void Territory::setOwner(Player *o) { owner = o; }
+void Territory::setArmies(int a) { armies = a; }
 
 // Map default constructor
 Map::Map() {

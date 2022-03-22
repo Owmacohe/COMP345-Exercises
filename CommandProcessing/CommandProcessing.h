@@ -16,6 +16,8 @@ class Command : public Iloggable, public Subject {
         Command(string); // Parameterized constructor 1 (unparemeterized Commands)
         Command(string, string); // Parameterized constructor 2 (paremeterized Commands)
         ~Command(); // Destructor
+        friend ostream& operator<<(ostream &strm, const Command &c); // Stream insertion operator
+        Command& operator = (const Command& toAssign);  // Assignment operator
 
         // Accessors
         string getCommand(), getTransitionsTo(), getEffect();
@@ -40,10 +42,12 @@ class CommandProcessor : public Iloggable, public Subject {
         CommandProcessor(); // Default constructor
         CommandProcessor(GameEngine*); // Parameterized constructor
         ~CommandProcessor(); // Destructor
+        friend ostream& operator<<(ostream &strm, const CommandProcessor &cp); // Stream insertion operator
+        CommandProcessor& operator = (const CommandProcessor& toAssign);  // Assignment operator
 
         // Accessors
-        Command *getCommands();
         GameEngine *getEngine();
+        Command *getCommands();
 
         // Mutators
         void setCommands(Command*, int), setEngine(GameEngine*);
@@ -57,7 +61,7 @@ class CommandProcessor : public Iloggable, public Subject {
         int commandsLength; // Array length
 
         string stringToLog(); // From Iloggable
-    private:
+    protected:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         Command *commands; // Array of current and past Commands
 };
@@ -65,6 +69,9 @@ class CommandProcessor : public Iloggable, public Subject {
 // Modified CommandProcessor that instead gets Commands from a file
 class FileCommandProcessorAdapter : public CommandProcessor {
     public:
+        friend ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa); // Stream insertion operator
+        FileCommandProcessorAdapter& operator = (const FileCommandProcessorAdapter& toAssign);  // Assignment operator
+
         void getCommand() override; // Reads and then saves a command from a file
 
         void readFromFile(string); // Reads (startup) commands sequentially from a file
