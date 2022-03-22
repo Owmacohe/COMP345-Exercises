@@ -1,7 +1,7 @@
 #include "../Cards/Cards.h"
-#include "Map.cpp"
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
+#include "Map.h"
 
 int mapMain() {
     // Creating an array of file names and a MapLoader
