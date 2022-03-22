@@ -564,67 +564,79 @@ void GameEngine::startupPhase() {
             else if (word1 == "addplayer") {
                 // Use the addplayer <playername> command to enter players in the game (2-6 players)
 
-                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
-                    Player *p;
-                    p->setName(word2);
-                    player_list.push_back(p);
-
-                    effect = "Added Player: " + p->getName();
+                if (player_list.size() >= 6) {
+                    effect = "Unable to add Player (6 players reached)";
                     cout << effect << "!" << endl;
-
-                    *s = playersAdded;
                 }
                 else {
-                    effect = "Unable to add Player";
-                    cout << effect << "!" << endl;
+                    if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
+                        Player *p;
+                        p->setName(word2);
+                        player_list.push_back(p);
+
+                        effect = "Added Player: " + p->getName();
+                        cout << effect << "!" << endl;
+
+                        *s = playersAdded;
+                    }
+                    else {
+                        effect = "Unable to add Player";
+                        cout << effect << "!" << endl;
+                    }
                 }
             }
             else if (word1 == "gamestart") {
                // Fairly distribute all the territories to the players
 
-                int playerIndex = 0;
+                if (player_list.size() < 2) {
+                    effect = "Unable to start game (not enough players)";
+                    cout << effect << "!" << endl;
+                }
+                else {
+                    int playerIndex = 0;
 
-                for (int i = 0; i < map->territoriesLength; i++) {
-                    Player *tempPlayer = player_list.at(playerIndex);
-                    map->getTerritories()[i].setOwner(tempPlayer);
-                    Territory *tempTerr = new Territory(map->getTerritories()[i]);
-                    tempPlayer->getTerritory().push_back(tempTerr);
+                    for (int i = 0; i < map->territoriesLength; i++) {
+                        Player *tempPlayer = player_list.at(playerIndex);
+                        map->getTerritories()[i].setOwner(tempPlayer);
+                        Territory *tempTerr = new Territory(map->getTerritories()[i]);
+                        tempPlayer->getTerritory().push_back(tempTerr);
 
-                    playerIndex++;
+                        playerIndex++;
 
-                    if (playerIndex >= player_list.size()) {
-                        playerIndex = 0;
+                        if (playerIndex >= player_list.size()) {
+                            playerIndex = 0;
+                        }
                     }
+
+                    effect = "Distributed Territories to Players";
+
+                    // Determine randomly the order of play of the players in the game
+
+                    int *tempOrder = new int[player_list.size()];
+
+                    for (int j = 0; j < player_list.size(); j++) {
+                        tempOrder[j] = rand() % (player_list.size() - j) + j;
+                    }
+
+                    setPlayerOrder(tempOrder);
+
+                    effect += ", randomly determined the order of playing order";
+
+                    for (Player* k : player_list) {
+                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                        k->addToReinforcePool(50);
+
+                        // Let each player draw 2 initial cards from the deck using the deck’s draw() method
+                        k->getHand()->drawCard(*deck);
+                        k->getHand()->drawCard(*deck);
+                    }
+
+                    effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";
+
+                    // Switch the game to the play phase
+
+                    *s = assignReinforcement;
                 }
-
-                effect = "Distributed Territories to Players";
-
-                // Determine randomly the order of play of the players in the game
-
-                int *tempOrder = new int[player_list.size()];
-
-                for (int j = 0; j < player_list.size(); j++) {
-                    tempOrder[j] = rand() % (player_list.size() - j) + j;
-                }
-
-                setPlayerOrder(tempOrder);
-
-                effect += ", randomly determined the order of playing order";
-
-                for (Player* k : player_list) {
-                    // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                    k->addToReinforcePool(50);
-
-                    // Let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    k->getHand()->drawCard(*deck);
-                    k->getHand()->drawCard(*deck);
-                }
-
-                effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";
-
-                // Switch the game to the play phase
-
-                *s = assignReinforcement;
             }
         }
 
@@ -689,7 +701,7 @@ void GameEngine::mainGameLoop() {
         *s = start; // Switch to start up for replay
     }
     else endPhase();
-     */
+    */
 }
 
 // Check if a player has won by looping through territories and checking owner
