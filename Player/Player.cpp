@@ -68,12 +68,12 @@ vector<Territory*> Player::toDefend(Map* m) {
         string name = territory->getName();
         //cout << "Looking at territory : " << territory->getName() << endl;
         vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
+        //cout<< surrounded_territories.empty()<<endl;
         if (surrounded_territories.empty()) number_surrounding = -1;
             // step 1 check each territories numbers of enemies surrounding
         else {
             for (Territory *t: surrounded_territories) {
-                if (t->getOwner()->getName() != name ||
-                    t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
+                if (t->getOwner()->getName() != name || t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
                     number_surrounding = number_surrounding + 1;
                 }
             }
@@ -87,12 +87,10 @@ vector<Territory*> Player::toDefend(Map* m) {
         }
 
         for (Territory* i : surrounded_territories) { // Delete the vector of the surrounding to avoid memory leak
-            delete i;
             i = NULL;
         }
     }
     // step 3 sort and seperate territories in pair
-    // TODO: Test sorting works
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
         //cout<<"Ordering territory : " << p.second->getName() <<endl;
@@ -105,33 +103,38 @@ vector<Territory*> Player::toDefend(Map* m) {
 // Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
 // Priority is determined by which enemy territories connected have most armies
 vector<Territory*> Player::toAttack(Map* m) {
+    cout<<"Begin toAttack"<<endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
 
     for (Territory* territory : territories) {
+        cout << "Looking at territory : " << territory->getName() << endl;
         int number_armies = 0;
         string name = territory->getName();
         // step 1 get connected territories
         vector<Territory*> surround_territory = m->getConnectedTerritories(name);
+        cout << surround_territory.empty()<<endl;
+        cout<< *(surround_territory.at(0))<<endl;
         // step 2 for each connected territory thats an enemy count the number armies
         for (Territory* t : surround_territory) {
-            if (t->getOwner()->getName() != name) {
+            if (t->getOwner()->getName() != name || t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
                 number_armies = t->getArmies();
                 // step 3 pair enemy territory and their number of armies, add pair to vector
+                cout<<"Putting in pair : " << t->getName() <<endl;
                 pairs.first = number_armies;
                 pairs.second = t;
                 ordering.push_back(pairs);
             }
         }
         for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
-            delete i;
             i = NULL;
         }
     }
     // step 3 sort and seperate territories in pair 
     sort(ordering.begin(), ordering.end());
     for (pair<int, Territory*> p : ordering) {
+        cout<<"Ordering territory : " << p.second->getName() <<endl;
         attack_territories.insert(attack_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         p.second = NULL; // Dangling pointer avoidance
     }

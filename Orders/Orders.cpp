@@ -89,7 +89,7 @@ Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     target = p->toDefend(this->game->getMap()).at(0);
     cout << target->getName() << endl;
-    numToDeploy = rand() % p->getReinforcePool() + 1;
+    numToDeploy = 1;
     while (numToDeploy > playerIssuing->getReinforcePool()) {
         numToDeploy = rand() % p->getReinforcePool() + 1;
     }

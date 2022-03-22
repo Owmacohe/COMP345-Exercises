@@ -396,7 +396,6 @@ bool Map::validate() {
 }
 
 vector<Territory*> Map::getConnectedTerritories(string n) {
-    bool hasFound = true;
 
     vector<Territory*> connected = vector<Territory*>();
 
@@ -412,19 +411,11 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
         }
 
         if (other.getName() != "null") {
+            cout<<other.getName()<<endl;
             Territory *temp = new Territory(other);
             connected.push_back(temp);
         }
-        else {
-            hasFound = false;
-        }
     }
-
-    if (!hasFound) {
-        //cout << "No connected Territories!" << endl;
-        connected.clear();
-    }
-
     return connected;
 }
 
