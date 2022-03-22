@@ -153,6 +153,9 @@ string Command::stringToLog() {
 
 // Default constructor
 CommandProcessor::CommandProcessor() {
+    // TODO: command line option is set to either read commands from the console or from a given file
+        // if from file, set this to FileCommandProcessorAdapter
+
     commandsLength = 0;
     commands = new Command[commandsLength];
 
@@ -161,6 +164,9 @@ CommandProcessor::CommandProcessor() {
 
 // Parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine *e) {
+    // TODO: command line option is set to either read commands from the console or from a given file
+        // if from file, set this to FileCommandProcessorAdapter
+
     engine = e;
 
     commandsLength = 0;
@@ -171,7 +177,7 @@ CommandProcessor::CommandProcessor(GameEngine *e) {
 
 // Destructor
 CommandProcessor::~CommandProcessor() {
-    delete[] commands; // TODO: for some reason, this causes errors...
+    delete[] commands; // TODO: for some reason, this causes errors (I think it had to do with adding Commands)
     commands = NULL;
     commandsLength = 0;
 
@@ -291,8 +297,68 @@ string CommandProcessor::stringToLog() {
     return logString;
 }
 
-void FileLineReader::readLineFromFile() {
-    // TODO
+Command FileLineReader::readLineFromFile(string f, int l) {
+    ifstream input(f);
+    string line;
+
+    // Checking to see if the file can even be read from
+    if (!getline(input, line)) {
+        cout << "Unable to read file: " << f << endl;
+    }
+    else {
+        for (int i = 0; i < l; i++) {
+            getline(input, line);
+        }
+    }
+
+    input.close();
+
+    string word1 = "";
+    string word2 = "";
+    bool hasReachedSpace = false;
+
+    for (char i : line) {
+        if (!hasReachedSpace) {
+            if (i == ' ') {
+                hasReachedSpace = true;
+            }
+            else {
+                word1 += i;
+            }
+        }
+        else {
+            if (i != '<' && i != '>') {
+                word2 += i;
+            }
+        }
+    }
+
+    if (word2.length() > 0) {
+        return Command(word1, word2);
+    }
+    else {
+        return Command(word1);
+    }
+}
+
+// Default constructor
+FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
+    currentFile = "";
+    currentLine = 0;
+    flr = new FileLineReader();
+}
+
+// Parameterized constructor
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) {
+    currentFile = f;
+    currentLine = 0;
+    flr = new FileLineReader();
+}
+
+// Destructor
+FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
+    delete flr;
+    flr = NULL;
 }
 
 // FileCommandProcessorAdapter stream insertion operator
@@ -322,30 +388,7 @@ FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator = (const File
 
 // Reads and then saves a command from a file
 void FileCommandProcessorAdapter::getCommand() {
-    ifstream input(currentFile);
-    string line;
-
-    // Checking to see if the file can even be read from
-    if (!getline(input, line)) {
-        cout << "Unable to read file: " << currentFile << endl;
-    }
-    else {
-        for (int i = 0; i < currentLine; i++) {
-            getline(input, line);
-        }
-
-        currentLine++;
-    }
-
-    input.close();
-
-    Command temp = Command(line);
+    Command temp = flr->readLineFromFile(currentFile, currentLine);
+    currentLine++;
     saveCommand(temp);
-}
-
-// Reads (startup) commands sequentially from a file
-void FileCommandProcessorAdapter::readFromFile(string f) {
-    currentFile = f;
-
-    getEngine()->startupPhase();
 }

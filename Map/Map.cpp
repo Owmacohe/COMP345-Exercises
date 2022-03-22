@@ -396,8 +396,6 @@ bool Map::validate() {
 }
 
 vector<Territory*> Map::getConnectedTerritories(string n) {
-    bool hasFound = true;
-
     vector<Territory*> connected = vector<Territory*>();
 
     for (int i = 0; i < edgesLength; i++) {
@@ -415,14 +413,6 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
             Territory *temp = new Territory(other);
             connected.push_back(temp);
         }
-        else {
-            hasFound = false;
-        }
-    }
-
-    if (!hasFound) {
-        //cout << "No connected Territories!" << endl;
-        connected.clear();
     }
 
     return connected;
@@ -432,19 +422,11 @@ vector<Territory*> Map::getContinentTerritories(string c) {
     vector<Territory*> terrs = vector<Territory*>();
 
     if (doesContain(continents, continentsLength, c)) {
-        bool hasFound = false;
-
         for (int i = 0; i < territoriesLength; i++) {
             if (territories[i].getContinent() == c) {
                 Territory *temp = new Territory(territories[i]);
                 terrs.push_back(temp);
-
-                hasFound = false;
             }
-        }
-
-        if (!hasFound) {
-            cout << "Continent has no Territories!" << endl;
         }
     }
     else {
@@ -616,7 +598,6 @@ Map MapLoader::load(string f) {
                 delete[] lineSplit;
             }
 
-            input.close();
             cout << m.getName() << " loaded!" << endl;
         }
         // Setting the Map to bad, and printing the error message
