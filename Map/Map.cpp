@@ -414,7 +414,7 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
             connected.push_back(temp);
         }
     }
-
+    
     return connected;
 }
 

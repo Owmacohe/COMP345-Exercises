@@ -19,7 +19,7 @@ int Ordersmain() {
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
     int playerIndex = 0;
-    cout << mainmap->territoriesLength<<endl;
+    //cout << mainmap->territoriesLength<<endl;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
         Player *tempPlayer = player_list.at(playerIndex);
 
@@ -47,6 +47,13 @@ int Ordersmain() {
 	cout << *player1->getOrder() << "\n" << endl;
     cout << deploy1->stringToLog() << endl;
 
+//    vector<Territory*> teri = player1->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+    cout << "STARTING DEPLOY 2" <<endl;
+
     Deploy *deploy2 = new Deploy(player1);
     deploy2->validate();
     deploy2->execute();
@@ -54,6 +61,11 @@ int Ordersmain() {
     cout << *player1->getOrder() << "\n" << endl;
     cout << deploy2->stringToLog() << endl;
 
+//    teri = player1->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+    cout << "STARTING DEPLOY 3" <<endl;
     //	Deploy
     cout << "----- Deploy for Player 2 ----- " << endl;
     Deploy *deploy3 = new Deploy(player2);
@@ -63,12 +75,31 @@ int Ordersmain() {
     cout << *player2->getOrder() << "\n" << endl;
     cout << deploy3->stringToLog() << endl;
 
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+    cout << "STARTING DEPLOY 4" <<endl;
+
     Deploy *deploy4 = new Deploy(player2);
     deploy4->validate();
     deploy4->execute();
     player2->getOrder()->addOrder(deploy4);
     cout << *player2->getOrder() << "\n" << endl;
     cout << deploy4->stringToLog() << endl;
+
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+//    cout << "TESTING TO ATTACK" <<endl;
+//    vector<Territory*> terri = player1->toAttack(mainmap);
+//    cout << terri.empty()<<endl;
+//    for (Territory* t : terri){
+//        cout <<*t<<endl;
+//    }
 
 	// Advance
 //	Advance *advance1 = new Advance(player1);
