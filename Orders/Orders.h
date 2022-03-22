@@ -7,6 +7,9 @@
 using namespace std;
 
 class GameEngine;
+class Player;
+class Territory;
+
 /****************************** Order *******************************/
 class Order /*:public Iloggable, public Subject*/ {
 public:
@@ -43,7 +46,7 @@ class Deploy : public Order {
 
 public:
     Deploy(); // Constructor
-    Deploy(Player* p); // parameterized Constructor
+    Deploy(Player*); // parameterized Constructor
     Deploy(const Deploy& original);  // Copy Constructor
     ~Deploy();  //Destructor
     Deploy& operator = (const Deploy& D); // Assignment operator
