@@ -12,6 +12,9 @@ int main() {
     MapLoader* loader = new MapLoader();
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
+//    MapLoader* loader;
+//    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
     // Create Players List
     vector<Player*> player_list;
     Player* player1 = new Player(); player1->setReinforcementPool(10); player1->setName("Audrey");
@@ -25,29 +28,42 @@ int main() {
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
-    vector<Territory*> temp = Order::game->getMap()->getConnectedTerritories("Ontario-West");
-    for (auto t: temp){
-        cout << *t << endl;
-    }
+
+    cout << "Before Assigning" <<endl;
+    cout << "mainmap directly "<< mainmap->getTerritories()[0] << endl;
+    cout << " From Order " << Order::game->getMap()->getTerritories()[0] << endl;
+    cout << "From mainGE "<< mainGE->getMap()->getTerritories()[0] << endl;
+
+//     vector<Territory*> temp = Order::game->getMap()->getConnectedTerritories("Ontario-West");
+//     for (auto t: temp){
+//         cout << *t << endl;
+//     }
+
 
     // Assign Territories to Players
     int playerIndex = 0;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
-        Player *tempPlayer = player_list.at(playerIndex);
-        mainmap->getTerritories()[i].setOwner(tempPlayer);
-        Territory *tempTerr = new Territory(mainmap->getTerritories()[i]);
-        tempPlayer->assignTerritory(tempTerr);
+
+        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
+        mainmap->getTerritories()[i].setOwner(player_list.at(playerIndex));
+
         playerIndex++;
 
         if (playerIndex >= player_list.size()) {
             playerIndex = 0;
         }
+
     }
+    cout << "After Assigning" <<endl;
+    cout << "mainmap directly "<< mainmap->getTerritories()[0] << endl;
+    cout << " From Order " << Order::game->getMap()->getTerritories()[0] << endl;
+    cout << "From mainGE "<< mainGE->getMap()->getTerritories()[0] << endl;
+
     // Display Player list of Territories
     cout << endl;
     for (int i=0; i<player_list.size();i++){
         cout << player_list.at(i)->getName() << "'s territories: ";
-        for(auto teri : player_list.at(i)->getTerritory()){
+        for(auto teri : player_list.at(i)->getTerritoryList()){
             cout << teri->getName() << " | ";
         }
         cout << endl;
@@ -210,12 +226,13 @@ int main() {
 //        cout <<*t<<endl;
 //    }
 
-    cout << "TESTING TO ATTACK" <<endl;
-    vector<Territory*> terri = player1->toAttack(mainmap);
-    cout << "To Attack is Empty:"<< terri.empty() <<endl;
-    for (Territory* t : terri){
-        cout <<*t<<endl;
-    }
+
+//     cout << "TESTING TO ATTACK" <<endl;
+//     vector<Territory*> terri = player1->toAttack(mainmap);
+//     cout << "To Attack is Empty:"<< terri.empty() <<endl;
+//     for (Territory* t : terri){
+//         cout <<*t<<endl;
+//     }
 
     //    cout << "TESTING CONNECTED TERRITORIES" <<endl;
 //    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritory().at(0)->getName());
@@ -232,6 +249,14 @@ int main() {
     deploy1->validate();
     deploy1->execute();
     cout << deploy1->stringToLog() << endl;
+
+
+//    cout << "TESTING TO ATTACK" <<endl;
+//    vector<Territory*> terri = player1->toAttack(mainmap);
+//    cout << "To Attack is Empty:"<< terri.empty() <<endl;
+//    for (Territory* t : terri){
+//        cout <<*t<<endl;
+//    }
 
     Deploy *deploy2 = new Deploy(player1);
     cout << "Order: "<< *deploy2 << endl;
@@ -251,6 +276,7 @@ int main() {
     deploy4->execute();
     cout << deploy4->stringToLog() << endl;
 */
+
 
 	// Advance
 //	Advance *advance1 = new Advance(player1);

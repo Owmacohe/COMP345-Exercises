@@ -380,7 +380,7 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
     Territory* territory_most_armies; // Choose 1 territory belongs to the player that has the most armies
     int max_armies = 0 ;
-    for (Territory* t : p->getTerritory()) {
+    for (Territory* t : p->getTerritoryList()) {
         if (t->getArmies() > max_armies) {
             territory_most_armies = t;
             max_armies = t->getArmies();

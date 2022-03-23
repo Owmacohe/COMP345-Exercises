@@ -604,7 +604,7 @@ void GameEngine::startupPhase() {
                         //if we want we can replace like 601 and like 603 with tempPlayer->assignTerritory(tempTerr)
                         map->getTerritories()[i].setOwner(tempPlayer);
                         Territory *tempTerr = new Territory(map->getTerritories()[i]);
-                        tempPlayer->getTerritory().push_back(tempTerr);
+                        tempPlayer->getTerritoryList().push_back(tempTerr);
 
                         playerIndex++;
 
