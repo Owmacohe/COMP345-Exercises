@@ -88,6 +88,8 @@ Deploy::Deploy() : Order(false, "deploy"){
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     target = p->toDefend(this->game->getMap()).at(0);
+//    target = p->getTerritoryList().at(0);
+//    cout << "target in constructor " << *target << endl;
     numToDeploy = 1;
 }
 
@@ -137,7 +139,7 @@ void Deploy::setValidated(bool v) {
 void Deploy::validate() {
     // Check if Territory belongs to the Player
     cout << "... ";
-    if (target->getOwner() == playerIssuing) {
+    if (target->getOwnerName() == playerIssuing->getName()) {
         cout << "Valid!" << endl;
         validated = true;
     } else {

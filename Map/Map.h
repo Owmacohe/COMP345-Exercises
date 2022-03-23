@@ -23,6 +23,7 @@ class Territory {
         // Accessors
         string getName(), getContinent();
         Player *getOwner();
+        string getOwnerName();
         int getArmies();
 
         // Mutators

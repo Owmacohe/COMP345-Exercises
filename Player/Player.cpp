@@ -114,12 +114,11 @@ vector<Territory*> Player::toAttack(Map* m) {
         string name = territory->getName();
 
         // step 1 get connected territories
-
+        cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
         vector<Territory*> surround_territory = m->getConnectedTerritories(name); // Getting surrounding territories of the player's territory
 
         if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories --> ERROR OR VERY RARE, TEMPORARY CONDITION
-            cout << "Surround territory vector for that territory is empty." << endl;
-            continue; // Go to next Territory to continue searching for a territory to attack
+            cout << "Surround territory vector for that territory is empty."  << endl;
         }
         cout<< "First Territory in the the surrounded Territories" << *(surround_territory.at(0))<<endl;
 
@@ -224,6 +223,7 @@ void Player::setTerritory(vector<Territory*> t) {
 void Player::assignTerritory(Territory* t){
     territories.push_back(t);
 }
+
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
 void Player::setReinforcementPool(int armies) {reinforcePool = armies;}

@@ -5,15 +5,15 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int main() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
-    MapLoader* loader = new MapLoader();
-    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
-
-//    MapLoader* loader;
+//    MapLoader* loader = new MapLoader();
 //    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
+    MapLoader* loader;
+    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
 
     // Create Players List
@@ -38,16 +38,16 @@ int main() {
     int playerIndex = 0;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
 
-        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
         mainmap->getTerritories()[i].setOwner(player_list.at(playerIndex));
+        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
 
         playerIndex++;
 
         if (playerIndex >= player_list.size()) {
             playerIndex = 0;
         }
-
     }
+
     cout << "After Assigning" <<endl;
     cout << "mainmap directly "<< mainmap->getTerritories()[0] << endl;
     cout << " From Order " << Order::game->getMap()->getTerritories()[0] << endl;
@@ -116,19 +116,18 @@ int main() {
 
 
 //   cout << "TESTING CONNECTED TERRITORIES" <<endl;
-//    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritory().at(0)->getName());
-//    cout << "Connected_terries is empty:"<< connected_terries.empty() <<endl;
+//    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritoryList().at(0)->getName());
 //    for (Territory* t : connected_terries){
 //        cout <<*t<<endl;
 //    }
 
 
-//    cout << "TESTING TO ATTACK" <<endl;
-//    vector<Territory*> terri = player1->toAttack(mainmap);
-//    cout << "To Attack is Empty:"<< terri.empty() <<endl;
-//    for (Territory* t : terri){
-//        cout <<*t<<endl;
-//    }
+    cout << "TESTING TO ATTACK" <<endl;
+    vector<Territory*> terri = player1->toAttack(mainmap);
+    cout << "To Attack is Empty:"<< terri.empty() <<endl;
+    for (Territory* t : terri){
+        cout <<*t<<endl;
+    }
 
 	// Advance
 //	Advance *advance1 = new Advance(player1);
@@ -167,6 +166,7 @@ int main() {
     airlift4->execute() ;
     cout << airlift4->stringToLog() <<endl;
 */
+
 //    cout << "--------------- BOMB ---------------" << endl;
 //    // Bomb
 //	Bomb *bomb1 = new Bomb(player1);

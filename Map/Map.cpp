@@ -32,7 +32,7 @@ bool doesContain(Edge* arr, int size, Territory t1, Territory t2) {
 Territory::Territory() {
     name = "";
     continent = "";
-    owner = new Player;
+    owner = NULL;
     armies = 0;
     
     //cout << "[Territory default constructor]" << endl;
@@ -42,7 +42,7 @@ Territory::Territory() {
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
     owner = o;
 
-    //cout << "[" << n << " Territory param constructor]" << endl;
+    cout << "[" << n << " Territory param constructor]" << endl;
 }
 
 // Territory copy constructor
@@ -52,7 +52,7 @@ Territory::Territory(const Territory &t) {
     owner = t.owner;
     armies = t.armies;
     
-    //cout << "[" << t.name << " Territory copy constructor]" << endl;
+    cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
 // Territory destructor
@@ -91,12 +91,13 @@ Territory& Territory::operator = (const Territory& toAssign){
 string Territory::getName() { return name; }
 string Territory::getContinent() { return continent; }
 Player *Territory::getOwner() { return owner; }
+string Territory::getOwnerName() { return owner->getName(); }
 int Territory::getArmies() { return armies; }
 
 // Territory mutators
 void Territory::setName(string n) { name = n; }
 void Territory::setContinent(string c) { continent = c; }
-void Territory::setOwner(Player *o) { owner = o; }
+void Territory::setOwner(Player *o) { owner = o;}
 void Territory::setArmies(int a) { armies = a; }
 
 // Map default constructor
