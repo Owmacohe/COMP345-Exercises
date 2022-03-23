@@ -46,7 +46,8 @@ class Deploy : public Order {
 
 public:
     Deploy(); // Constructor
-    Deploy(Player*); // parameterized Constructor
+    Deploy(Player* p); // parameterized Constructor
+    Deploy(Player* p, Territory* target);
     Deploy(const Deploy& original);  // Copy Constructor
     ~Deploy();  //Destructor
     Deploy& operator = (const Deploy& D); // Assignment operator
@@ -83,6 +84,7 @@ class Advance : public Order {
 public:
     Advance(); // Constructor
     Advance(Player* p);  // Parameterized Constructor
+    Advance(Player* p, Territory* origin, Territory* target);
     Advance(const Advance& original);  // Copy Constructor
     ~Advance(); //Destructor
     Advance& operator = (const Advance& d);  // Assignment operator
@@ -121,6 +123,7 @@ class Airlift : public Order {
 public:
     Airlift();  // Constructor
     Airlift(Player* p); // Parameterized Constructor
+    Airlift(Player* p, Territory* origin, Territory* target);
     Airlift(const Airlift& original); // Copy Constructor
     ~Airlift();  //Destructor
     Airlift& operator = (const Airlift &D);  // Assignment operator
@@ -158,6 +161,7 @@ class Bomb : public Order {
 public:
     Bomb();  // Constructor
     Bomb(Player* p); // Parameterized Constructor
+    Bomb(Player* p, Territory* origin, Territory* target);
     Bomb(const Bomb& original);  // Copy Constructor
     ~Bomb();   //Destructor
     Bomb& operator = (const Bomb& D);  // Assignment operator
@@ -194,6 +198,7 @@ class Blockade : public Order {
 public:
     Blockade(); // Constructor
     Blockade(Player* p); // Parameterized Constructor
+    Blockade(Player* p, Territory* target);
     Blockade(const Blockade& original); // Copy Constructor
     ~Blockade();   //Destructor
     Blockade& operator = (const Blockade& D);   // Assignment operator
@@ -227,6 +232,7 @@ class Negotiate : public Order {
 public:
     Negotiate();  // Constructor
     Negotiate(Player* p); // Parameterized Constructor
+    Negotiate(Player* p, Player* target);
     Negotiate(const Negotiate& original); // Copy Constructor
     ~Negotiate(); //Destructor
     Negotiate& operator = (const Negotiate& D);  // Assignment operator
@@ -245,8 +251,6 @@ public:
     void validate();  //Method to validate if an order is valid
     void execute();   //Method to execute the order
 
-    string* validateResult; // TODO DID YOU ADD THIS AUDREY? - OOPs, I did but no need to
-
     // From Iloggable
      string stringToLog();
 
@@ -262,7 +266,7 @@ public:
     OrdersList();  // Constructor
     OrdersList(vector<Order*> vo); // Parameterized Constructor
     OrdersList(const OrdersList& original); // Copy Constructor
-    virtual ~OrdersList();     // Destructor TODO : VIRTUAL??? - I though it would be good to put virtual since ~Order() is virtual?
+    virtual ~OrdersList();     // Destructor
     vector<Order*> getOrderList();  // Accessors
     void setOrderList(vector<Order*> vo);  // Mutators
 
@@ -283,27 +287,3 @@ public:
 
     vector<Order*> playerOrderList;
 };
-
-/**************
-
-Deploy(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
-Deploy(Player* p, Territory* t);  // Parameterized constructor For IssueOrders Phase
-
-Advance(bool v, string s, Player* p, Territory* t, Territory* o);  // Parameterized constructor
-Advance(Player* p, Territory* t, Territory* o);  // Parameterized constructor For IssueOrders Phase
-
-Airlift(bool v, string s, Player* p, Territory* o, Territory* t, int armies);  // Parameterized constructor
-Airlift(Player* p, Territory* o, Territory* t, int numOfArmies);  // Parameterized constructor For IssueOrders Phase
-
-Bomb(bool v, string s, Player* p, Territory* o, Territory* t);  // Parameterized constructor
-Bomb(Player* p, Territory* o, Territory* t);  // Parameterized constructor For IssueOrders Phase
-
-Blockade(Player* p, Territory* t);  // Parameterized constructor for IssueOrders Phase
-Blockade(bool v, string s, Player* p, Territory* t);  // Parameterized constructor
-
-Negotiate(Player* p1, Player* p2);  // Parameterized constructor (Player only)
-Negotiate(bool v, string s, Player* p1, Player* p2);  // Parameterized constructor
-
-void addOrder(Order order); // Add Method used to add an order of the OrderList.
-void addOrder(string order); // Add Method used to add an order of the OrderList.
- *************/
