@@ -5,12 +5,16 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int main() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
-    MapLoader* loader = new MapLoader();
+//    MapLoader* loader = new MapLoader();
+//    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
+    MapLoader* loader;
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
 
     // Create Players List
     vector<Player*> player_list;
@@ -98,12 +102,20 @@ int main() {
 //        cout <<*t<<endl;
 //    }
 
-//    cout << "TESTING TO ATTACK" <<endl;
-//    vector<Territory*> terri = player1->toAttack(mainmap);
-//    cout << terri.empty()<<endl;
-//    for (Territory* t : terri){
+//    cout << "TESTING CONNECTED TERRITORIES" <<endl;
+//    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritory().at(0)->getName());
+//    cout << "Connected_terries is empty:"<< connected_terries.empty() <<endl;
+//    for (Territory* t : connected_terries){
 //        cout <<*t<<endl;
 //    }
+
+
+    cout << "TESTING TO ATTACK" <<endl;
+    vector<Territory*> terri = player1->toAttack(mainmap);
+    cout << "To Attack is Empty:"<< terri.empty() <<endl;
+    for (Territory* t : terri){
+        cout <<*t<<endl;
+    }
 
 	// Advance
 //	Advance *advance1 = new Advance(player1);
@@ -142,16 +154,12 @@ int main() {
     airlift4->execute() ;
     cout << airlift4->stringToLog() <<endl;
 */
-
-    // Bomb
+//    cout << "--------------- BOMB ---------------" << endl;
+//    // Bomb
 //	Bomb *bomb1 = new Bomb(player1);
-//	cout << "Adding to the OrdersList the Order: "<< *bomb1 << endl;
-//    cout << "Checking for validation: " << endl;
+//    cout << "Order:"  << *bomb1 << endl;
 //    bomb1->validate();
-//    cout << "Checking for execution: " ;
 //    bomb1->execute() ;
-//	player1->getOrder()->addOrder(bomb1);
-//	cout << *player1->getOrder() << "\n" << endl;
 //    cout << bomb1->stringToLog();
 
 /*
@@ -183,24 +191,25 @@ int main() {
 */
 
     // Negotiate
-    cout << "--------------- NEGOTIATE ---------------" << endl;
-	Negotiate *negotiate1 = new Negotiate(player1);
-	cout << "Order: "<< *negotiate1 << endl;
-    negotiate1->validate();
-    negotiate1->execute() ;
-    cout<< negotiate1->stringToLog();
+//    cout << "--------------- NEGOTIATE ---------------" << endl;
+//	Negotiate *negotiate1 = new Negotiate(player1);
+//	cout << "Order: "<< *negotiate1 << endl;
+//    negotiate1->validate();
+//    negotiate1->execute() ;
+//    cout<< negotiate1->stringToLog();
 
-    Negotiate *negotiate2 = new Negotiate(player1);
-    cout << "Order: "<< *negotiate2<< endl;
-    negotiate2->validate();
-    negotiate2->execute() ;
-    cout<< negotiate2->stringToLog();
+//    Negotiate *negotiate2 = new Negotiate(player1);
+//    cout << "Order: "<< *negotiate2<< endl;
+//    negotiate2->validate();
+//    negotiate2->execute() ;
+//    cout<< negotiate2->stringToLog();
+//
+//    Negotiate *negotiate3 = new Negotiate(player2);
+//    cout << "Order: "<< *negotiate3 << endl;
+//    negotiate3->validate();
+//    negotiate3->execute() ;
+//    cout<< negotiate3->stringToLog();
 
-    Negotiate *negotiate3 = new Negotiate(player2);
-    cout << "Order: "<< *negotiate3 << endl;
-    negotiate3->validate();
-    negotiate3->execute() ;
-    cout<< negotiate3->stringToLog();
 /* Assignment 1
     cout << "****************************** move() *******************************" << endl;
 	//Move()
