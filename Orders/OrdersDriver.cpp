@@ -5,15 +5,16 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int main() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
-    MapLoader* loader = new MapLoader();
+//    MapLoader* loader = new MapLoader();
+//    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
+    MapLoader* loader;
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
-//    MapLoader* loader;
-//    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
     // Create Players List
     vector<Player*> player_list;
@@ -28,32 +29,25 @@ int main() {
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
-
     cout << "Before Assigning" <<endl;
     cout << "mainmap directly "<< mainmap->getTerritories()[0] << endl;
     cout << " From Order " << Order::game->getMap()->getTerritories()[0] << endl;
     cout << "From mainGE "<< mainGE->getMap()->getTerritories()[0] << endl;
 
-//     vector<Territory*> temp = Order::game->getMap()->getConnectedTerritories("Ontario-West");
-//     for (auto t: temp){
-//         cout << *t << endl;
-//     }
-
-
     // Assign Territories to Players
     int playerIndex = 0;
     for (int i = 0; i < mainmap->territoriesLength; i++) {
 
-        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
         mainmap->getTerritories()[i].setOwner(player_list.at(playerIndex));
+        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
 
         playerIndex++;
 
         if (playerIndex >= player_list.size()) {
             playerIndex = 0;
         }
-
     }
+
     cout << "After Assigning" <<endl;
     cout << "mainmap directly "<< mainmap->getTerritories()[0] << endl;
     cout << " From Order " << Order::game->getMap()->getTerritories()[0] << endl;
@@ -69,179 +63,9 @@ int main() {
         cout << endl;
     }
 
-    // ******************************* Testing Orders Constructor *******************************
-    // Create Territories for testing
-    Territory* Yukon_Territory = new Territory("Yukon_Territory", "Northwestern_Territories", player1, 4);
-    Territory* Ontario_South = new Territory("Ontario-South","Ontario_and_Quebec", player1, 0 );
-    Territory* Ontario_North = new Territory("Ontario-North","Ontario_and_Quebec", player1, 0 );
-    Territory* Quebec_Central = new Territory("Quebec-Central","Ontario_and_Quebec", player1, 4 );
-    Territory* Manitoba_South = new Territory("Manitoba-South", "Western_Provinces-South", player1, 0);
-
-    Territory* Ontario_West = new Territory("Ontario-West","Ontario_and_Quebec", player2, 4 );
-    Territory* Quebec_South = new Territory("Quebec-South","Ontario_and_Quebec", player2, 0 );
-    Territory* Quebec_North = new Territory("Quebec-North","Ontario_and_Quebec", player2, 0 );
-
-    cout << "\n-------------------- DEPLOY --------------------" << endl;
-    Deploy* deploy1 = new Deploy(player1, Ontario_South);
-    cout << "Order: " << *deploy1 << endl;
-    deploy1->validate();
-    deploy1->execute();
-    cout << deploy1->stringToLog() << endl;
-
-    Deploy* deploy2 = new Deploy(player2, Quebec_North);
-    cout << "Order: " << *deploy2 << endl;
-    deploy2->validate();
-    deploy2->execute();
-    cout << deploy2->stringToLog() << endl;
-
-    // Target territory belongs to enemy -> failed
-    Deploy* deploy3 = new Deploy(player1, Ontario_West);
-    cout << "Order: " << *deploy3 << endl;
-    deploy3->validate();
-    deploy3->execute();
-    cout << deploy3->stringToLog() << endl;
-/*
-    cout << "\n-------------------- AIRLIFT --------------------" << endl;
-    Airlift* airlift1 = new Airlift(player1, Ontario_South, Ontario_North);
-    cout << "Order: " << *airlift1 << endl;
-    airlift1->validate();
-    airlift1->execute();
-    cout << airlift1->stringToLog() << endl;
-
-    // Target territory belongs to enemy -> failed
-    Airlift* airlift2 = new Airlift(player1, Ontario_South, Ontario_West);
-    cout << "Order: " << *airlift2 << endl;
-    airlift2->validate();
-    airlift2->execute();
-    cout << airlift2->stringToLog() << endl;
-
-    // Origin territory is not yours -> failed
-    Airlift* airlift3 = new Airlift(player1, Ontario_West, Ontario_South);
-    cout << "Order: " << *airlift3 << endl;
-    airlift3->validate();
-    airlift3->execute();
-    cout << airlift3->stringToLog() << endl;
-*/
-
-/*
-    cout << "\n-------------------- BOMB --------------------" << endl;
-    // TODO: Still having problems with Order::game->getMap(). It's empty for the time being -> getConnectedTerritories and adjacentTerritory won't work here
-    Bomb* bomb1 = new Bomb(player2, Ontario_West, Manitoba_South);
-    cout << "Order: " << *bomb1 << endl;
-    bomb1->validate();
-    bomb1->execute();
-    cout << bomb1->stringToLog() << endl;
-
-    // Target territory is your own territory -> failed
-    Bomb* bomb2 = new Bomb(player1, Ontario_South, Ontario_South);
-    cout << "Order: " << *bomb2 << endl;
-    bomb2->validate();
-    bomb2->execute();
-    cout << bomb2->stringToLog() << endl;
-
-    // Origin territory is not your -> failed
-    Bomb* bomb3 = new Bomb(player1, Ontario_West, Quebec_North);
-    cout << "Order: " << *bomb3 << endl;
-    bomb3->validate();
-    bomb3->execute();
-    cout << bomb3->stringToLog() << endl;
-
-    // Target territory is not adjacent -> failed
-    Bomb* bomb6 = new Bomb(player1, Yukon_Territory, Quebec_North);
-    cout << "Order: " << *bomb6 << endl;
-    bomb6->validate();
-    bomb6->execute();
-    cout << bomb6->stringToLog() << endl;
-*/
-
-/*
-    cout << "\n-------------------- BLOCKADE --------------------" << endl;
-    Blockade* blockade1 = new Blockade(player2, Ontario_West);
-    cout << "Order: " << *blockade1 << endl;
-    blockade1->validate();
-    blockade1->execute();
-    cout << blockade1->stringToLog() << endl;
-
-    Blockade* blockade2 = new Blockade(player1, Quebec_Central);
-    cout << "Order: " << *blockade2 << endl;
-    blockade2->validate();
-    blockade2->execute();
-    cout << blockade2->stringToLog() << endl;
-
-    // Target territory belongs to enemy -> failed + The effect of Neural Player persist
-    Blockade* blockade3 = new Blockade(player2, Quebec_Central);
-    cout << "Order: " << *blockade3 << endl;
-    blockade3->validate();
-    blockade3->execute();
-    cout << blockade3->stringToLog() << endl;
-*/
-
-/*
-    cout << "\n-------------------- NEGOTIATE --------------------" << endl;
-    Negotiate* negotiate1 = new Negotiate(player1, player2);
-    cout << "Order: " << *negotiate1 << endl;
-    negotiate1->validate();
-    negotiate1->execute();
-    cout << negotiate1->stringToLog() << endl;
-
-    // Target player is yourself -> failed
-    Negotiate* negotiate2 = new Negotiate(player1, player1);
-    cout << "Order: " << *negotiate2 << endl;
-    negotiate2->validate();
-    negotiate2->execute();
-    cout << negotiate2->stringToLog() << endl;
-
-    cout << "\n********** Testing the effect of negotiation " << endl;
-    // Target territory is under negotiate, cannot be bombed -> failed
-    Bomb* bomb4 = new Bomb(player1, Quebec_Central, Quebec_North);
-    cout << "Order: " << *bomb4 << endl;
-    bomb4->validate();
-    bomb4->execute();
-    cout << bomb4->stringToLog() << endl;
-
-    Bomb* bomb5 = new Bomb(player2, Quebec_North, Ontario_North);
-    cout << "Order: " << *bomb5 << endl;
-    bomb5->validate();
-    bomb5->execute();
-    cout << bomb5->stringToLog() << endl;
-*/
-
-    // ******************************* Testing Orders Constructor for GameLoop *******************************
-    // ToDefend() & toAttack()
-//    cout << "TESTING TO DEFEND" <<endl;
-//    vector<Territory*> toDefendList = player1->toDefend(Order::game->getMap());
-//    for (Territory* t : toDefendList ){
-//        cout <<*t<<endl;
-//    }
-
-//    cout << "TESTING TO ATTACK" <<endl;  // TODO: uncaught vector out of range
-//    vector<Territory*> toAttackList= player1->toAttack(Order::game->getMap());
-//    cout << toAttackList.empty()<<endl;
-//    for (Territory* t : toAttackList){
-//        cout <<*t<<endl;
-//    }
-
-//    teri = player2->toDefend(mainmap);
-//    for (Territory* t : teri){
-//        cout <<*t<<endl;
-//    }
+    //	Testing Orders
 
 
-//     cout << "TESTING TO ATTACK" <<endl;
-//     vector<Territory*> terri = player1->toAttack(mainmap);
-//     cout << "To Attack is Empty:"<< terri.empty() <<endl;
-//     for (Territory* t : terri){
-//         cout <<*t<<endl;
-//     }
-
-    //    cout << "TESTING CONNECTED TERRITORIES" <<endl;
-//    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritory().at(0)->getName());
-//    cout << "Connected_terries is empty:"<< connected_terries.empty() <<endl;
-//    for (Territory* t : connected_terries){
-//        cout <<*t<<endl;
-//    }
-
-/*
     // Deploy
     cout << "\n--------------- DEPLOY ---------------\n" << endl;
     Deploy *deploy1 = new Deploy(player1);
@@ -250,11 +74,9 @@ int main() {
     deploy1->execute();
     cout << deploy1->stringToLog() << endl;
 
-
-//    cout << "TESTING TO ATTACK" <<endl;
-//    vector<Territory*> terri = player1->toAttack(mainmap);
-//    cout << "To Attack is Empty:"<< terri.empty() <<endl;
-//    for (Territory* t : terri){
+//    vector<Territory*> teri = player1->toDefend(mainmap);
+//    cout << teri.empty() << endl;
+//    for (Territory* t : teri){
 //        cout <<*t<<endl;
 //    }
 
@@ -264,19 +86,48 @@ int main() {
     deploy2->execute();
     cout << deploy2->stringToLog() << endl;
 
+//    teri = player1->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
     Deploy *deploy3 = new Deploy(player2);
     cout << "Order: "<< *deploy3 << endl;
     deploy3->validate();
     deploy3->execute();
     cout << deploy3->stringToLog() << endl;
 
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
     Deploy *deploy4 = new Deploy(player2);
     cout << "Order: "<< *deploy4 << endl;
     deploy4->validate();
     deploy4->execute();
     cout << deploy4->stringToLog() << endl;
-*/
 
+//    teri = player2->toDefend(mainmap);
+//    for (Territory* t : teri){
+//        cout <<*t<<endl;
+//    }
+
+
+
+//   cout << "TESTING CONNECTED TERRITORIES" <<endl;
+//    vector<Territory*> connected_terries = mainmap->getConnectedTerritories(player1->getTerritoryList().at(0)->getName());
+//    for (Territory* t : connected_terries){
+//        cout <<*t<<endl;
+//    }
+
+
+    cout << "TESTING TO ATTACK" <<endl;
+    vector<Territory*> terri = player1->toAttack(mainmap);
+    cout << "To Attack is Empty:"<< terri.empty() <<endl;
+    for (Territory* t : terri){
+        cout <<*t<<endl;
+    }
 
 	// Advance
 //	Advance *advance1 = new Advance(player1);
@@ -350,29 +201,81 @@ int main() {
     blockade4->validate();
     blockade4->execute() ;
     cout << blockade4->stringToLog() <<endl;
-
 */
 
-/*
     // Negotiate
-    cout << "--------------- NEGOTIATE ---------------" << endl;
-	Negotiate *negotiate1 = new Negotiate(player1);
-	cout << "Order: "<< *negotiate1 << endl;
-    negotiate1->validate();
-    negotiate1->execute() ;
-    cout<< negotiate1->stringToLog();
+//    cout << "--------------- NEGOTIATE ---------------" << endl;
+//	Negotiate *negotiate1 = new Negotiate(player1);
+//	cout << "Order: "<< *negotiate1 << endl;
+//    negotiate1->validate();
+//    negotiate1->execute() ;
+//    cout<< negotiate1->stringToLog();
 
-    Negotiate *negotiate2 = new Negotiate(player1);
-    cout << "Order: "<< *negotiate2<< endl;
-    negotiate2->validate();
-    negotiate2->execute() ;
-    cout<< negotiate2->stringToLog();
+//    Negotiate *negotiate2 = new Negotiate(player1);
+//    cout << "Order: "<< *negotiate2<< endl;
+//    negotiate2->validate();
+//    negotiate2->execute() ;
+//    cout<< negotiate2->stringToLog();
+//
+//    Negotiate *negotiate3 = new Negotiate(player2);
+//    cout << "Order: "<< *negotiate3 << endl;
+//    negotiate3->validate();
+//    negotiate3->execute() ;
+//    cout<< negotiate3->stringToLog();
 
-    Negotiate *negotiate3 = new Negotiate(player2);
-    cout << "Order: "<< *negotiate3 << endl;
-    negotiate3->validate();
-    negotiate3->execute() ;
-    cout<< negotiate3->stringToLog();
+/* Assignment 1
+    cout << "****************************** move() *******************************" << endl;
+	//Move()
+	cout << "List before the move of Advance to the index 3" <<endl;
+	cout << *player1->getOrder() << "\n" <<endl;
+	player1->getOrder()->move(1,3);
+	cout << "List after the move of Advance to the index 3" <<endl;
+	cout << *player1->getOrder() << "\n" <<endl;
+    player1->getOrder()->move(3,0);
+    cout << "List after the move of Advance to index 0" <<endl;
+    cout << *player1->getOrder()<< "\n" <<endl;
+    player1->getOrder()->move(0,5);
+    cout << "List after the move of Advance to the index 5" <<endl;
+    cout << *player1->getOrder() << "\n" <<endl;
+
+    cout << "****************************** remove() *******************************" <<endl;
+	//Remove()
+	cout << "List before the removal of order #2" <<endl;
+	cout << *player1->getOrder() << "\n" <<endl;
+    player1->getOrder()->remove(2);
+	cout << "List after the removal of order #2" <<endl;
+	cout << *player1->getOrder() << "\n" <<endl;
+
+    cout << "****************************** Copy constructor and assignment operator *******************************"<<endl;
+    //Create through copy constructor object
+    cout << "Creating a deep copy of the OrderList through the Copy constructor" <<endl;
+    OrdersList player1List2(*player1->getOrder());
+    cout << endl;
+    //Create through assignment operator object
+    cout << "Creating a deep copy of the OrderList through the assignment operator" <<endl;
+    OrdersList player1List3 = player1List2;
+    cout << endl;
+
+    cout <<"****************************** Verification of deep copies *******************************" <<endl;
+	// Check the deep copies
+	cout << "Original, now modified list" << endl;
+	cout << *player1->getOrder() << "\n" <<endl;
+
+	cout << "Copy through the copy constructor" << endl;
+	cout << player1List2 << "\n" <<endl;
+
+	cout << "Copy through the assignment operator" << endl;
+	cout << player1List3 << "\n" <<endl;
 */
+
 	return 0;
 }
+
+// Create Map
+//    MapLoader* loader = new MapLoader();
+//    Map* mainMap = new Map(loader->load("/Users/Amelia/Documents/COMP345-Exercises/Orders/canada.map"));
+//    cout << *mainMap << endl;
+
+// Create Deck
+//    Deck *mainDeck = new Deck(10);
+//    cout << mainDeck << endl;
