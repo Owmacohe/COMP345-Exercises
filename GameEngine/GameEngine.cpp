@@ -597,6 +597,7 @@ void GameEngine::startupPhase() {
 
                     for (int i = 0; i < map->territoriesLength; i++) {
                         Player *tempPlayer = player_list.at(playerIndex);
+                        //if we want we can replace like 601 and like 603 with tempPlayer->assignTerritory(tempTerr)
                         map->getTerritories()[i].setOwner(tempPlayer);
                         Territory *tempTerr = new Territory(map->getTerritories()[i]);
                         tempPlayer->getTerritory().push_back(tempTerr);
