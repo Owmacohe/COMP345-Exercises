@@ -27,10 +27,8 @@ class Player {
 
         int getNumberOfArmies(); // Get number of armies player has
         int getNumberOfTerritories(); // Get number of territories player owns
-
         void addToReinforcePool(int armies); // Add to reinforcement pool
         void removeFromReinforcePool(int armies); // Remove from reinforcement pool
-        void assignTerritory(Territory* t); // Add territory to territories vector list
 
         Territory* getOriginTerritory(Territory* target_territory, Map* m); // Returns a territory of the player that is adjacent to the one they would like to attack
         
@@ -38,8 +36,9 @@ class Player {
         void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o), setReinforcementPool(int armies);
 
         // Mutators
+        void assignTerritory(Territory* t);
         string getName();
-        vector<Territory*> getTerritory();
+        vector<Territory*> getTerritoryList();
         Hand* getHand();
         OrdersList* getOrder();
         int getReinforcePool();

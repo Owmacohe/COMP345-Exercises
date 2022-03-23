@@ -221,17 +221,15 @@ void Player::setTerritory(vector<Territory*> t) {
         territories.push_back(i);
     }
 }
-void Player::assignTerritory(Territory *t) {
+void Player::assignTerritory(Territory* t){
     territories.push_back(t);
-    t->setOwner(this);
 }
-
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
 void Player::setReinforcementPool(int armies) {reinforcePool = armies;}
 
 string Player::getName() { return name; }
-vector<Territory*> Player::getTerritory() { return territories; }
+vector<Territory*> Player::getTerritoryList() { return territories; }
 Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
 int Player::getReinforcePool(){ return reinforcePool;}
