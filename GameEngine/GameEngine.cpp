@@ -269,42 +269,43 @@ void GameEngine::issueOrdersPhase() {
     string input;
     string response;
 
-    Player* p = player_list.at(currentPlayer);
+    // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
+    for (int i = 0; i < NumberOfPlayers; i++) {
+        Player *p = player_list.at(playerOrder[i]);
 
-    cout << "Issuing the orders for player " << p->getName() << endl;
-    // Only issue deploy orders while the players reinforcement pool contains armies
-    cout << "Issueing deploy orders" << endl;
-    while (p->getReinforcePool() != 0) {
-        p->issueOrder("deploy");
+        cout << "Issuing the orders for player " << p->getName() << endl;
+        // Only issue deploy orders while the players reinforcement pool contains armies
+        cout << "Issueing deploy orders" << endl;
+        while (p->getReinforcePool() != 0) {
+            p->issueOrder("deploy");
+        }
+        // Issue advance orders
+        cout << "Issueing advance orders" << endl;
+        do {
+            cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                p->issueOrder("advance");
+                // MJ said that checking if an advance is attacking or defending is done in orders
+            } else break;
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+        // Issue card orders
+        cout << "Issueing card orders" << endl;
+        do {
+            cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
+            cin >> input;
+            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                cout << "The following is " << p->getName() << " hand" << endl;
+                cout << p->getHand() << endl;
+                cout << "Which card would you like to play ?" << endl;
+                cin >> response;
+                int index = checkCardInHand(response, p->getHand());
+                if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
+                else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played";
+            } else break;
+        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+        endIssueOrderPhase(p);
     }
-    // Issue advance orders
-    cout << "Issueing advance orders" << endl;
-    do {
-        cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
-        cin >> input;
-        if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-            p->issueOrder("advance");
-            // MJ said that checking if an advance is attacking or defending is done in orders
-        }
-        else break;
-    } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
-    // Issue card orders
-    cout << "Issueing card orders" << endl;
-    do {
-        cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
-        cin >> input;
-        if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-            cout << "The following is " << p->getName() << " hand" << endl;
-            cout << p->getHand() << endl;
-            cout << "Which card would you like to play ?" << endl;
-            cin >> response;
-            int index = checkCardInHand(response, p->getHand());
-            if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
-            else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played";
-        }
-        else break;
-    } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
-    endIssueOrderPhase(p);
 }
 
 void GameEngine::endIssueOrderPhase(Player *player) {
@@ -324,8 +325,6 @@ void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
 
-
-
     int playersWithoutDeploy = 0;
     int playersWithoutOrders = 0;
     bool hasMoreDeployOrders = true;
@@ -333,7 +332,9 @@ void GameEngine::executeOrdersPhase() {
 
     // avoiding the extra deploy list in player waiting on testing
     while (hasMoreDeployOrders == true ){
-        for(Player * p : player_list){
+        // this loop will loop based on the playing order
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder[i]);
             for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
                 if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
                     p->getOrder()->getOrderList().at(i)->execute();
@@ -344,28 +345,31 @@ void GameEngine::executeOrdersPhase() {
             }
 
         }
-        for(Player * p : player_list) {
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder[i]);
             if (!hasMoreDeploy(p))
                 playersWithoutDeploy++;
         }
-        if (playersWithoutDeploy == player_list.size())
+        if (playersWithoutDeploy == NumberOfPlayers)
             hasMoreDeployOrders = false;
         else
             playersWithoutDeploy = 0;
     }
     while (allOrdersDone == false ){
-        for(Player * p : player_list){
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder[i]);
             for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
                     p->getOrder()->getOrderList().at(i)->execute();
                     p->getOrder()->remove(i);
                     break;
             }
         }
-        for(Player * p : player_list) {
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder[i]);
             if (p->getOrder()->getOrderList().empty())
                 playersWithoutOrders ++;
         }
-        if (playersWithoutOrders == player_list.size())
+        if (playersWithoutOrders == NumberOfPlayers)
             allOrdersDone = true;
         else
             playersWithoutOrders = 0;
@@ -656,14 +660,12 @@ void GameEngine::mainGameLoop() {
     string input;
     while (playing == true) {
         for (int i = 0; i < NumberOfPlayers; i++) {
-            Player *p = player_list.at(playerOrder[i]);
-        
             assignReinforcementPhase(); // Begin reinforcement phase
-            issueOrdersPhase(); // Begin issue orders phase
-            executeOrdersPhase(); // Begin execute orders phase
-            checkPlayers(); // Check if any players need to be removed
-            playing = !checkForWinner(); // Check for winner
         }
+        issueOrdersPhase(); // Begin issue orders phase
+        executeOrdersPhase(); // Begin execute orders phase
+        checkPlayers(); // Check if any players need to be removed
+        playing = !checkForWinner(); // Check for winner
         resetAlliances(); // Reset Alliances
     }
 
