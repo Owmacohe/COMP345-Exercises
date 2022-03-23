@@ -245,8 +245,8 @@ void GameEngine::assignReinforcementPhase() {
 
     vector<Territory*> territoriesByContinent;
 
-    string* Continents = map->getContinents();
-    for (int i = 0; i < Continents->size(); i++) { // Loop through all continents
+    vector<string> Continents = map->getContinents();
+    for (int i = 0; i < Continents.size(); i++) { // Loop through all continents
         bool flag = true;
         territoriesByContinent = map->getContinentTerritories(Continents[i]);
         for (Territory * t : territoriesByContinent){ // Loop through territories in each continent to check if they belong to player
@@ -506,7 +506,7 @@ void GameEngine::startupPhase() {
 
         processor->getCommand();
 
-        Command temp = processor->getCommands()[processor->commandsLength - 1];
+        Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
         string effect = "";
 
@@ -515,7 +515,7 @@ void GameEngine::startupPhase() {
             string word2 = "";
             bool hasReachedSpace = false;
 
-            for (char i : temp.getCommand()) {
+            for (char i : temp->getCommand()) {
                 if (!hasReachedSpace) {
                     if (i == ' ') {
                         hasReachedSpace = true;
@@ -595,11 +595,10 @@ void GameEngine::startupPhase() {
                 else {
                     int playerIndex = 0;
 
-                    for (int i = 0; i < map->territoriesLength; i++) {
+                    for (Territory *i : map->getTerritories()) {
                         Player *tempPlayer = player_list.at(playerIndex);
-                        map->getTerritories()[i].setOwner(tempPlayer);
-                        Territory *tempTerr = new Territory(map->getTerritories()[i]);
-                        tempPlayer->getTerritory().push_back(tempTerr);
+                        i->setOwner(tempPlayer);
+                        tempPlayer->getTerritory().push_back(i);
 
                         playerIndex++;
 
@@ -640,7 +639,7 @@ void GameEngine::startupPhase() {
             }
         }
 
-        temp.saveEffect(effect);
+        temp->saveEffect(effect);
     }
 
     // ALSO ADD GameEngine Pointer to attribute to Order Class
@@ -671,9 +670,9 @@ void GameEngine::mainGameLoop() {
 
         processor->getCommand();
 
-        Command temp = processor->getCommands()[processor->commandsLength - 1];
+        Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
-        string command = temp.getCommand();
+        string command = temp->getCommand();
         string effect = "";
 
         if (command == "replay") {
@@ -690,7 +689,7 @@ void GameEngine::mainGameLoop() {
             cout << effect << "!" << endl;
         }
 
-        temp.saveEffect(effect);
+        temp->saveEffect(effect);
     }
 
     /*
@@ -709,9 +708,9 @@ bool GameEngine::checkForWinner() {
     int lost = 0;
     for (Player* p : player_list) { 
         string player = p->getName();
-        for (int i = 0; i < map->territoriesLength; i++) {
-            string owner = map->getTerritories()[i].getOwner()->getName();
-            if (owner != player ) {
+        for (Territory *i : map->getTerritories()) {
+            string owner = i->getOwner()->getName();
+            if (owner != player) {
                 lost = lost + 1;
                 break; 
             }

@@ -19,13 +19,12 @@ int Ordersmain() {
     Map* mainmap = new Map(loader->load("../Orders/canada.map"));
 
     int playerIndex = 0;
-    cout << mainmap->territoriesLength<<endl;
-    for (int i = 0; i < mainmap->territoriesLength; i++) {
+    cout << mainmap->getTerritories().size()<<endl;
+    for (Territory *i : mainmap->getTerritories()) {
         Player *tempPlayer = player_list.at(playerIndex);
+        i->setOwner(tempPlayer);
+        tempPlayer->getTerritory().push_back(i);
 
-        mainmap->getTerritories()[i].setOwner(tempPlayer);
-        Territory *tempTerr = new Territory(mainmap->getTerritories()[i]);
-        tempPlayer->assignTerritory(tempTerr);
         playerIndex++;
 
         if (playerIndex >= player_list.size()) {
