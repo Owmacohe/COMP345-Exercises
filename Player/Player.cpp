@@ -62,18 +62,22 @@ vector<Territory*> Player::toDefend(Map* m) {
     vector<Territory*> defend_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
-    //cout<<"Begin toDefend"<<endl;
-    for (Territory* territory : territories) {
+
+    for (Territory* territory : territories) { // Looping through the player's territories
         int number_surrounding = 0;
         string name = territory->getName();
+        string owner =  territory->getOwner()->getName();
         //cout << "Looking at territory : " << territory->getName() << endl;
+
         vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
         //cout<< surrounded_territories.empty()<<endl;
+
         if (surrounded_territories.empty()) number_surrounding = -1;
-            // step 1 check each territories numbers of enemies surrounding
+
+        // step 1 check each territories numbers of enemies surrounding
         else {
             for (Territory *t: surrounded_territories) {
-                if (t->getOwner()->getName() != name || t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
+                if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player //TODO:: (t->getOwner()->getName() != "Neutral"))
                     number_surrounding = number_surrounding + 1;
                 }
             }
@@ -92,6 +96,7 @@ vector<Territory*> Player::toDefend(Map* m) {
     }
     // step 3 sort and seperate territories in pair
     sort(ordering.begin(), ordering.end());
+
     for (pair<int, Territory*> p : ordering) {
         //cout<<"Ordering territory : " << p.second->getName() <<endl;
         defend_territories.insert(defend_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
@@ -103,15 +108,15 @@ vector<Territory*> Player::toDefend(Map* m) {
 // Returns a vector list of territories for player to attack based on territories touching edges of players owned territories in priority
 // Priority is determined by which enemy territories connected have most armies
 vector<Territory*> Player::toAttack(Map* m) {
-    cout<<"Begin toAttack"<<endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
 
     for (Territory* territory : territories) { // Looping through the player's territories
-        cout << "Looking at territory : " << territory->getName() << endl;
+        //cout << "Looking at territory : " << territory->getName() << endl;
         int number_armies = 0;
         string name = territory->getName();
+        string owner =  territory->getOwner()->getName();
 
         // step 1 get connected territories
         // cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
@@ -120,24 +125,15 @@ vector<Territory*> Player::toAttack(Map* m) {
         if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories --> ERROR OR VERY RARE, TEMPORARY CONDITION
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
-//        cout<< "First Territory in the the surrounded Territories" << *(surround_territory.at(0))<<endl;
-
         // step 2 for each connected territory that's an enemy's count the number armies
-        //cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
+        // cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
         for (Territory* t : surround_territory) {
-            if (t->getOwner()->getName() != name || t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
+            if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player //TODO:: THIS ISNT EVALUTAING PROPERLY WHEN I REMOVE ( || (t->getOwner()->getName() != "Neutral")) IT WORKS ????
                 number_armies = t->getArmies();
                 // step 3 pair enemy territory and their number of armies, add pair to vector
                 pairs.first = number_armies;
                 pairs.second = t;
-                // TODO : Below checks for duplicate in ordering but not working
-                bool duplicateCheck = false;
-                for (auto pairDuplicateCheck : ordering){
-                    if(pairDuplicateCheck.second->getName() == pairs.second->getName()){
-                        duplicateCheck = true;}
-                }
-                if (!duplicateCheck) {ordering.push_back(pairs);
-                cout<<"Putting in pair : " << number_armies << " , "<< t->getName() <<endl;}
+                ordering.push_back(pairs);
             }
         }
         for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
@@ -146,16 +142,17 @@ vector<Territory*> Player::toAttack(Map* m) {
     }
 
     // step 3 sort and separate territories in pair
-    cout << "step 3 sort and separate territories in pair" << endl;
-    if(ordering.empty()){ cout << "No territories to Attack." << endl;}
+    if(ordering.empty()) { cout << "No territories to Attack." << endl; }
 
     else {
-    sort(ordering.begin(), ordering.end());
-    for (pair<int, Territory*> p : ordering) {
-        cout<<"Ordering territory : " << p.second->getName() <<endl;
-        attack_territories.insert(attack_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
-        p.second = NULL; // Dangling pointer avoidance
-    }}
+        sort(ordering.begin(), ordering.end());
+        ordering.erase(unique(ordering.begin(), ordering.end()), ordering.end());
+        for (pair<int, Territory*> p : ordering) {
+            //cout<<"Ordering territory : " << p.second->getName() <<endl;
+            attack_territories.insert(attack_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
+            p.second = NULL; // Dangling pointer avoidance
+        }
+    }
     return attack_territories;
 }
 
