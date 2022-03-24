@@ -233,32 +233,30 @@ void GameEngine::assignCountries() {
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign reinforcement phase" << endl;
+    for (int i = 0; i < NumberOfPlayers; i++) {
+        Player *p = player_list.at(playerOrder[i]);
 
-    // Adding the reset of alliances
-    //resetAlliances();
+        int num = floor((p->getNumberOfTerritories())/3);
+        if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
+        else p->addToReinforcePool(num);
 
-    Player* p = player_list.at(currentPlayer);
-
-    int num = floor((p->getNumberOfTerritories())/3);
-    if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
-    else p->addToReinforcePool(num);
-
-    vector<Territory*> territoriesByContinent;
-
-    vector<string> Continents = map->getContinents();
-    for (int i = 0; i < Continents.size(); i++) { // Loop through all continents
-        bool flag = true;
-        territoriesByContinent = map->getContinentTerritories(Continents[i]);
-        for (Territory * t : territoriesByContinent){ // Loop through territories in each continent to check if they belong to player
-            if(!(t->getOwner()->getName() == p->getName())) {
-                flag = false; // Break and set flag false if player does not own territory
-                break;
+        vector<Territory*> territoriesByContinent;
+        int continent_track = 0;
+        for (string continent : map->getContinents()) { // Loop through all continents
+            bool flag = true;
+            territoriesByContinent = map->getContinentTerritories(continent);
+            for (Territory *t : territoriesByContinent) { // Loop through territories in each continent to check if they belong to player
+                if(!(t->getOwner()->getName() == p->getName())) {
+                    flag = false; // Break and set flag false if player does not own territory
+                    break;
+                }
             }
-        }
-        if (flag == false) { continue; }
-        else {
-            int bonus = map->getContinentBonuses()[i];
-            p->addToReinforcePool(bonus);
+            if (flag == false) { continue; }
+            else {
+                int bonus = map->getContinentBonuses().at(continent_track);
+                p->addToReinforcePool(bonus);
+            }
+            continent_track = continent_track+1;
         }
     }
     cout << "End of assign reinforcement" << endl;
@@ -601,8 +599,8 @@ void GameEngine::startupPhase() {
 
                     for (Territory *i : map->getTerritories()) {
                         Player *tempPlayer = player_list.at(playerIndex);
-                        map->getTerritories()[i].setOwner(tempPlayer);
-                        Territory *tempTerr = new Territory(map->getTerritories()[i]);
+                        i->setOwner(tempPlayer);
+                        Territory *tempTerr = new Territory(*i);
                         tempPlayer->assignTerritory(tempTerr);
 
                         playerIndex++;
@@ -658,15 +656,16 @@ void GameEngine::mainGameLoop() {
     bool playing = true;
     string input;
     while (playing == true) {
-        for (int i = 0; i < NumberOfPlayers; i++) {
-            assignReinforcementPhase(); // Begin reinforcement phase
-        }
-        issueOrdersPhase(); // Begin issue orders phase
-        executeOrdersPhase(); // Begin execute orders phase
+        assignReinforcementPhase(); // Begin reinforcement phase for all players
+        issueOrdersPhase(); // Begin issue orders phase for all players
+        executeOrdersPhase(); // Begin execute orders phase for all players
         checkPlayers(); // Check if any players need to be removed
-        playing = !checkForWinner(); // Check for winner
         resetAlliances(); // Reset Alliances
+
+        // Win phase is started in check for winner
+        playing = !checkForWinner(); // Check for winner
     }
+
 
     while (*s == 8) {
         cout << "Replay or quit? " << endl;

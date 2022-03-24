@@ -68,11 +68,3 @@ int gameEngineMain() {
     
     return 0;
 }
-//MAIN GAME LOOP
-//(1) a player receives the correct number of armies in the reinforcement phase (showing different cases); 
-//(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool; 
-//(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists; 
-//(4) a player can play cards to issue orders; 
-//(5) a player that does not control any territory is removed from the game; 
-//(6) the game ends when a single player controls all the territories. 
-//All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
