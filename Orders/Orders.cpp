@@ -7,14 +7,6 @@
 // Static GameEngine*
 GameEngine *Order::game = new GameEngine();
 
-// We don't need accessor and mutator for public variable -> Can delete this one
-//GameEngine *Order::getGameEngine() {
-//    return game;
-//}
-//
-//void Order::setGameEngine(GameEngine *gamePlaying) {
-//    Order::game = gamePlaying;
-//}
 /****************************** Order *******************************/
 
 // Default constructor
@@ -93,6 +85,20 @@ Deploy::Deploy(Player* p) : Order(false, "deploy"){
     numToDeploy = 1;
 }
 
+Deploy::Deploy(Player *p, Territory *target) : Order(false, "deploy") {
+    playerIssuing = p;
+    this->target = target;
+    // Condition checked: If there's no more armies to airlift
+    if (p->getReinforcePool() == 0) {
+        numToDeploy = 0;
+    } else {
+        numToDeploy = rand() % p->getReinforcePool() + 1; // generate a random number
+        while (numToDeploy > p->getReinforcePool()) { // make sure the condition armies <= armies in origin
+            numToDeploy = rand() % p->getReinforcePool() + 1;
+        }
+    }
+}
+// Copy Constructor
 Deploy::Deploy(const Deploy &original) : Order(original) {
     playerIssuing = original.playerIssuing;
     target = original.target;
@@ -137,14 +143,15 @@ void Deploy::setValidated(bool v) {
 }
 
 void Deploy::validate() {
-    // Check if Territory belongs to the Player
     cout << "... ";
-    cout << target->getOwnerName() << endl;
-    if (target->getOwnerName() == playerIssuing->getName()) {
-        cout << "Valid!" << endl;
+    if (numToDeploy == 0) {
+        cout << "Invalid! - No more armies left to deploy" << endl;
+        validated = false;
+    } else if (target->getOwnerName() == playerIssuing->getName()) {
+        cout << "Valid! - Territory owner: " << target->getOwnerName() << endl;
         validated = true;
     } else {
-        cout << "Invalid! - You don't own this territory " << endl;
+        cout << "Invalid! - You don't own this territory - Territory owner: " << target->getOwnerName() << endl;
         validated = false;
     }
 }
@@ -154,9 +161,9 @@ void Deploy::execute() {
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
-        cout << "execution successful!\n" << endl;
+        cout << "Execution successful!\n" << endl;
     } else {
-        cout << "execution fail!\n" << endl;
+        cout << "Execution fail!\n" << endl;
     }
 //    notify(this); // FROM SUBJECT
 }
@@ -268,7 +275,7 @@ void Advance::setValidated(bool v) {
 
 void Advance::validate() {
     validateResult = "";
-
+    cout << "... ";
     // Check if Territory belongs to the Player
     if (origin->getOwner()->getName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own this territory" << endl;
@@ -332,7 +339,6 @@ void Advance::execute() {
     } else
         cout << "Can't execute Advance order!" << endl;
 }
-
     //notify(this); // FROM SUBJECT LET ME KNOW HOW YOU ARE GOING TO STORE THE ACTION (ATTACK OR NOT) so I can output it in the log
 
 
@@ -384,14 +390,28 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
         target = p->toDefend(game->getMap()).at(i+1);
         i++;
     }
-
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         cout << "No more armies left to airlift!" << endl;
+        numToAirlift = 0;
     } else {
         numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
         while (numToAirlift > origin->getArmies()){ // make sure the condition armies <= armies in origin
             numToAirlift = rand() % origin->getArmies() + 1;
+        }
+    }
+}
+
+Airlift::Airlift(Player* p, Territory* origin, Territory* target) : Order (false, "airlift"){
+    playerIssuing = p;
+    this->origin = origin;
+    this->target = target;
+    // Condition checked: If there's no more armies to airlift
+    if (origin->getArmies() == 0){
+        numToAirlift = 0;
+    } else {
+        numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
+        while (numToAirlift > origin->getArmies()) { // make sure the condition armies <= armies in origin
         }
     }
 }
@@ -446,12 +466,19 @@ void Airlift::setValidated(bool v) {
 }
 
 void Airlift::validate() {
-    cout << "...";
-    if (target->getOwner() == playerIssuing && origin->getOwner() == playerIssuing){
+    cout << "... ";
+    // Check if there are armies to airlift
+    if (numToAirlift == 0) {
+        cout << "Invalid! - No more armies left to airlift" << endl;
+        validated = false;
+    }
+    // Check if the target territory belong to the player issuing
+    else if (target->getOwnerName() == playerIssuing->getName() && origin->getOwnerName() == playerIssuing->getName()){
         cout << "Valid!" << endl;
         validated = true;
-    } else {
-        cout << "Invalid! - You don't own both Territories" << endl;
+    }
+    else {
+        cout << "Invalid! - You don't own both territories" << endl;
         validated = false;
     }
 }
@@ -461,9 +488,9 @@ void Airlift::execute() {
     if(validated){
         origin->setArmies(origin->getArmies()-numToAirlift); // Subtract armies from origin
         target->setArmies(target->getArmies()+numToAirlift); // Add armies to target
-        cout << "execution successful!\n" << endl;
+        cout << "Execution successful!\n" << endl;
     } else{
-        cout << "execution failed!\n" << endl;
+        cout << "Execution failed!\n" << endl;
     }
     // notify(this); // FROM SUBJECT
 }
@@ -505,6 +532,12 @@ Bomb::Bomb(Player* p) : Order(false, "bomb"){
     origin = p->getOriginTerritory(target,game->getMap());
 }
 
+Bomb::Bomb(Player* p, Territory* origin, Territory* target) : Order(false, "bomb"){
+    playerIssuing = p;
+    this->origin = origin;
+    this->target = target;
+}
+
 // Copy constructor
 Bomb::Bomb(const Bomb &original) : Order(original) {
     playerIssuing = original.playerIssuing;
@@ -529,9 +562,9 @@ Bomb &Bomb::operator=(const Bomb &o) {
 }
 
 ostream &operator<<(ostream &os, const Bomb &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() /*<< " " << o.origin->getName() << " " << o.target->getName()*/ << ") ";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName() << " | "
+       << validated << " | origin: " << o.origin->getName() << " | target: " << o.target->getName() << ") ";
     return os;
 }
 
@@ -552,42 +585,57 @@ void Bomb::setValidated(bool v) {
 }
 
 void Bomb::validate() {
-    // Check that Territory A is not the Player's
-    if (origin->getOwner() == playerIssuing) {
-        cout << "invalid Bomb: the Territory belongs to the Player issuing the bomb order";
+    cout << "... ";
+    // Check if target territory belongs to playerIssuing
+    if (target->getOwnerName() == playerIssuing->getName()) {
+        cout << "Invalid! - You can't bomb your territories" << endl;
         validated = false;
     }
-        // Check for an existing Alliance
-    else if (game->existingAlliance(origin->getOwner(), target->getOwner())) {
+    // Check if origin territory does not belong to playerIssuing
+//    else if (origin->getOwnerName() != playerIssuing->getName()){
+//        cout << "Invalid! - You don't own this territory" << endl;
+//        validated = false;
+//    }
+    // Check for an existing Alliance
+    else if (game->existingAlliance(origin->getOwner(), target->getOwner())||target->getOwnerName() == "Neutral") {
+        cout << "Invalid! - You can't bomb territory in negotiation" << endl;
         validated = false;
     }
-        // Check that territories are adjacent
-    else if (game->getMap()->adjacentTerritories(origin, target)) {
+    // Check that territories are adjacent
+    else if (!(game->getMap()->adjacentTerritories(origin, target))) {
+        cout << "Invalid! - Territory is not adjacent" << endl;
         validated = false;
-    } else
+    }else {
+        cout << "Valid!" << endl;
         validated = true;
-
+    }
 }
 
 void Bomb::execute() {
+    cout << "... ";
     if (!validated) {
-        cout << "Invalid Bomb Order, Truce between players\n";
-        cout << "Invalid Bomb Order";
-
+        cout << "Execution failed! \n" << endl;
     } else {
         int bombedArmies = (target->getArmies()) / 2;
         target->setArmies(bombedArmies);
-        cout << this->stringToLog();
+        cout << "Execution successful! \n" << endl;
     }
     //notify(this); // FROM SUBJECT
 }
 
 string Bomb::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder =
-            "Bomb order" + validation + ": Bomb from " + origin->getName() + " to " + target->getName() + ".\n";
-    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+    string logStringOrder = "";
+    string logStringEffect = "";
+    string validation = (validated) ? "executed" : "validation failed";
+
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
+    if (validated){
+        logStringOrder = "Bomb " + validation + ": Send bomb from " + origin->getName() + " to " + target->getName() + "\n";
+        logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+    } else {
+        logStringOrder = "Bomb " + validation + ": Send no bomb from " + origin->getName() + " to " + target->getName() + "\n";
+        logStringEffect = target->getName() + " still has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+    }
     return logStringPlayer + logStringOrder + logStringEffect;
 }
 
@@ -610,6 +658,11 @@ Blockade::Blockade(Player* p) : Order(false, "blockade"){
         target = p->toDefend(game->getMap()).at(i+1);
         i++;
     }
+}
+
+Blockade::Blockade(Player* p, Territory* target) : Order (false,"blockade"){
+    playerIssuing = p;
+    this->target = target;
 }
 
 // Copy constructor
@@ -655,7 +708,7 @@ void Blockade::setValidated(bool v) {
 
 void Blockade::validate() {
     cout << "... ";
-    if (target->getOwner()->getName() == playerIssuing->getName()) {
+    if (target->getOwnerName() == playerIssuing->getName()) {
         validated = true;
         cout << "Valid!" << endl;
     } else {
@@ -668,15 +721,14 @@ void Blockade::validate() {
 void Blockade::execute() {
     cout << "... ";
     if (!validated) {
-        cout << "execution failed!\n" << endl;
+        cout << "Execution failed!\n" << endl;
     } else {
         int doubleArmies = (target->getArmies()) * 2;
         target->setArmies(doubleArmies);
         target->setOwner(game->getNeutralPlayer());
-        cout << "execution successful!\n" << endl;
+        cout << "Execution successful!\n" << endl;
     }
     //notify(this); // FROM SUBJECT
-    // For now it's hard to see the double effect of Blockade. Since most of the territories in toDefend has 0 armies -> this is only visible in game loop
 }
 
 string Blockade::stringToLog() {
@@ -706,7 +758,7 @@ Negotiate::Negotiate() : Order(false, "negotiate"){
 }
 
 // Parameterize Constructor
-Negotiate::Negotiate(Player* p) : Order(false, "negotiate"){
+Negotiate::Negotiate(Player* p) : Order(false, "negotiate") {
     playerIssuing = p;
     cout << "\nPlayer to negotiate with: ";
     string playerTargetName = "";
@@ -714,7 +766,7 @@ Negotiate::Negotiate(Player* p) : Order(false, "negotiate"){
     unsigned i = 0;
     // TODO: Check if the player does not exist -> re-enter player's name
     // target player = player of the name playerTargetName
-    for (int i = 0; i < game->getplayer_list().size(); i++){
+    for (int i = 0; i < game->getplayer_list().size(); i++) {
         if (game->getplayer_list().at(i)->getName() == playerTargetName) {
             targetPlayer = game->getplayer_list().at(i);
         }
@@ -726,6 +778,11 @@ Negotiate::Negotiate(const Negotiate &original) : Order(original) {
     playerIssuing = new Player(*original.playerIssuing);
     targetPlayer = new Player(*original.targetPlayer);
     cout << "Copy constructor for Negotiate class has been called" << endl;
+}
+
+Negotiate::Negotiate(Player* p, Player* target) : Order(false, "negotiate") {
+    playerIssuing = p;
+    targetPlayer = target;
 }
 
 // Destructor
@@ -777,10 +834,10 @@ void Negotiate::validate() {
 void Negotiate::execute() {
     cout << "... ";
     if (!validated) {
-        cout << "execution failed!\n" << endl;
+        cout << "Execution failed!\n" << endl;
     } else {
         game->addAlliances(playerIssuing, targetPlayer);
-        cout << "execution successful!\n" << endl;
+        cout << "Execution successful!\n" << endl;
     }
     //notify(this); // FROM SUBJECT
 }
