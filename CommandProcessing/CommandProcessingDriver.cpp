@@ -15,7 +15,7 @@ int commandProcessingMain() {
     return 0;
 }
 
-int main() {
+int CommandProcessingmain() {
     commandProcessingMain();
 
     return 0;

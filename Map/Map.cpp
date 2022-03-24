@@ -42,7 +42,7 @@ Territory::Territory() {
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
     owner = o;
 
-    cout << "[" << n << " Territory param constructor]" << endl;
+    //cout << "[" << n << " Territory param constructor]" << endl;
 }
 
 // Territory copy constructor
@@ -316,7 +316,7 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
     vector<Territory*> connected = vector<Territory*>();
 
     for (Edge *i : edges) {
-        Territory *other;
+        Territory *other = new Territory;
         other->setName("null");
 
         if (i->a->getName() == n) {

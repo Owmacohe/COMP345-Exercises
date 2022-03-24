@@ -114,24 +114,30 @@ vector<Territory*> Player::toAttack(Map* m) {
         string name = territory->getName();
 
         // step 1 get connected territories
-        cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
+        // cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
         vector<Territory*> surround_territory = m->getConnectedTerritories(name); // Getting surrounding territories of the player's territory
 
         if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories --> ERROR OR VERY RARE, TEMPORARY CONDITION
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
-        cout<< "First Territory in the the surrounded Territories" << *(surround_territory.at(0))<<endl;
+//        cout<< "First Territory in the the surrounded Territories" << *(surround_territory.at(0))<<endl;
 
         // step 2 for each connected territory that's an enemy's count the number armies
-        cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
+        //cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
         for (Territory* t : surround_territory) {
             if (t->getOwner()->getName() != name || t->getOwner()->getName() != "Neutral") { // Neutral player is not enemy or player
                 number_armies = t->getArmies();
                 // step 3 pair enemy territory and their number of armies, add pair to vector
-                cout<<"Putting in pair : " << t->getName() <<endl;
                 pairs.first = number_armies;
                 pairs.second = t;
-                ordering.push_back(pairs);
+                // TODO : Below checks for duplicate in ordering but not working
+                bool duplicateCheck = false;
+                for (auto pairDuplicateCheck : ordering){
+                    if(pairDuplicateCheck.second->getName() == pairs.second->getName()){
+                        duplicateCheck = true;}
+                }
+                if (!duplicateCheck) {ordering.push_back(pairs);
+                cout<<"Putting in pair : " << number_armies << " , "<< t->getName() <<endl;}
             }
         }
         for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
