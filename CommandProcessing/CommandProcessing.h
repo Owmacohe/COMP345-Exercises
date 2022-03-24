@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include <fstream>
 using namespace std;
 
@@ -21,19 +22,17 @@ class Command : public Iloggable, public Subject {
 
         // Accessors
         string getCommand(), getTransitionsTo(), getEffect();
-        int *getValidIn();
+        vector<int> getValidIn();
 
         // Mutators
-        void setCommand(string), setValidIn(int*, int), setTransitionsTo(string), saveEffect(string);
+        void setCommand(string), setValidIn(vector<int>), setTransitionsTo(string), saveEffect(string);
 
         void addValidInState(int); // Method to add a new state in which the Command is valid
-
-        int validInLength; // Array length
 
         string stringToLog(); // From Iloggable
     private:
         string command, transitionsTo, effect; // Command name, next state, and effect of the command
-        int *validIn; // Which states it valid in
+        vector<int> validIn; // Which states it valid in
 };
 
 // Class to get and store Commands from the console for use in drivers and phases
@@ -47,29 +46,27 @@ class CommandProcessor : public Iloggable, public Subject {
 
         // Accessors
         GameEngine *getEngine();
-        Command *getCommands();
+        vector<Command*> getCommands();
 
         // Mutators
-        void setCommands(Command*, int), setEngine(GameEngine*);
+        void setEngine(GameEngine*), setCommands(vector<Command*>);
 
-        Command readCommand(); // Gets command from console
-        void saveCommand(const Command &c); // Stores the gotten Command in the array
+        Command *readCommand(); // Gets command from console
+        void saveCommand(Command*); // Stores the gotten Command in the array
         virtual void getCommand(); // Reads and then saves a command from the console
 
-        bool validate(const Command &c); // Checks if the current Command is in the valid state
-
-        int commandsLength; // Array length
+        bool validate(Command*); // Checks if the current Command is in the valid state
 
         string stringToLog(); // From Iloggable
     protected:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
-        Command *commands; // Array of current and past Commands
+        vector<Command*> commands; // Array of current and past Commands
 };
 
 // Class used by FileCommandProcessorAdapter to read sequential lines from a file
 class FileLineReader {
     public:
-        Command readLineFromFile(string, int); // Reads the given line from the given file and creates a Command out of it
+        Command *readLineFromFile(string, int); // Reads the given line from the given file and creates a Command out of it
 };
 
 // Modified CommandProcessor that instead gets Commands from a file

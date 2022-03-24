@@ -36,10 +36,11 @@ int Ordersmain() {
 
     // Assign Territories to Players
     int playerIndex = 0;
-    for (int i = 0; i < mainmap->territoriesLength; i++) {
-
-        mainmap->getTerritories()[i].setOwner(player_list.at(playerIndex));
-        player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
+    cout << mainmap->getTerritories().size()<<endl;
+    for (Territory *i : mainmap->getTerritories()) {
+        Player *tempPlayer = player_list.at(playerIndex);
+        i->setOwner(tempPlayer);
+        tempPlayer->getTerritory().push_back(i);
 
         playerIndex++;
 

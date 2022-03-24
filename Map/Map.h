@@ -31,18 +31,19 @@ class Territory {
     private:
         string name; // Name of the Territory
         string continent; // Name of the Territory's continent
-        Player* owner; // Name of the owner of the Territory
+        Player *owner; // Name of the owner of the Territory
         int armies; // Number of armies that the Territory has
 };
 
 // Small struct representing an edge between nodes on the graph
-struct Edge {
-    Territory a, b; // Connected territories
-    bool visited; // Whether the edge has been visited (when validating)
+class Edge {
+    public:
+        Territory *a, *b; // Connected territories
+        bool visited; // Whether the edge has been visited (when validating)
 };
 
-bool doesContain(string*, int, string); // Free method to determine whether a string pointer array contains a given string
-bool doesContain(Edge*, int, Territory, Territory); // Free method to determine whether an Edge pointer array contains an Edge between the given Territories
+bool doesContain(vector<string>, int, string); // Free method to determine whether a string pointer array contains a given string
+bool doesContain(vector<Edge*>, int, Territory, Territory); // Free method to determine whether an Edge pointer array contains an Edge between the given Territories
 
 // Class representing the graph data structure
 class Map {
@@ -56,34 +57,31 @@ class Map {
 
         // Accessors
         string getName();
-        string *getContinents();
-        int *getContinentBonuses();
-        Territory *getTerritories();
-        Edge *getEdges();
-
-        // Array lengths
-        int continentsLength, territoriesLength, edgesLength;
+        vector<string> getContinents();
+        vector<int> getContinentBonuses();
+        vector<Territory*> getTerritories();
+        vector<Edge*> getEdges();
 
         // Mutators
-        void setName(string), setContinents(string*, int), setContinentBonuses(int*), setTerritories(Territory*, int), setEdges(Edge*, int);
+        void setName(string), setContinents(vector<string>), setContinentBonuses(vector<int>), setTerritories(vector<Territory*>), setEdges(vector<Edge*>);
 
         void addContinent(string); // Method to add a new continent
         void addContinentBonus(int); // Method to add a new continent bonus
-        void addTerritory(const Territory &t); // Method to add a new Territory
-        void addEdge(const Edge &e); // Method to add a new Edge between Territories
+        void addTerritory(Territory*); // Method to add a new Territory
+        void addEdge(Edge*); // Method to add a new Edge between Territories
 
         bool isGoodMap = true; // Whether the Map that has been attempted to be loaded is from a proper file
         bool validate(); // Method to make sure the created Map is valid
 
         vector<Territory*> getConnectedTerritories(string); // Method to get all Territories that are connected to a given Territory
         vector<Territory*> getContinentTerritories(string); // Method to get all Territories that are a part of a given Ccntinent
-        bool adjacentTerritories(Territory* t1, Territory* t2); // Method to check if two territories are adjacent
+        bool adjacentTerritories(Territory*, Territory*); // Method to check if two territories are adjacent
     private:
         string name; // Name of the Map
-        string *continents; // Array of strings of all the continent names
-        int *continentBonuses; // Array of strings of all the continent names
-        Territory *territories; // Array of Territories
-        Edge *edges; // Array of edges between the Territories
+        vector<string> continents; // Array of strings of all the continent names
+        vector<int> continentBonuses; // Array of strings of all the continent names
+        vector<Territory*> territories; // Array of Territories
+        vector<Edge*> edges; // Array of edges between the Territories
 };
 
 // Class to load in new graphs

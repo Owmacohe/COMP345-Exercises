@@ -103,7 +103,7 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
-    
+
     return *this;
     // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
 //    MapLoader *ml;
@@ -199,7 +199,7 @@ void GameEngine::loadMap() {
         cout << "incorrect, please re-enter map name" << endl;
         cin >> mapName;
     }
-    
+
     Map m = ml->load(mapName + ".map");
 
     cout << "Loaded map" << endl;
@@ -245,8 +245,8 @@ void GameEngine::assignReinforcementPhase() {
 
     vector<Territory*> territoriesByContinent;
 
-    string* Continents = map->getContinents();
-    for (int i = 0; i < Continents->size(); i++) { // Loop through all continents
+    vector<string> Continents = map->getContinents();
+    for (int i = 0; i < Continents.size(); i++) { // Loop through all continents
         bool flag = true;
         territoriesByContinent = map->getContinentTerritories(Continents[i]);
         for (Territory * t : territoriesByContinent){ // Loop through territories in each continent to check if they belong to player
@@ -481,7 +481,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
     else {
         cout << "Invalid command!" << endl;
     }
-    
+
     notify(this); // FROM SUBJECT
 }
 
@@ -510,7 +510,7 @@ void GameEngine::startupPhase() {
 
         processor->getCommand();
 
-        Command temp = processor->getCommands()[processor->commandsLength - 1];
+        Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
         string effect = "";
 
@@ -519,7 +519,7 @@ void GameEngine::startupPhase() {
             string word2 = "";
             bool hasReachedSpace = false;
 
-            for (char i : temp.getCommand()) {
+            for (char i : temp->getCommand()) {
                 if (!hasReachedSpace) {
                     if (i == ' ') {
                         hasReachedSpace = true;
@@ -599,7 +599,7 @@ void GameEngine::startupPhase() {
                 else {
                     int playerIndex = 0;
 
-                    for (int i = 0; i < map->territoriesLength; i++) {
+                    for (Territory *i : map->getTerritories()) {
                         Player *tempPlayer = player_list.at(playerIndex);
                         map->getTerritories()[i].setOwner(tempPlayer);
                         Territory *tempTerr = new Territory(map->getTerritories()[i]);
@@ -644,7 +644,7 @@ void GameEngine::startupPhase() {
             }
         }
 
-        temp.saveEffect(effect);
+        temp->saveEffect(effect);
     }
 
     // ALSO ADD GameEngine Pointer to attribute to Order Class
@@ -673,9 +673,9 @@ void GameEngine::mainGameLoop() {
 
         processor->getCommand();
 
-        Command temp = processor->getCommands()[processor->commandsLength - 1];
+        Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
-        string command = temp.getCommand();
+        string command = temp->getCommand();
         string effect = "";
 
         if (command == "replay") {
@@ -692,13 +692,13 @@ void GameEngine::mainGameLoop() {
             cout << effect << "!" << endl;
         }
 
-        temp.saveEffect(effect);
+        temp->saveEffect(effect);
     }
 
     /*
     cout << "Would you like to play again ? y/n " << endl;
     cin >> input;
-    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) { 
+    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
         playAgain();
         *s = start; // Switch to start up for replay
     }
@@ -709,13 +709,13 @@ void GameEngine::mainGameLoop() {
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     int lost = 0;
-    for (Player* p : player_list) { 
+    for (Player* p : player_list) {
         string player = p->getName();
-        for (int i = 0; i < map->territoriesLength; i++) {
-            string owner = map->getTerritories()[i].getOwner()->getName();
-            if (owner != player ) {
+        for (Territory *i : map->getTerritories()) {
+            string owner = i->getOwner()->getName();
+            if (owner != player) {
                 lost = lost + 1;
-                break; 
+                break;
             }
         }
         if (lost == 0) {
@@ -728,13 +728,13 @@ bool GameEngine::checkForWinner() {
 
 // Check that players are still valid, remove players that are not
 // Validity : must own at least on territory
-void GameEngine::checkPlayers() {   
+void GameEngine::checkPlayers() {
     for (Player* p : player_list) {
         if (p->getNumberOfTerritories() == 0) {
             cout << "Player " << p->getName() << " has been eliminated";
             NumberOfPlayers = NumberOfPlayers - 1; //lowers player count
             player_list.erase(std::remove(player_list.begin(), player_list.end(), p), player_list.end()); //removes player from player_list
-        } 
+        }
     }
 }
 
@@ -763,4 +763,3 @@ string GameEngine::stringToLog() {
     string logString = "Game Engine now at the " + enumStates[*s] + "state. \n";
     return logString;
 }
-

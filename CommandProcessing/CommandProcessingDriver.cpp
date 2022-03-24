@@ -14,3 +14,9 @@ int commandProcessingMain() {
 
     return 0;
 }
+
+int main() {
+    commandProcessingMain();
+
+    return 0;
+}

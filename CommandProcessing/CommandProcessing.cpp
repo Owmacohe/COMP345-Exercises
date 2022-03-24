@@ -8,8 +8,7 @@
 // Default constructor
 Command::Command() {
     command = "";
-    validInLength = 0;
-    validIn = new int[validInLength];
+    validIn = vector<int>();
     transitionsTo = "";
     effect = "";
 
@@ -19,8 +18,7 @@ Command::Command() {
 // Parameterized constructor 1 (unparemeterized Commands)
 Command::Command(string c) {
     command = c;
-    validInLength = 0;
-    validIn = new int[validInLength];
+    validIn = vector<int>();
     effect = "";
 
     if (c == "validatemap") {
@@ -48,9 +46,8 @@ Command::Command(string c) {
 
 // Parameterized constructor 2 (paremeterized Commands)
 Command::Command(string c, string p) {
-    command = c + " <" + p + ">";
-    validInLength = 0;
-    validIn = new int[validInLength];
+    command = c;
+    validIn = vector<int>();
     effect = "";
 
     if (c == "loadmap") {
@@ -72,10 +69,6 @@ Command::Command(string c, string p) {
 
 // Destructor
 Command::~Command() {
-    validInLength = 0;
-    delete[] validIn;
-    validIn = NULL;
-
     cout << "[" + command + " Command destructor]" << endl;
 }
 
@@ -83,8 +76,8 @@ Command::~Command() {
 ostream& operator<<(ostream &strm, const Command &c) {
     string temp = "";
 
-    for (int i = 0; i < c.validInLength; i++) {
-        temp += to_string(c.validIn[i]) + " | ";
+    for (int i : c.validIn) {
+        temp += to_string(i) + " | ";
     }
 
     return strm <<
@@ -105,21 +98,18 @@ Command& Command::operator = (const Command& toAssign) {
 
 // Accessors
 string Command::getCommand() { return command; }
-int *Command::getValidIn() { return validIn; }
+vector<int> Command::getValidIn() { return validIn; }
 string Command::getTransitionsTo() { return transitionsTo; }
 string Command::getEffect() { return effect; }
 
 // Mutators
 void Command::setCommand(string c) { command = c; }
-void Command::setValidIn(int *v, int l) {
-    delete[] validIn;
-    validIn = new int[l];
+void Command::setValidIn(vector<int> v) {
+    validIn = vector<int>();
 
-    for (int i = 0; i < l; i++) {
-        validIn[i] = v[i];
+    for (int i : v) {
+        validIn.push_back(i);
     }
-
-    validInLength = l;
 }
 void Command::setTransitionsTo(string t) { transitionsTo = t; }
 void Command::saveEffect(string e) {
@@ -129,22 +119,7 @@ void Command::saveEffect(string e) {
 }
 
 // Method to add a new state in which the Command is valid
-void Command::addValidInState(int s) {
-    int *temp = new int[validInLength + 1]; // Creating a new array (1 size larger)
-
-    // Copying the old elements into the new array
-    for (int i = 0; i < validInLength; i++) {
-        temp[i] = validIn[i];
-    }
-
-    // Freeing the old memory and setting the new address
-    delete[] validIn;
-    validIn = temp;
-
-    // Setting the new element and incrementing the size variable
-    validIn[validInLength] = s;
-    validInLength++;
-}
+void Command::addValidInState(int s) { validIn.push_back(s); }
 
 string Command::stringToLog() {
     string logString = "Command entered: " + command + " leading to " + transitionsTo + " and creating the effect of " + effect +"\n";
@@ -156,8 +131,8 @@ CommandProcessor::CommandProcessor() {
     // TODO: command line option is set to either read commands from the console or from a given file
         // if from file, set this to FileCommandProcessorAdapter
 
-    commandsLength = 0;
-    commands = new Command[commandsLength];
+    engine = NULL;
+    commands = vector<Command*>();
 
     cout << "[CommandProcessor default constructor]" << endl;
 }
@@ -168,18 +143,17 @@ CommandProcessor::CommandProcessor(GameEngine *e) {
         // if from file, set this to FileCommandProcessorAdapter
 
     engine = e;
-
-    commandsLength = 0;
-    commands = new Command[commandsLength];
+    commands = vector<Command*>();
 
     cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
 // Destructor
 CommandProcessor::~CommandProcessor() {
-    delete[] commands; // TODO: for some reason, this causes errors (I think it had to do with adding Commands)
-    commands = NULL;
-    commandsLength = 0;
+    for (Command *i : commands) {
+        delete i;
+        i = NULL;
+    }
 
     cout << "[CommandProcessor destructor]" << endl;
 }
@@ -188,8 +162,8 @@ CommandProcessor::~CommandProcessor() {
 ostream& operator<<(ostream &strm, const CommandProcessor &cp) {
     string temp = "";
 
-    for (int i = 0; i < cp.commandsLength; i++) {
-        temp += cp.commands[i].getCommand() + " | ";
+    for (Command *i : cp.commands) {
+        temp += i->getCommand() + " | ";
     }
 
     return strm <<
@@ -206,78 +180,63 @@ CommandProcessor& CommandProcessor::operator = (const CommandProcessor& toAssign
 }
 
 // Accessors
-Command *CommandProcessor::getCommands() { return commands; }
+vector<Command*> CommandProcessor::getCommands() { return commands; }
 GameEngine *CommandProcessor::getEngine() { return engine; }
 
 // Mutators
-void CommandProcessor::setCommands(Command *c, int l) {
-    delete[] commands;
-    commands = new Command[l];
-
-    for (int i = 0; i < l; i++) {
-        commands[i] = c[i];
-    }
-
-    commandsLength = l;
-}
 void CommandProcessor::setEngine(GameEngine *e) {
     delete engine;
     engine = e;
 }
+void CommandProcessor::setCommands(vector<Command*> c) {
+    for (Command *i : commands) {
+        delete i;
+        i = NULL;
+    }
+
+    c = vector<Command*>();
+
+    for (Command *j : c) {
+        commands.push_back(j);
+    }
+}
 
 // Gets command from console
-Command CommandProcessor::readCommand() {
+Command *CommandProcessor::readCommand() {
     string word1, word2;
     cin >> word1 >> word2;
 
     if (word1 != "" && word2 == "") {
-        return Command(word1);
+        return new Command(word1);
     }
     else if ( word1 != "" && word2 != "") {
-        return Command(word1, word2);
+        return new Command(word1, word2);
     }
     else {
         cout << "Invalid command!" << endl;
-        Command c;
-        return c;
+        return NULL;
     }
 }
 
 // Stores the gotten Command in the array
-void CommandProcessor::saveCommand(const Command &c) {
-    Command *temp = new Command[commandsLength + 1]; // Creating a new array (1 size larger)
-
-    // Copying the old elements into the new array
-    for (int i = 0; i < commandsLength; i++) {
-        temp[i] = commands[i];
-    }
-
-    // Freeing the old memory and setting the new address
-    delete[] commands;
-    commands = temp;
-
-    // Setting the new element and incrementing the size variable
-    commands[commandsLength] = c;
-    commandsLength++;
+void CommandProcessor::saveCommand(Command *c) {
+    commands.push_back(c);
 
     notify(this); // FROM SUBJECT
 }
 
 // Reads and then saves a command from the console
 void CommandProcessor::getCommand() {
-    Command temp = readCommand();
+    Command *temp = readCommand();
     saveCommand(temp);
 }
 
 // Checks if the current Command is in the valid state
-bool CommandProcessor::validate(const Command &c) {
-    Command temp = Command(c);
+bool CommandProcessor::validate(Command *c) {
     bool isValid = false;
 
-    cout << engine->getState() << endl;
-
-    for (int i = 0; i < temp.validInLength; i++) {
-        if (temp.getValidIn()[i] == engine->getState()) {
+    for (int i : c->getValidIn()) {
+        if (i == engine->getState()) {
             isValid = true;
             break;
         }
@@ -287,17 +246,17 @@ bool CommandProcessor::validate(const Command &c) {
         return true;
     }
     else {
-        cout << "Command " + temp.getCommand() + " is invalid in the current state!" << endl;
+        cout << "Command " + c->getCommand() + " is invalid in the current state!" << endl;
         return false;
     }
 }
 
 string CommandProcessor::stringToLog() {
-    string logString = " Saved the following command to the CommandProcessor: " + commands[commandsLength-1].getEffect() +"\n";
+    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getEffect() +"\n";
     return logString;
 }
 
-Command FileLineReader::readLineFromFile(string f, int l) {
+Command *FileLineReader::readLineFromFile(string f, int l) {
     ifstream input(f);
     string line;
 
@@ -334,10 +293,10 @@ Command FileLineReader::readLineFromFile(string f, int l) {
     }
 
     if (word2.length() > 0) {
-        return Command(word1, word2);
+        return new Command(word1, word2);
     }
     else {
-        return Command(word1);
+        return new Command(word1);
     }
 }
 
@@ -365,8 +324,8 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
 ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa) {
     string temp = "";
 
-    for (int i = 0; i < fcpa.commandsLength; i++) {
-        temp += fcpa.commands[i].getCommand() + " | ";
+    for (Command *i : fcpa.commands) {
+        temp += i->getCommand() + " | ";
     }
 
     return strm <<
@@ -388,7 +347,7 @@ FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator = (const File
 
 // Reads and then saves a command from a file
 void FileCommandProcessorAdapter::getCommand() {
-    Command temp = flr->readLineFromFile(currentFile, currentLine);
+    Command *temp = flr->readLineFromFile(currentFile, currentLine);
     currentLine++;
     saveCommand(temp);
 }
