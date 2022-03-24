@@ -65,10 +65,6 @@ int GameLoopmain() {
             t->setOwner(player1);
         }
     }
-    vector<Territory*> t = player3->toAttack(mainmap);
-    for (Territory* territory : t) {
-        cout<<territory->getName()<<" owned by "<<territory->getOwner()->getName()<<endl;
-    }
 
     //TODO:: not functioning
     // Determine randomly the order of play of the players in the game
