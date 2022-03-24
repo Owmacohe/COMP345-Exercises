@@ -329,7 +329,7 @@ vector<Territory*> Map::getConnectedTerritories(string n) {
             connected.push_back(other);
         }
     }
-
+    
     return connected;
 }
 
