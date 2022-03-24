@@ -70,6 +70,19 @@ int main() {
     Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
     Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
     Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
+
+    cout<<"check toDefend"<<endl;
+    vector<Territory*> t = player1->toDefend(mainmap);
+    for (Territory* territory : t) {
+        cout<<territory->getName()<<" owned by "<<territory->getOwner()->getName()<<endl;
+    }
+    cout<<"------"<<endl;
+
+    cout<<"check toAttack"<<endl;
+    vector<Territory*> twr = player1->toAttack(mainmap);
+    for (Territory* territory : twr) {
+        cout<<territory->getName()<<" owned by "<<territory->getOwner()->getName()<<endl;
+    }
 /*
     cout << "\n-------------------- DEPLOY --------------------" << endl;
     Deploy* deploy1 = new Deploy(player1, Ontario_South);

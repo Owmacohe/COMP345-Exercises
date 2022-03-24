@@ -154,6 +154,7 @@ Player* GameEngine::getNeutralPlayer() {return neutralPlayer;}
 // Mutators
 void GameEngine::setState(State s) { this->s = &s; }
 void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
+void GameEngine::setNumberOfTerritories(int x) { this->NumberOfTerritories = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
 void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
@@ -235,8 +236,9 @@ void GameEngine::assignReinforcementPhase() {
     cout << "Assign reinforcement phase" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder[i]);
-
+        //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
         int num = floor((p->getNumberOfTerritories())/3);
+
         if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
         else p->addToReinforcePool(num);
 
@@ -544,6 +546,7 @@ void GameEngine::startupPhase() {
                     effect = "Loaded Map: " + map->getName();
                     cout << effect << "!" << endl;
                     *s = mapLoaded;
+                    NumberOfTerritories = m.getTerritories().size();
                 }
                 else {
                     effect = "Unable to load Map";
@@ -575,6 +578,7 @@ void GameEngine::startupPhase() {
                         Player *p;
                         p->setName(word2);
                         player_list.push_back(p);
+                        NumberOfPlayers = NumberOfPlayers + 1;
 
                         effect = "Added Player: " + p->getName();
                         cout << effect << "!" << endl;
