@@ -88,11 +88,9 @@ Deploy::Deploy() : Order(false, "deploy"){
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     target = p->toDefend(this->game->getMap()).at(0);
-    cout << target->getName() << endl;
+//    target = p->getTerritoryList().at(0);
+//    cout << "target in constructor " << *target << endl;
     numToDeploy = 1;
-    while (numToDeploy > playerIssuing->getReinforcePool()) {
-        numToDeploy = rand() % p->getReinforcePool() + 1;
-    }
 }
 
 Deploy::Deploy(const Deploy &original) : Order(original) {
@@ -117,9 +115,9 @@ Deploy &Deploy::operator=(const Deploy &o) {
 }
 
 ostream &operator<<(ostream &os, const Deploy &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() << " " << o.target->getName() << " " << o.numToDeploy << ") ";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName()  << " | "
+       << validated << " | target: " << o.target->getName() << " | " << o.numToDeploy << ") ";
     return os;
 }
 
@@ -140,7 +138,8 @@ void Deploy::setValidated(bool v) {
 
 void Deploy::validate() {
     // Check if Territory belongs to the Player
-    if (target->getOwner() == playerIssuing) {
+    cout << "... ";
+    if (target->getOwnerName() == playerIssuing->getName()) {
         cout << "Valid!" << endl;
         validated = true;
     } else {
@@ -150,21 +149,32 @@ void Deploy::validate() {
 }
 
 void Deploy::execute() {
+    cout << "... ";
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
+        cout << "execution successful!\n" << endl;
     } else {
-        cout << "Can't execute Deploy order!" << endl;
+        cout << "execution fail!\n" << endl;
     }
 //    notify(this); // FROM SUBJECT
 }
 
 string Deploy::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder = "Deploy order " + validation + " : Deployment " + to_string(numToDeploy) + " armies to " + target->getName() + "\n";
-    string logStringEffect =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
-    return logStringPlayer + logStringOrder + logStringEffect;
+    string logStringOrder = "";
+    string logStringEffect = "";
+    string validation = (validated) ? "executed" : "validation failed";
+
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
+    string logStringReinforcePool = to_string(playerIssuing->getReinforcePool()) +" armies remains in reinforcement pool \n";
+    if(validated){
+        logStringOrder = "Deploy " + validation + " : Deploy " + to_string(numToDeploy) + " armies to " + target->getName() + "\n";
+        logStringEffect = to_string(target->getArmies()) + " armies now occupy " + target->getName() + "\n";
+    } else {
+        logStringOrder = "Deploy " + validation + " : Deploy " + "0 armies to " + target->getName() + "\n";
+        logStringEffect = to_string(target->getArmies()) + " armies now occupy " + target->getName() + "\n";
+    }
+    return logStringPlayer + logStringOrder + logStringReinforcePool + logStringEffect;
 }
 
 /****************************** Advance *******************************/
@@ -232,9 +242,9 @@ Advance &Advance::operator=(const Advance &o) {
 }
 
 ostream &operator<<(ostream &os, const Advance &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() << " " /*<< o.origin->getName() << " " << o.target->getName() << " "*/ << o.numToAdvance << ")";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName() << " | "
+       << validated << " | " << o.origin->getName() << " | " << o.target->getName() << " | " << o.numToAdvance << ")";
     return os;
 }
 
@@ -354,22 +364,34 @@ Airlift::Airlift() : Order(false, "airlift"){
 // Parameterize Constructor
 Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
-    Territory* territory_most_armies;
+    Territory* territory_most_armies; // Choose 1 territory belongs to the player that has the most armies
     int max_armies = 0 ;
-    for (Territory* t : p->getTerritory()) {
+    for (Territory* t : p->getTerritoryList()) {
         if (t->getArmies() > max_armies) {
             territory_most_armies = t;
             max_armies = t->getArmies();
         }
     }
-    origin = territory_most_armies;
-    target = p->toDefend(game->getMap()).at(0);
-    if (origin->getName() == target->getName()) {
-        target = p->toDefend(game->getMap()).at(1);
+    origin = territory_most_armies; // Origin = territory with the most armies
+    target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most
+
+    // Condition checked: If target territory == origin territory, take next in toDefend()
+    vector<Territory*> toDefendList = p->toDefend(game->getMap());
+    unsigned i = 0;
+    target = p->toDefend(game->getMap()).at(i);
+    while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral"){
+        target = p->toDefend(game->getMap()).at(i+1);
+        i++;
     }
-    numToAirlift = rand() % origin->getArmies() + 1;
-    while (numToAirlift > origin->getArmies()){
-        numToAirlift = rand() % origin->getArmies() + 1;
+
+    // Condition checked: If there's no more armies to airlift
+    if (origin->getArmies() == 0){
+        cout << "No more armies left to airlift!" << endl;
+    } else {
+        numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
+        while (numToAirlift > origin->getArmies()){ // make sure the condition armies <= armies in origin
+            numToAirlift = rand() % origin->getArmies() + 1;
+        }
     }
 }
 
@@ -399,9 +421,9 @@ Airlift &Airlift::operator=(const Airlift &o) {
 }
 
 ostream &operator<<(ostream &os, const Airlift &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() << " " /*<< o.origin->getName() << " " << o.target->getName() << " "*/ << o.numToAirlift << ") ";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName()  << " | "
+       << validated << " | origin: " << o.origin->getName() << " | target: " << o.target->getName() << " | " << o.numToAirlift << ") ";
     return os;
 }
 
@@ -423,6 +445,7 @@ void Airlift::setValidated(bool v) {
 }
 
 void Airlift::validate() {
+    cout << "...";
     if (target->getOwner() == playerIssuing && origin->getOwner() == playerIssuing){
         cout << "Valid!" << endl;
         validated = true;
@@ -433,27 +456,38 @@ void Airlift::validate() {
 }
 
 void Airlift::execute() {
+    cout << "... ";
     if(validated){
-        origin->setArmies(origin->getArmies()-numToAirlift);
-        target->setArmies(target->getArmies()+numToAirlift);
+        origin->setArmies(origin->getArmies()-numToAirlift); // Subtract armies from origin
+        target->setArmies(target->getArmies()+numToAirlift); // Add armies to target
+        cout << "execution successful!\n" << endl;
     } else{
-        cout << "Can't execute Airlift order!" << endl;
+        cout << "execution failed!\n" << endl;
     }
     // notify(this); // FROM SUBJECT
 }
 
-string Airlift::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder =
-            "Airlift order " + validation + ": Airlifting " + to_string(numToAirlift) + " armies from " +
-            origin->getName() + " to " + target->getName() + ".\n";
 
-    string logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + ". \n";
-    string logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
+string Airlift::stringToLog() {
+    string logStringOrder = "";
+    string logStringEffect1 = "";
+    string logStringEffect2 = "";
+    string validation = (validated) ? "executed" : "validation failed";
+
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
+    if(validated){
+        logStringOrder = "Airlift " + validation + " : Airlift " + to_string(numToAirlift) + " armies from " + origin->getName()
+                         + " to " + target->getName() + " \n";
+        logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + " \n";
+        logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + " \n";
+    } else {
+        logStringOrder = "Airlift " + validation + " : Airlift 0 armies from " + origin->getName()
+                         + " to " + target->getName() + " \n";
+        logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + " \n";
+        logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + " \n";
+    }
     return logStringPlayer + logStringOrder + logStringEffect1 + logStringEffect2;
 }
-
 /****************************** Bomb *******************************/
 
 // Default constructor
@@ -567,7 +601,14 @@ Blockade::Blockade() : Order(false, "blockade"){
 // Parameterize Constructor
 Blockade::Blockade(Player* p) : Order(false, "blockade"){
     playerIssuing = p;
-    target = p->toDefend(game->getMap()).at(0);
+    // Condition checked: If target territory is already Neutral (protected), take next in toDefend()
+    vector<Territory*> toDefendList = p->toDefend(game->getMap());
+    unsigned i = 0;
+    target = p->toDefend(game->getMap()).at(i);
+    while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral"){
+        target = p->toDefend(game->getMap()).at(i+1);
+        i++;
+    }
 }
 
 // Copy constructor
@@ -590,9 +631,9 @@ Blockade &Blockade::operator=(const Blockade &o) {
 }
 
 ostream &operator<<(ostream &os, const Blockade &o) {
-    string validated = (o.validated) ? " (validated)" : " (not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() /*<< " " << o.target->getName() << " "*/ << ") ";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName() << " | "
+       <<  validated << " | target: " << o.target->getName() << ") ";
     return os;
 }
 
@@ -612,29 +653,46 @@ void Blockade::setValidated(bool v) {
 }
 
 void Blockade::validate() {
+    cout << "... ";
     if (target->getOwner()->getName() == playerIssuing->getName()) {
         validated = true;
-    } else
+        cout << "Valid!" << endl;
+    } else {
         validated = false;
+        cout << "Invalid! - You don't own this territory" << endl;
+    }
+
 }
 
 void Blockade::execute() {
+    cout << "... ";
     if (!validated) {
-        cout << "Invalid Blockade Order";
+        cout << "execution failed!\n" << endl;
     } else {
         int doubleArmies = (target->getArmies()) * 2;
         target->setArmies(doubleArmies);
         target->setOwner(game->getNeutralPlayer());
+        cout << "execution successful!\n" << endl;
     }
     //notify(this); // FROM SUBJECT
+    // For now it's hard to see the double effect of Blockade. Since most of the territories in toDefend has 0 armies -> this is only visible in game loop
 }
 
 string Blockade::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder = "blockade order " + validation + ": transfer of the ownership of " + target->getName() +
-                            " to the Neutral Player.\n";
-    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of the " + target->getOwner()->getName() + "player .\n";
+    string logStringOrder = "";
+    string logStringEffect = "";
+    string validation = (validated) ? "executed" : "validation failed";
+
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
+    if(validated){
+        logStringOrder = "Blockade " + validation + ": successfully transfer the ownership of " + target->getName() + " to Neutral Player\n";
+        logStringEffect = target->getName() + " has " + to_string(target->getArmies())
+                        + " armies and is under the ownership of the " + target->getOwner()->getName() + " player \n";
+    } else {
+        logStringOrder = "Blockade " + validation + ": unsuccessfully transfer the ownership of " + target->getName() + " to Neutral Player\n";
+        logStringEffect = target->getName() + " has " + to_string(target->getArmies())
+                          + " armies and is still under the ownership of the " + target->getOwner()->getName() + " player \n";
+    }
     return logStringPlayer + logStringOrder + logStringEffect;
 }
 
@@ -649,13 +707,16 @@ Negotiate::Negotiate() : Order(false, "negotiate"){
 // Parameterize Constructor
 Negotiate::Negotiate(Player* p) : Order(false, "negotiate"){
     playerIssuing = p;
-    cout << "which player would you like to negotiate with?" << endl;
-    string playerTargetName = "MJ";
-    //cin >> playerTargetName;
-
+    cout << "\nPlayer to negotiate with: ";
+    string playerTargetName = "";
+    cin >> playerTargetName;
+    unsigned i = 0;
+    // TODO: Check if the player does not exist -> re-enter player's name
+    // target player = player of the name playerTargetName
     for (int i = 0; i < game->getplayer_list().size(); i++){
-        if (game->getplayer_list().at(i)->getName() == playerTargetName)
-        { targetPlayer = game->getplayer_list().at(i);}
+        if (game->getplayer_list().at(i)->getName() == playerTargetName) {
+            targetPlayer = game->getplayer_list().at(i);
+        }
     }
 }
 
@@ -680,9 +741,8 @@ Negotiate &Negotiate::operator=(const Negotiate &o) {
 }
 
 ostream &operator<<(ostream &os, const Negotiate &o) {
-    string validated = (o.validated) ? "(validated)" : "(not validated)";
-    os << o.description << " (" << std::boolalpha << o.validated << " "
-       << o.playerIssuing->getName() << " " << o.targetPlayer->getName() << ") ";
+    string validated = (o.validated) ? "validated" : "not validated";
+    os << o.description << " (" << o.playerIssuing->getName() << " | " << validated << " | target: " << o.targetPlayer->getName() << ") ";
     return os;
 }
 
@@ -702,29 +762,39 @@ void Negotiate::setValidated(bool v) {
 }
 
 void Negotiate::validate() {
+    cout << "... ";
     if (playerIssuing->getName() == targetPlayer->getName() || targetPlayer->getName() == "Neutral") {
         validated = false;
-        cout << "Invalid Negotiate : Negotiate must be done with a different player, excluding the Neutral player\n";
-    } else
+        cout << "Invalid! - Negotiate must be done with a different player, excluding the Neutral player" << endl;
+    } else {
         validated = true;
+        cout << "Valid!" << endl;
+    }
+
 }
 
 void Negotiate::execute() {
+    cout << "... ";
     if (!validated) {
-        cout << "Invalid Negotiate Order\n";
+        cout << "execution failed!\n" << endl;
     } else {
         game->addAlliances(playerIssuing, targetPlayer);
-        cout << "Executed Negotiate Order\n";
+        cout << "execution successful!\n" << endl;
     }
     //notify(this); // FROM SUBJECT
 }
 
 string Negotiate::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ")";
-    string logStringOrder =
-            "Negotiate order " + validation + ": " + playerIssuing->getName() + " and " + targetPlayer->getName() +
-            " are in a truce until the end of this round of turns." "\n";
+    string logStringOrder = "";
+    string validation = (validated) ? "executed" : "validation failed";
+
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ")\n";
+    if (validated){
+        logStringOrder = "Negotiate " + validation + ": an alliance is form between " + playerIssuing->getName() + " and " + targetPlayer->getName()
+                         + " - cannot attack each other \n";
+    } else {
+        logStringOrder = "Negotiate " + validation + ": no alliance is formed between " + playerIssuing->getName() + " and " + targetPlayer->getName()+ "\n";
+    }
     return logStringPlayer + logStringOrder;
 }
 
@@ -1171,4 +1241,17 @@ OrdersList OrdersList::operator=(const OrdersList &original) {
 }
 ***********
 
+string Airlift::stringToLog() {
+    string validation = (validated) ? "executed" : "to be validated";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
+    string logStringOrder =
+            "Airlift order " + validation + ": Airlifting " + to_string(numToAirlift) + " armies from " +
+            origin->getName() + " to " + target->getName() + ".\n";
+
+    string logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + ". \n";
+    string logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + ". \n";
+    return logStringPlayer + logStringOrder + logStringEffect1 + logStringEffect2;
+}
+
  */
+
