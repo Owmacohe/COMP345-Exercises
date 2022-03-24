@@ -139,6 +139,7 @@ void Deploy::setValidated(bool v) {
 void Deploy::validate() {
     // Check if Territory belongs to the Player
     cout << "... ";
+    cout << target->getOwnerName() << endl;
     if (target->getOwnerName() == playerIssuing->getName()) {
         cout << "Valid!" << endl;
         validated = true;
