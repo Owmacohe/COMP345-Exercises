@@ -59,7 +59,7 @@ int Ordersmain() {
     Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
     Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
     Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(12);
-
+    
     cout << "\n-------------------- DEPLOY --------------------" << endl;
     cout << "\n--------- Player 1" << endl;
     Deploy* deploy1 = new Deploy(player1, Ontario_South);
@@ -275,7 +275,7 @@ int Ordersmain() {
 
     // Airlift
     cout << "\n-------------------- AIRLIFT --------------------\n" << endl;
-	Airlift *airlift1 = new Airlift(player1);
+	  Airlift *airlift1 = new Airlift(player1);
     cout << "Order: "<< *airlift1 << endl;
     airlift1->validate();
     airlift1->execute() ;
