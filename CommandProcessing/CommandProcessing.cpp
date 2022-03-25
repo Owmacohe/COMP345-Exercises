@@ -12,7 +12,7 @@ Command::Command() {
     transitionsTo = "";
     effect = "";
 
-    cout << "[Command default constructor]" << endl;
+    //cout << "[Command default constructor]" << endl;
 }
 
 // Parameterized constructor 1 (unparemeterized Commands)
@@ -41,12 +41,12 @@ Command::Command(string c) {
         cout << "Invalid command!" << endl;
     }
 
-    cout << "[" + command + " Command parameterized constructor]" << endl;
+    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Parameterized constructor 2 (paremeterized Commands)
 Command::Command(string c, string p) {
-    command = c;
+    command = c + " <" + p + ">";
     validIn = vector<int>();
     effect = "";
 
@@ -64,12 +64,12 @@ Command::Command(string c, string p) {
         cout << "Invalid command!" << endl;
     }
 
-    cout << "[" + command + " Command parameterized constructor]" << endl;
+    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Destructor
 Command::~Command() {
-    cout << "[" + command + " Command destructor]" << endl;
+    //cout << "[" + command + " Command destructor]" << endl;
 }
 
 // Command stream insertion operator
@@ -128,24 +128,18 @@ string Command::stringToLog() {
 
 // Default constructor
 CommandProcessor::CommandProcessor() {
-    // TODO: command line option is set to either read commands from the console or from a given file
-        // if from file, set this to FileCommandProcessorAdapter
-
     engine = NULL;
     commands = vector<Command*>();
 
-    cout << "[CommandProcessor default constructor]" << endl;
+    //cout << "[CommandProcessor default constructor]" << endl;
 }
 
 // Parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine *e) {
-    // TODO: command line option is set to either read commands from the console or from a given file
-        // if from file, set this to FileCommandProcessorAdapter
-
     engine = e;
     commands = vector<Command*>();
 
-    cout << "[CommandProcessor parameterized constructor]" << endl;
+    //cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
 // Destructor
@@ -159,16 +153,25 @@ CommandProcessor::~CommandProcessor() {
 }
 
 // CommandProcessor stream insertion operator
-ostream& operator<<(ostream &strm, const CommandProcessor &cp) {
+ostream& CommandProcessor::write(ostream &strm) const {
     string temp = "";
 
-    for (Command *i : cp.commands) {
+    for (Command *i : commands) {
         temp += i->getCommand() + " | ";
+    }
+
+    State s;
+
+    if (engine != NULL) {
+        s = *(engine->getState());
+    }
+    else {
+        s = null;
     }
 
     return strm <<
         "[COMMANDPROCESSOR PRINT]" <<
-        endl << "[--- Engine: " << cp.engine->getState() << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Engine: " << s << " ---]" << // TODO: should the engine be printed in a different way?
         endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]";
 }
 
@@ -180,14 +183,13 @@ CommandProcessor& CommandProcessor::operator = (const CommandProcessor& toAssign
 }
 
 // Accessors
-vector<Command*> CommandProcessor::getCommands() { return commands; }
+vector<Command*> CommandProcessor::getCommands() {
+    return commands;
+}
 GameEngine *CommandProcessor::getEngine() { return engine; }
 
 // Mutators
-void CommandProcessor::setEngine(GameEngine *e) {
-    delete engine;
-    engine = e;
-}
+void CommandProcessor::setEngine(GameEngine *e) { engine = e; }
 void CommandProcessor::setCommands(vector<Command*> c) {
     for (Command *i : commands) {
         delete i;
@@ -203,13 +205,34 @@ void CommandProcessor::setCommands(vector<Command*> c) {
 
 // Gets command from console
 Command *CommandProcessor::readCommand() {
-    string word1, word2;
-    cin >> word1 >> word2;
+    string temp;
+    fflush(stdin);
+    getline(cin, temp);
+
+    string word1 = "";
+    string word2 = "";
+    bool hasReachedSpace = false;
+
+    for (char i : temp) {
+        if (!hasReachedSpace) {
+            if (i == ' ') {
+                hasReachedSpace = true;
+            }
+            else {
+                word1 += i;
+            }
+        }
+        else {
+            if (i != '<' && i != '>') {
+                word2 += i;
+            }
+        }
+    }
 
     if (word1 != "" && word2 == "") {
         return new Command(word1);
     }
-    else if ( word1 != "" && word2 != "") {
+    else if (word1 != "" && word2 != "") {
         return new Command(word1, word2);
     }
     else {
@@ -228,7 +251,10 @@ void CommandProcessor::saveCommand(Command *c) {
 // Reads and then saves a command from the console
 void CommandProcessor::getCommand() {
     Command *temp = readCommand();
-    saveCommand(temp);
+
+    if (temp != NULL) {
+        saveCommand(temp);
+    }
 }
 
 // Checks if the current Command is in the valid state
@@ -236,7 +262,7 @@ bool CommandProcessor::validate(Command *c) {
     bool isValid = false;
 
     for (int i : c->getValidIn()) {
-        if (i == engine->getState()) {
+        if (i == *(engine->getState())) {
             isValid = true;
             break;
         }
@@ -246,7 +272,6 @@ bool CommandProcessor::validate(Command *c) {
         return true;
     }
     else {
-        cout << "Command " + c->getCommand() + " is invalid in the current state!" << endl;
         return false;
     }
 }
@@ -305,6 +330,8 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
     currentFile = "";
     currentLine = 0;
     flr = new FileLineReader();
+
+    //cout << "[FileCommandProcessorAdapter default constructor]" << endl;
 }
 
 // Parameterized constructor
@@ -312,28 +339,41 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) {
     currentFile = f;
     currentLine = 0;
     flr = new FileLineReader();
+
+    //cout << "[FileCommandProcessorAdapter parameterized constructor]" << endl;
 }
 
 // Destructor
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
     delete flr;
     flr = NULL;
+
+    //cout << "[FileCommandProcessorAdapter destructor]" << endl;
 }
 
 // FileCommandProcessorAdapter stream insertion operator
-ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa) {
+ostream& FileCommandProcessorAdapter::write(ostream &strm) const {
     string temp = "";
 
-    for (Command *i : fcpa.commands) {
+    for (Command *i : commands) {
         temp += i->getCommand() + " | ";
+    }
+
+    State s;
+
+    if (engine != NULL) {
+        s = *(engine->getState());
+    }
+    else {
+        s = null;
     }
 
     return strm <<
         "[FILECOMMANDPROCESSORADAPTER PRINT]" <<
-        endl << "[--- Engine: " << fcpa.engine->getState() << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Engine: " << s << " ---]" << // TODO: should the engine be printed in a different way?
         endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]" <<
-        endl << "[--- Current file: " << fcpa.currentFile << " ---]" <<
-        endl << "[--- Current line: " << fcpa.currentLine << " ---]";
+        endl << "[--- Current file: " << currentFile << " ---]" <<
+        endl << "[--- Current line: " << currentLine << " ---]";
 }
 
 // FileCommandProcessorAdapter assignment operator
@@ -344,6 +384,14 @@ FileCommandProcessorAdapter& FileCommandProcessorAdapter::operator = (const File
     currentLine = toAssign.currentLine;
     return *this;
 }
+
+// Accessors
+string FileCommandProcessorAdapter::getCurrentFile() { return currentFile; }
+int FileCommandProcessorAdapter::getCurrentLine() { return currentLine; }
+
+// Mutators
+void FileCommandProcessorAdapter::setCurrentFile(string f) { currentFile = f; }
+void FileCommandProcessorAdapter::setCurrentLine(int l) { currentLine = l; }
 
 // Reads and then saves a command from a file
 void FileCommandProcessorAdapter::getCommand() {

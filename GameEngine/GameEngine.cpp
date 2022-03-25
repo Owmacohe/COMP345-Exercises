@@ -82,9 +82,6 @@ GameEngine::~GameEngine() {
     }
     alliances.clear();
 
-    delete playerOrder;
-    playerOrder = NULL;
-
     delete neutralPlayer;
     neutralPlayer = NULL;
 }
@@ -127,7 +124,7 @@ ostream& operator<<(ostream &os, const GameEngine& gm) {
 }
 
 // Accessors
-State GameEngine::getState() { return *s; }
+State *GameEngine::getState() { return s; }
 int GameEngine::getNumberOfPlayers() { return NumberOfPlayers; }
 bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
@@ -148,16 +145,16 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
     }
     return false;
 }
-int *GameEngine::getPlayerOrder() { return playerOrder; }
+vector<int> GameEngine::getPlayerOrder() { return playerOrder; }
 Player* GameEngine::getNeutralPlayer() {return neutralPlayer;}
 
 // Mutators
-void GameEngine::setState(State s) { this->s = &s; }
+void GameEngine::setState(const State &st) { *s = st; }
 void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
 void GameEngine::setNumberOfTerritories(int x) { this->NumberOfTerritories = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
-void GameEngine::setProcessor(const CommandProcessor &cp) { *processor = cp; }
+void GameEngine::setProcessor(CommandProcessor *cp) { processor = cp; }
 void GameEngine::setMap(const Map &m) { *map = m; }
 void GameEngine::setDeck(const Deck& d){ *deck = d;}
 void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
@@ -169,9 +166,12 @@ void GameEngine::resetAlliances() {
     }
     alliances.clear();
 }
-void GameEngine::setPlayerOrder(int *po) {
-    delete[] playerOrder;
-    playerOrder = po;
+void GameEngine::setPlayerOrder(vector<int> po) {
+    playerOrder = vector<int>();
+
+    for (int i : po) {
+        playerOrder.push_back(i);
+    }
 }
 void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
 
@@ -483,19 +483,19 @@ void GameEngine::gameStartupTransitions(string str) {
 */
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
-    if (str == "issueorder" && (getState() == 5 || getState() == 6)) {
+    if (str == "issueorder" && (*getState() == 5 || *getState() == 6)) {
         issueOrdersPhase();
     }
-    else if (str == "endissueorders" && getState() == 6) {
+    else if (str == "endissueorders" && *getState() == 6) {
         endIssueOrderPhase(p);
     }
-    else if (str == "execorder" && getState() == 7) {
+    else if (str == "execorder" && *getState() == 7) {
         executeOrdersPhase();
     }
-    else if (str == "endexecorders" && getState() == 7) {
+    else if (str == "endexecorders" && *getState() == 7) {
         endexecuteOrdersPhase(p);
     }
-    else if (str == "win" && getState() == 7) {
+    else if (str == "win" && *getState() == 7) {
         winPhase(p);
     }
     else {
@@ -506,10 +506,10 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
 }
 
 void GameEngine::gameEndTransitions(string str) {
-    if (str == "end" && getState() == 8) {
+    if (str == "end" && *getState() == 8) {
         endPhase();
     }
-    else if (str == "play" && getState() == 8) {
+    else if (str == "play" && *getState() == 8) {
         playAgain();
     }
     else {
@@ -523,12 +523,39 @@ void GameEngine::gameEndTransitions(string str) {
 void GameEngine::startupPhase() {
     *s = start;
 
-    cout << "Welcome to Warzone" << endl;
+    cout << "Welcome to Warzone!" << endl;
+
+    FileCommandProcessorAdapter *fcpa;
+
+    cout << "Read commands from console or file?" << endl;
+
+    string word1, word2;
+    cin >> word1;
+
+    while (word1 != "console" && word1 != "file") {
+        cout << "Please try again!" << endl;
+        cin >> word1;
+    }
+
+    if (word1 == "file") {
+        cout << "Please provide the file name to read from:" << endl;
+        cin >> word2;
+
+        fcpa = new FileCommandProcessorAdapter(word2);
+        processor = fcpa;
+    }
+    else {
+        CommandProcessor *temp = new CommandProcessor;
+        processor = temp;
+    }
+
+    processor->setEngine(this);
+    setProcessor(processor);
 
     while (*s < 5) {
         cout << "Enter a command: " << endl;
 
-      //  processor->getCommand();
+        processor->getCommand();
 
         Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
@@ -559,14 +586,14 @@ void GameEngine::startupPhase() {
                 // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
 
                 MapLoader loader;
-                Map m = Map(loader.load(word2));
+                Map *m = loader.load(word2);
 
-                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ' && m.isGoodMap) {
-                    *map = m;
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ' && m->isGoodMap) {
+                    map = m;
                     effect = "Loaded Map: " + map->getName();
                     cout << effect << "!" << endl;
                     *s = mapLoaded;
-                    NumberOfTerritories = m.getTerritories().size();
+                    NumberOfTerritories = m->getTerritories().size();
                 }
                 else {
                     effect = "Unable to load Map";
@@ -595,7 +622,7 @@ void GameEngine::startupPhase() {
                 }
                 else {
                     if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
-                        Player *p;
+                        Player *p = new Player;
                         p->setName(word2);
                         player_list.push_back(p);
                         NumberOfPlayers = NumberOfPlayers + 1;
@@ -624,8 +651,7 @@ void GameEngine::startupPhase() {
                     for (Territory *i : map->getTerritories()) {
                         Player *tempPlayer = player_list.at(playerIndex);
                         i->setOwner(tempPlayer);
-                        Territory *tempTerr = new Territory(*i);
-                        tempPlayer->assignTerritory(tempTerr);
+                        tempPlayer->assignTerritory(i);
 
                         playerIndex++;
 
@@ -638,10 +664,10 @@ void GameEngine::startupPhase() {
 
                     // Determine randomly the order of play of the players in the game
 
-                    int *tempOrder = new int[player_list.size()];
+                    vector<int> tempOrder = vector<int>();
 
                     for (int j = 0; j < player_list.size(); j++) {
-                        tempOrder[j] = rand() % (player_list.size() - j) + j;
+                        tempOrder.push_back(rand() % (player_list.size() - j) + j);
                     }
 
                     setPlayerOrder(tempOrder);
@@ -649,12 +675,13 @@ void GameEngine::startupPhase() {
                     effect += ", randomly determined the order of playing order";
 
                     for (Player* k : player_list) {
-                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                        k->addToReinforcePool(50);
-
-                        // Let each player draw 2 initial cards from the deck using the deck’s draw() method
-                        k->getHand()->drawCard(*deck);
-                        k->getHand()->drawCard(*deck);
+                          // TODO: these below methods are causing errors
+//                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
+//                        k->addToReinforcePool(50);
+//
+//                        // Let each player draw 2 initial cards from the deck using the deck’s draw() method
+//                        k->getHand()->drawCard(*deck);
+//                        k->getHand()->drawCard(*deck);
                     }
 
                     effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";

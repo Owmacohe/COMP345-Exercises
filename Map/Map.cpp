@@ -52,7 +52,7 @@ Territory::Territory(const Territory &t) {
     owner = t.owner;
     armies = t.armies;
     
-    cout << "[" << t.name << " Territory copy constructor]" << endl;
+    //cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
 // Territory destructor
@@ -242,9 +242,9 @@ void Map::addTerritory(Territory *t) { territories.push_back(t); } // Method to 
 void Map::addEdge(Edge *e) { edges.push_back(e); } // Method to add an Edge to a Map
 
 // Free method to recursively determine if two given Territories are connected between edges on a Map
-bool validateEdge(Map &m, Territory *start, Territory *end) {
+bool validateEdge(Map *m, Territory *start, Territory *end) {
     // Checking all the edges for matches
-    for (Edge *i : m.getEdges()) {
+    for (Edge *i : m->getEdges()) {
         if (!i->visited) { // Making sure not to check previously used edges
             bool valid;
 
@@ -288,13 +288,13 @@ bool Map::validate() {
                 }
 
                 // Verifying that the map is a connected graph
-                if (!validateEdge(*this, territories[i], territories[j])) {
+                if (!validateEdge(this, territories[i], territories[j])) {
                     cout << "Validation of " << name << " failed!" << endl;
                     return false;
                 }
 
                 // Verifying that continents are connected subgraphs
-                if (territories[i]->getContinent() == territories[j]->getContinent() && !validateEdge(*this, territories[i], territories[j])) {
+                if (territories[i]->getContinent() == territories[j]->getContinent() && !validateEdge(this, territories[i], territories[j])) {
                     cout << "Validation of " << name << " failed!" << endl;
                     return false;
                 }
@@ -387,10 +387,10 @@ vector<string> stringSplit(string s, char delim) {
 }
 
 // Method to read the information at a given file, and output a fully-crafted Map object
-Map MapLoader::load(string f) {
+Map *MapLoader::load(string f) {
     ifstream input(f);
     string line;
-    Map m;
+    Map *m = new Map;
 
     // Checking to see if the file can even be read from
     if (!getline(input, line)) {
@@ -412,7 +412,7 @@ Map MapLoader::load(string f) {
 
             string mapName = nameSplit[2];
 
-            m.setName(mapName.substr(0, mapName.length() - 4)); // Setting the new Map's name
+            m->setName(mapName.substr(0, mapName.length() - 4)); // Setting the new Map's name
 
             // Reading every subsequent line in the file
             while (getline(input, line)) {
@@ -448,8 +448,8 @@ Map MapLoader::load(string f) {
                         // Adding each continent
                         if (section == 1) {
                             if (lineSplit.size() == 3) {
-                                m.addContinent(lineSplit[0]);
-                                m.addContinentBonus(stoi(lineSplit[1]));
+                                m->addContinent(lineSplit[0]);
+                                m->addContinentBonus(stoi(lineSplit[1]));
                             }
                             else {
                                 throw "INVALID MAP: improper continent!";
@@ -458,8 +458,8 @@ Map MapLoader::load(string f) {
                         // Adding each Territory
                         else if (section == 2) {
                             if (lineSplit.size() == 5) {
-                                Territory *t = new Territory(lineSplit[1], m.getContinents()[stoi(lineSplit[2]) - 1], NULL, 0);
-                                m.addTerritory(t);
+                                Territory *t = new Territory(lineSplit[1], m->getContinents()[stoi(lineSplit[2]) - 1], NULL, 0);
+                                m->addTerritory(t);
                             }
                             else {
                                 throw "INVALID MAP: improper territory!";
@@ -468,16 +468,16 @@ Map MapLoader::load(string f) {
                         // Adding each Edge
                         else if (section == 3) {
                             if (lineSplit.size() > 1) {
-                                Territory *t1 = m.getTerritories()[stoi(lineSplit[0]) - 1];
+                                Territory *t1 = m->getTerritories()[stoi(lineSplit[0]) - 1];
 
                                 // Comparing each Territory with the others on the line, and adding the new Edge if it doesn't yet exist
                                 for (int i = 1; i < lineSplit.size(); i++) {
-                                    Territory *t2 = m.getTerritories()[stoi(lineSplit[i]) - 1];
+                                    Territory *t2 = m->getTerritories()[stoi(lineSplit[i]) - 1];
 
                                     Edge *tempEdge = new Edge;
                                     tempEdge->a = t1;
                                     tempEdge->b = t2;
-                                    m.addEdge(tempEdge);
+                                    m->addEdge(tempEdge);
                                 }
                             }
                             else {
@@ -488,11 +488,11 @@ Map MapLoader::load(string f) {
                 }
             }
 
-            cout << m.getName() << " loaded!" << endl;
+            cout << m->getName() << " loaded!" << endl;
         }
         // Setting the Map to bad, and printing the error message
         catch (const char* message) {
-            m.isGoodMap = false;
+            m->isGoodMap = false;
             cout << message << endl;
         }
     }
