@@ -197,33 +197,54 @@ Advance::Advance() : Order(false, "advance"){
 }
 
 // Parameterize Constructor
-Advance::Advance(Player* p) : Order(false, "advance"){
+Advance::Advance(Player* p) : Order(false, "advance") {
     playerIssuing = p;
 
-    string input = "advance";
-    validateResult = input;
+    string input = "";
+    int x =  rand() % 2;
+    if (x == 0) {
+        input = "move";
+    } else
+        input = "attack";
 
-    if (input == "advance") {
+    // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
+    if (input == "move") {
     target = p->toDefend(game->getMap()).at(0);
+    } else if (input == "attack")
+        target = p->toAttack(game->getMap()).at(0);
 
-    }
-    else if (input == "attack")
-    target = p->toAttack(game->getMap()).at(0);
+        // From the target we chose, generate an origin that adjacent to it to attack
+        origin = p->getOriginTerritory(target, game->getMap());
 
-    origin = p->getOriginTerritory(target,game->getMap());
+//        cout << "Target : " << target->getName() << " " << target->getOwnerName() << endl;
+//        cout  << "Origin : "<< origin->getName() << " " << origin->getOwner()->getName() << endl;
+//        cout << to_string(origin->getArmies()) << endl;
 
-    cout << "Target : " <<target->getName() << " " << target->getOwner()->getName() << endl;
-   // cout  << "Origin : "<< origin->getName() << " " << origin->getOwner()->getName() << endl;
-    cout << to_string(origin->getArmies()) <<endl;
-
-    numToAdvance = rand() % origin->getArmies() + 1;
-
-    while (numToAdvance > origin->getArmies()){
-        numToAdvance = rand() % origin->getArmies() + 1;
-    }
-
+        // Condition checked: If there's no more armies to advance
+        if (origin->getArmies() == 0) {
+            numToAdvance = 0;
+        } else {
+            numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
+            while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
+                numToAdvance = rand() % origin->getArmies() + 1;
+            }
+        }
 }
+Advance::Advance(Player* p, Territory* origin, Territory* target){
+    playerIssuing = p;
+    this->origin = origin;
+    this->target = target;
 
+    // Condition checked: If there's no more armies to advance
+    if (origin->getArmies() == 0){
+        numToAdvance = 0;
+    } else {
+        numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
+        while (numToAdvance > origin->getArmies()){ // make sure the condition armies <= armies in origin
+            numToAdvance = rand() % origin->getArmies() + 1;
+        }
+    }
+}
 // Copy constructor
 Advance::Advance(const Advance &original) : Order(original) {
     playerIssuing = original.playerIssuing;
@@ -252,7 +273,7 @@ Advance &Advance::operator=(const Advance &o) {
 ostream &operator<<(ostream &os, const Advance &o) {
     string validated = (o.validated) ? "validated" : "not validated";
     os << o.description << " (" << o.playerIssuing->getName() << " | "
-       << validated << " | " << o.origin->getName() << " | " << o.target->getName() << " | " << o.numToAdvance << ")";
+       << validated << " | origin: " << o.origin->getName() << " | target: " << o.target->getName() << " | " + o.validateResult + " with " << o.numToAdvance << " armies)";
     return os;
 }
 
@@ -276,34 +297,45 @@ void Advance::setValidated(bool v) {
 void Advance::validate() {
     validateResult = "";
     cout << "... ";
-    // Check if Territory belongs to the Player
-    if (origin->getOwner()->getName() != playerIssuing->getName()) {
+    // Check if territory belongs to the player
+    if (origin->getOwnerName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own this territory" << endl;
         validated = false;
     }
     // Check if 2 Territories are adjacent
     else if(!(game->getMap()->adjacentTerritories(origin, target))){
-        cout << "Invalid! - Two territories are not adjacent" << endl;
+        cout << "Invalid! - Territories are not adjacent" << endl;
         validated = false;
     }
-    // Condition: If Source territory is owned by Player && Target territory and Source territory are adjacent
-    // Sub-condition: If Target Territory is owned by Player (Yes: Advance || No: Attack)
+    // Check if Territory belongs to the Player
+    else if (numToAdvance == 0 ) {
+        cout << "Invalid! - No more armies left to advance" << endl;
+        validated = false;
+    }
+    // Condition checked: If origin is owned by Player && target and origin are adjacent
+    // Sub-condition: If target is owned by Player Issuing (Yes: Advance || No: Attack)
     else{
-        if(target->getOwner()->getName() == playerIssuing->getName()){
-            cout << "Valid! ** Type advance" << endl;
-            validateResult = "Advance";
+        // Yes: Target is owned by player issuing -> Move armies
+        if(target->getOwnerName() == playerIssuing->getName()){
+            cout << "Valid! ** Move armies" << endl;
+            validateResult = "move";
             validated = true;
         }
-        // Condition: If target territory is not owned by player
-        // Sub-condition: If there exist alliance (Yes: attack is invalid || No: attack is valid)
-        else if (!(game->existingAlliance(origin->getOwner(), target->getOwner()))){
-            cout << "Valid! ** Type attack" << endl;
-            validateResult = "Advance";
-            validated = true;
-        }
-        else{
-            cout << "Invalid! - Cannot attack Territory in Negotiation";
+        // No: Target is not owned by player issuing -> Attack
+        // Check for existing alliance
+        else if(game->existingAlliance(origin->getOwner(), target->getOwner())){
+            cout << "Invalid! - You can't attack territory in negotiation" << endl;
             validated = false;
+        }
+        // Checking blockade protection
+        else if(target->getOwnerName() == "Neutral"){
+            cout << "Invalid! - You can't attack territory under protection of blockade" << endl;
+            validated = false;
+        }
+        else {
+            cout << "Valid! ** Attack" << endl;
+            validateResult = "attack";
+            validated = true;
         }
     }
 }
@@ -311,31 +343,30 @@ void Advance::validate() {
 void Advance::execute() {
     if (validated) {
         // Advance
-        if(target->getOwner() == playerIssuing) {
+        if (validateResult == "move") {
             origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
         }
         // Attack
-        else if ((target->getOwner() != playerIssuing) && !(game->existingAlliance(origin->getOwner(), target->getOwner()))){
-            origin->setArmies(origin->getArmies()-numToAdvance);
+//        else if (validateResult == "attack"){
+//            origin->setArmies(origin->getArmies()-numToAdvance);
+//            // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
+//            // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
+//            int attackPower = origin->getArmies()*0.6;
+//            int defendPower = target->getArmies()*0.7;
+//            if (attackPower == defendPower) {
+//                target->setArmies(0);
+//            }
+//            else if (attackPower > defendPower){
+//                target->setArmies((attackPower - defendPower)/0.6);
+//                target->setOwner(playerIssuing);
+//
+//                playerIssuing->getHand()->drawCard(*game->getDeck());
+//                // TODO player draw a card from the Deck
+//            }
+//            else{}
 
-            // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
-            // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
-            int attackPower = origin->getArmies()*0.6;
-            int defendPower = target->getArmies()*0.7;
-            if (attackPower == defendPower) {
-                target->setArmies(0);
-            }
-            else if (attackPower > defendPower){
-                target->setArmies((attackPower - defendPower)/0.6);
-                target->setOwner(playerIssuing);
-
-                playerIssuing->getHand()->drawCard(*game->getDeck());
-                // TODO player draw a card from the Deck
-            }
-            else{}
-
-        }
+//        }
     } else
         cout << "Can't execute Advance order!" << endl;
 }
@@ -343,17 +374,18 @@ void Advance::execute() {
 
 
 string Advance::stringToLog() {
-    string validation = (validated) ? "executed" : "to be validated";
-    string logStringPlayer = "(Player " + playerIssuing->getName() + ") ";
-    string logStringOrder;
+    string validation = (validated) ? "executed" : "validation failed";
+    string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
+    string logStringOrder = "";
+    string loStringEffect = "";
 
-    if (validateResult == "Attack"){
-        logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
+    if (validateResult == "attack"){
+        logStringOrder = "Advance: " + validation + " : attack "  + target->getName() + " with " + to_string(numToAdvance) + " armies \n";
     }
-    else if (validateResult == "Advance"){
-        logStringOrder = "Advance order" + validation + " : Attack with "+ to_string(numToAdvance) + " armies to " + target->getName() + "\n";
+    else if (validateResult == "move"){
+        logStringOrder = "Advance: " + validation + " : Move "+ to_string(numToAdvance) + " armies from " + origin->getName() + " to " + target->getName() + "\n";
     }
-    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
+    string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwnerName() + "\n";
 
     return logStringPlayer + logStringOrder + logStringEffect;
 }
@@ -392,7 +424,6 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     }
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
-        cout << "No more armies left to airlift!" << endl;
         numToAirlift = 0;
     } else {
         numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
@@ -406,6 +437,7 @@ Airlift::Airlift(Player* p, Territory* origin, Territory* target) : Order (false
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
+
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;
@@ -467,19 +499,19 @@ void Airlift::setValidated(bool v) {
 
 void Airlift::validate() {
     cout << "... ";
+    // Check if the target territory and origin belong to the player issuing
+    if (target->getOwnerName() != playerIssuing->getName() || origin->getOwnerName() != playerIssuing->getName()) {
+        cout << "Invalid! - You don't own both territories" << endl;
+        validated = false;
+    }
     // Check if there are armies to airlift
-    if (numToAirlift == 0) {
+    else if (numToAirlift == 0) {
         cout << "Invalid! - No more armies left to airlift" << endl;
         validated = false;
     }
-    // Check if the target territory belong to the player issuing
-    else if (target->getOwnerName() == playerIssuing->getName() && origin->getOwnerName() == playerIssuing->getName()){
+    else{
         cout << "Valid!" << endl;
         validated = true;
-    }
-    else {
-        cout << "Invalid! - You don't own both territories" << endl;
-        validated = false;
     }
 }
 
@@ -591,14 +623,14 @@ void Bomb::validate() {
         cout << "Invalid! - You can't bomb your territories" << endl;
         validated = false;
     }
-    // Check if origin territory does not belong to playerIssuing
-//    else if (origin->getOwnerName() != playerIssuing->getName()){
-//        cout << "Invalid! - You don't own this territory" << endl;
-//        validated = false;
-//    }
-    // Check for an existing Alliance
-    else if (game->existingAlliance(origin->getOwner(), target->getOwner())||target->getOwnerName() == "Neutral") {
+    // Check for an existing Alliance or blockade protection
+    else if (game->existingAlliance(origin->getOwner(), target->getOwner())) {
         cout << "Invalid! - You can't bomb territory in negotiation" << endl;
+        validated = false;
+    }
+    // Check for blockade protection
+    else if (target->getOwnerName() == "Neutral"){
+        cout << "Invalid! - You can't bomb territory under protection of blockade" << endl;
         validated = false;
     }
     // Check that territories are adjacent
@@ -1312,4 +1344,3 @@ string Airlift::stringToLog() {
 }
 
  */
-
