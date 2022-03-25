@@ -46,5 +46,6 @@ LogObserver::LogObserver(string name){
 LogObserver::~LogObserver(){};
 
 void LogObserver::update(Iloggable* il){
+    cout << " writing stringToLog to output file." << endl;
     outputFile << (*il).stringToLog() << "\n";
 };
