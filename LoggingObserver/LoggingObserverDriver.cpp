@@ -6,72 +6,123 @@
 #include "../GameEngine/GameEngine.h"
 #include "../CommandProcessing//CommandProcessing.h"
 
-////int LoggingObservermain() {
-//    int main() {
+    int LOmain() {
+
+        /****************************** CREATING Game, CommandProcessor, OrdersList, etc. *******************************/
+
+        LogObserver("gamelog.txt");
+
+        /**** Setting up the Game Engine ****/
+        MapLoader* loader;
+        Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+
+        // Create Players List
+        vector<Player*> player_list;
+        Player* player1 = new Player(); player1->setReinforcementPool(10); player1->setName("Audrey");
+        Player* player2 = new Player(); player2->setReinforcementPool(12); player2->setName("MJ");
+        player_list.push_back(player1); player_list.push_back(player2);
+
+        // Create & Set up Game Engine
+        GameEngine* mainGE = new GameEngine();
+        mainGE->setMap(*mainmap);
+        mainGE->setplayer_list(player_list);
+        mainGE->setDeck(*new Deck(20));
+        Order::game = mainGE;
+
+        // Assign Territories to Players
+        int playerIndex = 0;
+        for (Territory *i : mainmap->getTerritories()) {
+            Player *tempPlayer = player_list.at(playerIndex);
+            i->setOwner(tempPlayer);
+            tempPlayer->assignTerritory(i);
+
+            playerIndex++;
+            if (playerIndex >= player_list.size()) {
+                playerIndex = 0;
+            }
+        }
+        Territory* Yukon_Territory = Order::game->getMap()->getTerritories().at(30); Yukon_Territory->setArmies(4);
+        Territory* Ontario_South = Order::game->getMap()->getTerritories().at(8); Ontario_South->setArmies(0);
+        Territory* Ontario_North = Order::game->getMap()->getTerritories().at(10); Ontario_North->setArmies(0);
+        Territory* Quebec_Central = Order::game->getMap()->getTerritories().at(6); Quebec_Central->setArmies(4);
+        Territory* Manitoba_South = Order::game->getMap()->getTerritories().at(11); Manitoba_South->setArmies(4);
+        Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
+        Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
+        Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
+
+        /**** Commmand & CommandProcessor ****/
+        Command *command1 = new Command();
+        CommandProcessor *commandProcessor1 = new CommandProcessor();
+
+        /**** OrderList & Order ****/
+
+
+        /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
+
+        bool subjectGameEngine = is_base_of<Subject, GameEngine>::value;
+        bool subjectCommand = is_base_of<Subject, Command>::value;
+        bool subjectCommandProcessor = is_base_of<Subject, CommandProcessor>::value;
+        bool subjectOrdersList = is_base_of<Subject, OrdersList>::value;
+        bool subjectOrder = is_base_of<Subject, Order>::value;
+
+        cout << "\n--------- Inheritance of Class Subject\n" << endl;
+        if (subjectGameEngine) { cout << "GameEngine inherits from Subject" << endl;}
+        if (subjectCommand) { cout << "Command inherits from Subject"  << endl;}
+        if (subjectCommandProcessor) { cout << "CommandProcessor inherits from Subject"  << endl;}
+        if (subjectOrdersList) { cout << "OrdersList inherits from Subject" << endl;}
+        if (subjectOrder) { cout << "Order inherits from Subject" << endl;}
+
+        bool iloggableGameEngine = is_base_of<Iloggable, GameEngine>::value;
+        bool iloggableCommand = is_base_of<Iloggable, Command>::value;
+        bool iloggableCommandProcessor = is_base_of<Iloggable, CommandProcessor>::value;
+        bool iloggableOrdersList = is_base_of<Iloggable, OrdersList>::value;
+        bool iloggableOrder = is_base_of<Iloggable, Order>::value;
+
+        cout << "\n--------- Inheritance of Class Iloggable\n" << endl;
+        if (iloggableGameEngine) { cout << "GameEngine inherits from Iloggable\n";}
+        if (iloggableCommand) { cout << "Command inherits from Iloggable\n";}
+        if (iloggableCommandProcessor) { cout << "CommandProcessor inherits from Iloggable\n";}
+        if (iloggableOrdersList) { cout << "OrdersList inherits from Iloggable\n";}
+        if (iloggableOrder) { cout << "Order inherits from Iloggable\n";}
+
+        /****************************** Methods using the Observer Pattern *******************************/
+
+//        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
+//        cout << "\n--------- Read Command from Console" << endl;
+//        cout << "\n--------- Read Commmand from file" << endl;
 //
-//        LogObserver("gamelog.txt");
-//        GameEngine *game = new GameEngine();
-//        Command *command1 = new Command();
-//        CommandProcessor *commandProcessor1 = new CommandProcessor();
-//        OrdersList *orderList1 = new OrdersList();
-//        Negotiate *negotiate1 = new Negotiate();
+//        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
 //
-//        //   (1) Show that classes inherit from subject and Iloggable
-//        Subject* subjectGameEngine = dynamic_cast<Subject*> (game);
-//        Subject* subjectCommand = dynamic_cast<Subject*> (command1);
-//        Subject* subjectCommandProcessor = dynamic_cast<Subject*> (commandProcessor1);
-//        Subject* subjectOrdersList = dynamic_cast<Subject*> (orderList1);
-//        Subject* subjectOrder = dynamic_cast<Subject*> (negotiate1);
-//
-//        if (subjectGameEngine != NULL) { cout << "GameEngine inherits from Subject\n";}
-//        if (subjectCommand!= NULL) { cout << "Command inherits from Subject\n";}
-//        if (subjectCommandProcessor != NULL) { cout << "CommandProcessor inherits from Subject\n";}
-//        if (subjectOrdersList != NULL) { cout << "OrdersList inherits from Subject\n";}
-//        if (subjectOrder != NULL) { cout << "Order inherits from Subject\n";}
-//
-//        Iloggable* iloggableGameEngine = dynamic_cast<Iloggable*> (game);
-//        Iloggable* iloggableCommand = dynamic_cast<Iloggable*> (command1);
-//        Iloggable* iloggableCommandProcessor = dynamic_cast<Iloggable*> (commandProcessor1);
-//        Iloggable* iloggableOrdersList = dynamic_cast<Iloggable*> (orderList1);
-//        Iloggable* iloggableOrder = dynamic_cast<Iloggable*> (negotiate1);
-//
-//        if (iloggableGameEngine != NULL) { cout << "GameEngine inherits from Iloggable\n";}
-//        if (iloggableCommand != NULL) { cout << "Command inherits from Iloggable\n";}
-//        if (iloggableCommandProcessor != NULL) { cout << "CommandProcessor inherits from Iloggable\n";}
-//        if (iloggableOrdersList != NULL) { cout << "OrdersList inherits from Iloggable\n";}
-//        if (iloggableOrder != NULL) { cout << "Order inherits from Iloggable\n";}
-//
-//        //            (2) SaveCommand
-//        //            Execute
-//        //            saveEffect
-//        //            addOrder
-//        //            Transition methods use Notify(Subject)
-//
-//        game->gameStartupTransitions("loadmap");
-//
-//        //game->gamePlayTransitions("issueOrder", player1);
-//        //game->gameEndTransitions();
-//
-//        command1->saveEffect("validatemap");
-//
-//        commandProcessor1->saveCommand(*command1);
-//
-//
-//
-//        //            (3) gamelog.txt file is correctly written when it receives commands from console
-//
-//        //            (4) addOrder to Orderlist from a player actually outputs on file
-//        Player *player1 = new Player();
-//        player1->setName("testPlayer");
-//        player1->issueOrder(5);
-//
-//        //            (5) When an Order is executed, output to file
-//        order1->execute();
-//
-//        //            (6) GameEngine changes state, output to file
-//
-//
-//
-//        return 0;
-//
-//    }
+//        cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
+//        cout << "\n--------- Changing State to loadmap" << endl;
+//        cout << "\n--------- Changing State to validatemap" << endl;
+
+        cout << "\n-------------------- OrderList::addOrder() --------------------" << endl;
+        Deploy* deploy1 = new Deploy(player1, Ontario_South);
+        Deploy* deploy2 = new Deploy(player2, Quebec_North);
+        Deploy* deploy3 = new Deploy(player1, Ontario_West);
+
+        //player1
+        // TODO ADD getter for Orderlist
+
+        cout << "\n-------------------- Order::execute() --------------------" << endl;
+
+        cout << "\n--------- Player 1 Deploy" << endl;
+        cout << "Order: " << *deploy1 << endl;
+        deploy1->validate();
+        deploy1->execute();
+
+        cout << "\n--------- Player 2 Deploy" << endl;
+        cout << "Order: " << *deploy2 << endl;
+        deploy2->validate();
+        deploy2->execute();
+
+        cout << "\n--------- Player 1 Deploy (Target belongs to another player)" << endl;
+        cout << "Order: " << *deploy3 << endl;
+        deploy3->validate();
+        deploy3->execute();
+
+
+        return 0;
+
+    }
