@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
