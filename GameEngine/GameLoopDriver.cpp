@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-int GameLoopmain() {
+int main() {
     // Create Map Loader
     MapLoader loader;
     Map *mainmap = new Map(loader.load("../Orders/canada.map"));
@@ -66,18 +66,31 @@ int GameLoopmain() {
         }
     }
 
-    //TODO:: not functioning
-    // Determine randomly the order of play of the players in the game
+    // Set up player order
     int *tempOrder = new int[player_list.size()];
     for (int j = 0; j < player_list.size(); j++) {
-        tempOrder[j] = rand() % (player_list.size() - j) + j;
-        //std::random_shuffle( myvector.begin(), myvector.end() );
+        tempOrder[j] = j;
+    }
+    for (int i = 0; i < player_list.size(); i++) {
+        int index = (int) (rand() % (player_list.size() - i));
+        int temp = tempOrder[i];
+        tempOrder[i] = tempOrder[index];
+        tempOrder[index] = temp;
+    }
+    mainGE->setPlayerOrder(tempOrder);
+    for (int j = 0; j < player_list.size(); j++) {
+        cout<<mainGE->getPlayerOrder()[j]<<endl;
     }
 
-    mainGE->setPlayerOrder(tempOrder);
-    for (int k = 0; k < player_list.size(); k++) {
-        cout<<mainGE->getPlayerOrder()[k] <<endl;
-    }
+//    // Determine randomly the order of play of the players in the game
+//
+//    int *tempOrder = new int[player_list.size()];
+//
+//    for (int j = 0; j < player_list.size(); j++) {
+//        tempOrder[j] = rand() % (player_list.size() - j) + j;
+//    }
+//
+//    setPlayerOrder(tempOrder);
 
     // Initial state of player
     for (Player* k : player_list) {
