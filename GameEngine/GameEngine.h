@@ -76,7 +76,7 @@ class GameEngine : public Iloggable, public Subject {
         void endPhase();
         void playAgain();
 
-        void mainGameLoop();
+        bool mainGameLoop();
 
         //void gameStartupTransitions(string s);
         void gamePlayTransitions(string, Player*);
