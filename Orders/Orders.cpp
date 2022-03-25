@@ -80,8 +80,6 @@ Deploy::Deploy() : Order(false, "deploy"){
 Deploy::Deploy(Player* p) : Order(false, "deploy"){
     playerIssuing = p;
     target = p->toDefend(this->game->getMap()).at(0);
-//    target = p->getTerritoryList().at(0);
-//    cout << "target in constructor " << *target << endl;
     numToDeploy = 1;
 }
 
@@ -165,7 +163,7 @@ void Deploy::execute() {
     } else {
         cout << "Execution fail!\n" << endl;
     }
-//    notify(this); // FROM SUBJECT
+   notify(this);
 }
 
 string Deploy::stringToLog() {
@@ -230,17 +228,17 @@ Advance::Advance(Player* p) : Order(false, "advance") {
             }
         }
 }
-Advance::Advance(Player* p, Territory* origin, Territory* target){
+Advance::Advance(Player* p, Territory* origin, Territory* target) {
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
 
     // Condition checked: If there's no more armies to advance
-    if (origin->getArmies() == 0){
+    if (origin->getArmies() == 0) {
         numToAdvance = 0;
     } else {
         numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
-        while (numToAdvance > origin->getArmies()){ // make sure the condition armies <= armies in origin
+        while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
             numToAdvance = rand() % origin->getArmies() + 1;
         }
     }
@@ -369,8 +367,10 @@ void Advance::execute() {
 //        }
     } else
         cout << "Can't execute Advance order!" << endl;
+
+    notify(this);
 }
-    //notify(this); // FROM SUBJECT LET ME KNOW HOW YOU ARE GOING TO STORE THE ACTION (ATTACK OR NOT) so I can output it in the log
+
 
 
 string Advance::stringToLog() {
@@ -524,7 +524,7 @@ void Airlift::execute() {
     } else{
         cout << "Execution failed!\n" << endl;
     }
-    // notify(this); // FROM SUBJECT
+     notify(this);
 }
 
 
@@ -652,7 +652,7 @@ void Bomb::execute() {
         target->setArmies(bombedArmies);
         cout << "Execution successful! \n" << endl;
     }
-    //notify(this); // FROM SUBJECT
+    notify(this);
 }
 
 string Bomb::stringToLog() {
@@ -774,7 +774,7 @@ string Blockade::stringToLog() {
         logStringEffect = target->getName() + " has " + to_string(target->getArmies())
                         + " armies and is under the ownership of the " + target->getOwner()->getName() + " player \n";
     } else {
-        logStringOrder = "Blockade " + validation + ": unsuccessfully transfer the ownership of " + target->getName() + " to Neutral Player\n";
+        logStringOrder = "Blockade " + validation + ": unsuccessful transfer the ownership of " + target->getName() + " to Neutral Player\n";
         logStringEffect = target->getName() + " has " + to_string(target->getArmies())
                           + " armies and is still under the ownership of the " + target->getOwner()->getName() + " player \n";
     }
@@ -871,7 +871,7 @@ void Negotiate::execute() {
         game->addAlliances(playerIssuing, targetPlayer);
         cout << "Execution successful!\n" << endl;
     }
-    //notify(this); // FROM SUBJECT
+    notify(this);
 }
 
 string Negotiate::stringToLog() {
@@ -999,7 +999,7 @@ ostream &operator<<(ostream &os, const OrdersList &ordersList) {
 
 void OrdersList::addOrder(Order *order) {
     playerOrderList.push_back(order);
-    //notify(this);
+    notify(this);
 }
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.

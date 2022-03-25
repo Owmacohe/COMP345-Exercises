@@ -45,6 +45,7 @@ class GameEngine : public Iloggable, public Subject {
         // Mutators
         void setState(State s);
         void setNumberOfPlayers(int x);
+        void setNumberOfTerritories(int x);
         void setEndOfState(bool b);
         void setplayer_list(vector<Player*>);
         void setProcessor(const CommandProcessor &cp);
