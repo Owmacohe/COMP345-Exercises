@@ -11,7 +11,7 @@ class Player;
 class Territory;
 
 /****************************** Order *******************************/
-class Order /*:public Iloggable, public Subject*/ {
+class Order :public Iloggable, public Subject {
 public:
     Order(); // Default Constructor
     Order(bool v, string s); // parameterized Constructor
@@ -36,7 +36,7 @@ public:
     // From Iloggable
      string stringToLog();
 
-    bool validated; // Status of validation
+    bool validated; // Status of validation54
     string description; // Description of the Order
     static GameEngine* game; // Game Engine pointer for Order subclasses execution and validation
 };
@@ -66,8 +66,6 @@ public:
 
     void validate();     //Method to validate if an order is valid
     void execute();     //Method to execute the order
-
-    string validateResult; // TODO WHAT IS THIS ONE FOR AUDREY? - string stores type of advance (attack || advance)
 
     // From Iloggable
     string stringToLog();
@@ -260,7 +258,7 @@ private:
 };
 
 /****************************** OrdersList *******************************/
-class OrdersList /* : public Iloggable, public Subject*/ {
+class OrdersList  : public Iloggable, public Subject {
 
 public:
     OrdersList();  // Constructor
