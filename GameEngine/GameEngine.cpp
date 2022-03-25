@@ -286,6 +286,7 @@ void GameEngine::issueOrdersPhase() {
         }
 
         // Issue advance orders
+        cout << p->getName() << "'s turn" <<endl;
         cout << "Issueing advance orders" << endl;
         do {
             cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
@@ -689,8 +690,9 @@ void GameEngine::startupPhase() {
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
-void GameEngine::mainGameLoop() {
+bool GameEngine::mainGameLoop() {
     bool playing = true;
+    bool continueplaying;
     string input;
     while (playing == true) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
@@ -702,7 +704,6 @@ void GameEngine::mainGameLoop() {
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
     }
-
 
     while (*s == 8) {
         cout << "Replay or quit? " << endl;
@@ -720,26 +721,20 @@ void GameEngine::mainGameLoop() {
 
             effect = "Replaying game";
             cout << effect << "!" << endl;
+            continueplaying = true;
+
         }
         else if (command == "quit") {
             endPhase();
 
             effect = "Quitting game";
             cout << effect << "!" << endl;
+            continueplaying = false;
         }
 
         temp->saveEffect(effect);
     }
-
-    /*
-    cout << "Would you like to play again ? y/n " << endl;
-    cin >> input;
-    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-        playAgain();
-        *s = start; // Switch to start up for replay
-    }
-    else endPhase();
-    */
+    return continueplaying;
 }
 
 // Check if a player has won by looping through territories and checking owner
