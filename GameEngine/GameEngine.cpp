@@ -268,17 +268,37 @@ void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
     string response;
-
+    int deployed = 0;
+    int hasMoreTroops = 0;
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder[i]);
 
         cout << "Issuing the orders for player " << p->getName() << endl;
         // Only issue deploy orders while the players reinforcement pool contains armies
-        cout << "Issueing deploy orders" << endl;
-        while (p->getReinforcePool() != 0) {
+        hasMoreTroops = p->getReinforcePool();
+        if (hasMoreTroops>0)  cout << "Issueing deploy orders" << endl;
+        while(hasMoreTroops >0){
             p->issueOrder("deploy");
+            cout<<"deploy of 1 army issued"<<endl;
+
+            for(Order * o : p->getOrder()->getOrderList()){
+               hasMoreTroops = hasMoreTroops - dynamic_cast<Deploy*>(o)->getNumToDeploy();
+
+            }
+            cout<< "You still have "<<hasMoreTroops << " to deploy"<<endl;
+            if(hasMoreTroops == 0)
+                break;
+            else hasMoreTroops = p->getReinforcePool();
+
         }
+
+
+
+//        while (p->getReinforcePool() != 0) {
+//            p->issueOrder("deploy");
+//
+//        }
         // Issue advance orders
         cout << "Issueing advance orders" << endl;
         do {
@@ -296,12 +316,12 @@ void GameEngine::issueOrdersPhase() {
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 cout << "The following is " << p->getName() << " hand" << endl;
-                cout << p->getHand() << endl;
+                cout << *(p->getHand()) << endl;
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
                 int index = checkCardInHand(response, p->getHand());
                 if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
-                else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played";
+                else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played y";
             } else break;
         } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
         endIssueOrderPhase(p);
@@ -508,7 +528,7 @@ void GameEngine::startupPhase() {
     while (*s < 5) {
         cout << "Enter a command: " << endl;
 
-        processor->getCommand();
+      //  processor->getCommand();
 
         Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 

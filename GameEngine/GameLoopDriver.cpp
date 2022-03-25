@@ -59,7 +59,7 @@ int main() {
         }
     }
     // Player 1
-    for (Territory *t : mainmap->getTerritories()) {
+    for (Territory *t: mainmap->getTerritories()) {
         if (t->getContinent() != continent && t->getName() != player2_territory->getName()) {
             player1->assignTerritory(t);
             t->setOwner(player1);
@@ -79,7 +79,7 @@ int main() {
     }
     mainGE->setPlayerOrder(tempOrder);
     for (int j = 0; j < player_list.size(); j++) {
-        cout<<mainGE->getPlayerOrder()[j]<<endl;
+        cout << mainGE->getPlayerOrder()[j] << endl;
     }
 
 //    // Determine randomly the order of play of the players in the game
@@ -93,7 +93,7 @@ int main() {
 //    setPlayerOrder(tempOrder);
 
     // Initial state of player
-    for (Player* k : player_list) {
+    for (Player *k: player_list) {
         // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
         k->addToReinforcePool(10);
 
@@ -101,29 +101,73 @@ int main() {
         k->getHand()->drawCard(*deck);
         k->getHand()->drawCard(*deck);
     }
-    cout<<endl;
+    cout << endl;
     mainGE->setNumberOfPlayers(player_list.size());
-    cout << "Number of territories : " << mainmap->getTerritories().size()<<endl;
-    cout << "Player 1 number territories : " << player1->getNumberOfTerritories()<<endl;
-    cout << "Player 2 number territories : " << player2->getNumberOfTerritories()<<endl;
-    cout << "Player 3 number territories : " << player3->getNumberOfTerritories()<<endl;
+    cout << "Number of territories : " << mainmap->getTerritories().size() << endl;
+    cout << "Player 1 number territories : " << player1->getNumberOfTerritories() << endl;
+    cout << "Player 2 number territories : " << player2->getNumberOfTerritories() << endl;
+    cout << "Player 3 number territories : " << player3->getNumberOfTerritories() << endl;
     //(1) a player receives the correct number of armies in the reinforcement phase (showing different cases);
-    cout << "number of reinforcement for player 1 (" << player1->getName() << ") before reinforcement phase : " << player1->getReinforcePool() << endl;
-    cout << "number of reinforcement for player 2 (" << player2->getName() << ") before reinforcement phase : " << player2->getReinforcePool() << endl;
-    cout << "number of reinforcement for player 3 (" << player3->getName() << ") before reinforcement phase : " << player3->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 1 (" << player1->getName() << ") before reinforcement phase : "
+         << player1->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 2 (" << player2->getName() << ") before reinforcement phase : "
+         << player2->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 3 (" << player3->getName() << ") before reinforcement phase : "
+         << player3->getReinforcePool() << endl;
     mainGE->assignReinforcementPhase();
-    cout << "number of reinforcement for player 1 (" << player1->getName() << ") after reinforcement phase : " << player1->getReinforcePool() << endl;
-    cout << "number of reinforcement for player 2 (" << player2->getName() << ") after reinforcement phase : " << player2->getReinforcePool() << endl;
-    cout << "number of reinforcement for player 3 (" << player3->getName() << ") after reinforcement phase : " << player3->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 1 (" << player1->getName() << ") after reinforcement phase : "
+         << player1->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 2 (" << player2->getName() << ") after reinforcement phase : "
+         << player2->getReinforcePool() << endl;
+    cout << "number of reinforcement for player 3 (" << player3->getName() << ") after reinforcement phase : "
+         << player3->getReinforcePool() << endl;
 
-    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
+   // (2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
 
-    
+    //Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
+    mainGE->issueOrdersPhase();
+    int deployCounter = 0;
+    int anyOtherOrders = 0;
+    for(Player * p : player_list){
+        for(Order* o : p->getOrder()->getOrderList()){
+            if(o->getDescription() == "deploy"){
+                deployCounter ++ ;
+            }else anyOtherOrders++;
+        }
+        cout << "number of deploy orders for player  (" << p->getName() << ") after issueOrderPhase : "
+             << deployCounter << endl;
+
+        deployCounter = 0;
+        anyOtherOrders = 0;
+
+    }
+
+
+    // proof: if a player has no armies there will be no deploy orders to issue
+     player3->setReinforcementPool(0);
+     cout<<player3->getName()<<" has : "<<player3->getReinforcePool()<< " armies"<<endl;
+     mainGE->issueOrdersPhase();
+
+
+
+
+
 //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
+
+
+
 //(4) a player can play cards to issue orders;
 //(5) a player that does not control any territory is removed from the game;
 //(6) the game ends when a single player controls all the territories.
+
+//mainGE->checkPlayers();
+//for (Player * p : player_list){
+//    for (Territory * t : p->getTerritoryList()){
+//        cout<<t->getName()<<t->getOwnerName()<<endl;
+//    }
+//}
 //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
 
 
-}
+    }
+
