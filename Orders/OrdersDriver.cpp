@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int main() {
+int Ordersmain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
@@ -25,10 +25,8 @@ int main() {
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
-
     // Assign Territories to Players
     int playerIndex = 0;
-    cout << mainmap->getTerritories().size()<<endl;
     for (Territory *i : mainmap->getTerritories()) {
         Player *tempPlayer = player_list.at(playerIndex);
         i->setOwner(tempPlayer);
@@ -61,21 +59,23 @@ int main() {
     Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
     Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
     Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(12);
-
-    /*
+  
     cout << "\n-------------------- DEPLOY --------------------" << endl;
+    cout << "\n--------- Player 1" << endl;
     Deploy* deploy1 = new Deploy(player1, Ontario_South);
     cout << "Order: " << *deploy1 << endl;
     deploy1->validate();
     deploy1->execute();
     cout << deploy1->stringToLog() << endl;
 
+    cout << "\n--------- Player 2" << endl;
     Deploy* deploy2 = new Deploy(player2, Quebec_North);
     cout << "Order: " << *deploy2 << endl;
     deploy2->validate();
     deploy2->execute();
     cout << deploy2->stringToLog() << endl;
 
+    cout << "\n--------- Player 1 (Target belongs to another player)" << endl;
     // Target territory belongs to enemy -> failed
     Deploy* deploy3 = new Deploy(player1, Ontario_West);
     cout << "Order: " << *deploy3 << endl;
@@ -85,6 +85,7 @@ int main() {
 
 
     cout << "\n-------------------- AIRLIFT --------------------" << endl;
+    cout << "\n--------- Player 1" << endl;
     Airlift* airlift1 = new Airlift(player1, Ontario_South, Ontario_North);
     cout << "Order: " << *airlift1 << endl;
     airlift1->validate();
@@ -92,6 +93,7 @@ int main() {
     cout << airlift1->stringToLog() << endl;
 
     // Target territory belongs to enemy -> failed
+    cout << "\n--------- Player 1 (Target belongs to another player)" << endl;
     Airlift* airlift2 = new Airlift(player1, Ontario_South, Ontario_West);
     cout << "Order: " << *airlift2 << endl;
     airlift2->validate();
@@ -99,6 +101,7 @@ int main() {
     cout << airlift2->stringToLog() << endl;
 
     // Origin territory is not yours -> failed
+    cout << "\n--------- Player 1 (Origin belongs to another player)" << endl;
     Airlift* airlift3 = new Airlift(player1, Ontario_West, Ontario_South);
     cout << "Order: " << *airlift3 << endl;
     airlift3->validate();
@@ -106,6 +109,7 @@ int main() {
     cout << airlift3->stringToLog() << endl;
 
     cout << "\n-------------------- BOMB --------------------" << endl;
+    cout << "\n--------- Player 2" << endl;
     Bomb* bomb1 = new Bomb(player2, Ontario_West, Ontario_South);
     cout << "Order: " << *bomb1 << endl;
     bomb1->validate();
@@ -113,6 +117,7 @@ int main() {
     cout << bomb1->stringToLog() << endl;
 
     // Target territory is your own territory -> failed
+    cout << "\n--------- Player 2 (Target belongs to another player)" << endl;
     Bomb* bomb2 = new Bomb(player1, Ontario_South, Ontario_North);
     cout << "Order: " << *bomb2 << endl;
     bomb2->validate();
@@ -120,6 +125,7 @@ int main() {
     cout << bomb2->stringToLog() << endl;
 
     // Target territory is not adjacent -> failed
+    cout << "\n--------- Player 2 (Origin & Target are not adjacent)" << endl;
     Bomb* bomb6 = new Bomb(player1, Yukon_Territory, Quebec_North);
     cout << "Order: " << *bomb6 << endl;
     bomb6->validate();
@@ -150,12 +156,14 @@ int main() {
     advance4->validate();
 
     cout << "\n-------------------- BLOCKADE --------------------" << endl;
+    cout << "\n--------- Player 2" << endl;
     Blockade* blockade1 = new Blockade(player2, Ontario_West);
     cout << "Order: " << *blockade1 << endl;
     blockade1->validate();
     blockade1->execute();
     cout << blockade1->stringToLog() << endl;
 
+    cout << "\n--------- Player 1" << endl;
     Blockade* blockade2 = new Blockade(player1, Quebec_Central);
     cout << "Order: " << *blockade2 << endl;
     blockade2->validate();
@@ -163,6 +171,7 @@ int main() {
     cout << blockade2->stringToLog() << endl;
 
     // Target territory belongs to enemy -> failed + The effect of Neural Player persist
+    cout << "\n--------- Player 2 (Territory under ownership of Neutral Player, cannot be blocked)" << endl;
     Blockade* blockade3 = new Blockade(player2, Quebec_Central);
     cout << "Order: " << *blockade3 << endl;
     blockade3->validate();
@@ -170,7 +179,9 @@ int main() {
     cout << blockade3->stringToLog() << endl;
 
     // Territory is under protection of blockade -> failed
+    cout << "\n--------- Player 2 (Territory under ownership of Neutral Player, cannot be attacked)" << endl;
     Bomb* bomb4 = new Bomb(player1, Ontario_South , Ontario_West);
+
     cout << "Order: " << *bomb4 << endl;
     bomb4->validate();
     bomb4->execute();
@@ -182,6 +193,7 @@ int main() {
     advance5->validate();
 
     cout << "\n-------------------- NEGOTIATE --------------------" << endl;
+    cout << "\n--------- Player 1 & Player 2" << endl;
     Negotiate* negotiate1 = new Negotiate(player1, player2);
     cout << "Order: " << *negotiate1 << endl;
     negotiate1->validate();
@@ -189,6 +201,7 @@ int main() {
     cout << negotiate1->stringToLog() << endl;
 
     // Target player is yourself -> failed
+    cout << "\n--------- Player 1 & Player 1" << endl;
     Negotiate* negotiate2 = new Negotiate(player1, player1);
     cout << "Order: " << *negotiate2 << endl;
     negotiate2->validate();
@@ -196,6 +209,7 @@ int main() {
     cout << negotiate2->stringToLog() << endl;
 
     // Target territory is under negotiate, cannot be bombed -> failed
+    cout << "\n--------- Player 2 attacking Player 1" << endl;
     Bomb* bomb5 = new Bomb(player2, Quebec_North, Ontario_North);
     cout << "Order: " << *bomb5 << endl;
     bomb5->validate();
@@ -234,7 +248,6 @@ int main() {
 //        cout << *teri << endl;
 //    }
 
-
     // Deploy
     cout << "\n-------------------- DEPLOY --------------------\n" << endl;
     Deploy *deploy1 = new Deploy(player1);
@@ -260,6 +273,14 @@ int main() {
     deploy4->validate();
     deploy4->execute();
     cout << deploy4->stringToLog() << endl;
+
+    // Airlift
+    cout << "\n-------------------- AIRLIFT --------------------\n" << endl;
+	  Airlift *airlift1 = new Airlift(player1);
+    cout << "Order: "<< *airlift1 << endl;
+    airlift1->validate();
+    airlift1->execute() ;
+    cout << airlift1->stringToLog() <<endl;
 
     Deploy *deploy5 = new Deploy(player1);
     Deploy *deploy6 = new Deploy(player1);
