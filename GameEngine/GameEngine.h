@@ -29,7 +29,7 @@ class GameEngine : public Iloggable, public Subject {
         friend ostream& operator<<(ostream& os, const GameEngine& gm); // Stream insertion operator
 
         // Accessors
-        State getState();
+        State *getState();
         int getNumberOfPlayers();
         bool endOfState ();
         vector<Player*> getplayer_list();
@@ -38,23 +38,23 @@ class GameEngine : public Iloggable, public Subject {
         Deck *getDeck();
         set<pair<Player*, Player*>> getAlliances();
         bool existingAlliance(Player*, Player*);
-        int *getPlayerOrder();
+        vector<int> getPlayerOrder();
         int getCurrentPlayer();
         Player* getNeutralPlayer();
 
         // Mutators
-        void setState(State s);
+        void setState(const State &s);
         void setNumberOfPlayers(int x);
         void setNumberOfTerritories(int x);
         void setEndOfState(bool b);
         void setplayer_list(vector<Player*>);
-        void setProcessor(const CommandProcessor &cp);
+        void setProcessor(CommandProcessor*);
         void setMap(const Map &m);
         void setDeck(const Deck &d);
         void setAlliances (const  set<pair<Player*, Player*>> all);
         void addAlliances(Player*, Player*);
         void resetAlliances();
-        void setPlayerOrder(int*);
+        void setPlayerOrder(vector<int>);
         void setCurrentPlayer(int);
         void setNeutralPlayer(Player* np);
 
@@ -103,7 +103,7 @@ class GameEngine : public Iloggable, public Subject {
         CommandProcessor *processor;
         Map *map;
         set<pair<Player*, Player*>> alliances;
-        int *playerOrder;
+        vector<int> playerOrder;
         int currentPlayer;
         Player* neutralPlayer;
 };

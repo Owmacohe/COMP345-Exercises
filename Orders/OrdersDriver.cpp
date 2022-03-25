@@ -5,12 +5,12 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int main() {
+int ordersMain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
     MapLoader* loader;
-    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+    Map *mainmap = loader->load("../Orders/canada.map");
 
     // Create Players List
     vector<Player*> player_list;

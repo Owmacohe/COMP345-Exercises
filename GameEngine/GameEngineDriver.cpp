@@ -3,33 +3,20 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "GameEngine.h"
-#include "../Cards/Cards.h"
-#include "../Player/Player.h"
-#include "../Map/Map.h"
-#include "../Orders/Orders.h"
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
 int gameEngineMain() {
     GameEngine gameEngine;
-    // TODO create a new CommandProcessor and set it to the "processor" attribute
     string input;
     bool isPlaying = true;
 
     while (isPlaying) {
-        // ### TODO: the following block will be replaced with startupPhase()
-        //gameEngine.startGame();
-
-        while (gameEngine.getState() < 5) {
-            cout << "Enter a command: " << endl;
-            cin >> input;
-            //gameEngine.gameStartupTransitions(input);
-        }
-        // ###
+        gameEngine.startupPhase();
 
         // ### TODO: main game loop
 
-        while (gameEngine.getState() != 8) {
+        while (*gameEngine.getState() != 8) {
             for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
                 while (true) {
                     cout << gameEngine.getplayer_list()[i]->getName() << "'s turn" <<endl;
@@ -37,7 +24,7 @@ int gameEngineMain() {
                     cin >> input;
                     gameEngine.gamePlayTransitions(input, gameEngine.getplayer_list()[i]);
                     
-                    if ((gameEngine.getState() == 5 && input == "endexecorders") || (gameEngine.getState() == 8 && input == "win")) {
+                    if ((*gameEngine.getState() == 5 && input == "endexecorders") || (*gameEngine.getState() == 8 && input == "win")) {
                         cout << "break" << endl;
                         break;
                     }
@@ -49,7 +36,7 @@ int gameEngineMain() {
             }
         }
 
-        while (gameEngine.getState() == 8) {
+        while (*gameEngine.getState() == 8) {
             while (true) {
                 cout << "What would you like to do next? To Play Again or end the game?" <<endl;
                 cin >> input;

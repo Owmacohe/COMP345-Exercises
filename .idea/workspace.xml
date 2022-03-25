@@ -14,13 +14,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8e921a3-24b9-4148-a330-d3f4a34c9f38" name="Changes" comment="">
+    <list default="true" id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessingDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameEngine/GameLoopDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameLoopDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Map/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Map/Map.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map/Map.h" beforeDir="false" afterPath="$PROJECT_DIR$/Map/Map.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Map/MapDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Map/MapDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/OrdersDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,6 +97,11 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="COMP345-Exercises" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="COMP345_Assignment" TARGET_NAME="COMP345-Exercises" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="COMP345_Assignment" RUN_TARGET_NAME="COMP345-Exercises">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -99,7 +111,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a8e921a3-24b9-4148-a330-d3f4a34c9f38" name="Changes" comment="" />
+      <changelist id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="" />
       <created>1646325678271</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -126,7 +138,9 @@
       <workItem from="1647975041689" duration="8283000" />
       <workItem from="1648050625114" duration="594000" />
       <workItem from="1648069407809" duration="10432000" />
-      <workItem from="1648083318743" duration="5170000" />
+      <workItem from="1648083318743" duration="5260000" />
+      <workItem from="1648216211285" duration="4731000" />
+      <workItem from="1648228798184" duration="4191000" />
     </task>
     <servers />
   </component>

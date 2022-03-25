@@ -12,14 +12,14 @@ int mapMain() {
     // Looping through the files and creating a Map for each
     for (int i = 0; i < len; i++) {
         cout << endl;
-        Map temp = loader.load(files[i]);
+        Map *temp = loader.load(files[i]);
 
         // Only printing and validating the Map if it's from a good file
-        if (temp.isGoodMap) {
+        if (temp->isGoodMap) {
             cout << endl;
             cout << temp << endl;
             cout << endl;
-            temp.validate();
+            temp->validate();
         }
 
         cout << "\n==========" << endl;

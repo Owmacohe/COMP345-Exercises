@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int gameLoopMain() {
     // Create Map Loader
     MapLoader loader;
     Map *mainmap = new Map(loader.load("../Orders/canada.map"));

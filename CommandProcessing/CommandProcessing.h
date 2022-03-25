@@ -41,7 +41,8 @@ class CommandProcessor : public Iloggable, public Subject {
         CommandProcessor(); // Default constructor
         CommandProcessor(GameEngine*); // Parameterized constructor
         ~CommandProcessor(); // Destructor
-        friend ostream& operator<<(ostream &strm, const CommandProcessor &cp); // Stream insertion operator
+        virtual ostream& write(ostream &strm) const; // Stream insertion operator (virtual for derived class)
+        friend ostream& operator<<(ostream &strm, CommandProcessor const &cp) { return cp.write(strm); }; // Stream insertion operator
         CommandProcessor& operator = (const CommandProcessor& toAssign);  // Assignment operator
 
         // Accessors
@@ -76,8 +77,14 @@ class FileCommandProcessorAdapter : public CommandProcessor {
         FileCommandProcessorAdapter(string); // Parameterized constructor
         ~FileCommandProcessorAdapter(); // Destructor
 
-        friend ostream& operator<<(ostream &strm, const FileCommandProcessorAdapter &fcpa); // Stream insertion operator
+        ostream& write(ostream &strm) const override; // Stream insertion operator
         FileCommandProcessorAdapter& operator = (const FileCommandProcessorAdapter& toAssign);  // Assignment operator
+
+        string getCurrentFile();
+        int getCurrentLine();
+
+        // Mutators
+        void setCurrentFile(string), setCurrentLine(int);
 
         void getCommand() override; // Reads and then saves a command from a file
     private:
