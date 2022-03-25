@@ -7,10 +7,10 @@
 #include <iostream>
 using namespace std;
 
-int gameLoopMain() {
+int main() {
     // Create Map Loader
     MapLoader loader;
-    Map *mainmap = new Map(loader.load("../Orders/canada.map"));
+    Map* mainmap = loader.load("../Orders/canada.map");
 
     // Create Players List
     vector<Player *> players;
@@ -68,9 +68,9 @@ int gameLoopMain() {
     }
 
     // Set up player order
-    int *tempOrder = new int[(mainGE->getplayer_list()).size()];
+    vector<int> tempOrder;
     for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
-        tempOrder[j] = j;
+        tempOrder.push_back(j);
     }
     for (int i = 0; i < (mainGE->getplayer_list()).size(); i++) {
         int index = (int) (rand() % ((mainGE->getplayer_list()).size() - i));
