@@ -59,7 +59,7 @@ int Ordersmain() {
     Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
     Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
     Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(12);
-  
+    
     cout << "\n-------------------- DEPLOY --------------------" << endl;
     cout << "\n--------- Player 1" << endl;
     Deploy* deploy1 = new Deploy(player1, Ontario_South);
@@ -181,7 +181,6 @@ int Ordersmain() {
     // Territory is under protection of blockade -> failed
     cout << "\n--------- Player 2 (Territory under ownership of Neutral Player, cannot be attacked)" << endl;
     Bomb* bomb4 = new Bomb(player1, Ontario_South , Ontario_West);
-
     cout << "Order: " << *bomb4 << endl;
     bomb4->validate();
     bomb4->execute();

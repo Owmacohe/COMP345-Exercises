@@ -228,17 +228,17 @@ Advance::Advance(Player* p) : Order(false, "advance") {
             }
         }
 }
-Advance::Advance(Player* p, Territory* origin, Territory* target){
+Advance::Advance(Player* p, Territory* origin, Territory* target) {
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
 
     // Condition checked: If there's no more armies to advance
-    if (origin->getArmies() == 0){
+    if (origin->getArmies() == 0) {
         numToAdvance = 0;
     } else {
         numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
-        while (numToAdvance > origin->getArmies()){ // make sure the condition armies <= armies in origin
+        while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
             numToAdvance = rand() % origin->getArmies() + 1;
         }
     }
