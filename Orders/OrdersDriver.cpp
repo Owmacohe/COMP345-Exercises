@@ -21,7 +21,7 @@ int ordersMain() {
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(*mainmap);
-    mainGE->setplayer_list(player_list);
+    mainGE->setplayer_list(player_list); // TODO:: keep in mind that throughout the code u use player_list not mainGE->getplayer_list() so your player_list wont update with the gameengine
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
