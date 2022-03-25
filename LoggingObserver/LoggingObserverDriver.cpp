@@ -6,7 +6,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "../CommandProcessing//CommandProcessing.h"
 
-    int LOmain() {
+    int main() {
 
         /****************************** CREATING Game, CommandProcessor, OrdersList, etc. *******************************/
 
@@ -102,8 +102,9 @@
         Deploy* deploy2 = new Deploy(player2, Quebec_North);
         Deploy* deploy3 = new Deploy(player1, Ontario_West);
 
-        //player1
-        // TODO ADD getter for Orderlist
+        player1->getOrder()->addOrder(deploy1);
+        player1->getOrder()->addOrder(deploy2);
+        player1->getOrder()->addOrder(deploy3);
 
         cout << "\n-------------------- Order::execute() --------------------" << endl;
 
