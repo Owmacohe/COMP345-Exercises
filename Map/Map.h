@@ -87,5 +87,5 @@ class Map {
 // Class to load in new graphs
 class MapLoader {
     public:
-        Map load(string); // Method to read a .map file with the given name, and output it as a Map
+        Map *load(string); // Method to read a .map file with the given name, and output it as a Map
 };

@@ -5,12 +5,13 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int Ordersmain() {
+int ordersMain() {
+
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
     MapLoader* loader;
-    Map* mainmap = new Map(loader->load("../Orders/canada.map"));
+    Map *mainmap = loader->load("../Orders/canada.map");
 
     // Create Players List
     vector<Player*> player_list;
@@ -21,7 +22,7 @@ int Ordersmain() {
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(*mainmap);
-    mainGE->setplayer_list(player_list);
+    mainGE->setplayer_list(player_list); // TODO:: keep in mind that throughout the code u use player_list not mainGE->getplayer_list() so your player_list wont update with the gameengine
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 

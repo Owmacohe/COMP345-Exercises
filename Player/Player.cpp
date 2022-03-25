@@ -77,7 +77,7 @@ vector<Territory*> Player::toDefend(Map* m) {
         // step 1 check each territories numbers of enemies surrounding
         else {
             for (Territory *t: surrounded_territories) {
-                if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player //TODO:: (t->getOwner()->getName() != "Neutral"))
+                if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player
                     number_surrounding = number_surrounding + 1;
                 }
             }
@@ -128,7 +128,7 @@ vector<Territory*> Player::toAttack(Map* m) {
         // step 2 for each connected territory that's an enemy's count the number armies
         // cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
         for (Territory* t : surround_territory) {
-            if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player //TODO:: THIS ISNT EVALUTAING PROPERLY WHEN I REMOVE ( || (t->getOwner()->getName() != "Neutral")) IT WORKS ????
+            if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player
                 number_armies = t->getArmies();
                 // step 3 pair enemy territory and their number of armies, add pair to vector
                 pairs.first = number_armies;
@@ -187,6 +187,7 @@ int Player::getNumberOfArmies() {
 // Return number of territories player has
 int Player::getNumberOfTerritories() {
     int sum = 0;
+    if (territories.empty()) return 0;
     for (Territory* i : territories) {
         sum = sum + 1;
     }
@@ -223,8 +224,11 @@ void Player::setTerritory(vector<Territory*> t) {
         territories.push_back(i);
     }
 }
-void Player::assignTerritory(Territory* t){
+void Player::assignTerritory(Territory* t) {
     territories.push_back(t);
+}
+void Player::removeTerritory(int index) {
+    territories.erase(territories.begin()+index);
 }
 
 void Player::setHand(Hand* h) { hand = h; }
