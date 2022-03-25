@@ -839,7 +839,7 @@ void Negotiate::execute() {
         game->addAlliances(playerIssuing, targetPlayer);
         cout << "Execution successful!\n" << endl;
     }
-    //notify(this); // FROM SUBJECT
+    notify(this);
 }
 
 string Negotiate::stringToLog() {
