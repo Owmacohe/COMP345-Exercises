@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int Ordersmain() {
+int main() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
@@ -59,7 +59,7 @@ int Ordersmain() {
     Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
     Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
     Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(12);
-    
+
     cout << "\n-------------------- DEPLOY --------------------" << endl;
     cout << "\n--------- Player 1" << endl;
     Deploy* deploy1 = new Deploy(player1, Ontario_South);
@@ -216,10 +216,10 @@ int Ordersmain() {
     cout << bomb5->stringToLog() << endl;
 
     // Target territory is under negotiate, cannot be attack -> failed
+    cout << "\n--------- Player 1 (Territory is in negotiation, cannot be attacked)" << endl;
     Advance* advance6 = new Advance(player1,Ontario_South, Quebec_South);
     cout << "Order: " << *advance6 << endl;
     advance6->validate();
-    */
 
     //
     // ******************************* Testing Orders Constructor for GameLoop *******************************
@@ -247,6 +247,7 @@ int Ordersmain() {
 //        cout << *teri << endl;
 //    }
 
+/*
     // Deploy
     cout << "\n-------------------- DEPLOY --------------------\n" << endl;
     Deploy *deploy1 = new Deploy(player1);
@@ -405,7 +406,8 @@ int Ordersmain() {
 //    negotiate3->validate();
 //    negotiate3->execute();
 //    cout<< negotiate3->stringToLog();
-//	return 0;
+ */
+	return 0;
 }
 
 //    cout << "Before Assigning" <<endl;
