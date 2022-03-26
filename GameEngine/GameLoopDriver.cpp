@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int GameLoopmain() {
 
     // Create Players List
     vector<Player *> players;

@@ -349,7 +349,9 @@ void Advance::execute() {
         // Attack
         else if (validateResult == "attack") {
             int defend_alive = target->getArmies() - deathCalculation(target->getArmies(),0.6 );
+            cout << "Enemy's armies " << defend_alive <<endl;
             int attack_alive = numToAdvance -  deathCalculation(numToAdvance, 0.7);
+            cout << "Player's armies " << defend_alive << endl;
             // Attack successful
             if (attack_alive > defend_alive){
                 target->setArmies(attack_alive); // Attacker survived conquered the territory
@@ -359,6 +361,7 @@ void Advance::execute() {
             // Attack failed
             else {
                 target->setArmies(defend_alive);
+                cout << "Attack Failed, player now has " << defend_alive << " armies."<< endl;
             }
         }
     } else
@@ -370,9 +373,10 @@ void Advance::execute() {
 int Advance::deathCalculation(int qty, double probability) {
     bool kill;
     int dead = 0;
-    while (qty != 0){
+    while (qty > 0){
         kill = (rand() % 100) < probability*100;
         if (kill) dead++;
+        qty--;
     }
     return dead;
 }
