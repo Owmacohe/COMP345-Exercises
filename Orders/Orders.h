@@ -12,7 +12,7 @@ class Player;
 class Territory;
 
 /****************************** Order *******************************/
-class Order :public Iloggable, public Subject {
+class Order /*:public Iloggable, public Subject*/ {
 public:
     Order(); // Default Constructor
     Order(bool v, string s); // parameterized Constructor
@@ -35,7 +35,7 @@ public:
     virtual void execute() = 0; //Pure virtual execute function
 
     // From Iloggable
-     string stringToLog();
+    string stringToLog();
 
     bool validated; // Status of validation54
     string description; // Description of the Order
