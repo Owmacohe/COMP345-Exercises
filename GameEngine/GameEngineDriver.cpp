@@ -6,6 +6,15 @@
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
+//int main() {
+//    GameEngine gameEngine;
+//    gameEngine.startupPhase();
+//
+//    // TODO: we still need to figure out when and how to delete all of our pointers
+//
+//    return 0;
+//}
+
 int gameEngineMain() {
     GameEngine gameEngine;
     string input;
