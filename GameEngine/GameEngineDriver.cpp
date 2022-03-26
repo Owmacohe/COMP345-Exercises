@@ -13,14 +13,16 @@
 //    return 0;
 //}
 
-int gameEngineMain() {
-    GameEngine gameEngine;
+
+int GameEnginemain() {
+    GameEngine* gameEngine = new GameEngine;
+    Order::game = gameEngine;
     string input;
     bool isPlaying = true;
 
     while (isPlaying) {
-        gameEngine.startupPhase();
-        isPlaying = gameEngine.mainGameLoop();
+        gameEngine->startupPhase();
+        isPlaying = gameEngine->mainGameLoop();
     }
 
 //

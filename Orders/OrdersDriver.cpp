@@ -22,27 +22,27 @@ int Ordersmain() {
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(mainmap);
-    mainGE->setplayer_list(player_list); // TODO:: keep in mind that throughout the code u use player_list not mainGE->getplayer_list() so your player_list wont update with the gameengine
+    mainGE->setplayer_list(player_list);
     Order::game = mainGE;
 
     // Assign Territories to Players
     int playerIndex = 0;
     for (Territory *i : mainmap->getTerritories()) {
-        Player *tempPlayer = player_list.at(playerIndex);
+        Player *tempPlayer = mainGE->getplayer_list().at(playerIndex);
         i->setOwner(tempPlayer);
         tempPlayer->assignTerritory(i);
 
         playerIndex++;
-        if (playerIndex >= player_list.size()) {
+        if (playerIndex >= mainGE->getplayer_list().size()) {
             playerIndex = 0;
         }
     }
 
     // Display Player list of Territories
     cout << endl;
-    for (int i=0; i<player_list.size();i++){
-        cout << player_list.at(i)->getName() << "'s territories: ";
-        for(auto teri : player_list.at(i)->getTerritoryList()){
+    for (int i=0; i<mainGE->getplayer_list().size();i++){
+        cout << mainGE->getplayer_list().at(i)->getName() << "'s territories: ";
+        for(auto teri : mainGE->getplayer_list().at(i)->getTerritoryList()){
             cout << teri->getName() << " | ";
         }
         cout << endl;
