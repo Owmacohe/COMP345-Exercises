@@ -429,6 +429,7 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
         target = p->toDefend(game->getMap()).at(i+1);
         i++;
     }
+//    Territory*  TODO
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;

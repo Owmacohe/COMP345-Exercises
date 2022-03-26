@@ -711,7 +711,7 @@ void GameEngine::startupPhase() {
         temp->saveEffect(effect);
     }
 
-    Order::setGameEngine(this);
+//    Order::setGameEngine(this);
 
     notify(this); // FROM SUBJECT
 }
