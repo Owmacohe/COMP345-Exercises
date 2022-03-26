@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int GameLoopmain() {
     // Create Map Loader
     MapLoader loader;
     Map* mainmap = loader.load("../Orders/canada.map");
@@ -201,6 +201,6 @@ int main() {
 
 //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
 
-
+    return 0;
     }
 
