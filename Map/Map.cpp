@@ -84,6 +84,7 @@ Territory::Territory(const Territory &t) {
 
 // Territory destructor
 Territory::~Territory() {
+    owner = NULL;
     //cout << "[" << name << " Territory destructor]" << endl;
 }
 

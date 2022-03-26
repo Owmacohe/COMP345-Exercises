@@ -54,12 +54,6 @@ Player::Player(const Player &p) {
 
 // Destructor
 Player::~Player() {
-    for (Territory* i : territories) {
-        delete i;
-        i = NULL;
-        //cout << "[Player territory destructor]" << endl;
-    }
-
     delete hand;
     hand = NULL;
     delete orders;
