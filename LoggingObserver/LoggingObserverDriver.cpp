@@ -25,9 +25,9 @@ LogObserver* Subject::logObs=logger;
 
         // Create & Set up Game Engine
         GameEngine* mainGE = new GameEngine();
-        mainGE->setMap(*mainmap);
+        mainGE->setMap(mainmap);
         mainGE->setplayer_list(player_list);
-        mainGE->setDeck(*new Deck(20));
+        mainGE->setDeck(new Deck(20));
         Order::game = mainGE;
 
         // Assign Territories to Players

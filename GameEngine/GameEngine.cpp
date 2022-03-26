@@ -138,8 +138,8 @@ void GameEngine::setNumberOfTerritories(int x) { this->NumberOfTerritories = x; 
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
 void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
 void GameEngine::setProcessor(CommandProcessor *cp) { processor = cp; }
-void GameEngine::setMap(const Map &m) { *map = m; }
-void GameEngine::setDeck(const Deck& d){ *deck = d;}
+void GameEngine::setMap(Map* m) { map = m; }
+void GameEngine::setDeck(Deck* d){ deck = d;}
 void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
 void GameEngine::addAlliances(Player* p1, Player* p2) {alliances.insert(make_pair(p1,p2));}
 void GameEngine::resetAlliances() {
@@ -218,7 +218,7 @@ void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign reinforcement phase" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
-        Player *p = player_list.at(playerOrder[i]);
+        Player *p = player_list.at(playerOrder.at(i));
         //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
         int num = floor((p->getNumberOfTerritories())/3);
 
@@ -255,7 +255,7 @@ void GameEngine::issueOrdersPhase() {
     int hasMoreTroops = 0;
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
-        Player *p = player_list.at(playerOrder[i]);
+        Player *p = player_list.at(playerOrder.at(i));
 
         cout << "Issuing the orders for player " << p->getName() << endl;
 
@@ -324,8 +324,8 @@ void GameEngine::executeOrdersPhase() {
     while (hasMoreDeployOrders == true ){
         // this loop will loop based on the playing order
         for (int i = 0; i < NumberOfPlayers; i++) {
-            Player *p = player_list.at(playerOrder[i]);
-            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+            Player *p = player_list.at(playerOrder.at(i));
+            for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) {
                 if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
                     p->getOrder()->getOrderList().at(i)->execute();
                     p->getOrder()->remove(i);
