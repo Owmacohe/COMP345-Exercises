@@ -11,7 +11,7 @@ using namespace std;
 class GameEngine;
 
 // Class representing one Command that gets executed in (primarily) the startup phase
-class Command /*:public Iloggable, public Subject*/ {
+class Command :public Iloggable, public Subject {
     public:
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1 (unparemeterized Commands)
@@ -29,7 +29,7 @@ class Command /*:public Iloggable, public Subject*/ {
 
         void addValidInState(int); // Method to add a new state in which the Command is valid
 
-//        string stringToLog(); // From Iloggable
+        string stringToLog(); // From Iloggable
     private:
         string command, transitionsTo, effect; // Command name, next state, and effect of the command
         vector<int> validIn; // Which states it valid in
@@ -85,7 +85,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
 
         // Mutators
         void setCurrentFile(string), setCurrentLine(int);
-//    string stringToLog(); // From Iloggable TODO MJ
+    //string stringToLog(); // From Iloggable TODO MJ
 
         void getCommand() override; // Reads and then saves a command from a file
     private:

@@ -20,7 +20,7 @@ enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
 
-class GameEngine /*: public Iloggable, public Subject*/ {
+class GameEngine : public Iloggable, public Subject {
     public:
         GameEngine() ; // Constructor
         GameEngine(const GameEngine &gm); // Copy constructor
@@ -91,7 +91,7 @@ class GameEngine /*: public Iloggable, public Subject*/ {
         bool equalsIgnoreCase(string, string);
 
         // From Iloggable
-        /*string stringToLog();*/
+        string stringToLog();
     private:
         State* s;
         int NumberOfPlayers;
