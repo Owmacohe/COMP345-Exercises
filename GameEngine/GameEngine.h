@@ -16,6 +16,8 @@ class Hand;
 class CommandProcessor;
 class Map;
 
+bool doesContain(vector<int>, int); // Free method to determine whether an int vector contains a given int
+
 enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
 };
@@ -76,7 +78,7 @@ class GameEngine : public Iloggable, public Subject {
         void endPhase();
         void playAgain();
 
-        void mainGameLoop();
+        bool mainGameLoop();
 
         //void gameStartupTransitions(string s);
         void gamePlayTransitions(string, Player*);

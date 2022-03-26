@@ -35,7 +35,10 @@ public:
     virtual void execute() = 0; //Pure virtual execute function
 
     // From Iloggable
+
     string stringToLog();
+    // string stringToLog() override; TODO SOMEONE ADDED THE KEYWORD, ILL CHECK IT AFTER - MJ
+
 
     bool validated; // Status of validation54
     string description; // Description of the Order
@@ -89,6 +92,7 @@ public:
     Advance& operator = (const Advance& d);  // Assignment operator
     friend ostream& operator<<(ostream& os, const Advance& advance);  // Stream insertion operator
 
+    int deathCalculation(int qty, double probability);
     // Accessors
     string getDescription();
     bool getValidated();
@@ -259,7 +263,7 @@ private:
 };
 
 /****************************** OrdersList *******************************/
-class OrdersList  : public Iloggable, public Subject {
+class OrdersList :public Iloggable, public Subject {
 
 public:
     OrdersList();  // Constructor

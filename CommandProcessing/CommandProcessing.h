@@ -80,6 +80,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
         ostream& write(ostream &strm) const override; // Stream insertion operator
         FileCommandProcessorAdapter& operator = (const FileCommandProcessorAdapter& toAssign);  // Assignment operator
 
+        // Accessors
         string getCurrentFile();
         int getCurrentLine();
 
