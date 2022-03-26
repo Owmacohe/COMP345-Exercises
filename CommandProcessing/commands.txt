@@ -1,0 +1,8 @@
+loadmap europe.map
+validatemap
+addplayer Owen
+addplayer Gabbi
+addplayer Joe
+addplayer Audrey
+addplayer MJ
+gamestart

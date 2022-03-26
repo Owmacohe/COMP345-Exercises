@@ -51,8 +51,8 @@ class GameEngine : public Iloggable, public Subject {
         void setEndOfState(bool b);
         void setplayer_list(vector<Player*>);
         void setProcessor(CommandProcessor*);
-        void setMap(const Map &m);
-        void setDeck(const Deck &d);
+        void setMap(Map*);
+        void setDeck(Deck*);
         void setAlliances (const  set<pair<Player*, Player*>> all);
         void addAlliances(Player*, Player*);
         void resetAlliances();

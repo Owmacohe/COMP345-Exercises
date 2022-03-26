@@ -7,10 +7,7 @@
 #include <iostream>
 using namespace std;
 
-int GameLoopmain() {
-    // Create Map Loader
-    MapLoader loader;
-    Map* mainmap = loader.load("../Orders/canada.map");
+int main() {
 
     // Create Players List
     vector<Player *> players;
@@ -24,22 +21,16 @@ int GameLoopmain() {
     players.push_back(player2);
     players.push_back(player3);
 
+    // Create Map Loader
+    MapLoader loader;
+    Map* mainmap = loader.load("../Map/canada.map");
+
     // Create && set up gameEngine
     GameEngine *mainGE = new GameEngine();
+    mainGE->setMap(mainmap);
     mainGE->setplayer_list(players);
-    Deck *deck = new Deck(10);
-    mainGE->setDeck(*deck);
-    mainGE->setMap(*mainmap);
 
     // Assign Territories to Players
-    // The following will assign equal territories for each player, but I will not be doing this for demonstrative purposes :
-    //    int playerIndex = 0;
-    //    for (int i = 0; i < mainmap->territoriesLength; i++) {
-    //         player_list.at(playerIndex)->assignTerritory(new Territory(mainmap->getTerritories()[i]));
-    //         mainmap->getTerritories()[i].setOwner(player_list.at(playerIndex));
-    //        playerIndex++;
-    //        if (playerIndex >= player_list.size()) { playerIndex = 0; }
-    //    }
     // One player with territories normal, one without many territories, and one with a whole continent
     // Player 3
     string continent = mainmap->getContinents().at(0);
@@ -69,29 +60,18 @@ int GameLoopmain() {
 
     // Set up player order
     vector<int> tempOrder;
-    for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
-        tempOrder.push_back(j);
-    }
-    for (int i = 0; i < (mainGE->getplayer_list()).size(); i++) {
-        int index = (int) (rand() % ((mainGE->getplayer_list()).size() - i));
-        int temp = tempOrder[i];
-        tempOrder[i] = tempOrder[index];
-        tempOrder[index] = temp;
+    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
+        int randOrder = rand() % mainGE->getplayer_list().size();
+
+        while (doesContain(tempOrder, randOrder)) {
+            randOrder = rand() % mainGE->getplayer_list().size();
+        }
+
+        cout << randOrder << endl;
+
+        tempOrder.push_back(randOrder);
     }
     mainGE->setPlayerOrder(tempOrder);
-//    for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
-//        cout << mainGE->getPlayerOrder()[j] << endl;
-//    }
-
-//    // Determine randomly the order of play of the players in the game
-//
-//    int *tempOrder = new int[player_list.size()];
-//
-//    for (int j = 0; j < player_list.size(); j++) {
-//        tempOrder[j] = rand() % (player_list.size() - j) + j;
-//    }
-//
-//    setPlayerOrder(tempOrder);
 
     // Initial state of player
     for (Player *k: mainGE->getplayer_list()) {
@@ -99,8 +79,8 @@ int GameLoopmain() {
         k->addToReinforcePool(10);
 
         // Let each player draw 2 initial cards from the deck using the deck’s draw() method
-        k->getHand()->drawCard(*deck);
-        k->getHand()->drawCard(*deck);
+        k->getHand()->drawCard(*mainGE->getDeck());
+        k->getHand()->drawCard(*mainGE->getDeck());
     }
     cout<<endl;
 
@@ -151,12 +131,10 @@ int GameLoopmain() {
 //
 //    //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
 //    cout <<"---a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend()---"<<endl;
-//    //TODO
 //    mainGE->issueOrdersPhase();
 //
 //    //(4) a player can play cards to issue orders;
 //    cout <<"---a player can play cards to issue orders---"<<endl;
-//    //TODO
 //    mainGE->issueOrdersPhase();
 
     //(5) a player that does not control any territory is removed from the game;
@@ -178,7 +156,6 @@ int GameLoopmain() {
     }
     mainGE->checkPlayers();
     cout << "Number players : " << mainGE->getNumberOfPlayers() <<endl;
-    cout << "Number players : " << (mainGE->getplayer_list()).size() <<endl;
     cout << "Player order after removal: " <<endl;
     for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
         cout << mainGE->getPlayerOrder()[j] << endl;
@@ -200,7 +177,8 @@ int GameLoopmain() {
     mainGE->checkForWinner();
 
 //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
-
     return 0;
-    }
+// TODO :: delete
+
+}
 
