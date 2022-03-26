@@ -15,7 +15,8 @@ class Map;
 class Player {
     public:
         Player(); // Default constructor
-        Player(string, vector<Territory*>, Hand*, OrdersList*, int); // Parameterized constructor
+        Player(string, vector<Territory*>, Hand*, OrdersList*, int); // Parameterized constructor (everything)
+        Player(string); // Parameterized constructor (name only)
         Player(const Player &p); // Copy constructor
 
         ~Player(); // Destructor

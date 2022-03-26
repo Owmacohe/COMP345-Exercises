@@ -10,6 +10,9 @@ using namespace std;
 
 class Player; // Forward declaration of Player
 
+bool doesContain(vector<string>, int, string); // Free method to determine whether a string vector contains a given string
+vector<string> stringSplit(string, char); // Free method to split a given string into a string vector based on a given delimiter
+
 // Class representing a node on the graph
 class Territory {
     public:
@@ -42,8 +45,7 @@ class Edge {
         bool visited; // Whether the edge has been visited (when validating)
 };
 
-bool doesContain(vector<string>, int, string); // Free method to determine whether a string pointer array contains a given string
-bool doesContain(vector<Edge*>, int, Territory, Territory); // Free method to determine whether an Edge pointer array contains an Edge between the given Territories
+bool doesContain(vector<Edge*>, int, Territory, Territory); // Free method to determine whether an Edge vector contains an Edge between the given Territories
 
 // Class representing the graph data structure
 class Map {
@@ -71,6 +73,7 @@ class Map {
         void addEdge(Edge*); // Method to add a new Edge between Territories
 
         bool isGoodMap = true; // Whether the Map that has been attempted to be loaded is from a proper file
+        bool validateEdge(Map*, Territory*, Territory*); // Method to recursively determine if two given Territories are connected between edges on a Map
         bool validate(); // Method to make sure the created Map is valid
 
         vector<Territory*> getConnectedTerritories(string); // Method to get all Territories that are connected to a given Territory

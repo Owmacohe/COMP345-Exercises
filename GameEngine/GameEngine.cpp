@@ -519,12 +519,24 @@ void GameEngine::gameEndTransitions(string str) {
     notify(this); // FROM SUBJECT
 }
 
+// Free method to determine whether an int vector contains a given int
+bool doesContain(vector<int> arr, int in) {
+    for (int i : arr) {
+        if (i == in) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // Reads (startup) commands sequentially from the console
 void GameEngine::startupPhase() {
     *s = start;
 
     cout << "Welcome to Warzone!" << endl;
 
+    // Creating the (possibly unused) FileCommandProcessorAdapter
     FileCommandProcessorAdapter *fcpa;
 
     cout << "Read commands from console or file?" << endl;
@@ -532,40 +544,62 @@ void GameEngine::startupPhase() {
     string word1, word2;
     cin >> word1;
 
+    // Catching wrong inputs
     while (word1 != "console" && word1 != "file") {
         cout << "Please try again!" << endl;
         cin >> word1;
     }
 
-    if (word1 == "file") {
+    // Creating a new CommandProcessor if reading from the console
+    if (word1 == "console") {
+        CommandProcessor *temp = new CommandProcessor;
+        processor = temp;
+
+        cout << "Please give a command: " << endl;
+    }
+    // Creating a new FileCommandProcessorAdapter if reading from a file
+    else {
         cout << "Please provide the file name to read from:" << endl;
         cin >> word2;
+
+        bool isValid = false;
+
+        // Catching wrong inputs
+        while (!isValid) {
+            ifstream input(word2);
+
+            if (input.is_open()) {
+                isValid = true;
+            } else {
+                cout << "Please try again!" << endl;
+                cin >> word2;
+            }
+        }
 
         fcpa = new FileCommandProcessorAdapter(word2);
         processor = fcpa;
     }
-    else {
-        CommandProcessor *temp = new CommandProcessor;
-        processor = temp;
-    }
 
+    // Connecting to and from the CommandProcessor
     processor->setEngine(this);
     setProcessor(processor);
 
     while (*s < 5) {
         cout << "Enter a command: " << endl;
 
+        // Getting the next Command, and accessing it for local use
         processor->getCommand();
-
         Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
         string effect = "";
 
+        // Making sure the command is in fact valid
         if (processor->validate(temp)) {
             string word1 = "";
             string word2 = "";
             bool hasReachedSpace = false;
 
+            // Splitting the input into words (if it can be split)
             for (char i : temp->getCommand()) {
                 if (!hasReachedSpace) {
                     if (i == ' ') {
@@ -582,30 +616,35 @@ void GameEngine::startupPhase() {
                 }
             }
 
+            // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
             if (word1 == "loadmap") {
-                // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
+                // TODO: do I need to check if a Map has already been loaded, and if so, delete it before I create a new one?
 
                 MapLoader loader;
                 Map *m = loader.load(word2);
 
                 if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ' && m->isGoodMap) {
                     map = m;
+
                     effect = "Loaded Map: " + map->getName();
                     cout << effect << "!" << endl;
-                    *s = mapLoaded;
+
                     NumberOfTerritories = m->getTerritories().size();
+
+                    *s = mapLoaded;
                 }
                 else {
                     effect = "Unable to load Map";
                     cout << effect << "!" << endl;
+                    // TODO: do I need to delete m here?
                 }
             }
+            // Use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
             else if (word1 == "validatemap") {
-                // Use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
-
                 if (map->validate()) {
                     effect = "Validated Map: " + map->getName();
                     cout << effect << "!" << endl;
+
                     *s = mapValidated;
                 }
                 else {
@@ -613,19 +652,17 @@ void GameEngine::startupPhase() {
                     cout << effect << "!" << endl;
                 }
             }
+            // Use the addplayer <playername> command to enter players in the game (2-6 players)
             else if (word1 == "addplayer") {
-                // Use the addplayer <playername> command to enter players in the game (2-6 players)
-
                 if (player_list.size() >= 6) {
                     effect = "Unable to add Player (6 players reached)";
                     cout << effect << "!" << endl;
                 }
                 else {
                     if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
-                        Player *p = new Player;
-                        p->setName(word2);
+                        Player *p = new Player(word2);
                         player_list.push_back(p);
-                        NumberOfPlayers = NumberOfPlayers + 1;
+                        NumberOfPlayers++;
 
                         effect = "Added Player: " + p->getName();
                         cout << effect << "!" << endl;
@@ -639,8 +676,6 @@ void GameEngine::startupPhase() {
                 }
             }
             else if (word1 == "gamestart") {
-               // Fairly distribute all the territories to the players
-
                 if (player_list.size() < 2) {
                     effect = "Unable to start game (not enough players)";
                     cout << effect << "!" << endl;
@@ -648,6 +683,7 @@ void GameEngine::startupPhase() {
                 else {
                     int playerIndex = 0;
 
+                    // Fairly distribute all the territories to the players
                     for (Territory *i : map->getTerritories()) {
                         Player *tempPlayer = player_list.at(playerIndex);
                         i->setOwner(tempPlayer);
@@ -662,12 +698,19 @@ void GameEngine::startupPhase() {
 
                     effect = "Distributed Territories to Players";
 
-                    // Determine randomly the order of play of the players in the game
-
                     vector<int> tempOrder = vector<int>();
 
+                    // Determine randomly the order of play of the players in the game
                     for (int j = 0; j < player_list.size(); j++) {
-                        tempOrder.push_back(rand() % (player_list.size() - j) + j);
+                        int randOrder = rand() % player_list.size();
+
+                        while (doesContain(tempOrder, randOrder)) {
+                            randOrder = rand() % player_list.size();
+                        }
+
+                        cout << randOrder << endl;
+
+                        tempOrder.push_back(randOrder);
                     }
 
                     setPlayerOrder(tempOrder);
@@ -675,7 +718,7 @@ void GameEngine::startupPhase() {
                     effect += ", randomly determined the order of playing order";
 
                     for (Player* k : player_list) {
-                          // TODO: these below methods are causing errors
+                          // TODO: these methods below are causing errors
 //                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
 //                        k->addToReinforcePool(50);
 //
@@ -696,7 +739,7 @@ void GameEngine::startupPhase() {
         temp->saveEffect(effect);
     }
 
-    // ALSO ADD GameEngine Pointer to attribute to Order Class
+    // TODO: ALSO ADD GameEngine Pointer to attribute to Order Class
     // Order::setGameEngine(new );
 
     notify(this); // FROM SUBJECT

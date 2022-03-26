@@ -16,25 +16,24 @@ Command::Command() {
 }
 
 // Parameterized constructor 1 (unparemeterized Commands)
-Command::Command(string c) {
-    command = c;
+Command::Command(string c) : command(c) {
     validIn = vector<int>();
     effect = "";
 
     if (c == "validatemap") {
-        this->addValidInState(2);
+        addValidInState(2);
         transitionsTo = "mapvalidated";
     }
     else if (c == "gamestart") {
-        this->addValidInState(4);
+        addValidInState(4);
         transitionsTo = "assignreinforcement";
     }
     else if (c == "replay") {
-        this->addValidInState(8);
+        addValidInState(8);
         transitionsTo = "start";
     }
     else if (c == "quit") {
-        this->addValidInState(8);
+        addValidInState(8);
         transitionsTo = "exit program";
     }
     else {
@@ -45,8 +44,7 @@ Command::Command(string c) {
 }
 
 // Parameterized constructor 2 (paremeterized Commands)
-Command::Command(string c, string p) {
-    command = c + " <" + p + ">";
+Command::Command(string c, string p) : command(c + " <" + p + ">") {
     validIn = vector<int>();
     effect = "";
 
@@ -135,8 +133,7 @@ CommandProcessor::CommandProcessor() {
 }
 
 // Parameterized constructor
-CommandProcessor::CommandProcessor(GameEngine *e) {
-    engine = e;
+CommandProcessor::CommandProcessor(GameEngine *e) : engine(e) {
     commands = vector<Command*>();
 
     //cout << "[CommandProcessor parameterized constructor]" << endl;
@@ -149,7 +146,7 @@ CommandProcessor::~CommandProcessor() {
         i = NULL;
     }
 
-    cout << "[CommandProcessor destructor]" << endl;
+    //cout << "[CommandProcessor destructor]" << endl;
 }
 
 // CommandProcessor stream insertion operator
@@ -206,13 +203,14 @@ void CommandProcessor::setCommands(vector<Command*> c) {
 // Gets command from console
 Command *CommandProcessor::readCommand() {
     string temp;
-    fflush(stdin);
+    fflush(stdin); // Making sure to flush the console
     getline(cin, temp);
 
     string word1 = "";
     string word2 = "";
     bool hasReachedSpace = false;
 
+    // Splitting the input into words (if it can be split)
     for (char i : temp) {
         if (!hasReachedSpace) {
             if (i == ' ') {
@@ -229,9 +227,11 @@ Command *CommandProcessor::readCommand() {
         }
     }
 
+    // Single word command
     if (word1 != "" && word2 == "") {
         return new Command(word1);
     }
+    // Double word command
     else if (word1 != "" && word2 != "") {
         return new Command(word1, word2);
     }
@@ -262,6 +262,7 @@ bool CommandProcessor::validate(Command *c) {
     bool isValid = false;
 
     for (int i : c->getValidIn()) {
+        // Comparing each state in which the Command is valid to the current state
         if (i == *(engine->getState())) {
             isValid = true;
             break;
@@ -281,6 +282,7 @@ string CommandProcessor::stringToLog() {
     return logString;
 }
 
+// Reads the given line from the given file and creates a Command out of it
 Command *FileLineReader::readLineFromFile(string f, int l) {
     ifstream input(f);
     string line;
@@ -290,17 +292,17 @@ Command *FileLineReader::readLineFromFile(string f, int l) {
         cout << "Unable to read file: " << f << endl;
     }
     else {
+        // Looping through the file until the appropriate line is found
         for (int i = 0; i < l; i++) {
             getline(input, line);
         }
     }
 
-    input.close();
-
     string word1 = "";
     string word2 = "";
     bool hasReachedSpace = false;
 
+    // Splitting the input into words (if it can be split)
     for (char i : line) {
         if (!hasReachedSpace) {
             if (i == ' ') {
@@ -317,11 +319,17 @@ Command *FileLineReader::readLineFromFile(string f, int l) {
         }
     }
 
-    if (word2.length() > 0) {
+    // Single word command
+    if (word1 != "" && word2 == "") {
+        return new Command(word1);
+    }
+    // Double word command
+    else if (word1 != "" && word2 != "") {
         return new Command(word1, word2);
     }
     else {
-        return new Command(word1);
+        cout << "Invalid command!" << endl;
+        return NULL;
     }
 }
 
@@ -335,8 +343,7 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
 }
 
 // Parameterized constructor
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) {
-    currentFile = f;
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) :currentFile(f) {
     currentLine = 0;
     flr = new FileLineReader();
 

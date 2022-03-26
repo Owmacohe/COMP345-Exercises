@@ -14,7 +14,7 @@ Player::Player() {
     //cout << "[Player default constructor]" << endl;
 }
 
-// Param constructor
+// Parameterized constructor (everything)
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r): name(n), reinforcePool(r) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
@@ -23,6 +23,18 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r): n
 
     hand = new Hand(*h);
     orders = new OrdersList(*o);
+
+    //cout << "[Player param constructor]" << endl;
+}
+
+// Parameterized constructor (name only)
+Player::Player(string n) : name(n) {
+    territories = vector<Territory*>();
+    hand = new Hand;
+    orders = new OrdersList;
+    reinforcePool = 0;
+    deployList = new OrdersList;
+
     //cout << "[Player param constructor]" << endl;
 }
 

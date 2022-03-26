@@ -3,6 +3,7 @@
 #include "../Player/Player.h"
 #include "Map.h"
 
+// Free method to determine whether a string vector contains a given string
 bool doesContain(vector<string> arr, string s) {
     for (string i : arr) {
         if (i == s) {
@@ -13,6 +14,7 @@ bool doesContain(vector<string> arr, string s) {
     return false;
 }
 
+// Free method to determine whether an Edge vector contains an Edge between the given Territories
 bool doesContain(vector<Edge*> arr, Territory *t1, Territory *t2) {
     for (Edge *i : arr) {
         string n1 = i->a->getName();
@@ -26,6 +28,31 @@ bool doesContain(vector<Edge*> arr, Territory *t1, Territory *t2) {
     }
 
     return false;
+}
+
+// Free method to split a given string into a string vector based on a given delimiter
+vector<string> stringSplit(string s, char delim) {
+    vector<string> result = vector<string>();
+    int indexChecker = 0;
+    string temp = "";
+
+    // Looping through all the characters in the string
+    for (char i : s) {
+        // Adding to the current word if a delimiter has not been reached
+        if (i != delim) {
+            temp += i;
+        }
+
+        // Adding the new word to the pointer array if a delimiter or the end has been reached
+        if (i == delim || indexChecker == s.length() - 1) {
+            result.push_back(temp);
+            temp = "";
+        }
+
+        indexChecker++;
+    }
+
+    return result;
 }
 
 // Territory default constructor
@@ -241,8 +268,8 @@ void Map::addContinentBonus(int b) { continentBonuses.push_back(b); } // Method 
 void Map::addTerritory(Territory *t) { territories.push_back(t); } // Method to add a Territory to a Map
 void Map::addEdge(Edge *e) { edges.push_back(e); } // Method to add an Edge to a Map
 
-// Free method to recursively determine if two given Territories are connected between edges on a Map
-bool validateEdge(Map *m, Territory *start, Territory *end) {
+// Method to recursively determine if two given Territories are connected between edges on a Map
+bool Map::validateEdge(Map *m, Territory *start, Territory *end) {
     // Checking all the edges for matches
     for (Edge *i : m->getEdges()) {
         if (!i->visited) { // Making sure not to check previously used edges
@@ -289,13 +316,13 @@ bool Map::validate() {
 
                 // Verifying that the map is a connected graph
                 if (!validateEdge(this, territories[i], territories[j])) {
-                    cout << "Validation of " << name << " failed!" << endl;
+                    //cout << "Validation of " << name << " failed!" << endl;
                     return false;
                 }
 
                 // Verifying that continents are connected subgraphs
                 if (territories[i]->getContinent() == territories[j]->getContinent() && !validateEdge(this, territories[i], territories[j])) {
-                    cout << "Validation of " << name << " failed!" << endl;
+                    //cout << "Validation of " << name << " failed!" << endl;
                     return false;
                 }
             }
@@ -303,12 +330,12 @@ bool Map::validate() {
 
         // Verifying that each country belongs to one and only one continent
         if (!doesContain(continents, territories[i]->getContinent())) {
-            cout << "Validation of " << name << " failed!" << endl;
+            //cout << "Validation of " << name << " failed!" << endl;
             return false;
         }
     }
 
-    cout << "Validation of " << name << " succeeded!" << endl;
+    //cout << "Validation of " << name << " succeeded!" << endl;
     return true;
 }
 
@@ -359,31 +386,6 @@ bool Map::adjacentTerritories(Territory* t1, Territory* t2) {
 
     else
     return false;
-}
-
-// Free method to split a given string into a pointer array based on a given delimiter
-vector<string> stringSplit(string s, char delim) {
-    vector<string> result = vector<string>();
-    int indexChecker = 0;
-    string temp = "";
-
-    // Looping through all the characters in the string
-    for (char i : s) {
-        // Adding to the current word if a delimiter has not been reached
-        if (i != delim) {
-            temp += i;
-        }
-
-        // Adding the new word to the pointer array if a delimiter or the end has been reached
-        if (i == delim || indexChecker == s.length() - 1) {
-            result.push_back(temp);
-            temp = "";
-        }
-
-        indexChecker++;
-    }
-
-    return result;
 }
 
 // Method to read the information at a given file, and output a fully-crafted Map object
@@ -488,7 +490,7 @@ Map *MapLoader::load(string f) {
                 }
             }
 
-            cout << m->getName() << " loaded!" << endl;
+            //cout << m->getName() << " loaded!" << endl;
         }
         // Setting the Map to bad, and printing the error message
         catch (const char* message) {
