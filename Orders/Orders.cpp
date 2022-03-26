@@ -164,7 +164,7 @@ void Deploy::execute() {
     } else {
         cout << "Execution fail!\n" << endl;
     }
-   notify(this);
+//   notify(this);
 }
 
 string Deploy::stringToLog() {
@@ -364,7 +364,7 @@ void Advance::execute() {
     } else
         cout << "Can't execute Advance order!" << endl;
 
-    notify(this);
+//    notify(this);
 }
 
 int Advance::deathCalculation(int qty, double probability) {
@@ -527,7 +527,7 @@ void Airlift::execute() {
     } else{
         cout << "Execution failed!\n" << endl;
     }
-     notify(this);
+//     notify(this);
 }
 
 
@@ -655,7 +655,7 @@ void Bomb::execute() {
         target->setArmies(bombedArmies);
         cout << "Execution successful! \n" << endl;
     }
-    notify(this);
+//    notify(this);
 }
 
 string Bomb::stringToLog() {
@@ -874,7 +874,7 @@ void Negotiate::execute() {
         game->addAlliances(playerIssuing, targetPlayer);
         cout << "Execution successful!\n" << endl;
     }
-    notify(this);
+//    notify(this);
 }
 
 string Negotiate::stringToLog() {
@@ -1002,7 +1002,7 @@ ostream &operator<<(ostream &os, const OrdersList &ordersList) {
 
 void OrdersList::addOrder(Order *order) {
     playerOrderList.push_back(order);
-    notify(this);
+//    notify(this);
 }
 
 // Remove Method used to remove an order of the OrderList. The Parameter is an int for the index of the Order.
