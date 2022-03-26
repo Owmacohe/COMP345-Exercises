@@ -5,18 +5,23 @@
 
 using namespace std;
 
+/****************************** Iloggable *******************************/
+// Class inherited with a single method to be overriden in respective subclasses
 class Iloggable{
 public:
     string virtual stringToLog()=0;
 };
 
+/****************************** Observer *******************************/
+// Abstract Class
 class Observer{
 public:
     Observer(); // Constructor
     ~Observer(); // Destructor
-    virtual void update(Iloggable* il) = 0; // Virtual method called upon by Notify from the Subject
-};
+    virtual void update(Iloggable* il) = 0;}; // Virtual method called upon by Notify from the Subject
 
+/****************************** LogObserver *******************************/
+// Concrete Class to log into an output file
 class LogObserver : public Observer{
 public:
     LogObserver(); // Constructor
@@ -29,14 +34,18 @@ public:
     ofstream outputFile; // output Stream for the game logs
 };
 
+/****************************** Subject *******************************/
 class Subject {
 public:
     Subject(); // Constructor
     ~Subject(); // Destructor
-    void notify(Iloggable* il); // Method to Notify the Update method of the Observer
-    void attach(Observer *obs); // Method to attach the observer to the Subject's list of subscribers
-    void detach(Observer *obs); // Method to detach the observer to the Subject's list of subscribers
 
-    public:
-    list<Observer*> observers; // Not used as per model of assignment
+    LogObserver* getLogObserver();
+    static void setLogObserver(LogObserver* logobs);
+
+    void notify(Iloggable* il); // Method to Notify the Update method of the Observer
+
+public:
+static LogObserver* logObs;
+
 };

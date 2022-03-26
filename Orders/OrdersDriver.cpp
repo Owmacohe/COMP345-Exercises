@@ -5,7 +5,8 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int ordersMain() {
+int main() {
+
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader
@@ -21,7 +22,7 @@ int ordersMain() {
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(*mainmap);
-    mainGE->setplayer_list(player_list);
+    mainGE->setplayer_list(player_list); // TODO:: keep in mind that throughout the code u use player_list not mainGE->getplayer_list() so your player_list wont update with the gameengine
     mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
@@ -137,6 +138,8 @@ int ordersMain() {
     Advance* advance1 = new Advance(player2, Quebec_North, Quebec_Central);
     cout << "Order: " << *advance1 << endl;
     advance1->validate();
+    advance1->execute();
+    cout << advance1->stringToLog() << endl;
 
     // Move armies
     Advance* advance2 = new Advance(player2, Ontario_West, Manitoba_South);

@@ -275,31 +275,18 @@ void GameEngine::issueOrdersPhase() {
         Player *p = player_list.at(playerOrder[i]);
 
         cout << "Issuing the orders for player " << p->getName() << endl;
+
         // Only issue deploy orders while the players reinforcement pool contains armies
-        hasMoreTroops = p->getReinforcePool();
-        if (hasMoreTroops>0)  cout << "Issueing deploy orders" << endl;
-        while(hasMoreTroops >0){
+        int hasMoreTroops = p->getReinforcePool();
+        if (hasMoreTroops > 0)  cout << "Issueing deploy orders" << endl;
+        for (int i = 0; i < hasMoreTroops; i++) {
             p->issueOrder("deploy");
-            cout<<"deploy of 1 army issued"<<endl;
-
-            for(Order * o : p->getOrder()->getOrderList()){
-               hasMoreTroops = hasMoreTroops - dynamic_cast<Deploy*>(o)->getNumToDeploy();
-
-            }
-            cout<< "You still have "<<hasMoreTroops << " to deploy"<<endl;
-            if(hasMoreTroops == 0)
-                break;
-            else hasMoreTroops = p->getReinforcePool();
-
+            p->setReinforcementPool(p->getReinforcePool()-1);
+            cout<<"deploy of army "<<i+1<<"/"<<hasMoreTroops<<" issued"<<endl;
         }
 
-
-
-//        while (p->getReinforcePool() != 0) {
-//            p->issueOrder("deploy");
-//
-//        }
         // Issue advance orders
+        cout << p->getName() << "'s turn" <<endl;
         cout << "Issueing advance orders" << endl;
         do {
             cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
@@ -746,8 +733,9 @@ void GameEngine::startupPhase() {
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
-void GameEngine::mainGameLoop() {
+bool GameEngine::mainGameLoop() {
     bool playing = true;
+    bool continueplaying;
     string input;
     while (playing == true) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
@@ -759,7 +747,6 @@ void GameEngine::mainGameLoop() {
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
     }
-
 
     while (*s == 8) {
         cout << "Replay or quit? " << endl;
@@ -777,26 +764,20 @@ void GameEngine::mainGameLoop() {
 
             effect = "Replaying game";
             cout << effect << "!" << endl;
+            continueplaying = true;
+
         }
         else if (command == "quit") {
             endPhase();
 
             effect = "Quitting game";
             cout << effect << "!" << endl;
+            continueplaying = false;
         }
 
         temp->saveEffect(effect);
     }
-
-    /*
-    cout << "Would you like to play again ? y/n " << endl;
-    cin >> input;
-    if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-        playAgain();
-        *s = start; // Switch to start up for replay
-    }
-    else endPhase();
-    */
+    return continueplaying;
 }
 
 // Check if a player has won by looping through territories and checking owner
@@ -816,24 +797,33 @@ bool GameEngine::checkForWinner() {
             return true;
         }
     }
+    cout<<"No winner, therefore continue"<<endl;
     return false;
 }
 
 // Check that players are still valid, remove players that are not
 // Validity : must own at least on territory
 void GameEngine::checkPlayers() {
-    for (Player* p : player_list) {
+    for (int i = 0; i <player_list.size(); i++) {
+        int ordervalue = playerOrder[i];
+        Player *p = player_list.at(ordervalue);
         if (p->getNumberOfTerritories() == 0) {
-            cout << "Player " << p->getName() << " has been eliminated";
-            NumberOfPlayers = NumberOfPlayers - 1; //lowers player count
-            player_list.erase(std::remove(player_list.begin(), player_list.end(), p), player_list.end()); //removes player from player_list
+            cout << "Player " << p->getName() << " has been eliminated" <<endl;
+            NumberOfPlayers = NumberOfPlayers - 1; // Lowers player count
+            player_list.erase(player_list.begin() + playerOrder[i]); // Removes player from player_list
+            for (int j = i; j <= player_list.size()-1; j++) { // Removes from playing order
+                playerOrder[j] = (playerOrder[j+1]);
+            }
+            for (int k = 0; k < player_list.size(); k++) { // Accommodates playerOrder for change in playerlist size
+                if (playerOrder[k] > ordervalue) playerOrder[k] = playerOrder[k] - 1;
+            }
         }
     }
 }
 
 // Check that a card type is in a specific hand
 int GameEngine::checkCardInHand(string type, Hand* h) {
-    int index = 0; //returns index of card in hand, -1 if card is not in hand
+    int index = 0; // Returns index of card in hand, -1 if card is not in hand
     for (Card* c : h->hand) {
         if (equalsIgnoreCase(c->getType(), type)) return index;
         index = index + 1;

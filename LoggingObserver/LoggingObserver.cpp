@@ -1,50 +1,35 @@
 #include "LoggingObserver.h"
 
-string Iloggable::stringToLog(){
-return "";
-};
+/****************************** Iloggable *******************************/
+string Iloggable::stringToLog(){return "";}
 
-Subject::Subject(){
-observers = list<Observer*>();}
+/****************************** Observer *******************************/
+Observer::Observer(){}; // Constructor
+Observer::~Observer(){}; // Destructor
 
-Subject::~Subject(){
-    for (Observer* i : observers) {
-        delete i;
-        i = NULL;
-        cout << "deleting an observer in Observers of the subject" <<endl;
-    }
-    observers .clear();
-    cout << "deleted Observers of subject" <<endl;
-};
-
-void Subject::attach(Observer *obs){
-observers.push_back(obs);
-};
-
-void Subject::detach(Observer *obs){
-observers.remove(obs);
-};
-
-void Subject::notify(Iloggable* il){
-    for (Observer* i : observers) {
-        i->update(il);
-    }
-};
-
-Observer::Observer(){};
-Observer::~Observer(){};
-
+/****************************** LogObserver *******************************/
 
 LogObserver::LogObserver(){
-fileName = "";
-outputFile.open(fileName);}
+    fileName = "";
+    outputFile.open(fileName);}
 
 LogObserver::LogObserver(string name){
     fileName = name;
     outputFile.open(fileName);}
 
-LogObserver::~LogObserver(){};
+LogObserver::~LogObserver(){
+    outputFile.close();} // Destructor
 
 void LogObserver::update(Iloggable* il){
+    cout << " writing stringToLog to output file." << endl;
     outputFile << (*il).stringToLog() << "\n";
 };
+
+/****************************** Subject *******************************/
+Subject::Subject(){}
+Subject::~Subject(){};  // Destructor
+LogObserver* Subject::getLogObserver(){return logObs;}
+void Subject::setLogObserver(LogObserver* lo){logObs = lo;}
+
+void Subject::notify(Iloggable* il){logObs->update(il);};
+
