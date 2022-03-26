@@ -465,7 +465,7 @@ void GameEngine::gameStartupTransitions(string str) {
         cout << "Invalid command!" << endl;
     }
 
-//    notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 */
 
@@ -489,7 +489,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
         cout << "Invalid command!" << endl;
     }
 
-//    notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 
 void GameEngine::gameEndTransitions(string str) {
@@ -503,7 +503,7 @@ void GameEngine::gameEndTransitions(string str) {
         cout << "Invalid command!" << endl;
     }
 
-//    notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 
 // Free method to determine whether an int vector contains a given int
@@ -729,7 +729,7 @@ void GameEngine::startupPhase() {
     // TODO: ALSO ADD GameEngine Pointer to attribute to Order Class
     // Order::setGameEngine(new );
 
-//    notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase

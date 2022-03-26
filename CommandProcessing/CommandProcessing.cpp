@@ -113,7 +113,7 @@ void Command::setTransitionsTo(string t) { transitionsTo = t; }
 void Command::saveEffect(string e) {
     effect = e;
 
-//    notify(this);
+    notify(this);
 }
 
 // Method to add a new state in which the Command is valid
@@ -245,7 +245,7 @@ Command *CommandProcessor::readCommand() {
 void CommandProcessor::saveCommand(Command *c) {
     commands.push_back(c);
 
-//    notify(this); // FROM SUBJECT
+    notify(this); // FROM SUBJECT
 }
 
 // Reads and then saves a command from the console

@@ -12,7 +12,7 @@ class Player;
 class Territory;
 
 /****************************** Order *******************************/
-class Order /*:public Iloggable, public Subject*/ {
+class Order :public Iloggable, public Subject {
 public:
     Order(); // Default Constructor
     Order(bool v, string s); // parameterized Constructor
