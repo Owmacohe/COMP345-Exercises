@@ -21,9 +21,8 @@ int Ordersmain() {
 
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
-    mainGE->setMap(*mainmap);
+    mainGE->setMap(mainmap);
     mainGE->setplayer_list(player_list); // TODO:: keep in mind that throughout the code u use player_list not mainGE->getplayer_list() so your player_list wont update with the gameengine
-    mainGE->setDeck(*new Deck(20));
     Order::game = mainGE;
 
     // Assign Territories to Players
@@ -224,6 +223,8 @@ int Ordersmain() {
     cout << "Order: " << *advance6 << endl;
     advance6->validate();
 
+    // TODO TESTING ISSUEORDER AND EXECUTEORDERS PHASE
+
     //
     // ******************************* Testing Orders Constructor for GameLoop *******************************
     // ToDefend() & toAttack()
@@ -236,14 +237,14 @@ int Ordersmain() {
 //        cout << *teri << endl;
 //    }
 
-    // Testing ToDefend
+//     Testing ToDefend
 //    cout << "Testing ToDefend" << endl;
 //    vector<Territory*> territoriesToDefend = player1->toDefend(mainmap);
 //    for(auto teri : territoriesToDefend){
 //        cout << *teri << endl;
 //    }
-
-    // Testing ToAttack
+//
+//     Testing ToAttack
 //    cout << "Testing ToAttack" << endl;
 //    vector<Territory*> territoriesToAttack = player1->toAttack(mainmap);
 //    for(auto teri : territoriesToAttack){

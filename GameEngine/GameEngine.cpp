@@ -14,7 +14,7 @@ GameEngine::GameEngine() {
     *s = null;
     NumberOfPlayers = 0;
     NumberOfTerritories = 0;
-    deck = new Deck(10);
+    deck = new Deck(20);
     player_list = vector<Player*>();
     map = NULL;
     alliances = set<pair<Player*, Player*>>();
@@ -711,8 +711,7 @@ void GameEngine::startupPhase() {
         temp->saveEffect(effect);
     }
 
-    // TODO: ALSO ADD GameEngine Pointer to attribute to Order Class
-    // Order::setGameEngine(new );
+    Order::setGameEngine(this);
 
     notify(this); // FROM SUBJECT
 }

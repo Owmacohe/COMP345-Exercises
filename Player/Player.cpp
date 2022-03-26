@@ -128,7 +128,7 @@ vector<Territory*> Player::toAttack(Map* m) {
         // cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
         vector<Territory*> surround_territory = m->getConnectedTerritories(name); // Getting surrounding territories of the player's territory
 
-        if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories --> ERROR OR VERY RARE, TEMPORARY CONDITION
+        if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
         // step 2 for each connected territory that's an enemy's count the number armies
