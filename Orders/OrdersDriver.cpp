@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int ordersMain() {
+int main() {
 
     /****************************** CREATING A GAME *******************************/
 
@@ -138,6 +138,8 @@ int ordersMain() {
     Advance* advance1 = new Advance(player2, Quebec_North, Quebec_Central);
     cout << "Order: " << *advance1 << endl;
     advance1->validate();
+    advance1->execute();
+    cout << advance1->stringToLog() << endl;
 
     // Move armies
     Advance* advance2 = new Advance(player2, Ontario_West, Manitoba_South);
