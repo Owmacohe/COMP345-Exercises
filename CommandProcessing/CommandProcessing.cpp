@@ -406,3 +406,5 @@ void FileCommandProcessorAdapter::getCommand() {
     currentLine++;
     saveCommand(temp);
 }
+
+// TODO STRING TO LOG MJ
