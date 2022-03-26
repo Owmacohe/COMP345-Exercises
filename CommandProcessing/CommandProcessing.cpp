@@ -168,7 +168,7 @@ ostream& CommandProcessor::write(ostream &strm) const {
 
     return strm <<
         "[COMMANDPROCESSOR PRINT]" <<
-        endl << "[--- Engine: " << s << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Engine: " << s << " ---]" <<
         endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]";
 }
 
@@ -377,7 +377,7 @@ ostream& FileCommandProcessorAdapter::write(ostream &strm) const {
 
     return strm <<
         "[FILECOMMANDPROCESSORADAPTER PRINT]" <<
-        endl << "[--- Engine: " << s << " ---]" << // TODO: should the engine be printed in a different way?
+        endl << "[--- Engine: " << s << " ---]" <<
         endl << "[--- Commands: " << temp.substr(0, temp.length() - 3) << " ---]" <<
         endl << "[--- Current file: " << currentFile << " ---]" <<
         endl << "[--- Current line: " << currentLine << " ---]";

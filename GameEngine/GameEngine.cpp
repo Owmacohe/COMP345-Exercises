@@ -14,20 +14,14 @@ GameEngine::GameEngine() {
     *s = null;
     NumberOfPlayers = 0;
     NumberOfTerritories = 0;
-    deck = new Deck();
+    deck = new Deck(10);
     player_list = vector<Player*>();
-    map = new Map();
+    map = NULL;
     alliances = set<pair<Player*, Player*>>();
 
     // Add Neutral Player to Game
     neutralPlayer = new Player();
     neutralPlayer->setName("Neutral");
-
-    // Attributes not initialized, CONFIRM WITH TEAM
-//    MapLoader *ml;
-//    bool phaseEnd;
-//    CommandProcessor *processor;
-
 }
 
 // Copy constructor
@@ -35,32 +29,27 @@ GameEngine::GameEngine(const GameEngine &gm) {
     s = gm.s;
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
-    this->deck = new Deck(*(gm.deck));
+    deck = gm.deck;
 
     for (Player* p : gm.player_list) {
-        this->player_list.push_back(new Player(*p));
+        player_list.push_back(p);
     }
-    Map *map = new Map(*gm.map);
+
+    Map *map = gm.map;
 
     alliances = set<pair<Player*, Player*>>();
     for(auto x : gm.alliances) {
-        pair<Player*, Player*> pairCopied = make_pair(new Player(*x.first), new Player(*x.second));
+        pair<Player*, Player*> pairCopied = make_pair(x.first, x.second);
         alliances.insert(pairCopied);
     }
 
-    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
-//    MapLoader *ml;
-//    bool phaseEnd;
-//    CommandProcessor *processor;
+    neutralPlayer = gm.neutralPlayer;
 }
 
 // Destructor
 GameEngine::~GameEngine() {
     delete s;
     s = NULL;
-
-    delete ml;
-    ml = NULL;
 
     delete deck;
     deck = NULL;
@@ -70,30 +59,26 @@ GameEngine::~GameEngine() {
         p = NULL;
     }
 
-    delete processor;
-    processor = NULL;
-
-    delete[] map;
+    delete map;
     map = NULL;
 
-    for(auto x : alliances) {
+    for (auto x : alliances) {
         x.first = NULL;
         x.second = NULL;
     }
-    alliances.clear();
+
+    delete processor;
+    processor = NULL;
 
     delete neutralPlayer;
     neutralPlayer = NULL;
 }
-// Attributes not initialized / Destroyed, CONFIRM WITH TEAM
-//    bool phaseEnd;
 
 // Assignment operator
 GameEngine& GameEngine::operator = (const GameEngine& gm) {
-    this->s = gm.s;
+    s = gm.s;
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
-    this->ml = gm.ml;
     phaseEnd = gm.phaseEnd;
     this->deck = gm.deck;
 
@@ -102,9 +87,7 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     }
 
     return *this;
-    // Attributes not initialized / Destroyed, CONFIRM WITH TEAM
-//    MapLoader *ml;
-//    bool phaseEnd;
+    // TODO: Attributes not initialized / Destroyed, CONFIRM WITH TEAM
 //    CommandProcessor *processor;
 //    alliances = set<pair<Player*, Player*>>();
 //    Map *map;
@@ -605,7 +588,10 @@ void GameEngine::startupPhase() {
 
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
             if (word1 == "loadmap") {
-                // TODO: do I need to check if a Map has already been loaded, and if so, delete it before I create a new one?
+                if (map != NULL) {
+                    delete map;
+                    map = NULL;
+                }
 
                 MapLoader loader;
                 Map *m = loader.load(word2);
@@ -623,7 +609,9 @@ void GameEngine::startupPhase() {
                 else {
                     effect = "Unable to load Map";
                     cout << effect << "!" << endl;
-                    // TODO: do I need to delete m here?
+
+                    delete m;
+                    m = NULL;
                 }
             }
             // Use the validatemap command to validate the map (i.e. it is a connected graph, etc – see assignment 1)
@@ -695,8 +683,6 @@ void GameEngine::startupPhase() {
                             randOrder = rand() % player_list.size();
                         }
 
-                        cout << randOrder << endl;
-
                         tempOrder.push_back(randOrder);
                     }
 
@@ -705,13 +691,12 @@ void GameEngine::startupPhase() {
                     effect += ", randomly determined the order of playing order";
 
                     for (Player* k : player_list) {
-                          // TODO: these methods below are causing errors
-//                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-//                        k->addToReinforcePool(50);
-//
-//                        // Let each player draw 2 initial cards from the deck using the deck’s draw() method
-//                        k->getHand()->drawCard(*deck);
-//                        k->getHand()->drawCard(*deck);
+                        // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                        k->addToReinforcePool(50);
+
+                        // Let each player draw 2 initial cards from the deck using the deck’s draw() method
+                        k->getHand()->drawCard(*deck);
+                        k->getHand()->drawCard(*deck);
                     }
 
                     effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";
@@ -759,24 +744,27 @@ bool GameEngine::mainGameLoop() {
         string effect = "";
 
         if (command == "replay") {
-            playAgain();
-            *s = start; // Switch to start up for replay
+            //playAgain();
 
             effect = "Replaying game";
             cout << effect << "!" << endl;
             continueplaying = true;
 
+            *s = start; // Switch to start up for replay
         }
         else if (command == "quit") {
-            endPhase();
+            //endPhase();
 
             effect = "Quitting game";
             cout << effect << "!" << endl;
             continueplaying = false;
+
+            *s = null;
         }
 
         temp->saveEffect(effect);
     }
+
     return continueplaying;
 }
 

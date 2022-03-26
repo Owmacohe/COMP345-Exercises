@@ -10,8 +10,6 @@
 //    GameEngine gameEngine;
 //    gameEngine.startupPhase();
 //
-//    // TODO: we still need to figure out when and how to delete all of our pointers
-//
 //    return 0;
 //}
 
