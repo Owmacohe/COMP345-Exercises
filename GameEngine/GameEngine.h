@@ -98,7 +98,6 @@ class GameEngine : public Iloggable, public Subject {
         State* s;
         int NumberOfPlayers;
         int NumberOfTerritories;
-        MapLoader *ml;
         bool phaseEnd;
         Deck *deck;
         vector<Player*> player_list;

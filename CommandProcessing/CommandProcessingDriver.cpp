@@ -67,7 +67,8 @@ int commandProcessingMain() {
 
     cout << "Is valid command: " << cp->validate(c) << endl; // Validating the Command
 
-    // TODO: figure out how to delete e properly
+    delete e;
+    e = NULL;
 
     return 0;
 }
