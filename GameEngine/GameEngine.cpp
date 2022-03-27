@@ -336,11 +336,9 @@ void GameEngine::issueOrdersPhase() {
     endIssueOrderPhase();
 }
 
-void GameEngine::endIssueOrderPhase(Player *player) {
+void GameEngine::endIssueOrderPhase() {
     transition(executeOrder);
-    cout << "End phase issue orders for player " << player->getName() << endl;
-
-}
+    cout << "End issue order phase" << endl;}
 
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
@@ -407,11 +405,13 @@ void GameEngine::executeOrdersPhase() {
         else
             playersWithoutOrders = 0;
     }
+    endexecuteOrdersPhase();
 }
-// TODO WE DELETE THIS ?
-void GameEngine::endexecuteOrdersPhase(Player *player) {
+
+
+void GameEngine::endexecuteOrdersPhase() {
     transition(assignReinforcement);
-    cout << "End phase execute Order for player " << player->getName() << endl;
+    cout << "End execute order phase" << endl;
 }
 
 void GameEngine::winPhase(Player *p) {
@@ -457,7 +457,6 @@ void GameEngine::gameStartupTransitions(string str) {
 
     notify(this); // FROM SUBJECT
 }
-*/
 
 void GameEngine::gamePlayTransitions(string str, Player *p) {
     if (str == "issueorder" && (*getState() == 5 || *getState() == 6)) {
@@ -470,7 +469,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
         executeOrdersPhase();
     }
     else if (str == "endexecorders" && *getState() == 7) {
-        endexecuteOrdersPhase(p);
+        endexecuteOrdersPhase();
     }
     else if (str == "win" && *getState() == 7) {
         winPhase(p);
@@ -495,6 +494,7 @@ void GameEngine::gameEndTransitions(string str) {
 
     notify(this); // FROM SUBJECT
 }
+*/
 
 // Free method to determine whether an int vector contains a given int
 bool doesContain(vector<int> arr, int in) {
