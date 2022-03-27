@@ -218,8 +218,14 @@ void GameEngine::assignReinforcementPhase() {
         //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
         int num = floor((p->getNumberOfTerritories())/3);
 
-        if (num < 3) p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
-        else p->addToReinforcePool(num);
+        if (num < 3) {
+            p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
+            cout << "Adding 3 armies to reinforcement pool of player " << p->getName() <<endl;
+        }
+        else {
+            p->addToReinforcePool(num);
+            cout << "Adding " << num << " armies to reinforcement pool of player " << p->getName() <<endl;
+        }
 
         vector<Territory*> territoriesByContinent;
         int continent_track = 0;
@@ -236,6 +242,7 @@ void GameEngine::assignReinforcementPhase() {
             else {
                 int bonus = map->getContinentBonuses().at(continent_track);
                 p->addToReinforcePool(bonus);
+                cout << "Adding continent bonus " << bonus << " armies to reinforcement pool of player " << p->getName() <<endl;
             }
             continent_track = continent_track+1;
         }
@@ -250,11 +257,10 @@ void GameEngine::issueOrdersPhase() {
     int deployed = 0;
     int hasMoreTroops = 0;
 
-    bool goodinput = false;
-
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
+        bool goodinput = false;
 
         cout << "Issuing the orders for player " << p->getName() << endl;
 
@@ -264,7 +270,7 @@ void GameEngine::issueOrdersPhase() {
         for (int i = 0; i < hasMoreTroops; i++) {
             p->issueOrder("deploy");
             p->setReinforcementPool(p->getReinforcePool() - 1);
-            cout << "deploy of army " << i + 1 << "/" << hasMoreTroops << " issued" << endl;
+            cout << "Deploy of army " << i + 1 << "/" << hasMoreTroops << " issued" << endl;
         }
 
         // Issue advance orders
@@ -278,32 +284,50 @@ void GameEngine::issueOrdersPhase() {
                 p->issueOrder("advance");
                 cout << "Advance order added to Player's Order List" << endl;
                 // MJ said that checking if an advance is attacking or defending is done in orders
+                break;
             }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
-            else cout<< "Invalid input !" <<endl;
+            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
+                goodinput = true;
+                break;
+            }
+            else {
+                cout<< "Invalid input !" <<endl;
+                break;
+            }
         }
         goodinput = false;
         // Issue card orders
         cout << "Issuing card orders" << endl;
         while (goodinput == false) {
+            cout << "The following is " << p->getName() << " hand" << endl;
+            cout << *(p->getHand()) << endl;
             cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
-                cout << "The following is " << p->getName() << " hand" << endl;
-                cout << *(p->getHand()) << endl;
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
                 int index = -1;
                 while (index == -1) {
                     index = checkCardInHand(response, p->getHand());
-                    if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
-                    else {cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
-                    break;}
+                    if (index != -1) {
+                        p->getHand()->playCard(index, *deck, *p->getOrder());
+                        break;
+                    }
+                    else {
+                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
+                        break;
+                    }
                 }
             }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
-            else cout<< "Invalid input !" <<endl;
+            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
+                goodinput = true;
+                break;
+            }
+            else {
+                cout<< "Invalid input !" <<endl;
+                break;
+            }
         }
         endIssueOrderPhase(p);
     }
