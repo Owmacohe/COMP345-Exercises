@@ -5,7 +5,7 @@
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
 
-// Default constructor
+// Command default constructor
 Command::Command() {
     command = "";
     validIn = vector<int>();
@@ -15,7 +15,7 @@ Command::Command() {
     //cout << "[Command default constructor]" << endl;
 }
 
-// Parameterized constructor 1 (un-parameterized Commands)
+// Command parameterized constructor 1 (un-parameterized Commands)
 Command::Command(string c) : command(c) {
     validIn = vector<int>();
     effect = "";
@@ -43,7 +43,7 @@ Command::Command(string c) : command(c) {
     //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
-// Parameterized constructor 2 (parameterized Commands)
+// Command parameterized constructor 2 (parameterized Commands)
 Command::Command(string c, string p) : command(c + " <" + p + ">") {
     validIn = vector<int>();
     effect = "";
@@ -66,7 +66,22 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
     //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
-// Destructor
+// Command copy constructor
+Command::Command(const Command &c) {
+    command = c.command;
+    transitionsTo = c.transitionsTo;
+    effect = c.effect;
+
+    validIn = vector<int>();
+
+    for (int i : c.validIn) {
+        validIn.push_back(i);
+    }
+
+    //cout << "[" + command + " Command copy constructor]" << endl;
+}
+
+// Command destructor
 Command::~Command() {
     //cout << "[" + command + " Command destructor]" << endl;
 }
@@ -124,7 +139,7 @@ string Command::stringToLog() {
     return logString;
 }
 
-// Default constructor
+//  CommandProcessor default constructor
 CommandProcessor::CommandProcessor() {
     engine = NULL;
     commands = vector<Command*>();
@@ -132,14 +147,22 @@ CommandProcessor::CommandProcessor() {
     //cout << "[CommandProcessor default constructor]" << endl;
 }
 
-// Parameterized constructor
+// CommandProcessor parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine *e) : engine(e) {
     commands = vector<Command*>();
 
     //cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
-// Destructor
+// CommandProcessor copy constructor
+CommandProcessor::CommandProcessor(const CommandProcessor &cp) {
+    engine = cp.engine;
+    setCommands(cp.commands);
+
+    //cout << "[CommandProcessor copy constructor]" << endl;
+}
+
+// CommandProcessor destructor
 CommandProcessor::~CommandProcessor() {
     for (Command *i : commands) {
         delete i;
@@ -332,7 +355,7 @@ Command *FileLineReader::readLineFromFile(string f, int l) {
     }
 }
 
-// Default constructor
+// FileCommandProcessorAdapter default constructor
 FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
     currentFile = "";
     currentLine = 0;
@@ -341,7 +364,7 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
     //cout << "[FileCommandProcessorAdapter default constructor]" << endl;
 }
 
-// Parameterized constructor
+// FileCommandProcessorAdapter parameterized constructor
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) :currentFile(f) {
     currentLine = 0;
     flr = new FileLineReader();
@@ -349,7 +372,19 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) :currentFile(
     //cout << "[FileCommandProcessorAdapter parameterized constructor]" << endl;
 }
 
-// Destructor
+// FileCommandProcessorAdapter copy constructor
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpa) {
+    engine = fcpa.engine;
+    setCommands(fcpa.commands);
+
+    flr = fcpa.flr;
+    currentFile = fcpa.currentFile;
+    currentLine = fcpa.currentLine;
+
+    //cout << "[FileCommandProcessorAdapter copy constructor]" << endl;
+}
+
+// FileCommandProcessorAdapter destructor
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
     delete flr;
     flr = NULL;

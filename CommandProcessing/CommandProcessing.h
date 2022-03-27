@@ -16,6 +16,7 @@ class Command :public Iloggable, public Subject {
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1 (un-parameterized Commands)
         Command(string, string); // Parameterized constructor 2 (parameterized Commands)
+        Command(const Command &c); // Copy constructor
         ~Command(); // Destructor
         friend ostream& operator<<(ostream &strm, const Command &c); // Stream insertion operator
         Command& operator = (const Command& toAssign);  // Assignment operator
@@ -40,6 +41,7 @@ class CommandProcessor : public Iloggable, public Subject {
     public:
         CommandProcessor(); // Default constructor
         CommandProcessor(GameEngine*); // Parameterized constructor
+        CommandProcessor(const CommandProcessor &cp); // Copy constructor
         ~CommandProcessor(); // Destructor
         virtual ostream& write(ostream &strm) const; // Stream insertion operator (virtual for derived class)
         friend ostream& operator<<(ostream &strm, CommandProcessor const &cp) { return cp.write(strm); }; // Stream insertion operator
@@ -75,6 +77,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
     public:
         FileCommandProcessorAdapter(); // Default constructor
         FileCommandProcessorAdapter(string); // Parameterized constructor
+        FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpa); // Copy constructor
         ~FileCommandProcessorAdapter(); // Destructor
 
         ostream& write(ostream &strm) const override; // Stream insertion operator
