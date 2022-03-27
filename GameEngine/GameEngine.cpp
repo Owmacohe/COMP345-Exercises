@@ -308,15 +308,14 @@ void GameEngine::issueOrdersPhase() {
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
                 int index = -1;
-                while (index == -1) {
+                while (index < 0) {
                     index = checkCardInHand(response, p->getHand());
-                    if (index != -1) {
+                    if (index >= 0) {
                         p->getHand()->playCard(index, *deck, *p->getOrder());
                         break;
                     }
                     else {
-                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
-                        break;
+                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again"<< endl;
                     }
                 }
             }
@@ -329,13 +328,13 @@ void GameEngine::issueOrdersPhase() {
                 break;
             }
         }
-        endIssueOrderPhase(p);
     }
+    endIssueOrderPhase();
 }
 
-void GameEngine::endIssueOrderPhase(Player *player) {
+void GameEngine::endIssueOrderPhase() {
     *s = executeOrder;
-    cout << "End phase issue orders for player " << player->getName() << endl;
+    cout << "End phase issue orders for players" << endl;
 }
 
 bool GameEngine::hasMoreDeploy(Player *p) {

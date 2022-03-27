@@ -70,7 +70,7 @@ class GameEngine : public Iloggable, public Subject {
         */
         void assignReinforcementPhase();
         void issueOrdersPhase();
-        void endIssueOrderPhase(Player*);
+        void endIssueOrderPhase();
         bool hasMoreDeploy(Player*);
         void executeOrdersPhase();
         void endexecuteOrdersPhase(Player*);
