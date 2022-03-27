@@ -42,119 +42,122 @@ LogObserver* Subject::logObs=logger;
 
         /****************************** Methods using the Observer Pattern *******************************/
 
-
         cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
         logger->outputFile  << "\n-------------------- GameEngine::transition() --------------------" << endl;
+
         GameEngine *mainGE = new GameEngine;
+
+        cout << "In output file: The Game Engine has transitioned to the startstate. " << endl;
         mainGE->transition(start); // contains notify()
 
-        //loading a map
+        cout << "In output file: The Game Engine has transitioned to the mapLoadedstate. \n" << endl;
         mainGE->transition(mapLoaded); // contains notify()
         MapLoader* loader;
         Map* mainmap = loader->load("../Orders/canada.map");
+
+        cout << "\nIn output file: The Game Engine has transitioned to the mapValidatedstate." << endl;
         mainGE->transition(mapValidated); // contains notify()
 
-        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
-        logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
+
+        cout << "\n-------------------- CommandProcessor::saveCommand() (File) --------------------" << endl;
+        logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() (File) --------------------" << endl;
+
+        cout << "In output file: Saved the following command to the CommandProcessor: addplayer <Audrey>" << endl;
+        cout << "In output file: The Game Engine has transitioned to the playersAddedstate.\n" << endl;
 
         CommandProcessor *cp;
         FileCommandProcessorAdapter *fcpa;
-
-        cout << "\n--------- Read command from file" << endl;
-        logger->outputFile << "\n--------- Read command from file" << endl;
-
         string fileName = "../LoggingObserver/commandLogObs.txt";
         ifstream input(fileName);
         fcpa = new FileCommandProcessorAdapter(fileName);
         cp = fcpa;
         cp->setEngine(mainGE);
         mainGE->setProcessor(cp);
-        cp->getCommand(); // Getting a single Command, contains SaveCommand()
+
+        cp->getCommand(); // contains SaveCommand()
         Command *command1 = cp->getCommands()[cp->getCommands().size() - 1];
 
-        cout << command1->getEffect() << endl;
-
         // Splitting the input into words (if it can be split)
-        string effect = "";
+        string effect1 = "";
         string word1 = "";
         string word2 = "";
         bool hasReachedSpace = false;
 
-        for (char i : command1->getCommand()) { // Contains SaveCommand()
+        for (char i : command1->getCommand()) {
             if (!hasReachedSpace) {
                 if (i == ' ') {hasReachedSpace = true;}
-                else {word1 += i;}
-            }
-            else {if (i != '<' && i != '>') {word2 += i;}}
-        }
+                else {word1 += i;}}
+            else {if (i != '<' && i != '>') {word2 += i;}}}
 
         if (word1 == "addplayer") {
             if (mainGE->getplayer_list().size() >= 6) {
-                effect = "Unable to add Player (6 players reached)";
-                cout << effect << "!" << endl;}
+                effect1 = "Unable to add Player (6 players reached)";
+                cout << effect1 << "!" << endl;}
             else {
                 if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                     Player *p = new Player(word2);
                     mainGE->getplayer_list().push_back(p);
                     mainGE->setNumberOfPlayers(mainGE->getNumberOfPlayers()+1);
 
-                    effect = "Added Player: " + p->getName();
-                    cout << effect << "!" << endl;
+                    effect1 = "Added Player: " + p->getName();
+                    cout << effect1 << "!" << endl;
                     mainGE->transition(playersAdded);}
-                else { effect = "Unable to add Player";
-                        cout << effect << "!" << endl;}
+                else { effect1 = "Unable to add Player";
+                        cout << effect1 << "!" << endl;}
             }
         }
 
-        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
-        logger->outputFile << "\n-------------------- Command::SaveEffect --------------------" << endl;
-        command1->saveEffect(effect);
-        cout << command1->getEffect() << endl;
+        cout << "\n-------------------- CommandProcessor::saveCommand() (Console) --------------------" << endl;
+        logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() (Console) --------------------" << endl;
 
-/*
-        cout << "\n--------- Read Command from Console" << endl;
-        logger->outputFile << "\n--------- Read Command from Console" << endl;
-
+        cout << "In output file: Saved the following command to the CommandProcessor: addplayer <MJ>" << endl;
+        cout << "In output file: The Game Engine has transitioned to the playersAddedstate.\n" << endl;
         CommandProcessor *cp2 = new CommandProcessor;
-        cp = cp2;
+        cp2->setEngine(mainGE);
+        mainGE->setProcessor(cp2);
+
         cout << "Please give a command: " << endl;
-        cp->getCommand(); // Getting a single Command
-        Command *command2 = cp->getCommands()[cp->getCommands().size() - 1];
+
+        cp2->getCommand(); // Contains SaveCommand()
+        Command *command2 = cp2->getCommands()[cp2->getCommands().size() - 1];
 
         // Splitting the input into words (if it can be split)
-        for (char i : command1->getCommand()) { // Contains SaveCommand()
+        string effect2 = "";
+        word1 = "";
+        word2 = "";
+        hasReachedSpace = false;
+
+        for (char j : command2->getCommand()) {
             if (!hasReachedSpace) {
-                if (i == ' ') {hasReachedSpace = true;}
-                else {word1 += i;}
-            }
-            else {if (i != '<' && i != '>') {word2 += i;}}
-        }
+                if (j == ' ') {hasReachedSpace = true;}
+                else {word1 += j;}}
+            else {if (j != '<' && j != '>') {word2 += j;}}}
 
         if (word1 == "addplayer") {
             if (mainGE->getplayer_list().size() >= 6) {
-                effect = "Unable to add Player (6 players reached)";
-                cout << effect << "!" << endl;
-            }
-            else {
-                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
+                effect2 = "Unable to add Player (6 players reached)";
+                cout << effect2 << "!" << endl;}
+            else { if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                     Player *p = new Player(word2);
                     mainGE->getplayer_list().push_back(p);
                     mainGE->setNumberOfPlayers(mainGE->getNumberOfPlayers()+1);
-
-                    effect = "Added Player: " + p->getName();
-                    cout << effect << "!" << endl;
-                    mainGE->transition(playersAdded);
-                }
+                    effect2 = "Added Player: " + p->getName();
+                    cout << effect2 << "!" << endl;
+                    mainGE->transition(playersAdded);}
                 else {
-                    effect = "Unable to add Player";
-                    cout << effect << "!" << endl;
-                }
-            }
-        }
+                    effect2 = "Unable to add Player";
+                    cout << effect2 << "!" << endl;}}}
 
-        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
-        logger->outputFile << "\n-------------------- Command::SaveEffect --------------------" << endl;
-        command2->saveEffect(effect);
+
+        cout << "\n-------------------- Command::SaveEffect() --------------------" << endl;
+        logger->outputFile << "\n-------------------- Command::SaveEffect() --------------------" << endl;
+
+        cout << "In output file: Command entered: \"addplayer <Audrey>\" changing the Game Engine State to playersadded and having the effect of \"Added Player: MJ\"\n" << endl;
+        command1->saveEffect(effect1);
+
+        cout << "In output file: Command entered: \"addplayer <MJ>\" changing the Game Engine State to playersadded and having the effect of \"Added Player: MJ\"" << endl;
+        command2->saveEffect(effect2);
+
 
         // Create Players List
         vector<Player*> player_list;
@@ -188,32 +191,27 @@ LogObserver* Subject::logObs=logger;
         Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
         Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
 
-        cout << "\n-------------------- CommandProcessor::saveCommand()  --------------------" << endl;
-
-        cout << "\n--------- Read Commmand from file \"commands.txt\"" << endl;
-        fileName = "../CommandProcessing/commands.txt";
-
-        cout << "\n--------- Read Command from Console" << endl;
-
-        cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
-        cout << "\n--------- Read Commmand from file" << endl;
-
-        cout << "\n--------- Changing State to loadmap" << endl;
-        cout << "\n--------- Changing State to validatemap" << endl;
 
         cout << "\n-------------------- OrderList::addOrder() --------------------" << endl;
         logger->outputFile << "\n-------------------- OrderList::addOrder() --------------------" << endl;
+
         Deploy* deploy1 = new Deploy(player1, Ontario_South);
         Deploy* deploy2 = new Deploy(player2, Quebec_North);
         Deploy* deploy3 = new Deploy(player1, Ontario_West);
 
+        cout << "In output file : Added the Order deploy to Audrey's OrderList." << endl;
+        cout << "In output file : Added the Order deploy to MJ's OrderList." << endl;
+        cout << "In output file : Added the Order deploy to Audrey's OrderList." << endl;
         player1->getOrder()->addOrder(deploy1);
         player1->getOrder()->addOrder(deploy2);
         player1->getOrder()->addOrder(deploy3);
-        cout << *player1->getOrder() << endl;
 
         cout << "\n-------------------- Order::execute() --------------------" << endl;
         logger->outputFile << "\n-------------------- Order::execute() --------------------" << endl;
+
+        cout << "In output file, Deploy execution information for Audrey." << endl;
+        cout << "In output file, Deploy execution information for MJ. " << endl;
+        cout << "In output file, Deploy execution information for Audrey. " << endl;
 
         cout << "\n--------- Player 1 Deploy" << endl;
         cout << "Order: " << *deploy1 << endl;
@@ -223,13 +221,15 @@ LogObserver* Subject::logObs=logger;
         cout << "\n--------- Player 2 Deploy" << endl;
         cout << "Order: " << *deploy2 << endl;
         deploy2->validate();
+        cout << "writing stringToLog to output file: " << endl;
         deploy2->execute();
 
         cout << "\n--------- Player 1 Deploy (Target belongs to another player)" << endl;
         cout << "Order: " << *deploy3 << endl;
         deploy3->validate();
+        cout << "writing stringToLog to output file: " << endl;
         deploy3->execute();
-*/
+
         logger->outputFile << "\n-------------------- Closing the gamelog file --------------------" << endl;
         Order::logObs->outputFile.close();
         return 0;
