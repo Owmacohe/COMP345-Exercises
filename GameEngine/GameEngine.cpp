@@ -81,16 +81,12 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     NumberOfTerritories = gm.NumberOfTerritories;
     phaseEnd = gm.phaseEnd;
     this->deck = gm.deck;
-
+    neutralPlayer = gm.neutralPlayer;
     for (Player* p : gm.player_list) {
         this->player_list.push_back(p);
     }
 
     return *this;
-    // TODO: Attributes not initialized / Destroyed, CONFIRM WITH TEAM
-//    CommandProcessor *processor;
-//    alliances = set<pair<Player*, Player*>>();
-//    Map *map;
 };
 
 // Stream insertion operator
@@ -286,6 +282,7 @@ void GameEngine::issueOrdersPhase() {
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
                 p->issueOrder("advance");
+                cout << "Advance order added to Player's Order List" << endl;
                 // MJ said that checking if an advance is attacking or defending is done in orders
                 break;
             }
