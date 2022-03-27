@@ -88,15 +88,16 @@ LogObserver* Subject::logObs=logger;
 
         /****************************** Methods using the Observer Pattern *******************************/
 
-//        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
-//        cout << "\n--------- Read Command from Console" << endl;
-//        cout << "\n--------- Read Commmand from file" << endl;
-//
-//        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
-//
-//        cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
-//        cout << "\n--------- Changing State to loadmap" << endl;
-//        cout << "\n--------- Changing State to validatemap" << endl;
+        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
+
+        cout << "\n--------- Read Command from Console" << endl;
+        cout << "\n--------- Read Commmand from file" << endl;
+
+        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
+
+        cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
+        cout << "\n--------- Changing State to loadmap" << endl;
+        cout << "\n--------- Changing State to validatemap" << endl;
 
         cout << "\n-------------------- OrderList::addOrder() --------------------" << endl;
         Deploy* deploy1 = new Deploy(player1, Ontario_South);
@@ -124,6 +125,7 @@ LogObserver* Subject::logObs=logger;
         deploy3->validate();
         deploy3->execute();
 
+        Order::logObs->outputFile.close();
         return 0;
 
     }
