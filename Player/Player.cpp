@@ -203,9 +203,6 @@ int Player::getNumberOfTerritories() {
 // Return an origin territory adjacent to a target territory
 Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     vector<Territory*> surround_territory = m->getConnectedTerritories(target_territory->getName());
-    for (Territory* i : surround_territory) {
-        cout << i->getName() << endl;
-    }
     for (Territory* t : surround_territory) {
         if (t->getOwner()->getName() == name) return t;
     }
