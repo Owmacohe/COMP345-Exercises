@@ -286,7 +286,7 @@ void GameEngine::issueOrdersPhase() {
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
                 p->issueOrder("advance");
-                // MJ said that checking if an advance is attacking or defending is done in orders
+                cout << "Advance order issued" <<endl;
                 break;
             }
             else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
