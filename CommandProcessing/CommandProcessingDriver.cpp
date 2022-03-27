@@ -61,6 +61,8 @@ int commandProcessingMain() {
 
     Command *c = cp->getCommands()[cp->getCommands().size() - 1];
 
+    c->saveEffect("Driver Effect");
+
     // Printing the CommandProcessor and the single Command
     cout << endl << *cp << endl << endl;
     cout << *c << endl << endl;
