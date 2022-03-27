@@ -219,10 +219,6 @@ Advance::Advance(Player* p) : Order(false, "advance") {
         origin = p->getOriginTerritory(target, game->getMap());
         if (origin == NULL){origin = playerIssuing->getTerritoryList().at(0);}
 
-//        cout << "Target : " << target->getName() << " " << target->getOwnerName() << endl;
-//        cout  << "Origin : "<< origin->getName() << " " << origin->getOwner()->getName() << endl;
-//        cout << to_string(origin->getArmies()) << endl;
-
         // Condition checked: If there's no more armies to advance
         if (origin->getArmies() == 0) {
             numToAdvance = 0;
@@ -351,30 +347,35 @@ void Advance::execute() {
             origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
         }
-        // Attack
+        // Attack until exhaust
         else if (validateResult == "attack") {
-            int defend_alive = target->getArmies() - deathCalculation(target->getArmies(),0.6 );
-            cout << "Enemy's armies " << defend_alive <<endl;
-            int attack_alive = numToAdvance -  deathCalculation(numToAdvance, 0.7);
-            cout << "Player's armies " << defend_alive << endl;
-            // Attack successful
-            if (attack_alive > defend_alive){
-                target->setArmies(attack_alive); // Attacker survived conquered the territory
-                target->setOwner(playerIssuing); // The territory now belong to player issuing
-                playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory
-            }
-            // Attack failed
-            else {
-                target->setArmies(defend_alive);
-                cout << "Attack Failed, player now has " << defend_alive << " armies."<< endl;
+            int defend_alive = target->getArmies();
+            int attack_alive = numToAdvance;
+            bool isExhaust = false;
+            while (!isExhaust){
+                defend_alive = target->getArmies() - deathCalculation(target->getArmies(),0.6 );
+                cout << "Player's armies: " << attack_alive << endl;
+                attack_alive = numToAdvance -  deathCalculation(numToAdvance, 0.7);
+                cout << "Enemy's armies: " << defend_alive <<endl;
+                // Attack successful
+                if (defend_alive <= 0 && attack_alive > 0 ){
+                    target->setArmies(attack_alive); // Attacker survived conquered the territory
+                    target->setOwner(playerIssuing); // The territory now belong to player issuing
+                    playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory
+                    isExhaust = true;
+                }
+                // Attack failed
+                else if (defend_alive > 0 && attack_alive <= 0){
+                    target->setArmies(defend_alive);
+                    cout << "Attack Failed, player now has " << defend_alive << " armies."<< endl;
+                    isExhaust = true;
+                }
             }
         }
     } else
         cout << "Can't execute Advance order!" << endl;
-
     notify(this);
 }
-
 int Advance::deathCalculation(int qty, double probability) {
     bool kill;
     int dead = 0;

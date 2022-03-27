@@ -23,9 +23,9 @@ int cardsMain() {
     cout << *player1->getHand() << endl;
 
     cout << "\n******************************* Play Card *******************************" << endl;
-    player1->getHand()->playCard(4, *mainDeck, *player1->getOrder());
-    player1->getHand()->playCard(3, *mainDeck, *player1->getOrder());
-    player1->getHand()->playCard(0, *mainDeck, *player1->getOrder());
+    player1->getHand()->playCard(4, *mainDeck, *player1->getOrder(), player1);
+    player1->getHand()->playCard(3, *mainDeck, *player1->getOrder(), player1);
+    player1->getHand()->playCard(0, *mainDeck, *player1->getOrder(), player1);
 
     cout << endl;
     cout << *(player1->getOrder());
@@ -59,10 +59,10 @@ int cardsMain() {
     cout << *assignDeck << endl;
 
     cout << "\n> AssignHand plays all cards:" << endl;
-    assignHand->playCard(3, *assignDeck, *player1->getOrder());
-    assignHand->playCard(1, *assignDeck, *player1->getOrder());
-    assignHand->playCard(0, *assignDeck, *player1->getOrder());
-    assignHand->playCard(0, *assignDeck, *player1->getOrder());
+    assignHand->playCard(3, *assignDeck, *player1->getOrder(), player1);
+    assignHand->playCard(1, *assignDeck, *player1->getOrder(), player1);
+    assignHand->playCard(0, *assignDeck, *player1->getOrder(), player1);
+    assignHand->playCard(0, *assignDeck, *player1->getOrder(), player1);
     cout << endl;
     cout << *player1->getOrder() << endl
     ;
@@ -92,8 +92,8 @@ int cardsMain() {
     cout << *copyDeck << endl;
 
     cout << "\n> CopyHand plays 2 cards:" << endl;
-    copyHand->playCard(1, *copyDeck, *player1->getOrder());
-    copyHand->playCard(0, *copyDeck, *player1->getOrder());
+    copyHand->playCard(1, *copyDeck, *player1->getOrder(), player1);
+    copyHand->playCard(0, *copyDeck, *player1->getOrder(), player1);
     cout << endl;
     cout << *player1->getOrder() << endl;
 
