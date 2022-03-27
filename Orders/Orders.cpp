@@ -341,54 +341,57 @@ void Advance::validate() {
 }
 
 void Advance::execute() {
-    cout << "... Advance ";
-    // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
-    if (validateResult == "move") {
-        target = playerIssuing->toDefend(game->getMap()).at(0);
-        cout << validateResult << " to " << target->getName() <<endl;
-    } else if (validateResult == "attack") {
-        target = playerIssuing->toAttack(game->getMap()).at(0);
-        cout << validateResult << " to " << target->getName() <<endl;
-    }
     if (validated) {
         // Advance
         if (validateResult == "move") {
+            cout << "... Advance execute ";
             origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
+            cout << "successfully!\n" << endl;
         }
         // Attack until exhaust
         else if (validateResult == "attack") {
-            int defend_alive = target->getArmies();
-            int attack_alive = numToAdvance;
+            cout << "... Advance execute " << endl;
+            int defend_alive = target->getArmies();  int defend_die = 0;
+            int attack_alive = numToAdvance;         int attack_die = 0;
+
             bool isExhaust = false;
             while (!isExhaust){
-                defend_alive = target->getArmies() - deathCalculation(target->getArmies(),0.6 );
-                cout << target->getArmies() << " Death: " << deathCalculation(target->getArmies(),0.6 ) <<endl;
-                target->setArmies(defend_alive); // Attacker survived conquered the territory
-                cout << "Enemy's armies: " << defend_alive << endl;
+                int numToAdvance2 = numToAdvance;
+                // numToAdvance = attacker | target armies = defender
 
-                attack_alive = numToAdvance -  deathCalculation(numToAdvance, 0.7);
-                cout << target->getArmies() << " Death: " << deathCalculation(target->getArmies(),0.6 ) << endl;
-                numToAdvance = attack_alive;
-                cout << "Player's armies: " << attack_alive <<endl;
+                defend_die = deathCalculation(numToAdvance2,0.6);
+                defend_alive = target->getArmies() - defend_die;
+//                cout << "Enemy's armies: " << target->getArmies() << " die: " << defend_die << endl;
+//                cout << "Enemy's alive: " << defend_alive << endl;
+
+                attack_die = deathCalculation(target->getArmies(), 0.7);
+                attack_alive = numToAdvance2 - attack_die;
+//                cout << "Player's armies: " << numToAdvance << " die: " << attack_die << endl;
+//                cout << "Player's alive: " << attack_alive <<endl;
+
+                target->setArmies(defend_alive);
+                numToAdvance2 = attack_alive;
 
                 // Attack successful
                 if (defend_alive <= 0 && attack_alive > 0 ){
                     target->setArmies(attack_alive); // Attacker survived conquered the territory
                     target->setOwner(playerIssuing); // The territory now belong to player issuing
+                    cout << "Card drawn: ";
                     playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory
                     isExhaust = true;
+                    cout << "\nAttack successful!\n " << endl;
                 }
                 // Attack failed
-                else if (defend_alive > 0 && attack_alive <= 0){
+                else if (defend_alive >= 0 && attack_alive <= 0){
                     target->setArmies(defend_alive);
-                    cout << "Attack Failed, player now has " << defend_alive << " armies.\n"<< endl;
+                    cout << "Attack Failed, enemy left with " << defend_alive << " armies.\n"<< endl;
                     isExhaust = true;
                 }
             }
         }
     } else
-        cout << "Can't execute Advance order!\n" << endl;
+        cout << "... Execution fail!\n" << endl;
     notify(this);
 }
 int Advance::deathCalculation(int qty, double probability) {
@@ -409,10 +412,13 @@ string Advance::stringToLog() {
     string loStringEffect = "";
 
     if (validateResult == "attack"){
-        logStringOrder = "Advance: " + validation + " : attack "  + target->getName() + " with " + to_string(numToAdvance) + " armies \n";
+        logStringOrder = "Advance " + validation + " : attack "  + target->getName() + " with " + to_string(numToAdvance) + " armies \n";
     }
     else if (validateResult == "move"){
-        logStringOrder = "Advance: " + validation + " : Move "+ to_string(numToAdvance) + " armies from " + origin->getName() + " to " + target->getName() + "\n";
+        logStringOrder = "Advance " + validation + " : move "+ to_string(numToAdvance) + " armies from " + origin->getName() + " to " + target->getName() + "\n";
+    }
+    else {
+        logStringOrder = "Advance " + validation + " \n";
     }
     string logStringEffect = target->getName() + " has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwnerName() + "\n";
     return logStringPlayer + logStringOrder + logStringEffect;
@@ -827,8 +833,6 @@ Negotiate::Negotiate(Player* p) : Order(false, "negotiate") {
     string playerTargetName = "";
     cin >> playerTargetName;
     unsigned i = 0;
-    // TODO: Check if the player does not exist -> re-enter player's name
-    // target player = player of the name playerTargetName
     for (int i = 0; i < game->getplayer_list().size(); i++) {
         if (game->getplayer_list().at(i)->getName() == playerTargetName) {
             targetPlayer = game->getplayer_list().at(i);

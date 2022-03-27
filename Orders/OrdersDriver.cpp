@@ -151,11 +151,15 @@ int Ordersmain() {
     Advance* advance3 = new Advance(player1, Ontario_North, Quebec_North);
     cout << "Order: " << *advance3 << endl;
     advance3->validate();
+    advance3->execute();
+    cout << advance3->stringToLog() << endl;
 
     // Origin territory doesn't belong to player  -> failed
     Advance* advance4 = new Advance(player1, Quebec_North, Ontario_South);
     cout << "Order: " << *advance4 << endl;
     advance4->validate();
+    advance4->execute();
+    cout << advance4->stringToLog() << endl;
 
     cout << "\n-------------------- BLOCKADE --------------------" << endl;
     cout << "\n--------- Player 2" << endl;
@@ -222,20 +226,16 @@ int Ordersmain() {
     Advance* advance6 = new Advance(player1,Ontario_South, Quebec_South);
     cout << "Order: " << *advance6 << endl;
     advance6->validate();
+    advance6->execute();
 
-    // TODO TESTING ISSUEORDER AND EXECUTEORDERS PHASE
-    // Set up player order
-
+    // Testing issueOrder and executeOrder
+    cout << "\n-------------------- IssueOrder phase --------------------\n" << endl;
     vector<int> tempOrder;
     for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
         int randOrder = rand() % mainGE->getplayer_list().size();
-
         while (doesContain(tempOrder, randOrder)) {
             randOrder = rand() % mainGE->getplayer_list().size();
         }
-
-        cout << randOrder << endl;
-
         tempOrder.push_back(randOrder);
     }
     mainGE->setPlayerOrder(tempOrder);
@@ -251,7 +251,11 @@ int Ordersmain() {
     cout << player1->getName()<<" OrderList: " << *player1->getOrder() <<endl;
     cout << player2->getName()<< " OrderList: " << *player2->getOrder() <<endl;
 
-   // mainGE->executeOrdersPhase();
+    cout << "\n------------------- Execution phase --------------------\n" << endl;
+    mainGE->executeOrdersPhase();
+
+    cout << player1->getName()<<" OrderList: " << *player1->getOrder() <<endl;
+    cout << player2->getName()<< " OrderList: " << *player2->getOrder() <<endl;
     //
     // ******************************* Testing Orders Constructor for GameLoop *******************************
     // ToDefend() & toAttack()
