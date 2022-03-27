@@ -22,11 +22,11 @@ string Card::getType() const {
     return type;
 }
 
-void Card::play(OrdersList &playerOrdersList) const {
+void Card::play(OrdersList &playerOrdersList, Player* p) const {
     //Creat Order of the corresponding type
     if (type == "bomb") {
         cout << "Play Bomb card" << endl;
-        Bomb* myBomb = new Bomb(); // Create a Bomb object and play as an order
+        Bomb* myBomb = new Bomb(p); // Create a Bomb object and play as an order
         playerOrdersList.addOrder(myBomb); // Place it in the OrdersList
     } /*else if (type == "reinforcement") {
         cout << "Play Reinforcement card" << endl;
@@ -34,15 +34,15 @@ void Card::play(OrdersList &playerOrdersList) const {
         playerOrdersList.addOrder(myReinforcement);
     }*/ else if (type == "blockade") {
         cout << "Play Blockade card" << endl;
-        Blockade* myBlockade = new Blockade();
+        Blockade* myBlockade = new Blockade(p);
         playerOrdersList.addOrder(myBlockade);
     } else if (type == "airlift") {
         cout << "Play Airlift card" << endl;
-       Airlift* myAirlift = new Airlift();
+       Airlift* myAirlift = new Airlift(p);
        playerOrdersList.addOrder(myAirlift);
     } else if (type == "diplomacy") {
         cout << "Play Negotiate card" << endl;
-        Negotiate *myNegotiate = new Negotiate();
+        Negotiate *myNegotiate = new Negotiate(p);
         playerOrdersList.addOrder(myNegotiate);
     } else {
         cout << "Invalid card, play() can not be called!" << endl;
@@ -80,13 +80,11 @@ Deck::Deck(int numCard) {
     deck = vector<Card*>();
 
     for (int i = 0; i < numCardInDeck; i++) {
-        if (i % 5 == 0) {
+        if (i % 4 == 0) {
             deck.push_back(new Card("bomb"));
-        } else if (i % 5 == 1) {
-            deck.push_back(new Card("reinforcement"));
-        } else if (i % 5 == 2) {
+        } else if (i % 4 == 1) {
             deck.push_back(new Card("blockade"));
-        } else if (i % 5 == 3) {
+        } else if (i % 4 == 2) {
             deck.push_back(new Card("airlift"));
         } else {
             deck.push_back(new Card("diplomacy"));
@@ -198,9 +196,9 @@ void Hand::drawCard(Deck& d) {
     numCardInHand++;
 }
 
-void Hand::playCard(int i, Deck &d, OrdersList &l) {
+void Hand::playCard(int i, Deck &d, OrdersList &l, Player* p) {
     // Create Order and add Order to OrderList
-    hand.at(i)->play(l);
+    hand.at(i)->play(l, p);
 
     // Add the played Card back to deck
     Card* playedCard =hand.at(i);

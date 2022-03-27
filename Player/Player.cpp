@@ -206,8 +206,6 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     for (Territory* t : surround_territory) {
         if (t->getOwner()->getName() == name) return t;
     }
-
-
     return NULL;
 }
 
