@@ -341,7 +341,7 @@ void GameEngine::endIssueOrderPhase() {
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
     for (Order * o : p->getOrder()->getOrderList()){
-        if (o->getDescription() == "Deploy")
+        if (equalsIgnoreCase(o->getDescription(), "deploy"))
             return true;
     }
     return false;
@@ -357,12 +357,11 @@ void GameEngine::executeOrdersPhase() {
     bool hasMoreDeployOrders = true;
     bool allOrdersDone = false;
 
-    // avoiding the extra deploy list in player waiting on testing
     while (hasMoreDeployOrders == true ){
-        // this loop will loop based on the playing order
+        // Loop will loop based on the playing order
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
-            for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) {
+            for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) { // Loop through orders of player orderlist
                 if (equalsIgnoreCase(p->getOrder()->getOrderList().at(i)->getDescription(), "deploy")) {
                     p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
@@ -374,7 +373,7 @@ void GameEngine::executeOrdersPhase() {
 
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
-            Player *p = player_list.at(playerOrder[i]);
+            Player *p = player_list.at(playerOrder.at(i));
             if (!hasMoreDeploy(p))
                 playersWithoutDeploy++;
         }
@@ -383,19 +382,19 @@ void GameEngine::executeOrdersPhase() {
         else
             playersWithoutDeploy = 0;
     }
+
     while (allOrdersDone == false ){
         for (int i = 0; i < NumberOfPlayers; i++) {
-            Player *p = player_list.at(playerOrder[i]);
-            for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+            Player *p = player_list.at(playerOrder.at(i));
+            for(int i = 0 ; i < p->getOrder()->getOrderList().size(); i++) {
                     p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
-                    cout << p->getOrder()->getOrderList().at(i)->stringToLog() << endl;
                     p->getOrder()->remove(i);
                     break;
             }
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
-            Player *p = player_list.at(playerOrder[i]);
+            Player *p = player_list.at(playerOrder.at(i));
             if (p->getOrder()->getOrderList().empty())
                 playersWithoutOrders ++;
         }
