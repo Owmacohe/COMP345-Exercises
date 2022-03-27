@@ -354,9 +354,15 @@ void Advance::execute() {
             bool isExhaust = false;
             while (!isExhaust){
                 defend_alive = target->getArmies() - deathCalculation(target->getArmies(),0.6 );
-                cout << "Player's armies: " << attack_alive << endl;
+                cout << target->getArmies() << " Death: " << deathCalculation(target->getArmies(),0.6 ) <<endl;
+                target->setArmies(defend_alive); // Attacker survived conquered the territory
+                cout << "Enemy's armies: " << defend_alive << endl;
+
                 attack_alive = numToAdvance -  deathCalculation(numToAdvance, 0.7);
-                cout << "Enemy's armies: " << defend_alive <<endl;
+                cout << target->getArmies() << " Death: " << deathCalculation(target->getArmies(),0.6 ) << endl;
+                numToAdvance = attack_alive;
+                cout << "Player's armies: " << attack_alive <<endl;
+
                 // Attack successful
                 if (defend_alive <= 0 && attack_alive > 0 ){
                     target->setArmies(attack_alive); // Attacker survived conquered the territory
