@@ -121,8 +121,8 @@ Card* Deck::draw() {
     // keep a copy of the returned card in a temp var
     Card * temp = deck.at(numRandom);
 
-    //Display the type of card that is drawn
-    cout << numRandom << "-" << *deck.at(numRandom) << " | ";
+    // Display the type of card that is drawn
+     cout << *deck.at(numRandom);
 
     // Remove the drawn card from Deck
     deck.erase(deck.begin()+numRandom);
