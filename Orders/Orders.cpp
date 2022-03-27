@@ -1049,8 +1049,46 @@ void OrdersList::move(int i, int j) {
 }
 
 string OrdersList::stringToLog() {
-    Order *lastOrderAdded = playerOrderList.at(playerOrderList.size() - 1);
-    string logString = lastOrderAdded->stringToLog() + ".\n";
+    Order *lastOrderAdded = NULL;
+    lastOrderAdded = playerOrderList.at(playerOrderList.size() - 1);
+    string logString = "";
+    if (lastOrderAdded->getDescription() == "deploy")
+    {
+        Deploy *temp = dynamic_cast<Deploy*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+    else if (lastOrderAdded->getDescription() == "advance")
+    {
+        Advance *temp = dynamic_cast<Advance*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+    else if (lastOrderAdded->getDescription() == "bomb")
+    {
+        Bomb *temp = dynamic_cast<Bomb*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+    else if (lastOrderAdded->getDescription() == "blockade")
+    {
+        Blockade *temp = dynamic_cast<Blockade*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+    else if (lastOrderAdded->getDescription() == "airlift")
+    {
+        Airlift *temp = dynamic_cast<Airlift*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+    else if (lastOrderAdded->getDescription() == "negotiate")
+    {
+        Negotiate *temp = dynamic_cast<Negotiate*>(lastOrderAdded);
+        logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
+        temp = NULL;
+    }
+
     return logString;
 }
 
