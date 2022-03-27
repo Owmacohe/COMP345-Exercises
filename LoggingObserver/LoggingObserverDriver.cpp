@@ -52,7 +52,6 @@ LogObserver* Subject::logObs=logger;
         MapLoader* loader;
         Map* mainmap = loader->load("../Orders/canada.map");
 
-
         cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
         logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
 
@@ -200,6 +199,18 @@ LogObserver* Subject::logObs=logger;
         Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
         Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
 
+        cout << "\n-------------------- CommandProcessor::saveCommand()  --------------------" << endl;
+
+        cout << "\n--------- Read Commmand from file \"commands.txt\"" << endl;
+        string fileName = "../CommandProcessing/commands.txt";
+
+        cout << "\n--------- Read Command from Console" << endl;
+
+        cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
+        cout << "\n--------- Read Commmand from file" << endl;
+
+        cout << "\n--------- Changing State to loadmap" << endl;
+        cout << "\n--------- Changing State to validatemap" << endl;
 
         cout << "\n-------------------- OrderList::addOrder() --------------------" << endl;
         logger->outputFile << "\n-------------------- OrderList::addOrder() --------------------" << endl;
@@ -210,6 +221,7 @@ LogObserver* Subject::logObs=logger;
         player1->getOrder()->addOrder(deploy1);
         player1->getOrder()->addOrder(deploy2);
         player1->getOrder()->addOrder(deploy3);
+        cout << *player1->getOrder() << endl;
 
         cout << "\n-------------------- Order::execute() --------------------" << endl;
         logger->outputFile << "\n-------------------- Order::execute() --------------------" << endl;
