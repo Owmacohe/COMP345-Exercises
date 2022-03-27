@@ -75,7 +75,7 @@ class GameEngine : public Iloggable, public Subject {
         void endIssueOrderPhase();
         bool hasMoreDeploy(Player*);
         void executeOrdersPhase();
-        void endexecuteOrdersPhase(Player*);         // TODO WE DELETE THIS ?
+        void endexecuteOrdersPhase();
         void winPhase(Player*);
         void endPhase();
         void playAgain();
