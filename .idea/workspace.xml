@@ -14,12 +14,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Orders/Orders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Orders/Orders.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="" />
+
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -135,6 +131,7 @@
       <workItem from="1648228798184" duration="4191000" />
       <workItem from="1648321762710" duration="1770000" />
       <workItem from="1648323745498" duration="2897000" />
+      <workItem from="1648354140449" duration="364000" />
     </task>
     <servers />
   </component>
@@ -160,6 +157,7 @@
       <configuration name="CMakeRunConfiguration">
         <watch expression="pairs" />
         <watch expression="pairs" />
+        <watch expression="toAssign.territories" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>

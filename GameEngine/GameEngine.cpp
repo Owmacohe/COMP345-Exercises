@@ -211,6 +211,7 @@ void GameEngine::assignCountries() {
 }
 */
 
+// Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
 
     transition(assignReinforcement);
@@ -253,6 +254,7 @@ void GameEngine::assignReinforcementPhase() {
     cout << "End of assign reinforcement" << endl;
 }
 
+// Issue order phase
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
@@ -286,7 +288,6 @@ void GameEngine::issueOrdersPhase() {
                 goodinput = true;
                 p->issueOrder("advance");
                 cout << "Advance order added to Player's Order List" << endl;
-                // MJ said that checking if an advance is attacking or defending is done in orders
                 break;
             }
             else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
@@ -311,15 +312,14 @@ void GameEngine::issueOrdersPhase() {
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
                 int index = -1;
-                while (index == -1) {
+                while (index < 0) {
                     index = checkCardInHand(response, p->getHand());
-                    if (index != -1) {
-                        p->getHand()->playCard(index, *deck, *p->getOrder());
+                    if (index >= 0) {
+                        p->getHand()->playCard(index, *deck, *p->getOrder(), p);
                         break;
                     }
                     else {
-                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
-                        break;
+                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again"<< endl;
                     }
                 }
             }
@@ -332,15 +332,17 @@ void GameEngine::issueOrdersPhase() {
                 break;
             }
         }
-        endIssueOrderPhase(p);
     }
+    endIssueOrderPhase();
 }
+
 
 void GameEngine::endIssueOrderPhase(Player *player) {
     transition(executeOrder);
     cout << "End phase issue orders for player " << player->getName() << endl;
 }
 
+// Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
     for (Order * o : p->getOrder()->getOrderList()){
         if (o->getDescription() == "Deploy")
@@ -349,6 +351,7 @@ bool GameEngine::hasMoreDeploy(Player *p) {
     return false;
 }
 
+// Execute order phase
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
@@ -404,47 +407,6 @@ void GameEngine::executeOrdersPhase() {
         else
             playersWithoutOrders = 0;
     }
-
-
-
-
-
-
-//    for (int i = 0; i < player_list.size(); i++) {
-//        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
-//            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
-//                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
-//                  player_list.at(i)->getOrder()->remove(j);
-//            }
-//        }
-//    }
-//    // To execute and remove the deploy orders
-//    int  deployDoneCount =0;
-//    while(deployDoneCount < NumberOfPlayers) {
-//        deployDoneCount =0;
-//        for (int i = 0; i < player_list.size(); i++) {
-//            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
-//                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
-//                player_list[i]->getOrder()->remove(i);
-//
-//            } else deployDoneCount++;
-//        }
-//    }
-//    // To execute the rest of the orders on each player's list
-//    int  playersDone =0;
-//    while(playersDone < NumberOfPlayers) {
-//        playersDone =0;
-//        for (int i = 0; i < player_list.size(); i++) {
-//            if (!player_list[i]->getOrder()->getOrderList().empty()) {
-//                player_list[i]->getOrder()->getOrderList().at(i)->execute();
-//                player_list[i]->getOrder()->remove(i);
-//
-//            } else {
-//
-//                playersDone++;
-//            }
-//        }
-//    }
 }
 // TODO WE DELETE THIS ?
 void GameEngine::endexecuteOrdersPhase(Player *player) {
@@ -467,9 +429,57 @@ void GameEngine::playAgain() {
     cout << "The Game will restart soon" << endl;
 }
 
+
 void GameEngine::transition(State transitionState) {
     *s = transitionState;
     notify(this);
+}
+// THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
+
+/*
+void GameEngine::gameStartupTransitions(string str) {
+    if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
+        loadMap();
+    }
+    else if (str == "validatemap" && getState() == 2) {
+        validateMap();
+    }
+    else if (str == "addplayer" && (getState() ==3 || getState() == 4)) {
+       addPlayer();
+    }
+    else if (str == "assigncountries" && getState() ==4) {
+        assignCountries();
+        assignReinforcementPhase();
+    }
+    else {
+        cout << "Invalid command!" << endl;
+    }
+
+    notify(this); // FROM SUBJECT
+}
+*/
+
+void GameEngine::gamePlayTransitions(string str, Player *p) {
+    if (str == "issueorder" && (*getState() == 5 || *getState() == 6)) {
+        issueOrdersPhase();
+    }
+    else if (str == "endissueorders" && *getState() == 6) {
+        endIssueOrderPhase();
+    }
+    else if (str == "execorder" && *getState() == 7) {
+        executeOrdersPhase();
+    }
+    else if (str == "endexecorders" && *getState() == 7) {
+        endexecuteOrdersPhase(p);
+    }
+    else if (str == "win" && *getState() == 7) {
+        winPhase(p);
+    }
+    else {
+        cout << "Invalid command!" << endl;
+    }
+
+    notify(this); // FROM SUBJECT
 }
 
 void GameEngine::gameEndTransitions(string str) {
@@ -812,6 +822,7 @@ int GameEngine::checkCardInHand(string type, Hand* h) {
     return -1;
 }
 
+// Checks for returns true for strings that are equal ignoring case
 bool GameEngine::equalsIgnoreCase(string s1, string s2) {
    // Change to lower case
    transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
