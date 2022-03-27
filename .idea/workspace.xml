@@ -123,6 +123,7 @@
       <workItem from="1648228798184" duration="4191000" />
       <workItem from="1648321762710" duration="1770000" />
       <workItem from="1648323745498" duration="2897000" />
+      <workItem from="1648354140449" duration="364000" />
     </task>
     <servers />
   </component>
@@ -144,19 +145,11 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Player/Player.cpp</url>
-          <line>204</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="pairs" />
         <watch expression="pairs" />
+        <watch expression="toAssign.territories" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>
