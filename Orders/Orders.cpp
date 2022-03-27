@@ -157,6 +157,7 @@ void Deploy::validate() {
 
 void Deploy::execute() {
     cout << "... Deploy ";
+    target = playerIssuing->toDefend(this->game->getMap()).at(0);
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
@@ -209,10 +210,10 @@ Advance::Advance(Player* p) : Order(false, "advance") {
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
         target = p->toDefend(game->getMap()).at(0);
-        cout << input << " to " << target->getName() <<endl;
+        cout << p->getName() << " is issuing a "<< input << " Advance"<<endl;
     } else if (input == "attack") {
         target = p->toAttack(game->getMap()).at(0);
-        cout << input << " to " << target->getName() <<endl;
+        cout << p->getName() << " is issuing an "<< input << " Advance"<<endl;
     }
 
         // From the target we chose, generate an origin that adjacent to it to attack
@@ -295,7 +296,7 @@ void Advance::setValidated(bool v) {
 
 void Advance::validate() {
     validateResult = "";
-    cout << "... Advance ";
+    cout << "... Advance - " << playerIssuing->getName() << " - ";
     // Check if territory belongs to the player
     if (origin->getOwnerName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own this territory" << endl;
@@ -341,6 +342,14 @@ void Advance::validate() {
 
 void Advance::execute() {
     cout << "... Advance ";
+    // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
+    if (validateResult == "move") {
+        target = playerIssuing->toDefend(game->getMap()).at(0);
+        cout << validateResult << " to " << target->getName() <<endl;
+    } else if (validateResult == "attack") {
+        target = playerIssuing->toAttack(game->getMap()).at(0);
+        cout << validateResult << " to " << target->getName() <<endl;
+    }
     if (validated) {
         // Advance
         if (validateResult == "move") {
@@ -373,13 +382,13 @@ void Advance::execute() {
                 // Attack failed
                 else if (defend_alive > 0 && attack_alive <= 0){
                     target->setArmies(defend_alive);
-                    cout << "Attack Failed, player now has " << defend_alive << " armies."<< endl;
+                    cout << "Attack Failed, player now has " << defend_alive << " armies.\n"<< endl;
                     isExhaust = true;
                 }
             }
         }
     } else
-        cout << "Can't execute Advance order!" << endl;
+        cout << "Can't execute Advance order!\n" << endl;
     notify(this);
 }
 int Advance::deathCalculation(int qty, double probability) {
