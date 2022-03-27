@@ -225,9 +225,28 @@ int Ordersmain() {
 
     // TODO TESTING ISSUEORDER AND EXECUTEORDERS PHASE
     // Set up player order
+
     vector<int> tempOrder;
     for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
         int randOrder = rand() % mainGE->getplayer_list().size();
+
+//    vector<int> tempOrder;
+//    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
+//        int randOrder = rand() % mainGE->getplayer_list().size();
+//
+//        while (doesContain(tempOrder, randOrder)) {
+//            randOrder = rand() % mainGE->getplayer_list().size();
+//        }
+//
+//        cout << randOrder << endl;
+//
+//        tempOrder.push_back(randOrder);
+//    }
+//    mainGE->setPlayerOrder(tempOrder);
+//
+//    mainGE->setNumberOfPlayers(mainGE->getplayer_list().size());
+//    mainGE->issueOrdersPhase();
+
 
         while (doesContain(tempOrder, randOrder)) {
             randOrder = rand() % mainGE->getplayer_list().size();
