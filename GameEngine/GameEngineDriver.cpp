@@ -13,10 +13,10 @@
 //    return 0;
 //}
 
-
-int GameEnginemain() {
+int main() {
     GameEngine* gameEngine = new GameEngine;
     Order::game = gameEngine;
+
     string input;
     bool isPlaying = true;
 
