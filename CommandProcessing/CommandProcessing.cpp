@@ -15,7 +15,7 @@ Command::Command() {
     //cout << "[Command default constructor]" << endl;
 }
 
-// Parameterized constructor 1 (unparemeterized Commands)
+// Parameterized constructor 1 (un-parameterized Commands)
 Command::Command(string c) : command(c) {
     validIn = vector<int>();
     effect = "";
@@ -43,7 +43,7 @@ Command::Command(string c) : command(c) {
     //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
-// Parameterized constructor 2 (paremeterized Commands)
+// Parameterized constructor 2 (parameterized Commands)
 Command::Command(string c, string p) : command(c + " <" + p + ">") {
     validIn = vector<int>();
     effect = "";
@@ -52,6 +52,7 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
         this->addValidInState(1);
         this->addValidInState(2);
         transitionsTo = "maploaded";
+
     }
     else if (c == "addplayer") {
         this->addValidInState(3);
@@ -112,7 +113,6 @@ void Command::setValidIn(vector<int> v) {
 void Command::setTransitionsTo(string t) { transitionsTo = t; }
 void Command::saveEffect(string e) {
     effect = e;
-
     notify(this);
 }
 
@@ -244,7 +244,6 @@ Command *CommandProcessor::readCommand() {
 // Stores the gotten Command in the array
 void CommandProcessor::saveCommand(Command *c) {
     commands.push_back(c);
-
     notify(this); // FROM SUBJECT
 }
 
@@ -407,4 +406,7 @@ void FileCommandProcessorAdapter::getCommand() {
     saveCommand(temp);
 }
 
-// TODO STRING TO LOG MJ
+string FileCommandProcessorAdapter::stringToLog() {
+    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getEffect() +"\n";
+    return logString;
+}

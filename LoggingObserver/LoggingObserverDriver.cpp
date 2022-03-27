@@ -11,53 +11,6 @@ LogObserver* Subject::logObs=logger;
 
     int LogObsmain() {
 
-        /****************************** CREATING Game, CommandProcessor, OrdersList, etc. *******************************/
-        /**** Setting up the Game Engine ****/
-        MapLoader* loader;
-        Map* mainmap = loader->load("../Orders/canada.map");
-
-
-        // Create Players List
-        vector<Player*> player_list;
-        Player* player1 = new Player(); player1->setReinforcementPool(10); player1->setName("Audrey");
-        Player* player2 = new Player(); player2->setReinforcementPool(12); player2->setName("MJ");
-        player_list.push_back(player1); player_list.push_back(player2);
-
-        // Create & Set up Game Engine
-        GameEngine* mainGE = new GameEngine();
-        mainGE->setMap(mainmap);
-        mainGE->setplayer_list(player_list);
-        mainGE->setDeck(new Deck(20));
-        Order::game = mainGE;
-
-        // Assign Territories to Players
-        int playerIndex = 0;
-        for (Territory *i : mainmap->getTerritories()) {
-            Player *tempPlayer = player_list.at(playerIndex);
-            i->setOwner(tempPlayer);
-            tempPlayer->assignTerritory(i);
-
-            playerIndex++;
-            if (playerIndex >= player_list.size()) {
-                playerIndex = 0;
-            }
-        }
-        Territory* Yukon_Territory = Order::game->getMap()->getTerritories().at(30); Yukon_Territory->setArmies(4);
-        Territory* Ontario_South = Order::game->getMap()->getTerritories().at(8); Ontario_South->setArmies(0);
-        Territory* Ontario_North = Order::game->getMap()->getTerritories().at(10); Ontario_North->setArmies(0);
-        Territory* Quebec_Central = Order::game->getMap()->getTerritories().at(6); Quebec_Central->setArmies(4);
-        Territory* Manitoba_South = Order::game->getMap()->getTerritories().at(11); Manitoba_South->setArmies(4);
-        Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
-        Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
-        Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
-
-        /**** Commmand & CommandProcessor ****/
-        Command *command1 = new Command();
-        CommandProcessor *commandProcessor1 = new CommandProcessor();
-
-        /**** OrderList & Order ****/
-
-
         /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
 
         bool subjectGameEngine = is_base_of<Subject, GameEngine>::value;
@@ -86,20 +39,170 @@ LogObserver* Subject::logObs=logger;
         if (iloggableOrdersList) { cout << "OrdersList inherits from Iloggable\n";}
         if (iloggableOrder) { cout << "Order inherits from Iloggable\n";}
 
+
         /****************************** Methods using the Observer Pattern *******************************/
-
-        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
-
-        cout << "\n--------- Read Command from Console" << endl;
-        cout << "\n--------- Read Commmand from file" << endl;
-
-        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
+/*
 
         cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
-        cout << "\n--------- Changing State to loadmap" << endl;
-        cout << "\n--------- Changing State to validatemap" << endl;
+        logger->outputFile  << "\n-------------------- GameEngine::transition() --------------------" << endl;
+        GameEngine *mainGE = new GameEngine;
+        mainGE->transition(start); // contains notify()
+
+        //loading a map
+        MapLoader* loader;
+        Map* mainmap = loader->load("../Orders/canada.map");
+
+
+        cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
+        logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
+
+        CommandProcessor *cp;
+        FileCommandProcessorAdapter *fcpa;
+
+        cout << "\n--------- Read command from file" << endl;
+        logger->outputFile << "\n--------- Read command from file" << endl;
+
+        string fileName = "../LoggingObserver/commandLogObs.txt";
+        ifstream input(fileName);
+        fcpa = new FileCommandProcessorAdapter(fileName);
+        cp = fcpa;
+        cp->setEngine(mainGE);
+        mainGE->setProcessor(cp);
+        cp->getCommand(); // Getting a single Command, contains SaveCommand()
+        Command *command1 = cp->getCommands()[cp->getCommands().size() - 1];
+
+        // Splitting the input into words (if it can be split)
+        string effect = "";
+        string word1 = "";
+        string word2 = "";
+        bool hasReachedSpace = false;
+        for (char i : command1->getCommand()) {
+            if (!hasReachedSpace) {
+                if (i == ' ') {
+                    hasReachedSpace = true;
+                }
+                else {
+                    word1 += i;
+                }
+            }
+            else {
+                if (i != '<' && i != '>') {
+                    word2 += i;
+                }
+            }
+        }
+        if (word1 == "addplayer") {
+            if (mainGE->getplayer_list().size() >= 6) {
+                effect = "Unable to add Player (6 players reached)";
+                cout << effect << "!" << endl;
+            }
+            else {
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
+                    Player *p = new Player(word2);
+                    mainGE->getplayer_list().push_back(p);
+                    mainGE->setNumberOfPlayers(mainGE->getNumberOfPlayers()+1);
+
+                    effect = "Added Player: " + p->getName();
+                    cout << effect << "!" << endl;
+                    mainGE->transition(playersAdded);
+                }
+                else {
+                    effect = "Unable to add Player";
+                    cout << effect << "!" << endl;
+                }
+            }
+        }
+
+        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
+        logger->outputFile << "\n-------------------- Command::SaveEffect --------------------" << endl;
+        command1->saveEffect(effect);
+
+        cout << "\n--------- Read Command from Console" << endl;
+        logger->outputFile << "\n--------- Read Command from Console" << endl;
+
+        CommandProcessor *cp2 = new CommandProcessor;
+        cp = cp2;
+        cout << "Please give a command: " << endl;
+        cp->getCommand(); // Getting a single Command
+        Command *command2 = cp->getCommands()[cp->getCommands().size() - 1];
+
+        // Splitting the input into words (if it can be split)
+        for (char i : command1->getCommand()) {
+            if (!hasReachedSpace) {
+                if (i == ' ') {
+                    hasReachedSpace = true;
+                }
+                else {
+                    word1 += i;
+                }
+            }
+            else {
+                if (i != '<' && i != '>') {
+                    word2 += i;
+                }
+            }
+        }
+        if (word1 == "addplayer") {
+            if (mainGE->getplayer_list().size() >= 6) {
+                effect = "Unable to add Player (6 players reached)";
+                cout << effect << "!" << endl;
+            }
+            else {
+                if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
+                    Player *p = new Player(word2);
+                    mainGE->getplayer_list().push_back(p);
+                    mainGE->setNumberOfPlayers(mainGE->getNumberOfPlayers()+1);
+
+                    effect = "Added Player: " + p->getName();
+                    cout << effect << "!" << endl;
+                    mainGE->transition(playersAdded);
+                }
+                else {
+                    effect = "Unable to add Player";
+                    cout << effect << "!" << endl;
+                }
+            }
+        }
+
+        cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
+        logger->outputFile << "\n-------------------- Command::SaveEffect --------------------" << endl;
+        command2->saveEffect(effect);
+
+        // Create Players List
+        vector<Player*> player_list;
+        Player* player1 = new Player();
+        player1->setReinforcementPool(10); player1->setName("Audrey");
+        Player* player2 = new Player();
+        player2->setReinforcementPool(12); player2->setName("MJ");
+        player_list.push_back(player1); player_list.push_back(player2);
+
+        // Create & Set up Game Engine
+        mainGE->setMap(mainmap);
+        mainGE->setplayer_list(player_list);
+        mainGE->setDeck(new Deck(20));
+        Order::game = mainGE;
+
+        // Assign Territories to Players
+        int playerIndex = 0;
+        for (Territory *i : mainmap->getTerritories()) {
+            Player *tempPlayer = player_list.at(playerIndex);
+            i->setOwner(tempPlayer);
+            tempPlayer->assignTerritory(i);
+            playerIndex++;
+            if (playerIndex >= player_list.size()) {playerIndex = 0;}}
+
+        Territory* Yukon_Territory = Order::game->getMap()->getTerritories().at(30); Yukon_Territory->setArmies(4);
+        Territory* Ontario_South = Order::game->getMap()->getTerritories().at(8); Ontario_South->setArmies(0);
+        Territory* Ontario_North = Order::game->getMap()->getTerritories().at(10); Ontario_North->setArmies(0);
+        Territory* Quebec_Central = Order::game->getMap()->getTerritories().at(6); Quebec_Central->setArmies(4);
+        Territory* Manitoba_South = Order::game->getMap()->getTerritories().at(11); Manitoba_South->setArmies(4);
+        Territory* Ontario_West = Order::game->getMap()->getTerritories().at(9); Ontario_West->setArmies(4);
+        Territory* Quebec_South = Order::game->getMap()->getTerritories().at(7); Quebec_South->setArmies(0);
+        Territory* Quebec_North = Order::game->getMap()->getTerritories().at(5); Quebec_North->setArmies(0);
+
 
         cout << "\n-------------------- OrderList::addOrder() --------------------" << endl;
+        logger->outputFile << "\n-------------------- OrderList::addOrder() --------------------" << endl;
         Deploy* deploy1 = new Deploy(player1, Ontario_South);
         Deploy* deploy2 = new Deploy(player2, Quebec_North);
         Deploy* deploy3 = new Deploy(player1, Ontario_West);
@@ -109,6 +212,7 @@ LogObserver* Subject::logObs=logger;
         player1->getOrder()->addOrder(deploy3);
 
         cout << "\n-------------------- Order::execute() --------------------" << endl;
+        logger->outputFile << "\n-------------------- Order::execute() --------------------" << endl;
 
         cout << "\n--------- Player 1 Deploy" << endl;
         cout << "Order: " << *deploy1 << endl;
@@ -124,7 +228,8 @@ LogObserver* Subject::logObs=logger;
         cout << "Order: " << *deploy3 << endl;
         deploy3->validate();
         deploy3->execute();
-
+*/
+        logger->outputFile << "\n-------------------- Closing the gamelog file --------------------" << endl;
         Order::logObs->outputFile.close();
         return 0;
 

@@ -14,8 +14,8 @@ class GameEngine;
 class Command :public Iloggable, public Subject {
     public:
         Command(); // Default constructor
-        Command(string); // Parameterized constructor 1 (unparemeterized Commands)
-        Command(string, string); // Parameterized constructor 2 (paremeterized Commands)
+        Command(string); // Parameterized constructor 1 (un-parameterized Commands)
+        Command(string, string); // Parameterized constructor 2 (parameterized Commands)
         ~Command(); // Destructor
         friend ostream& operator<<(ostream &strm, const Command &c); // Stream insertion operator
         Command& operator = (const Command& toAssign);  // Assignment operator
@@ -86,7 +86,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
 
         // Mutators
         void setCurrentFile(string), setCurrentLine(int);
-    //string stringToLog(); // From Iloggable TODO MJ
+        string stringToLog(); // From Iloggable
 
         void getCommand() override; // Reads and then saves a command from a file
     private:
