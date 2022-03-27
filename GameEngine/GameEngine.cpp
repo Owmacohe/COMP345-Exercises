@@ -253,47 +253,60 @@ void GameEngine::issueOrdersPhase() {
     string response;
     int deployed = 0;
     int hasMoreTroops = 0;
+
+    bool goodinput = false;
+
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
 
         cout << "Issuing the orders for player " << p->getName() << endl;
 
-        // Only issue deploy orders while the players reinforcement pool contains armies
+        // Only issue deploy orders while the player's reinforcement pool contains armies
         int hasMoreTroops = p->getReinforcePool();
-        if (hasMoreTroops > 0)  cout << "Issueing deploy orders" << endl;
+        if (hasMoreTroops > 0) cout << "Issueing deploy orders" << endl;
         for (int i = 0; i < hasMoreTroops; i++) {
             p->issueOrder("deploy");
-            p->setReinforcementPool(p->getReinforcePool()-1);
-            cout<<"deploy of army "<<i+1<<"/"<<hasMoreTroops<<" issued"<<endl;
+            p->setReinforcementPool(p->getReinforcePool() - 1);
+            cout << "deploy of army " << i + 1 << "/" << hasMoreTroops << " issued" << endl;
         }
 
         // Issue advance orders
-        cout << p->getName() << "'s turn" <<endl;
-        cout << "Issueing advance orders" << endl;
-        do {
+        cout << p->getName() << "'s turn" << endl;
+        cout << "Issuing advance orders" << endl;
+        while (goodinput == false) {
             cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                goodinput = true;
                 p->issueOrder("advance");
                 // MJ said that checking if an advance is attacking or defending is done in orders
-            } else break;
-        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+            }
+            if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
+            else cout<< "Invalid input !" <<endl;
+        }
+        goodinput = false;
         // Issue card orders
-        cout << "Issueing card orders" << endl;
-        do {
+        cout << "Issuing card orders" << endl;
+        while (goodinput == false) {
             cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
+                goodinput = true;
                 cout << "The following is " << p->getName() << " hand" << endl;
                 cout << *(p->getHand()) << endl;
                 cout << "Which card would you like to play ?" << endl;
                 cin >> response;
-                int index = checkCardInHand(response, p->getHand());
-                if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
-                else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played y";
-            } else break;
-        } while (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes"));
+                int index = -1;
+                while (index == -1) {
+                    index = checkCardInHand(response, p->getHand());
+                    if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
+                    else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
+                }
+            }
+            if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
+            else cout<< "Invalid input !" <<endl;
+        }
         endIssueOrderPhase(p);
     }
 }
@@ -327,6 +340,7 @@ void GameEngine::executeOrdersPhase() {
             Player *p = player_list.at(playerOrder.at(i));
             for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) {
                 if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
+                    p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
                     p->getOrder()->remove(i);
                     break;
@@ -349,6 +363,7 @@ void GameEngine::executeOrdersPhase() {
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder[i]);
             for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
+                    p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
                     p->getOrder()->remove(i);
                     break;
@@ -692,7 +707,7 @@ void GameEngine::startupPhase() {
 
                     for (Player* k : player_list) {
                         // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                        k->addToReinforcePool(50);
+                        k->addToReinforcePool(50); //TODO :: im just using this todo to mark where its initialized to 50
 
                         // Let each player draw 2 initial cards from the deck using the deck’s draw() method
                         k->getHand()->drawCard(*deck);
@@ -710,9 +725,6 @@ void GameEngine::startupPhase() {
 
         temp->saveEffect(effect);
     }
-
-//    Order::setGameEngine(this);
-
     notify(this); // FROM SUBJECT
 }
 
