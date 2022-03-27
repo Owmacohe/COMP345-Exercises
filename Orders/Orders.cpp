@@ -142,7 +142,7 @@ void Deploy::setValidated(bool v) {
 }
 
 void Deploy::validate() {
-    cout << "... ";
+    cout << "... Deploy ";
     if (numToDeploy == 0) {
         cout << "Invalid! - No more armies left to deploy" << endl;
         validated = false;
@@ -156,7 +156,7 @@ void Deploy::validate() {
 }
 
 void Deploy::execute() {
-    cout << "... ";
+    cout << "... Deploy ";
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
@@ -208,9 +208,12 @@ Advance::Advance(Player* p) : Order(false, "advance") {
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
-    target = p->toDefend(game->getMap()).at(0);
-    } else if (input == "attack")
+        target = p->toDefend(game->getMap()).at(0);
+        cout << input << " to " << target->getName() <<endl;
+    } else if (input == "attack") {
         target = p->toAttack(game->getMap()).at(0);
+        cout << input << " to " << target->getName() <<endl;
+    }
 
         // From the target we chose, generate an origin that adjacent to it to attack
         origin = p->getOriginTerritory(target, game->getMap());
@@ -296,7 +299,7 @@ void Advance::setValidated(bool v) {
 
 void Advance::validate() {
     validateResult = "";
-    cout << "... ";
+    cout << "... Advance ";
     // Check if territory belongs to the player
     if (origin->getOwnerName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own this territory" << endl;
@@ -341,6 +344,7 @@ void Advance::validate() {
 }
 
 void Advance::execute() {
+    cout << "... Advance ";
     if (validated) {
         // Advance
         if (validateResult == "move") {
@@ -411,7 +415,7 @@ Airlift::Airlift() : Order(false, "airlift"){
 // Parameterize Constructor
 Airlift::Airlift(Player* p) : Order(false, "airlift"){
     playerIssuing = p;
-    Territory* territory_most_armies; // Choose 1 territory belongs to the player that has the most armies
+    Territory* territory_most_armies = p->getTerritoryList().at(0); // Choose 1 territory belongs to the player that has the most armies
     int max_armies = 0 ;
     for (Territory* t : p->getTerritoryList()) {
         if (t->getArmies() > max_armies) {
@@ -509,7 +513,7 @@ void Airlift::setValidated(bool v) {
 }
 
 void Airlift::validate() {
-    cout << "... ";
+    cout << "... Airlift ";
     // Check if the target territory and origin belong to the player issuing
     if (target->getOwnerName() != playerIssuing->getName() || origin->getOwnerName() != playerIssuing->getName()) {
         cout << "Invalid! - You don't own both territories" << endl;
@@ -527,7 +531,7 @@ void Airlift::validate() {
 }
 
 void Airlift::execute() {
-    cout << "... ";
+    cout << "... Airlift ";
     if(validated){
         origin->setArmies(origin->getArmies()-numToAirlift); // Subtract armies from origin
         target->setArmies(target->getArmies()+numToAirlift); // Add armies to target
@@ -628,7 +632,7 @@ void Bomb::setValidated(bool v) {
 }
 
 void Bomb::validate() {
-    cout << "... ";
+    cout << "... Bomb ";
     // Check if target territory belongs to playerIssuing
     if (target->getOwnerName() == playerIssuing->getName()) {
         cout << "Invalid! - You can't bomb your territories" << endl;
@@ -655,7 +659,7 @@ void Bomb::validate() {
 }
 
 void Bomb::execute() {
-    cout << "... ";
+    cout << "... Bomb ";
     if (!validated) {
         cout << "Execution failed! \n" << endl;
     } else {
@@ -750,7 +754,7 @@ void Blockade::setValidated(bool v) {
 }
 
 void Blockade::validate() {
-    cout << "... ";
+    cout << "... Blockade ";
     if (target->getOwnerName() == playerIssuing->getName()) {
         validated = true;
         cout << "Valid!" << endl;
@@ -762,7 +766,7 @@ void Blockade::validate() {
 }
 
 void Blockade::execute() {
-    cout << "... ";
+    cout << "... Blockade ";
     if (!validated) {
         cout << "Execution failed!\n" << endl;
     } else {
@@ -863,7 +867,7 @@ void Negotiate::setValidated(bool v) {
 }
 
 void Negotiate::validate() {
-    cout << "... ";
+    cout << "... Negotiate ";
     if (playerIssuing->getName() == targetPlayer->getName() || targetPlayer->getName() == "Neutral") {
         validated = false;
         cout << "Invalid! - Negotiate must be done with a different player, excluding the Neutral player" << endl;
@@ -875,7 +879,7 @@ void Negotiate::validate() {
 }
 
 void Negotiate::execute() {
-    cout << "... ";
+    cout << "... Negotiate ";
     if (!validated) {
         cout << "Execution failed!\n" << endl;
     } else {
