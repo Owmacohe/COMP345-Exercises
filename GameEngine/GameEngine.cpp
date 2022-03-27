@@ -336,10 +336,10 @@ void GameEngine::issueOrdersPhase() {
     endIssueOrderPhase();
 }
 
-
 void GameEngine::endIssueOrderPhase(Player *player) {
     transition(executeOrder);
     cout << "End phase issue orders for player " << player->getName() << endl;
+
 }
 
 // Checks for deploy orders in orderlist
@@ -432,8 +432,8 @@ void GameEngine::playAgain() {
 
 void GameEngine::transition(State transitionState) {
     *s = transitionState;
-    notify(this);
-}
+    notify(this);}
+
 // THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
 
 /*
