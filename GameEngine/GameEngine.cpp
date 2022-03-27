@@ -128,7 +128,7 @@ vector<int> GameEngine::getPlayerOrder() { return playerOrder; }
 Player* GameEngine::getNeutralPlayer() {return neutralPlayer;}
 
 // Mutators
-void GameEngine::setState(const State &st) { *s = st; }
+void GameEngine::setState(const State &st) { *s = st;}
 void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
 void GameEngine::setNumberOfTerritories(int x) { this->NumberOfTerritories = x; }
 void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
@@ -154,6 +154,7 @@ void GameEngine::setPlayerOrder(vector<int> po) {
 }
 void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
 
+// TODO WE DELETE THIS ?
 // THE FOLLOWING METHODS ARE UNNECESSARY NOW, BUT WE SHOULD KEEP THEM COMMENTED JUST IN CASE
 
 /*
@@ -212,7 +213,9 @@ void GameEngine::assignCountries() {
 
 // Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
-    *s = assignReinforcement;
+
+    transition(assignReinforcement);
+
     cout << "Assign reinforcement phase" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
@@ -333,9 +336,10 @@ void GameEngine::issueOrdersPhase() {
     endIssueOrderPhase();
 }
 
-void GameEngine::endIssueOrderPhase() {
-    *s = executeOrder;
-    cout << "End issue order phase" << endl;
+
+void GameEngine::endIssueOrderPhase(Player *player) {
+    transition(executeOrder);
+    cout << "End phase issue orders for player " << player->getName() << endl;
 }
 
 // Checks for deploy orders in orderlist
@@ -404,27 +408,32 @@ void GameEngine::executeOrdersPhase() {
             playersWithoutOrders = 0;
     }
 }
-
+// TODO WE DELETE THIS ?
 void GameEngine::endexecuteOrdersPhase(Player *player) {
-    *s = assignReinforcement;
+    transition(assignReinforcement);
     cout << "End phase execute Order for player " << player->getName() << endl;
 }
 
 void GameEngine::winPhase(Player *p) {
-    *s = win;
+    transition(win);
     cout << "Victory for player: " << p->getName() << endl;
 }
 
 void GameEngine::endPhase() {
-    *s = null;
+    transition(null);
     cout << "Thank you for Playing Warzone" << endl;
 }
 
 void GameEngine::playAgain() {
-    *s = null;
+    transition(null);
     cout << "The Game will restart soon" << endl;
 }
 
+
+void GameEngine::transition(State transitionState) {
+    *s = transitionState;
+    notify(this);
+}
 // THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
 
 /*
@@ -500,7 +509,7 @@ bool doesContain(vector<int> arr, int in) {
 
 // Reads (startup) commands sequentially from the console
 void GameEngine::startupPhase() {
-    *s = start;
+    transition(start);
 
     cout << "Welcome to Warzone!" << endl;
 
@@ -618,7 +627,7 @@ void GameEngine::startupPhase() {
                     effect = "Validated Map: " + map->getName();
                     cout << effect << "!" << endl;
 
-                    *s = mapValidated;
+                    transition(mapValidated);
                 }
                 else {
                     effect = "Unable to validate Map";
@@ -640,7 +649,7 @@ void GameEngine::startupPhase() {
                         effect = "Added Player: " + p->getName();
                         cout << effect << "!" << endl;
 
-                        *s = playersAdded;
+                        transition(playersAdded);
                     }
                     else {
                         effect = "Unable to add Player";
@@ -700,8 +709,7 @@ void GameEngine::startupPhase() {
                     effect += ", gave 50 armies to each Player, and drew 2 cards for each Player";
 
                     // Switch the game to the play phase
-
-                    *s = assignReinforcement;
+                    transition(assignReinforcement);
                 }
             }
         }
@@ -745,6 +753,7 @@ bool GameEngine::mainGameLoop() {
             continueplaying = true;
 
             *s = start; // Switch to start up for replay
+            transition(start);
         }
         else if (command == "quit") {
             //endPhase();
@@ -753,7 +762,7 @@ bool GameEngine::mainGameLoop() {
             cout << effect << "!" << endl;
             continueplaying = false;
 
-            *s = null;
+            transition(null);
         }
 
         temp->saveEffect(effect);
@@ -826,6 +835,6 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
 string GameEngine::stringToLog() {
     string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
                            "issueOrder", "executeOrder", "win"};
-    string logString = "Game Engine now at the " + enumStates[*s] + "state. \n";
+    string logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
     return logString;
 }
