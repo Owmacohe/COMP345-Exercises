@@ -41,7 +41,7 @@ LogObserver* Subject::logObs=logger;
 
 
         /****************************** Methods using the Observer Pattern *******************************/
-/*
+
 
         cout << "\n-------------------- GameEngine::transition() --------------------" << endl;
         logger->outputFile  << "\n-------------------- GameEngine::transition() --------------------" << endl;
@@ -49,8 +49,10 @@ LogObserver* Subject::logObs=logger;
         mainGE->transition(start); // contains notify()
 
         //loading a map
+        mainGE->transition(mapLoaded); // contains notify()
         MapLoader* loader;
         Map* mainmap = loader->load("../Orders/canada.map");
+        mainGE->transition(mapValidated); // contains notify()
 
         cout << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
         logger->outputFile << "\n-------------------- CommandProcessor::saveCommand() --------------------" << endl;
@@ -70,31 +72,26 @@ LogObserver* Subject::logObs=logger;
         cp->getCommand(); // Getting a single Command, contains SaveCommand()
         Command *command1 = cp->getCommands()[cp->getCommands().size() - 1];
 
+        cout << command1->getEffect() << endl;
+
         // Splitting the input into words (if it can be split)
         string effect = "";
         string word1 = "";
         string word2 = "";
         bool hasReachedSpace = false;
-        for (char i : command1->getCommand()) {
+
+        for (char i : command1->getCommand()) { // Contains SaveCommand()
             if (!hasReachedSpace) {
-                if (i == ' ') {
-                    hasReachedSpace = true;
-                }
-                else {
-                    word1 += i;
-                }
+                if (i == ' ') {hasReachedSpace = true;}
+                else {word1 += i;}
             }
-            else {
-                if (i != '<' && i != '>') {
-                    word2 += i;
-                }
-            }
+            else {if (i != '<' && i != '>') {word2 += i;}}
         }
+
         if (word1 == "addplayer") {
             if (mainGE->getplayer_list().size() >= 6) {
                 effect = "Unable to add Player (6 players reached)";
-                cout << effect << "!" << endl;
-            }
+                cout << effect << "!" << endl;}
             else {
                 if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                     Player *p = new Player(word2);
@@ -103,19 +100,18 @@ LogObserver* Subject::logObs=logger;
 
                     effect = "Added Player: " + p->getName();
                     cout << effect << "!" << endl;
-                    mainGE->transition(playersAdded);
-                }
-                else {
-                    effect = "Unable to add Player";
-                    cout << effect << "!" << endl;
-                }
+                    mainGE->transition(playersAdded);}
+                else { effect = "Unable to add Player";
+                        cout << effect << "!" << endl;}
             }
         }
 
         cout << "\n-------------------- Command::SaveEffect --------------------" << endl;
         logger->outputFile << "\n-------------------- Command::SaveEffect --------------------" << endl;
         command1->saveEffect(effect);
+        cout << command1->getEffect() << endl;
 
+/*
         cout << "\n--------- Read Command from Console" << endl;
         logger->outputFile << "\n--------- Read Command from Console" << endl;
 
@@ -126,21 +122,14 @@ LogObserver* Subject::logObs=logger;
         Command *command2 = cp->getCommands()[cp->getCommands().size() - 1];
 
         // Splitting the input into words (if it can be split)
-        for (char i : command1->getCommand()) {
+        for (char i : command1->getCommand()) { // Contains SaveCommand()
             if (!hasReachedSpace) {
-                if (i == ' ') {
-                    hasReachedSpace = true;
-                }
-                else {
-                    word1 += i;
-                }
+                if (i == ' ') {hasReachedSpace = true;}
+                else {word1 += i;}
             }
-            else {
-                if (i != '<' && i != '>') {
-                    word2 += i;
-                }
-            }
+            else {if (i != '<' && i != '>') {word2 += i;}}
         }
+
         if (word1 == "addplayer") {
             if (mainGE->getplayer_list().size() >= 6) {
                 effect = "Unable to add Player (6 players reached)";
@@ -202,7 +191,7 @@ LogObserver* Subject::logObs=logger;
         cout << "\n-------------------- CommandProcessor::saveCommand()  --------------------" << endl;
 
         cout << "\n--------- Read Commmand from file \"commands.txt\"" << endl;
-        string fileName = "../CommandProcessing/commands.txt";
+        fileName = "../CommandProcessing/commands.txt";
 
         cout << "\n--------- Read Command from Console" << endl;
 
