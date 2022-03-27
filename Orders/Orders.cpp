@@ -214,6 +214,7 @@ Advance::Advance(Player* p) : Order(false, "advance") {
 
         // From the target we chose, generate an origin that adjacent to it to attack
         origin = p->getOriginTerritory(target, game->getMap());
+        if (origin == NULL){origin = playerIssuing->getTerritoryList().at(0);}
 
 //        cout << "Target : " << target->getName() << " " << target->getOwnerName() << endl;
 //        cout  << "Origin : "<< origin->getName() << " " << origin->getOwner()->getName() << endl;

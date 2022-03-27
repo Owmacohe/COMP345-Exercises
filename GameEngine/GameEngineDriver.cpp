@@ -13,7 +13,7 @@
 //    return 0;
 //}
 
-int main() {
+int GameEnginemain() {
     GameEngine* gameEngine = new GameEngine;
     Order::game = gameEngine;
 

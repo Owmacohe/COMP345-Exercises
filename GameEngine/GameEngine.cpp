@@ -264,7 +264,7 @@ void GameEngine::issueOrdersPhase() {
 
         // Only issue deploy orders while the player's reinforcement pool contains armies
         int hasMoreTroops = p->getReinforcePool();
-        if (hasMoreTroops > 0) cout << "Issueing deploy orders" << endl;
+        if (hasMoreTroops > 0) cout << "Issuing deploy orders" << endl;
         for (int i = 0; i < hasMoreTroops; i++) {
             p->issueOrder("deploy");
             p->setReinforcementPool(p->getReinforcePool() - 1);
@@ -282,7 +282,7 @@ void GameEngine::issueOrdersPhase() {
                 p->issueOrder("advance");
                 // MJ said that checking if an advance is attacking or defending is done in orders
             }
-            if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
+            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
             else cout<< "Invalid input !" <<endl;
         }
         goodinput = false;
@@ -301,10 +301,11 @@ void GameEngine::issueOrdersPhase() {
                 while (index == -1) {
                     index = checkCardInHand(response, p->getHand());
                     if (index != -1) p->getHand()->playCard(index, *deck, *p->getOrder());
-                    else cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
+                    else {cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again.  ";
+                    break;}
                 }
             }
-            if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
+            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) goodinput = true;
             else cout<< "Invalid input !" <<endl;
         }
         endIssueOrderPhase(p);
