@@ -135,7 +135,7 @@ void Command::saveEffect(string e) {
 void Command::addValidInState(int s) { validIn.push_back(s); }
 
 string Command::stringToLog() {
-    string logString = "Command entered: " + command + " leading to " + transitionsTo + " and creating the effect of " + effect +"\n";
+    string logString = "Command entered: " + command + " changing the Game Engine State to " + transitionsTo + " " + effect +"\n";
     return logString;
 }
 
@@ -300,7 +300,7 @@ bool CommandProcessor::validate(Command *c) {
 }
 
 string CommandProcessor::stringToLog() {
-    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getEffect() +"\n";
+    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getCommand() +"\n";
     return logString;
 }
 
@@ -442,6 +442,6 @@ void FileCommandProcessorAdapter::getCommand() {
 }
 
 string FileCommandProcessorAdapter::stringToLog() {
-    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getEffect() +"\n";
+    string logString = " Saved the following command to the CommandProcessor: " + commands[commands.size() - 1]->getCommand() +"\n";
     return logString;
 }
