@@ -110,24 +110,24 @@ int GameLoopmain() {
 //    cout <<"---a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool---"<<endl;
 //    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
 //    // During this section fo demo, just click no for advances and card playing
-//    mainGE->issueOrdersPhase();
-//    int deployCounter = 0;
-//    int anyOtherOrders = 0;
-//    for (int i = 0; i < (mainGE->getplayer_list()).size(); i++) {
-//        Player *p = mainGE->getplayer_list().at(mainGE->getPlayerOrder()[i]);
-//        cout<< "Number of armies in reinforcement pool for "<< p->getName() <<" : " << player1->getReinforcePool()<<endl;
-//        for(Order* o : p->getOrder()->getOrderList()){
-//            if(o->getDescription() == "deploy"){
-//                deployCounter ++ ;
-//            }else anyOtherOrders++;
-//        }
-//        cout << "number of deploy orders for player  (" << p->getName() << ") after issueOrderPhase : "
-//             << deployCounter << endl;
-//
-//        deployCounter = 0;
-//        anyOtherOrders = 0;
-//
-//    }
+    mainGE->issueOrdersPhase();
+    int deployCounter = 0;
+    int anyOtherOrders = 0;
+    for (int i = 0; i < (mainGE->getplayer_list()).size(); i++) {
+        Player *p = mainGE->getplayer_list().at(mainGE->getPlayerOrder()[i]);
+        cout<< "Number of armies in reinforcement pool for "<< p->getName() <<" : " << player1->getReinforcePool()<<endl;
+        for(Order* o : p->getOrder()->getOrderList()){
+            if(o->getDescription() == "deploy"){
+                deployCounter ++ ;
+            }else anyOtherOrders++;
+        }
+        cout << "number of deploy orders for player  (" << p->getName() << ") after issueOrderPhase : "
+             << deployCounter << endl;
+
+        deployCounter = 0;
+        anyOtherOrders = 0;
+
+    }
 //
 //    //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
 //    cout <<"---a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend()---"<<endl;
