@@ -421,15 +421,17 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     origin = territory_most_armies; // Origin = territory with the most armies
     target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most
 
-    // Condition checked: If target territory == origin territory, take next in toDefend()
-    vector<Territory*> toDefendList = p->toDefend(game->getMap());
-    unsigned i = 0;
-    target = p->toDefend(game->getMap()).at(i);
-    while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral"){
-        target = p->toDefend(game->getMap()).at(i+1);
-        i++;
-    }
-//    Territory*  TODO
+//    // Condition checked: If target territory == origin territory, take next in toDefend()
+//    vector<Territory*> toDefendList = p->toDefend(game->getMap()); // TODO MAKE SURE WE DELETE THIS
+//    unsigned i = 0;
+//    target = p->toDefend(game->getMap()).at(i);
+//    while (i<toDefendList.size()){
+//        Territory* target2 = toDefendList.at(i+1);
+//        if(target->getName() == target2->getName())
+//        i=+1;
+//    }
+
+
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;

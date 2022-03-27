@@ -224,6 +224,23 @@ int Ordersmain() {
     advance6->validate();
 
     // TODO TESTING ISSUEORDER AND EXECUTEORDERS PHASE
+    // Set up player order
+//    vector<int> tempOrder;
+//    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
+//        int randOrder = rand() % mainGE->getplayer_list().size();
+//
+//        while (doesContain(tempOrder, randOrder)) {
+//            randOrder = rand() % mainGE->getplayer_list().size();
+//        }
+//
+//        cout << randOrder << endl;
+//
+//        tempOrder.push_back(randOrder);
+//    }
+//    mainGE->setPlayerOrder(tempOrder);
+//
+//    mainGE->setNumberOfPlayers(mainGE->getplayer_list().size());
+//    mainGE->issueOrdersPhase();
 
     //
     // ******************************* Testing Orders Constructor for GameLoop *******************************
@@ -299,27 +316,27 @@ int Ordersmain() {
     Advance *advance1 = new Advance(player1);
     cout << "Order: "<< *advance1 << endl;
     advance1->validate();
-//    advance1->execute();
+    advance1->execute();
 //    cout << advance1->stringToLog() << endl;
 
     Advance *advance2 = new Advance(player1);
     cout << "Order: "<< *advance2 << endl;
     advance2->validate();
-//    advance2->execute();
+    advance2->execute();
 //    cout << advance2->stringToLog() << endl;
 
     Advance *advance3 = new Advance(player2);
     cout << "Order: "<< *advance3 << endl;
     advance3->validate();
-//    advance3->execute();
+    advance3->execute();
 //    cout << advance3->stringToLog() << endl;
 
     Advance *advance4 = new Advance(player2);
     cout << "Order: "<< *advance4 << endl;
     advance4->validate();
-//    advance4->execute();
+    advance4->execute();
 //    cout << advance4->stringToLog() << endl;
-
+*/
     // Airlift
 //    cout << "\n-------------------- AIRLIFT --------------------\n" << endl;
 //	Airlift *airlift1 = new Airlift(player1);
@@ -410,7 +427,7 @@ int Ordersmain() {
 //    negotiate3->validate();
 //    negotiate3->execute();
 //    cout<< negotiate3->stringToLog();
- */
+
 	return 0;
 }
 
