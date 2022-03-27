@@ -314,7 +314,7 @@ void GameEngine::issueOrdersPhase() {
                 while (index < 0) {
                     index = checkCardInHand(response, p->getHand());
                     if (index >= 0) {
-                        p->getHand()->playCard(index, *deck, *p->getOrder());
+                        p->getHand()->playCard(index, *deck, *p->getOrder(), p);
                         break;
                     }
                     else {
@@ -403,47 +403,6 @@ void GameEngine::executeOrdersPhase() {
         else
             playersWithoutOrders = 0;
     }
-
-
-
-
-
-
-//    for (int i = 0; i < player_list.size(); i++) {
-//        for (int j = 0; j < player_list[i]->getOrder()->getOrderList().size(); j++) {
-//            if (player_list[i]->getOrder()->getOrderList()[j]->description == "Deploy") {
-//                  player_list[i]->getDeployList()->addOrder(player_list[i]->getOrder()->getOrderList().at(j));
-//                  player_list.at(i)->getOrder()->remove(j);
-//            }
-//        }
-//    }
-//    // To execute and remove the deploy orders
-//    int  deployDoneCount =0;
-//    while(deployDoneCount < NumberOfPlayers) {
-//        deployDoneCount =0;
-//        for (int i = 0; i < player_list.size(); i++) {
-//            if (!player_list[i]->getDeployList()->getOrderList().empty()) {
-//                player_list[i]->getDeployList()->getOrderList().at(i)->execute();
-//                player_list[i]->getOrder()->remove(i);
-//
-//            } else deployDoneCount++;
-//        }
-//    }
-//    // To execute the rest of the orders on each player's list
-//    int  playersDone =0;
-//    while(playersDone < NumberOfPlayers) {
-//        playersDone =0;
-//        for (int i = 0; i < player_list.size(); i++) {
-//            if (!player_list[i]->getOrder()->getOrderList().empty()) {
-//                player_list[i]->getOrder()->getOrderList().at(i)->execute();
-//                player_list[i]->getOrder()->remove(i);
-//
-//            } else {
-//
-//                playersDone++;
-//            }
-//        }
-//    }
 }
 
 void GameEngine::endexecuteOrdersPhase(Player *player) {

@@ -27,6 +27,7 @@ int GameLoopmain() {
 
     // Create && set up gameEngine
     GameEngine *mainGE = new GameEngine();
+    Order::game = mainGE;
     mainGE->setMap(mainmap);
     mainGE->setplayer_list(players);
 
@@ -66,9 +67,6 @@ int GameLoopmain() {
         while (doesContain(tempOrder, randOrder)) {
             randOrder = rand() % mainGE->getplayer_list().size();
         }
-
-        cout << randOrder << endl;
-
         tempOrder.push_back(randOrder);
     }
     mainGE->setPlayerOrder(tempOrder);
@@ -107,7 +105,7 @@ int GameLoopmain() {
          << player3->getReinforcePool() << endl;
 
 //    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
-//    cout <<"---a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool---"<<endl;
+    cout <<"---a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool---"<<endl;
 //    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
 //    // During this section fo demo, just click no for advances and card playing
     mainGE->issueOrdersPhase();
@@ -128,14 +126,14 @@ int GameLoopmain() {
         anyOtherOrders = 0;
 
     }
-//
-//    //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
-//    cout <<"---a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend()---"<<endl;
-//    mainGE->issueOrdersPhase();
-//
-//    //(4) a player can play cards to issue orders;
-//    cout <<"---a player can play cards to issue orders---"<<endl;
-//    mainGE->issueOrdersPhase();
+
+    //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
+    cout <<"---a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend()---"<<endl;
+    mainGE->issueOrdersPhase();
+
+    //(4) a player can play cards to issue orders;
+    cout <<"---a player can play cards to issue orders---"<<endl;
+    mainGE->issueOrdersPhase();
 
     //(5) a player that does not control any territory is removed from the game;
     cout <<"---a player that does not control any territory is removed from the game---"<<endl;

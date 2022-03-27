@@ -8,6 +8,7 @@
 using namespace std;
 
 class OrdersList;
+class Player;
 
 class Card {
     public:
@@ -16,7 +17,7 @@ class Card {
         Card(Card &anotherCard);  // Copy Constructor
 
         string getType() const;
-        void play(OrdersList &ordersList) const;
+        void play(OrdersList &ordersList, Player* p) const;
         friend ostream& operator<<(ostream& os, const Card& card); // Over load << operator to print out value in Hand
         Card& operator = (const Card& toAssign);
     private:
@@ -48,7 +49,7 @@ class Hand {
         Hand& operator =(const Hand& toAssign);    // = assignment operator Overloading
 
         void drawCard(Deck &d);
-        void playCard(int i, Deck &d, OrdersList &l);
+        void playCard(int i, Deck &d, OrdersList &l, Player* p);
 
         vector <Card*> hand;
         int numCardInHand;
