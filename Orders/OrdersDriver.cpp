@@ -225,23 +225,31 @@ int Ordersmain() {
 
     // TODO TESTING ISSUEORDER AND EXECUTEORDERS PHASE
     // Set up player order
-//    vector<int> tempOrder;
-//    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
-//        int randOrder = rand() % mainGE->getplayer_list().size();
-//
-//        while (doesContain(tempOrder, randOrder)) {
-//            randOrder = rand() % mainGE->getplayer_list().size();
-//        }
-//
-//        cout << randOrder << endl;
-//
-//        tempOrder.push_back(randOrder);
-//    }
-//    mainGE->setPlayerOrder(tempOrder);
-//
-//    mainGE->setNumberOfPlayers(mainGE->getplayer_list().size());
-//    mainGE->issueOrdersPhase();
+    vector<int> tempOrder;
+    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
+        int randOrder = rand() % mainGE->getplayer_list().size();
 
+        while (doesContain(tempOrder, randOrder)) {
+            randOrder = rand() % mainGE->getplayer_list().size();
+        }
+
+        cout << randOrder << endl;
+
+        tempOrder.push_back(randOrder);
+    }
+    mainGE->setPlayerOrder(tempOrder);
+    mainGE->resetAlliances();
+    mainGE->setNumberOfPlayers(mainGE->getplayer_list().size());
+
+    cout << "Player 1 OrderList: " << *player1->getOrder() <<endl;
+    cout << "Player 2 OrderList: " << *player2->getOrder() <<endl;
+
+    mainGE->issueOrdersPhase();
+
+    cout << "Player 1 OrderList: " << *player1->getOrder() <<endl;
+    cout << "Player 2 OrderList: " << *player2->getOrder() <<endl;
+
+   // mainGE->executeOrdersPhase();
     //
     // ******************************* Testing Orders Constructor for GameLoop *******************************
     // ToDefend() & toAttack()

@@ -210,6 +210,7 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
         if (t->getOwner()->getName() == name) return t;
     }
 
+
     return NULL;
 }
 
