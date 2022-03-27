@@ -496,7 +496,7 @@ void GameEngine::gamePlayTransitions(string str, Player *p) {
         issueOrdersPhase();
     }
     else if (str == "endissueorders" && *getState() == 6) {
-        endIssueOrderPhase(p);
+        endIssueOrderPhase();
     }
     else if (str == "execorder" && *getState() == 7) {
         executeOrdersPhase();
