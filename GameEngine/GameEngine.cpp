@@ -210,6 +210,7 @@ void GameEngine::assignCountries() {
 }
 */
 
+// Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
     *s = assignReinforcement;
     cout << "Assign reinforcement phase" << endl;
@@ -250,6 +251,7 @@ void GameEngine::assignReinforcementPhase() {
     cout << "End of assign reinforcement" << endl;
 }
 
+// Issue order phase
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
@@ -333,9 +335,10 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::endIssueOrderPhase() {
     *s = executeOrder;
-    cout << "End phase issue orders for players" << endl;
+    cout << "End issue order phase" << endl;
 }
 
+// Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
     for (Order * o : p->getOrder()->getOrderList()){
         if (o->getDescription() == "Deploy")
@@ -344,6 +347,7 @@ bool GameEngine::hasMoreDeploy(Player *p) {
     return false;
 }
 
+// Execute order phase
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
     cout << "Executing Deploy Order" << endl;
@@ -809,6 +813,7 @@ int GameEngine::checkCardInHand(string type, Hand* h) {
     return -1;
 }
 
+// Checks for returns true for strings that are equal ignoring case
 bool GameEngine::equalsIgnoreCase(string s1, string s2) {
    // Change to lower case
    transform(s1.begin(), s1.end(), s1.begin(), ::tolower);

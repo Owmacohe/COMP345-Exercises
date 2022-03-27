@@ -15,8 +15,8 @@ add_executable(
         #CommandProcessing/CommandProcessingDriver.cpp
         GameEngine/GameEngine.h
         GameEngine/GameEngine.cpp
-        GameEngine/GameEngineDriver.cpp
-        #GameEngine/GameLoopDriver.cpp
+        #GameEngine/GameEngineDriver.cpp
+        GameEngine/GameLoopDriver.cpp
         LoggingObserver/LoggingObserver.h
         LoggingObserver/LoggingObserver.cpp
         LoggingObserver/LoggingObserverDriver.cpp
