@@ -269,13 +269,12 @@ void GameEngine::issueOrdersPhase() {
 
         cout << "Issuing the orders for player " << p->getName() << endl;
 
-        // Only issue deploy orders while the player's reinforcement pool contains armies
-        int hasMoreTroops = p->getReinforcePool();
-        if (hasMoreTroops > 0) cout << "Issuing deploy orders" << endl;
-        for (int i = 0; i < hasMoreTroops; i++) {
+        int num = p->getReinforcePool();
+        // Only issue deploy orders while the player's reinforcement pool contains armies;
+        if (num > 0) cout << "Issuing deploy orders" << endl;
+        for (int i = 0; i < num; i++) {
             p->issueOrder("deploy");
-            p->setReinforcementPool(p->getReinforcePool() - 1);
-            cout << "Deploy of army " << i + 1 << "/" << hasMoreTroops << " issued" << endl;
+            cout << "Deploy of army " << i + 1 << "/" << num << " issued" << endl;
         }
 
         // Issue advance orders
@@ -287,7 +286,6 @@ void GameEngine::issueOrdersPhase() {
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
                 p->issueOrder("advance");
-                cout << "Advance order added to Player's Order List" << endl;
                 break;
             }
             else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
@@ -365,7 +363,7 @@ void GameEngine::executeOrdersPhase() {
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
             for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) {
-                if (p->getOrder()->getOrderList().at(i)->getDescription() == "Deploy") {
+                if (equalsIgnoreCase(p->getOrder()->getOrderList().at(i)->getDescription(), "deploy")) {
                     p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
                     p->getOrder()->remove(i);
@@ -391,6 +389,7 @@ void GameEngine::executeOrdersPhase() {
             for(int i =0 ; i<p->getOrder()->getOrderList().size(); i++) {
                     p->getOrder()->getOrderList().at(i)->validate();
                     p->getOrder()->getOrderList().at(i)->execute();
+                    cout << p->getOrder()->getOrderList().at(i)->stringToLog() << endl;
                     p->getOrder()->remove(i);
                     break;
             }

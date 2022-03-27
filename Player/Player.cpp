@@ -219,7 +219,7 @@ void Player::addToReinforcePool(int armies) {
 }
 
 void Player::removeFromReinforcePool(int armies) {
-    reinforcePool -= armies;
+    reinforcePool = reinforcePool - armies;
 }
 
 // Mutators and Accessors

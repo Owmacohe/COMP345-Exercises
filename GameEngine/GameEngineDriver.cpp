@@ -24,44 +24,5 @@ int GameEnginemain() {
         gameEngine->startupPhase();
         isPlaying = gameEngine->mainGameLoop();
     }
-
-//
-//        while (*gameEngine.getState() != 8) {
-//            for (int i = 0; i < gameEngine.getNumberOfPlayers(); i++) {
-//                while (true) {
-//                    cout << gameEngine.getplayer_list()[i]->getName() << "'s turn" <<endl;
-//                    cout << "What would you like to do now?\n" <<endl;
-//                    cin >> input;
-//                    gameEngine.gamePlayTransitions(input, gameEngine.getplayer_list()[i]);
-//
-//                    if ((*gameEngine.getState() == 5 && input == "endexecorders") || (*gameEngine.getState() == 8 && input == "win")) {
-//                        cout << "break" << endl;
-//                        break;
-//                    }
-//                }
-//
-//                if (input == "win") {
-//                    break;
-//                }
-//            }
-//        }
-//
-//        while (*gameEngine.getState() == 8) {
-//            while (true) {
-//                cout << "What would you like to do next? To Play Again or end the game?" <<endl;
-//                cin >> input;
-//                gameEngine.gameEndTransitions(input);
-//
-//                if (gameEngine.getState() == 0) {
-//                    if (input == "end") {
-//                        isPlaying = false;
-//                    }
-//
-//                    break;
-//                }
-//            }
-//        }
-//    }
-    
     return 0;
 }
