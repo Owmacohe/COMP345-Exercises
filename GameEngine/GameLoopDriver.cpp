@@ -4,10 +4,7 @@
 #include "../Cards/Cards.h"
 #include "../Orders/Orders.h"
 
-#include <iostream>
-using namespace std;
-
-int GameLoopmain() {
+int main() {
 
     // Create Players List
     vector<Player *> players;
@@ -83,13 +80,13 @@ int GameLoopmain() {
     cout<<endl;
 
     //(1) a player receives the correct number of armies in the reinforcement phase (showing different cases);
-    cout <<"---a player receives the correct number of armies in the reinforcement phase---"<<endl;
+    cout <<"\n------test reinforcement phase------"<<endl;
     mainGE->setNumberOfPlayers((mainGE->getplayer_list()).size());
     cout << "Number of territories : " << mainmap->getTerritories().size() << endl;
     cout << "Player 1 number territories : " << player1->getNumberOfTerritories() << endl;
     cout << "Player 2 number territories : " << player2->getNumberOfTerritories() << endl;
     cout << "Player 3 number territories : " << player3->getNumberOfTerritories() << endl;
-
+    cout<<endl;
     cout << "number of reinforcement for player 1 (" << player1->getName() << ") before reinforcement phase : "
          << player1->getReinforcePool() << endl;
     cout << "number of reinforcement for player 2 (" << player2->getName() << ") before reinforcement phase : "
@@ -104,10 +101,11 @@ int GameLoopmain() {
     cout << "number of reinforcement for player 3 (" << player3->getName() << ") after reinforcement phase : "
          << player3->getReinforcePool() << endl;
 
-//    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
-    cout <<"---a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool---"<<endl;
-//    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
-//    // During this section fo demo, just click no for advances and card playing
+
+    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
+    cout <<"\n------test deployment------"<<endl;
+    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
+    // During this section fo demo, just click no for advances and card playing
     mainGE->issueOrdersPhase();
     int deployCounter = 0;
     int anyOtherOrders = 0;
@@ -128,21 +126,21 @@ int GameLoopmain() {
     }
 
     //(3) a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend() lists;
-    cout <<"---a player can issue advance orders to either defend or attack, based on the toAttack() and toDefend()---"<<endl;
+    cout <<"\n------test advance------"<<endl;
     mainGE->issueOrdersPhase();
 
     //(4) a player can play cards to issue orders;
-    cout <<"---a player can play cards to issue orders---"<<endl;
+    cout <<"\n------test playing cards------"<<endl;
     mainGE->issueOrdersPhase();
 
     //(5) a player that does not control any territory is removed from the game;
-    cout <<"---a player that does not control any territory is removed from the game---"<<endl;
+    cout <<"\n------test player removal------"<<endl;
     cout << "Number players : " << mainGE->getNumberOfPlayers() <<endl;
-    cout << "Player order before removal: " <<endl;
+    cout << "\nPlaying order before removal: " <<endl;
     for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
         cout << mainGE->getPlayerOrder()[j] << endl;
     }
-    cout << "Player list before removal: " <<endl;
+    cout << "\nPlayer list before removal: " <<endl;
     for (Player *p : mainGE->getplayer_list()){
         cout<<p->getName()<<endl;
     }
@@ -154,17 +152,17 @@ int GameLoopmain() {
     }
     mainGE->checkPlayers();
     cout << "Number players : " << mainGE->getNumberOfPlayers() <<endl;
-    cout << "Player order after removal: " <<endl;
+    cout << "\nPlaying order after removal: " <<endl;
     for (int j = 0; j < (mainGE->getplayer_list()).size(); j++) {
         cout << mainGE->getPlayerOrder()[j] << endl;
     }
-    cout << "Player list after removal: " <<endl;
+    cout << "\nPlayer list after removal: " <<endl;
     for (Player *p : mainGE->getplayer_list()){
         cout<<p->getName()<<endl;
     }
 
     //(6) the game ends when a single player controls all the territories.
-    cout <<"---the game ends when a single player controls all the territories---"<<endl;
+    cout <<"\n------test winner------"<<endl;
     mainGE->checkForWinner();
     while (player3->getNumberOfTerritories() > 0) {
         Territory* t = player3->getTerritoryList().at(0);
@@ -176,7 +174,5 @@ int GameLoopmain() {
 
 //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
     return 0;
-// TODO :: delete
-
 }
 
