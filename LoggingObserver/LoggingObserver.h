@@ -26,7 +26,12 @@ class LogObserver : public Observer{
     public:
         LogObserver(); // Constructor
         LogObserver(string fileName); // Parameterized Constructor
+        LogObserver(const LogObserver& logObs); // Copy Constructor
         ~LogObserver(); // Destructor
+
+    LogObserver& operator = (const LogObserver& D); // Assignment operator
+    friend ostream& operator<<(ostream& os, const LogObserver& logObs); // Stream insertion operator
+
         void update(Iloggable* il); // Method to update the concrete observer object
     public:
         string fileName; // Name of file to output game logs
@@ -37,7 +42,9 @@ class LogObserver : public Observer{
 class Subject {
 public:
     Subject(); // Constructor
+    Subject(const Subject&); // Copy Constructor
     ~Subject(); // Destructor
+    Subject& operator = (const Subject& s); // Assignment operator
 
     LogObserver* getLogObserver();
     static void setLogObserver(LogObserver* logobs);

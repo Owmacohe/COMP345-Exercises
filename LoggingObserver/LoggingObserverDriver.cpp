@@ -9,7 +9,7 @@
 LogObserver* logger = new LogObserver("gamelog.txt");
 LogObserver* Subject::logObs=logger;
 
-    int LogObsmain() {
+    int main() {
 
         /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
 
