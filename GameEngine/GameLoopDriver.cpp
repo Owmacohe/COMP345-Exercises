@@ -4,11 +4,7 @@
 #include "../Cards/Cards.h"
 #include "../Orders/Orders.h"
 
-#include <iostream>
-using namespace std;
-
-int GameLoopmain() {
-
+int gameLoopmain() {
     // Create Players List
     vector<Player *> players;
     Player *player1 = new Player();
@@ -104,10 +100,10 @@ int GameLoopmain() {
     cout << "number of reinforcement for player 3 (" << player3->getName() << ") after reinforcement phase : "
          << player3->getReinforcePool() << endl;
 
-//    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
+    //(2) a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool;
     cout <<"---a player will only issue deploy orders and no other kind of orders if they still have armies in their reinforcement pool---"<<endl;
-//    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
-//    // During this section fo demo, just click no for advances and card playing
+    // Normal case--- every deploy order only deploys 1 army in this case as of the definition of class "Deploy"
+    // During this section fo demo, just click no for advances and card playing
     mainGE->issueOrdersPhase();
     int deployCounter = 0;
     int anyOtherOrders = 0;
@@ -174,9 +170,6 @@ int GameLoopmain() {
     }
     mainGE->checkForWinner();
 
-//All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
+    //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
     return 0;
-// TODO :: delete
-
 }
-

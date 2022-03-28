@@ -11,7 +11,6 @@ Player::Player() {
     orders = new OrdersList;
     reinforcePool = 0;
     deployList = new OrdersList;
-    //cout << "[Player default constructor]" << endl;
 }
 
 // Parameterized constructor (everything)
@@ -23,8 +22,6 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r): n
 
     hand = new Hand(*h);
     orders = new OrdersList(*o);
-
-    //cout << "[Player param constructor]" << endl;
 }
 
 // Parameterized constructor (name only)
@@ -34,8 +31,6 @@ Player::Player(string n) : name(n) {
     orders = new OrdersList;
     reinforcePool = 0;
     deployList = new OrdersList;
-
-    //cout << "[Player param constructor]" << endl;
 }
 
 // Copy constructor
@@ -49,7 +44,6 @@ Player::Player(const Player &p) {
     hand = new Hand(*(p.hand));
     orders = new OrdersList(*(p.orders));
     reinforcePool = p.reinforcePool;
-    //cout << "[Player copy constructor]" << endl;
 }
 
 // Destructor
@@ -58,8 +52,6 @@ Player::~Player() {
     hand = NULL;
     delete orders;
     orders = NULL;
-
-    //cout << "[Player destructor]" << endl;
 }
 
 // Returns a vector list of territories for player to defend in priority
@@ -73,10 +65,8 @@ vector<Territory*> Player::toDefend(Map* m) {
         int number_surrounding = 0;
         string name = territory->getName();
         string owner =  territory->getOwner()->getName();
-        //cout << "Looking at territory : " << territory->getName() << endl;
 
         vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
-        //cout<< surrounded_territories.empty()<<endl;
 
         if (surrounded_territories.empty()) number_surrounding = -1;
 
@@ -90,7 +80,6 @@ vector<Territory*> Player::toDefend(Map* m) {
         }
         // step 2 pair territory and their number of surrounding territories, add pair to vector
         if (number_surrounding != 0) {
-            //cout<<"Putting in pair : " << territory->getName() <<endl;
             pairs.first = territory->getArmies();
             pairs.second = territory;
             ordering.push_back(pairs);
@@ -104,7 +93,6 @@ vector<Territory*> Player::toDefend(Map* m) {
     sort(ordering.begin(), ordering.end());
 
     for (pair<int, Territory*> p : ordering) {
-        //cout<<"Ordering territory : " << p.second->getName() <<endl;
         defend_territories.insert(defend_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         p.second = NULL; // Dangling pointer avoidance
     }
@@ -119,20 +107,17 @@ vector<Territory*> Player::toAttack(Map* m) {
     vector<pair<int, Territory*>> ordering;
 
     for (Territory* territory : territories) { // Looping through the player's territories
-        //cout << "Looking at territory : " << territory->getName() << endl;
         int number_armies = 0;
         string name = territory->getName();
         string owner =  territory->getOwner()->getName();
 
         // step 1 get connected territories
-        // cout<< m->getConnectedTerritories(name).at(0)->getName() <<endl;
         vector<Territory*> surround_territory = m->getConnectedTerritories(name); // Getting surrounding territories of the player's territory
 
         if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
         // step 2 for each connected territory that's an enemy's count the number armies
-        // cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
         for (Territory* t : surround_territory) {
             if ((t->getOwner()->getName() != owner)) { // Neutral player is not enemy or player
                 number_armies = t->getArmies();
@@ -154,7 +139,6 @@ vector<Territory*> Player::toAttack(Map* m) {
         sort(ordering.begin(), ordering.end());
         ordering.erase(unique(ordering.begin(), ordering.end()), ordering.end());
         for (pair<int, Territory*> p : ordering) {
-            //cout<<"Ordering territory : " << p.second->getName() <<endl;
             attack_territories.insert(attack_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
             p.second = NULL; // Dangling pointer avoidance
         }

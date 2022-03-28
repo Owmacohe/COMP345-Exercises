@@ -152,74 +152,15 @@ void GameEngine::setPlayerOrder(vector<int> po) {
         playerOrder.push_back(i);
     }
 }
-void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
-
-// TODO WE DELETE THIS ?
-// THE FOLLOWING METHODS ARE UNNECESSARY NOW, BUT WE SHOULD KEEP THEM COMMENTED JUST IN CASE
-
-/*
-// Phases, states, and commands
-void GameEngine::startGame() {
-    *s = start;
-    cout << "Welcome to Warzone" << endl;
-    cout << "Please enter the number of players" << endl;
-    cin >> this->NumberOfPlayers;
-    cout << "end of start phase" << endl;
-
-   startupPhase();
-}
-
-void GameEngine::loadMap() {
-    *s = mapLoaded;
-
-    string mapName;
-    cout << "enter map name" << endl;
-    cin >> mapName;
-
-    while(mapName != "canada" || mapName != "europe") {
-        cout << "incorrect, please re-enter map name" << endl;
-        cin >> mapName;
-    }
-
-    Map m = ml->load(mapName + ".map");
-
-    cout << "Loaded map" << endl;
-}
-
-void GameEngine::validateMap() {
-    *s = mapValidated;
-    cout << "End of map validated phase" << endl;
-}
-
-void GameEngine::addPlayer() {
-    *s = playersAdded;
-
-    for(int i = 0; i < NumberOfPlayers; i++) {
-        string name;
-        Player *p = new Player;
-        cout << "Please enter the player's name" << endl;
-        cin >> name;
-        p->setName(name);
-        player_list.push_back(p);
-    }
-
-    cout << "End of players added phase" << endl;
-}
-
-void GameEngine::assignCountries() {
-    cout << "End of assign countries command" << endl;
-}
-*/
+void GameEngine::setNeutralPlayer(Player* np) { neutralPlayer = np; };
 
 // Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
-
     transition(assignReinforcement);
 
     cout << "Assign reinforcement phase" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
-        //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
         int num = floor((p->getNumberOfTerritories())/3);
 
         if (num < 3) {
@@ -336,7 +277,8 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::endIssueOrderPhase() {
     transition(executeOrder);
-    cout << "End issue order phase" << endl;}
+    cout << "End issue order phase" << endl;
+}
 
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
@@ -430,69 +372,8 @@ void GameEngine::playAgain() {
 
 void GameEngine::transition(State transitionState) {
     *s = transitionState;
-    notify(this);}
-
-// THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
-
-/*
-void GameEngine::gameStartupTransitions(string str) {
-    if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
-        loadMap();
-    }
-    else if (str == "validatemap" && getState() == 2) {
-        validateMap();
-    }
-    else if (str == "addplayer" && (getState() ==3 || getState() == 4)) {
-       addPlayer();
-    }
-    else if (str == "assigncountries" && getState() ==4) {
-        assignCountries();
-        assignReinforcementPhase();
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
+    notify(this);
 }
-
-void GameEngine::gamePlayTransitions(string str, Player *p) {
-    if (str == "issueorder" && (*getState() == 5 || *getState() == 6)) {
-        issueOrdersPhase();
-    }
-    else if (str == "endissueorders" && *getState() == 6) {
-        endIssueOrderPhase();
-    }
-    else if (str == "execorder" && *getState() == 7) {
-        executeOrdersPhase();
-    }
-    else if (str == "endexecorders" && *getState() == 7) {
-        endexecuteOrdersPhase();
-    }
-    else if (str == "win" && *getState() == 7) {
-        winPhase(p);
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
-}
-
-void GameEngine::gameEndTransitions(string str) {
-    if (str == "end" && *getState() == 8) {
-        endPhase();
-    }
-    else if (str == "play" && *getState() == 8) {
-        playAgain();
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
-}
-*/
 
 // Free method to determine whether an int vector contains a given int
 bool doesContain(vector<int> arr, int in) {
@@ -609,7 +490,7 @@ void GameEngine::startupPhase() {
 
                     NumberOfTerritories = m->getTerritories().size();
 
-                    *s = mapLoaded;
+                    transition(mapLoaded);
                 }
                 else {
                     effect = "Unable to load Map";
@@ -697,7 +578,7 @@ void GameEngine::startupPhase() {
 
                     for (Player* k : player_list) {
                         // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                        k->addToReinforcePool(50); //TODO :: im just using this todo to mark where its initialized to 50
+                        k->addToReinforcePool(50);
 
                         // Let each player draw 2 initial cards from the deck using the deck’s draw() method
                         k->getHand()->drawCard(*deck);
@@ -714,6 +595,7 @@ void GameEngine::startupPhase() {
 
         temp->saveEffect(effect);
     }
+
     notify(this); // FROM SUBJECT
 }
 
@@ -744,18 +626,13 @@ bool GameEngine::mainGameLoop() {
         string effect = "";
 
         if (command == "replay") {
-            //playAgain();
-
             effect = "Replaying game";
             cout << effect << "!" << endl;
             continueplaying = true;
 
-            *s = start; // Switch to start up for replay
             transition(start);
         }
         else if (command == "quit") {
-            //endPhase();
-
             effect = "Quitting game";
             cout << effect << "!" << endl;
             continueplaying = false;

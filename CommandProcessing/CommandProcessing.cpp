@@ -11,8 +11,6 @@ Command::Command() {
     validIn = vector<int>();
     transitionsTo = "";
     effect = "";
-
-    //cout << "[Command default constructor]" << endl;
 }
 
 // Command parameterized constructor 1 (un-parameterized Commands)
@@ -39,8 +37,6 @@ Command::Command(string c) : command(c) {
     else {
         cout << "Invalid command!" << endl;
     }
-
-    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Command parameterized constructor 2 (parameterized Commands)
@@ -62,8 +58,6 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
     else {
         cout << "Invalid command!" << endl;
     }
-
-    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Command copy constructor
@@ -77,14 +71,10 @@ Command::Command(const Command &c) {
     for (int i : c.validIn) {
         validIn.push_back(i);
     }
-
-    //cout << "[" + command + " Command copy constructor]" << endl;
 }
 
 // Command destructor
-Command::~Command() {
-    //cout << "[" + command + " Command destructor]" << endl;
-}
+Command::~Command() { }
 
 // Command stream insertion operator
 ostream& operator<<(ostream &strm, const Command &c) {
@@ -143,23 +133,17 @@ string Command::stringToLog() {
 CommandProcessor::CommandProcessor() {
     engine = NULL;
     commands = vector<Command*>();
-
-    //cout << "[CommandProcessor default constructor]" << endl;
 }
 
 // CommandProcessor parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine *e) : engine(e) {
     commands = vector<Command*>();
-
-    //cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
 // CommandProcessor copy constructor
 CommandProcessor::CommandProcessor(const CommandProcessor &cp) {
     engine = cp.engine;
     setCommands(cp.commands);
-
-    //cout << "[CommandProcessor copy constructor]" << endl;
 }
 
 // CommandProcessor destructor
@@ -168,8 +152,6 @@ CommandProcessor::~CommandProcessor() {
         delete i;
         i = NULL;
     }
-
-    //cout << "[CommandProcessor destructor]" << endl;
 }
 
 // CommandProcessor stream insertion operator
@@ -360,16 +342,12 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
     currentFile = "";
     currentLine = 0;
     flr = new FileLineReader();
-
-    //cout << "[FileCommandProcessorAdapter default constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter parameterized constructor
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) :currentFile(f) {
     currentLine = 0;
     flr = new FileLineReader();
-
-    //cout << "[FileCommandProcessorAdapter parameterized constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter copy constructor
@@ -380,16 +358,12 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProces
     flr = fcpa.flr;
     currentFile = fcpa.currentFile;
     currentLine = fcpa.currentLine;
-
-    //cout << "[FileCommandProcessorAdapter copy constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter destructor
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
     delete flr;
     flr = NULL;
-
-    //cout << "[FileCommandProcessorAdapter destructor]" << endl;
 }
 
 // FileCommandProcessorAdapter stream insertion operator
