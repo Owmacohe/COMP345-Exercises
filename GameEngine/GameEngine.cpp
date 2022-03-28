@@ -216,7 +216,7 @@ void GameEngine::assignReinforcementPhase() {
 
     transition(assignReinforcement);
 
-    cout << "Assign reinforcement phase" << endl;
+    cout << "\nAssign reinforcement phase\n" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
         //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
@@ -251,7 +251,7 @@ void GameEngine::assignReinforcementPhase() {
             continent_track = continent_track+1;
         }
     }
-    cout << "End of assign reinforcement" << endl;
+    cout << "\nEnd of assign reinforcement\n" << endl;
 }
 
 // Issue order phase
@@ -267,7 +267,7 @@ void GameEngine::issueOrdersPhase() {
         Player *p = player_list.at(playerOrder.at(i));
         bool goodinput = false;
 
-        cout << "Issuing the orders for player " << p->getName() << endl;
+        cout << "\nIssuing the orders for player " << p->getName() <<"\n"<<endl;
 
         int num = p->getReinforcePool();
         // Only issue deploy orders while the player's reinforcement pool contains armies;
@@ -278,10 +278,10 @@ void GameEngine::issueOrdersPhase() {
         }
 
         // Issue advance orders
-        cout << p->getName() << "'s turn" << endl;
-        cout << "Issuing advance orders" << endl;
+        cout << "\n" << p->getName() << "'s turn" << endl;
+        cout << "\nIssuing advance orders" << endl;
         while (goodinput == false) {
-            cout << "Would " << p->getName() << " like to issue an Advance order ? y/n " << endl;
+            cout << "\nWould " << p->getName() << " like to issue an Advance order ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
@@ -299,11 +299,11 @@ void GameEngine::issueOrdersPhase() {
         }
         goodinput = false;
         // Issue card orders
-        cout << "Issuing card orders" << endl;
+        cout << "\nIssuing card orders" << endl;
         while (goodinput == false) {
-            cout << "The following is " << p->getName() << " hand" << endl;
+            cout << "\nThe following is " << p->getName() << "'s hand: " << endl;
             cout << *(p->getHand()) << endl;
-            cout << "Would " << p->getName() << " like to play any cards ? y/n " << endl;
+            cout << "\nWould " << p->getName() << " like to play any cards ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
                 goodinput = true;
@@ -336,7 +336,8 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::endIssueOrderPhase() {
     transition(executeOrder);
-    cout << "End issue order phase" << endl;}
+    cout << "\nEnd issue order phase\n" << endl;
+}
 
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
@@ -350,7 +351,7 @@ bool GameEngine::hasMoreDeploy(Player *p) {
 // Execute order phase
 void GameEngine::executeOrdersPhase() {
     // First , adding all deploy orders into a separate list and removing them from the original player's lists
-    cout << "Executing Deploy Order" << endl;
+    cout << "\nExecuting Deploy Order\n" << endl;
 
     int playersWithoutDeploy = 0;
     int playersWithoutOrders = 0;
@@ -409,7 +410,7 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::endexecuteOrdersPhase() {
     transition(assignReinforcement);
-    cout << "End execute order phase" << endl;
+    cout << "\nEnd execute order phase\n" << endl;
 }
 
 void GameEngine::winPhase(Player *p) {
@@ -786,7 +787,7 @@ bool GameEngine::checkForWinner() {
             return true;
         }
     }
-    cout<<"No winner, therefore continue"<<endl;
+    cout<<"\nNo winner, therefore continue\n"<<endl;
     return false;
 }
 
@@ -797,7 +798,7 @@ void GameEngine::checkPlayers() {
         int ordervalue = playerOrder[i];
         Player *p = player_list.at(ordervalue);
         if (p->getNumberOfTerritories() == 0) {
-            cout << "Player " << p->getName() << " has been eliminated" <<endl;
+            cout << "\nPlayer " << p->getName() << " has been eliminated\n" <<endl;
             NumberOfPlayers = NumberOfPlayers - 1; // Lowers player count
             player_list.erase(player_list.begin() + playerOrder[i]); // Removes player from player_list
             for (int j = i; j <= player_list.size()-1; j++) { // Removes from playing order

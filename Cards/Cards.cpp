@@ -122,7 +122,7 @@ Card* Deck::draw() {
     Card * temp = deck.at(numRandom);
 
     // Display the type of card that is drawn
-     cout << *deck.at(numRandom);
+     cout << *deck.at(numRandom) << " | ";
 
     // Remove the drawn card from Deck
     deck.erase(deck.begin()+numRandom);
