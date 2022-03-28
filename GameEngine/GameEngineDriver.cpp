@@ -3,9 +3,17 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "GameEngine.h"
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
-int gameEnginemain() {
+//int main() {
+//    GameEngine gameEngine;
+//    gameEngine.startupPhase();
+//
+//    return 0;
+//}
+
+int GameEnginemain() {
     GameEngine* gameEngine = new GameEngine;
     Order::game = gameEngine;
 
@@ -16,6 +24,5 @@ int gameEnginemain() {
         gameEngine->startupPhase();
         isPlaying = gameEngine->mainGameLoop();
     }
-
     return 0;
 }

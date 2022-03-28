@@ -21,6 +21,7 @@ LogObserver::~LogObserver(){
     outputFile.close();} // Destructor
 
 void LogObserver::update(Iloggable* il){
+//    cout << "writing stringToLog to output file." << endl;
     outputFile << (*il).stringToLog() << "\n";
 };
 

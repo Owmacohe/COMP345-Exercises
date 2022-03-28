@@ -2,6 +2,7 @@
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
 #include "../GameEngine/GameEngine.h"
+#include "../LoggingObserver/LoggingObserver.h"
 #include "Orders.h"
 
 // Static GameEngine*
@@ -361,9 +362,13 @@ void Advance::execute() {
 
                 defend_die = deathCalculation(numToAdvance2,0.6);
                 defend_alive = target->getArmies() - defend_die;
+//                cout << "Enemy's armies: " << target->getArmies() << " die: " << defend_die << endl;
+//                cout << "Enemy's alive: " << defend_alive << endl;
 
                 attack_die = deathCalculation(target->getArmies(), 0.7);
                 attack_alive = numToAdvance2 - attack_die;
+//                cout << "Player's armies: " << numToAdvance << " die: " << attack_die << endl;
+//                cout << "Player's alive: " << attack_alive <<endl;
 
                 target->setArmies(defend_alive);
                 numToAdvance2 = attack_alive;
@@ -442,6 +447,17 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     }
     origin = territory_most_armies; // Origin = territory with the most armies
     target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most
+
+//    // Condition checked: If target territory == origin territory, take next in toDefend()
+//    vector<Territory*> toDefendList = p->toDefend(game->getMap()); // TODO MAKE SURE WE DELETE THIS
+//    unsigned i = 0;
+//    target = p->toDefend(game->getMap()).at(i);
+//    while (i<toDefendList.size()){
+//        Territory* target2 = toDefendList.at(i+1);
+//        if(target->getName() == target2->getName())
+//        i=+1;
+//    }
+
 
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
@@ -1088,3 +1104,22 @@ string OrdersList::stringToLog() {
 
     return logString;
 }
+
+/******************************* DRAFT *******************************/
+// Advance execute()
+//            origin->setArmies(origin->getArmies()-numToAdvance);
+//            // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
+//            // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
+//            int attackPower = origin->getArmies()*0.6;
+//            int defendPower = target->getArmies()*0.7;
+//            if (attackPower == defendPower) {
+//                target->setArmies(0);
+//            }
+//            else if (attackPower > defendPower){
+//                target->setArmies((attackPower - defendPower)/0.6);
+//                target->setOwner(playerIssuing);
+//
+//                playerIssuing->getHand()->drawCard(*game->getDeck());
+//            }
+//            else{}
+//        }

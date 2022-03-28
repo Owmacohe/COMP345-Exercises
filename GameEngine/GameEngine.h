@@ -33,7 +33,7 @@ class GameEngine : public Iloggable, public Subject {
         // Accessors
         State *getState();
         int getNumberOfPlayers();
-        bool endOfState ();
+        bool endOfState ();         // TODO WE DELETE THIS ?
         vector<Player*> getplayer_list();
         CommandProcessor *getProcessor();
         Map *getMap();
@@ -60,6 +60,16 @@ class GameEngine : public Iloggable, public Subject {
         void setCurrentPlayer(int);
         void setNeutralPlayer(Player* np);
 
+        // TODO WE DELETE THIS ?
+        // Phases, states, and commands
+        /*
+        void startGame();
+        void loadMap();
+        void validateMap();
+        void addPlayer();
+        void assignCountries();
+        */
+
         void assignReinforcementPhase();
         void issueOrdersPhase();
         void endIssueOrderPhase();
@@ -72,6 +82,8 @@ class GameEngine : public Iloggable, public Subject {
         void transition(State);
         bool mainGameLoop();
 
+        // TODO WE DELETE THIS ?
+        //void gameStartupTransitions(string s);
         void gamePlayTransitions(string, Player*);
         void gameEndTransitions(string);
 
@@ -85,6 +97,7 @@ class GameEngine : public Iloggable, public Subject {
 
         // From Iloggable
         string stringToLog();
+
     private:
         State* s;
         int NumberOfPlayers;

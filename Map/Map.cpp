@@ -61,11 +61,15 @@ Territory::Territory() {
     continent = "";
     owner = NULL;
     armies = 0;
+    
+    //cout << "[Territory default constructor]" << endl;
 }
 
 // Territory parameterized constructor
 Territory::Territory(string n, string c, Player *o, int a) : name(n), continent(c), armies(a) {
     owner = o;
+
+    //cout << "[" << n << " Territory param constructor]" << endl;
 }
 
 // Territory copy constructor
@@ -74,11 +78,14 @@ Territory::Territory(const Territory &t) {
     continent = t.continent;
     owner = t.owner;
     armies = t.armies;
+    
+    //cout << "[" << t.name << " Territory copy constructor]" << endl;
 }
 
 // Territory destructor
 Territory::~Territory() {
     owner = NULL;
+    //cout << "[" << name << " Territory destructor]" << endl;
 }
 
 // Territory stream insertion operator
@@ -128,6 +135,8 @@ Map::Map() {
     continentBonuses = vector<int>();
     territories = vector<Territory*>();
     edges = vector<Edge*>();
+
+    //cout << "[Map default constructor]" << endl;
 }
 
 // Map parameterized constructor
@@ -136,6 +145,8 @@ Map::Map(string n) : name(n) {
     continentBonuses = vector<int>();
     territories = vector<Territory*>();
     edges = vector<Edge*>();
+    
+    //cout << "[" << n << " Map param constructor]" << endl;
 }
 
 // Map copy constructor
@@ -145,6 +156,8 @@ Map::Map(const Map &m) {
     setContinentBonuses(m.continentBonuses);
     setTerritories(m.territories);
     setEdges(m.edges);
+
+    //cout << "[" << m.name << " Map copy constructor]" << endl;
 }
 
 // Map destructor
@@ -158,6 +171,8 @@ Map::~Map() {
         delete j;
         j = NULL;
     }
+
+    //cout << "[" << name << " Map destructor]" << endl;
 }
 
 // Map stream insertion operator
@@ -321,6 +336,7 @@ bool Map::validate() {
         }
     }
 
+    //cout << "Validation of " << name << " succeeded!" << endl;
     return true;
 }
 
@@ -474,6 +490,8 @@ Map *MapLoader::load(string f) {
                     }
                 }
             }
+
+            //cout << m->getName() << " loaded!" << endl;
         }
         // Setting the Map to bad, and printing the error message
         catch (const char* message) {
