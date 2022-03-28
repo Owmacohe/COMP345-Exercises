@@ -232,6 +232,6 @@ LogObserver* Subject::logObs=logger;
 
         logger->outputFile << "\n-------------------- Closing the gamelog file --------------------" << endl;
         Order::logObs->outputFile.close();
-        return 0;
 
+        return 0;
     }
