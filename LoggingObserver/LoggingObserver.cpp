@@ -1,35 +1,38 @@
 #include "LoggingObserver.h"
 
 /****************************** Iloggable *******************************/
-string Iloggable::stringToLog(){return "";}
+string Iloggable::stringToLog(){
+    return "";
+}
 
 /****************************** Observer *******************************/
-Observer::Observer(){}; // Constructor
-Observer::~Observer(){}; // Destructor
+Observer::Observer() { }; // Constructor
+Observer::~Observer() { }; // Destructor
 
 /****************************** LogObserver *******************************/
 
-LogObserver::LogObserver(){
+LogObserver::LogObserver() {
     fileName = "";
-    outputFile.open(fileName);}
+    outputFile.open(fileName);
+}
 
-LogObserver::LogObserver(string name){
+LogObserver::LogObserver(string name) {
     fileName = name;
-    outputFile.open(fileName);}
+    outputFile.open(fileName);
+}
 
-LogObserver::~LogObserver(){
-    outputFile.close();} // Destructor
+LogObserver::~LogObserver() {
+    outputFile.close();
+} // Destructor
 
-void LogObserver::update(Iloggable* il){
+void LogObserver::update(Iloggable* il) {
 //    cout << "writing stringToLog to output file." << endl;
     outputFile << (*il).stringToLog() << "\n";
-};
+}
 
 /****************************** Subject *******************************/
-Subject::Subject(){}
-Subject::~Subject(){};  // Destructor
-LogObserver* Subject::getLogObserver(){return logObs;}
-void Subject::setLogObserver(LogObserver* lo){logObs = lo;}
-
-void Subject::notify(Iloggable* il){logObs->update(il);};
-
+Subject::Subject() { }
+Subject::~Subject() { };  // Destructor
+LogObserver* Subject::getLogObserver(){ return logObs; }
+void Subject::setLogObserver(LogObserver* lo){ logObs = lo; }
+void Subject::notify(Iloggable* il){ logObs->update(il); }

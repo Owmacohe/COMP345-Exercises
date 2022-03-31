@@ -15,7 +15,7 @@ Player::Player() {
 }
 
 // Parameterized constructor (everything)
-Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r): name(n), reinforcePool(r) {
+Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r) : name(n), reinforcePool(r) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
         territories.push_back(new Territory(*i));
@@ -78,8 +78,9 @@ vector<Territory*> Player::toDefend(Map* m) {
         vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
         //cout<< surrounded_territories.empty()<<endl;
 
-        if (surrounded_territories.empty()) number_surrounding = -1;
-
+        if (surrounded_territories.empty()) {
+            number_surrounding = -1;
+        }
         // step 1 check each territories numbers of enemies surrounding
         else {
             for (Territory *t: surrounded_territories) {
@@ -88,6 +89,7 @@ vector<Territory*> Player::toDefend(Map* m) {
                 }
             }
         }
+
         // step 2 pair territory and their number of surrounding territories, add pair to vector
         if (number_surrounding != 0) {
             //cout<<"Putting in pair : " << territory->getName() <<endl;
@@ -100,6 +102,7 @@ vector<Territory*> Player::toDefend(Map* m) {
             i = NULL;
         }
     }
+
     // step 3 sort and seperate territories in pair
     sort(ordering.begin(), ordering.end());
 
@@ -108,6 +111,7 @@ vector<Territory*> Player::toDefend(Map* m) {
         defend_territories.insert(defend_territories.end(), p.second); // Pushes them in one by one because they are already sorted (insert at the front because it is sorted small to large)
         p.second = NULL; // Dangling pointer avoidance
     }
+
     return defend_territories;
 }
 
@@ -131,6 +135,7 @@ vector<Territory*> Player::toAttack(Map* m) {
         if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
+
         // step 2 for each connected territory that's an enemy's count the number armies
         // cout << "step 2 for each connected territory that's an enemy's count the number armies" << endl;
         for (Territory* t : surround_territory) {
@@ -142,14 +147,16 @@ vector<Territory*> Player::toAttack(Map* m) {
                 ordering.push_back(pairs);
             }
         }
+
         for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
             i = NULL;
         }
     }
 
     // step 3 sort and separate territories in pair
-    if(ordering.empty()) { cout << "No territories to Attack." << endl; }
-
+    if(ordering.empty()) {
+        cout << "No territories to Attack." << endl;
+    }
     else {
         sort(ordering.begin(), ordering.end());
         ordering.erase(unique(ordering.begin(), ordering.end()), ordering.end());
@@ -159,6 +166,7 @@ vector<Territory*> Player::toAttack(Map* m) {
             p.second = NULL; // Dangling pointer avoidance
         }
     }
+
     return attack_territories;
 }
 
@@ -184,19 +192,26 @@ void Player::issueOrder(string type) {
 // Return number of armies player has
 int Player::getNumberOfArmies() {
     int sum = 0;
+
     for (Territory* i : territories) {
         sum = sum + i->getArmies();
     }
+
     return sum;
 }
 
 // Return number of territories player has
 int Player::getNumberOfTerritories() {
     int sum = 0;
-    if (territories.empty()) return 0;
+
+    if (territories.empty()) {
+        return 0;
+    }
+
     for (Territory* i : territories) {
         sum = sum + 1;
     }
+
     return sum;
 }
 
@@ -206,21 +221,15 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     for (Territory* t : surround_territory) {
         if (t->getOwner()->getName() == name) return t;
     }
+
     return NULL;
 }
 
 // Return deploy list
-OrdersList* Player::getDeployList() {
-    return deployList;
-}
+OrdersList* Player::getDeployList() { return deployList; }
 
-void Player::addToReinforcePool(int armies) {
-    reinforcePool += armies;
-}
-
-void Player::removeFromReinforcePool(int armies) {
-    reinforcePool = reinforcePool - armies;
-}
+void Player::addToReinforcePool(int armies) { reinforcePool += armies; }
+void Player::removeFromReinforcePool(int armies) { reinforcePool = reinforcePool - armies; }
 
 // Mutators and Accessors
 void Player::setName(string n) { name = n; }
@@ -229,49 +238,48 @@ void Player::setTerritory(vector<Territory*> t) {
         territories.push_back(i);
     }
 }
-void Player::assignTerritory(Territory* t) {
-    territories.push_back(t);
-}
-void Player::removeTerritory(int index) {
-    territories.erase(territories.begin()+index);
-}
+void Player::assignTerritory(Territory* t) { territories.push_back(t); }
+void Player::removeTerritory(int index) { territories.erase(territories.begin()+index); }
 
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
-void Player::setReinforcementPool(int armies) {reinforcePool = armies;}
+void Player::setReinforcementPool(int armies) { reinforcePool = armies; }
 
 string Player::getName() { return name; }
 vector<Territory*> Player::getTerritoryList() { return territories; }
 Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
-int Player::getReinforcePool(){ return reinforcePool;}
+int Player::getReinforcePool(){ return reinforcePool; }
 
 // End of Mutators and Accessors
 
 // Assignment operator
-Player& Player::operator = (const Player& p){
-    this->name = p.name;
+Player& Player::operator = (const Player& p) {
+    name = p.name;
+
     for (Territory* i : p.territories) {
         this->territories.push_back(i);
     }
-    this->hand = p.hand;
-    this->orders = p.orders;
-    this->reinforcePool = p.reinforcePool;
+
+    hand = p.hand;
+    orders = p.orders;
+    reinforcePool = p.reinforcePool;
+
     return *this;
 }
 
 // Stream insertion operator
 std::ostream& operator<<(std::ostream &strm, const Player &p) {
     string t = "";
+
     for (Territory* i : p.territories) {
         t += (*i).getName() +" | ";
     }
 
     return strm <<
-                "PLAYER: " << p.name <<
-                "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
-                "\n    Players hand, " << *p.hand <<
-                "\n    Players orders, " << *p.orders <<
-                "\n    Players reinforcement pool has, " << p.reinforcePool << " armies"<<endl;
+        "PLAYER: " << p.name <<
+        "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
+        "\n    Players hand, " << *p.hand <<
+        "\n    Players orders, " << *p.orders <<
+        "\n    Players reinforcement pool has, " << p.reinforcePool << " armies"<<endl;
 }
-

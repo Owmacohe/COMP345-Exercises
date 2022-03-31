@@ -59,9 +59,9 @@ void Order::setValidated(bool v) {
     validated = v;
 }
 
-void Order::validate() {} // Virtual Method
+void Order::validate() { } // Virtual Method
 
-void Order::execute() {} // Virtual Method
+void Order::execute() { } // Virtual Method
 
 // From Iloggable
 string Order::stringToLog() {
@@ -71,27 +71,29 @@ string Order::stringToLog() {
 
 /****************************** Deploy *******************************/
 // Default constructor
-Deploy::Deploy() : Order(false, "deploy"){
+Deploy::Deploy() : Order(false, "deploy") {
     playerIssuing = nullptr;
     target = nullptr;
     numToDeploy = 0;
 }
 
 // Parameterize Constructor
-Deploy::Deploy(Player* p) : Order(false, "deploy"){
+Deploy::Deploy(Player* p) : Order(false, "deploy") {
     playerIssuing = p;
-    target = p->toDefend(this->game->getMap()).at(0);
+    target = p->toDefend(game->getMap()).at(0);
     numToDeploy = 1;
 }
 
 Deploy::Deploy(Player *p, Territory *target) : Order(false, "deploy") {
     playerIssuing = p;
-    this->target = target;
+    target = target;
+
     // Condition checked: If there's no more armies to airlift
     if (p->getReinforcePool() == 0) {
         numToDeploy = 0;
     } else {
         numToDeploy = rand() % p->getReinforcePool() + 1; // generate a random number
+
         while (numToDeploy > p->getReinforcePool()) { // make sure the condition armies <= armies in origin
             numToDeploy = rand() % p->getReinforcePool() + 1;
         }
@@ -111,7 +113,7 @@ Deploy::~Deploy() {
     playerIssuing = nullptr;
 }
 
-Deploy &Deploy::operator=(const Deploy &o) {
+Deploy &Deploy::operator = (const Deploy &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     target = o.target;
@@ -146,10 +148,12 @@ void Deploy::validate() {
     if (numToDeploy == 0) {
         cout << "Invalid! - No more armies left to deploy" << endl;
         validated = false;
-    } else if (target->getOwnerName() == playerIssuing->getName()) {
+    }
+    else if (target->getOwnerName() == playerIssuing->getName()) {
         cout << "Valid! - Territory owner: " << target->getOwnerName() << endl;
         validated = true;
-    } else {
+    }
+    else {
         cout << "Invalid! - You don't own this territory - Territory owner: " << target->getOwnerName() << endl;
         validated = false;
     }
@@ -165,7 +169,8 @@ void Deploy::execute() {
     } else {
         cout << "Execution fail!\n" << endl;
     }
-   notify(this);
+
+    notify(this);
 }
 
 string Deploy::stringToLog() {
@@ -182,13 +187,14 @@ string Deploy::stringToLog() {
         logStringOrder = "Deploy " + validation + " : Deploy " + "0 armies to " + target->getName() + "\n";
         logStringEffect = to_string(target->getArmies()) + " armies now occupy " + target->getName() + "\n";
     }
+
     return logStringPlayer + logStringOrder + logStringReinforcePool + logStringEffect;
 }
 
 /****************************** Advance *******************************/
 
 // Default constructor
-Advance::Advance() : Order(false, "advance"){
+Advance::Advance() : Order(false, "advance") {
     playerIssuing = nullptr;
     origin = nullptr;
     target = nullptr;
@@ -202,34 +208,40 @@ Advance::Advance(Player* p) : Order(false, "advance") {
 
     string input = "";
     int x =  rand() % 2;
+
     if (x == 0) {
         input = "move";
-    } else
+    } else {
         input = "attack";
+    }
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
         target = p->toDefend(game->getMap()).at(0);
         cout << p->getName() << " is issuing a "<< input << " Advance"<<endl;
-    } else if (input == "attack") {
+    }
+    else if (input == "attack") {
         target = p->toAttack(game->getMap()).at(0);
         cout << p->getName() << " is issuing an "<< input << " Advance"<<endl;
     }
 
-        // From the target we chose, generate an origin that adjacent to it to attack
-        origin = p->getOriginTerritory(target, game->getMap());
-        if (origin == NULL){origin = playerIssuing->getTerritoryList().at(0);}
+    // From the target we chose, generate an origin that adjacent to it to attack
+    origin = p->getOriginTerritory(target, game->getMap());
+    if (origin == NULL){origin = playerIssuing->getTerritoryList().at(0);}
 
-        // Condition checked: If there's no more armies to advance
-        if (origin->getArmies() == 0) {
-            numToAdvance = 0;
-        } else {
-            numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
-            while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
-                numToAdvance = rand() % origin->getArmies() + 1;
-            }
+    // Condition checked: If there's no more armies to advance
+    if (origin->getArmies() == 0) {
+        numToAdvance = 0;
+    }
+    else {
+        numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
+
+        while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
+            numToAdvance = rand() % origin->getArmies() + 1;
         }
+    }
 }
+
 Advance::Advance(Player* p, Territory* origin, Territory* target) {
     playerIssuing = p;
     this->origin = origin;
@@ -245,6 +257,7 @@ Advance::Advance(Player* p, Territory* origin, Territory* target) {
         }
     }
 }
+
 // Copy constructor
 Advance::Advance(const Advance &original) : Order(original) {
     playerIssuing = original.playerIssuing;
@@ -261,7 +274,7 @@ Advance::~Advance() {
     target = nullptr;
 }
 
-Advance &Advance::operator=(const Advance &o) {
+Advance &Advance::operator = (const Advance &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     origin = o.origin;
@@ -303,7 +316,7 @@ void Advance::validate() {
         validated = false;
     }
     // Check if 2 Territories are adjacent
-    else if(!(game->getMap()->adjacentTerritories(origin, target))){
+    else if (!(game->getMap()->adjacentTerritories(origin, target))){
         cout << "Invalid! - Territories are not adjacent" << endl;
         validated = false;
     }
@@ -314,21 +327,21 @@ void Advance::validate() {
     }
     // Condition checked: If origin is owned by Player && target and origin are adjacent
     // Sub-condition: If target is owned by Player Issuing (Yes: Advance || No: Attack)
-    else{
+    else {
         // Yes: Target is owned by player issuing -> Move armies
-        if(target->getOwnerName() == playerIssuing->getName()){
+        if (target->getOwnerName() == playerIssuing->getName()){
             cout << "Valid! ** Move armies" << endl;
             validateResult = "move";
             validated = true;
         }
         // No: Target is not owned by player issuing -> Attack
         // Check for existing alliance
-        else if(game->existingAlliance(origin->getOwner(), target->getOwner())){
+        else if (game->existingAlliance(origin->getOwner(), target->getOwner())){
             cout << "Invalid! - You can't attack territory in negotiation" << endl;
             validated = false;
         }
         // Checking blockade protection
-        else if(target->getOwnerName() == "Neutral"){
+        else if (target->getOwnerName() == "Neutral"){
             cout << "Invalid! - You can't attack territory under protection of blockade" << endl;
             validated = false;
         }
@@ -390,10 +403,14 @@ void Advance::execute() {
                 }
             }
         }
-    } else
+    }
+    else {
         cout << "... Execution fail!\n" << endl;
+    }
+
     notify(this);
 }
+
 int Advance::deathCalculation(int qty, double probability) {
     bool kill;
     int dead = 0;
@@ -402,6 +419,7 @@ int Advance::deathCalculation(int qty, double probability) {
         if (kill) dead++;
         qty--;
     }
+
     return dead;
 }
 
@@ -427,7 +445,7 @@ string Advance::stringToLog() {
 /****************************** Airlift *******************************/
 
 // Default constructor
-Airlift::Airlift() : Order(false, "airlift"){
+Airlift::Airlift() : Order(false, "airlift") {
     playerIssuing = nullptr;
     origin = nullptr;
     target = nullptr;
@@ -435,7 +453,7 @@ Airlift::Airlift() : Order(false, "airlift"){
 }
 
 // Parameterize Constructor
-Airlift::Airlift(Player* p) : Order(false, "airlift"){
+Airlift::Airlift(Player* p) : Order(false, "airlift") {
     playerIssuing = p;
     Territory* territory_most_armies = p->getTerritoryList().at(0); // Choose 1 territory belongs to the player that has the most armies
     int max_armies = 0 ;
@@ -448,21 +466,11 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     origin = territory_most_armies; // Origin = territory with the most armies
     target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most
 
-//    // Condition checked: If target territory == origin territory, take next in toDefend()
-//    vector<Territory*> toDefendList = p->toDefend(game->getMap()); // TODO MAKE SURE WE DELETE THIS
-//    unsigned i = 0;
-//    target = p->toDefend(game->getMap()).at(i);
-//    while (i<toDefendList.size()){
-//        Territory* target2 = toDefendList.at(i+1);
-//        if(target->getName() == target2->getName())
-//        i=+1;
-//    }
-
-
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;
-    } else {
+    }
+    else {
         numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
         while (numToAirlift > origin->getArmies()){ // make sure the condition armies <= armies in origin
             numToAirlift = rand() % origin->getArmies() + 1;
@@ -470,7 +478,7 @@ Airlift::Airlift(Player* p) : Order(false, "airlift"){
     }
 }
 
-Airlift::Airlift(Player* p, Territory* origin, Territory* target) : Order (false, "airlift"){
+Airlift::Airlift(Player* p, Territory* origin, Territory* target) : Order (false, "airlift") {
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
@@ -501,7 +509,7 @@ Airlift::~Airlift() {
     target = nullptr;
 }
 
-Airlift &Airlift::operator=(const Airlift &o) {
+Airlift &Airlift::operator = (const Airlift &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     origin = o.origin;
@@ -546,7 +554,7 @@ void Airlift::validate() {
         cout << "Invalid! - No more armies left to airlift" << endl;
         validated = false;
     }
-    else{
+    else {
         cout << "Valid!" << endl;
         validated = true;
     }
@@ -554,16 +562,16 @@ void Airlift::validate() {
 
 void Airlift::execute() {
     cout << "... Airlift ";
-    if(validated){
+    if (validated) {
         origin->setArmies(origin->getArmies()-numToAirlift); // Subtract armies from origin
         target->setArmies(target->getArmies()+numToAirlift); // Add armies to target
         cout << "Execution successful!\n" << endl;
-    } else{
+    }
+    else {
         cout << "Execution failed!\n" << endl;
     }
      notify(this);
 }
-
 
 string Airlift::stringToLog() {
     string logStringOrder = "";
@@ -583,25 +591,26 @@ string Airlift::stringToLog() {
         logStringEffect1 =  to_string(origin->getArmies()) +" armies now occupy " + origin->getName() + " \n";
         logStringEffect2 =  to_string(target->getArmies()) +" armies now occupy " + target->getName() + " \n";
     }
+
     return logStringPlayer + logStringOrder + logStringEffect1 + logStringEffect2;
 }
 /****************************** Bomb *******************************/
 
 // Default constructor
-Bomb::Bomb() : Order(false, "bomb"){
+Bomb::Bomb() : Order(false, "bomb") {
     playerIssuing = nullptr;
     origin = nullptr;
     target = nullptr;
 }
 
 // Parameterize Constructor
-Bomb::Bomb(Player* p) : Order(false, "bomb"){
+Bomb::Bomb(Player* p) : Order(false, "bomb") {
     playerIssuing = p;
     target = p->toAttack(game->getMap()).at(0);
     origin = p->getOriginTerritory(target,game->getMap());
 }
 
-Bomb::Bomb(Player* p, Territory* origin, Territory* target) : Order(false, "bomb"){
+Bomb::Bomb(Player* p, Territory* origin, Territory* target) : Order(false, "bomb") {
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
@@ -622,7 +631,7 @@ Bomb::~Bomb() {
     target = nullptr;
 }
 
-Bomb &Bomb::operator=(const Bomb &o) {
+Bomb &Bomb::operator = (const Bomb &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     origin = o.origin;
@@ -645,13 +654,8 @@ Territory* Bomb::getOrigin() { return origin; }
 Territory *Bomb::getTarget() { return target; }
 
 // Mutators
-void Bomb::setDescription(string d) {
-    description = d;
-}
-
-void Bomb::setValidated(bool v) {
-    validated = v;
-}
+void Bomb::setDescription(string d) { description = d; }
+void Bomb::setValidated(bool v) { validated = v; }
 
 void Bomb::validate() {
     cout << "... Bomb ";
@@ -674,7 +678,8 @@ void Bomb::validate() {
     else if (!(game->getMap()->adjacentTerritories(origin, target))) {
         cout << "Invalid! - Territory is not adjacent" << endl;
         validated = false;
-    }else {
+    }
+    else {
         cout << "Valid!" << endl;
         validated = true;
     }
@@ -689,6 +694,7 @@ void Bomb::execute() {
         target->setArmies(bombedArmies);
         cout << "Execution successful! \n" << endl;
     }
+
     notify(this);
 }
 
@@ -705,31 +711,33 @@ string Bomb::stringToLog() {
         logStringOrder = "Bomb " + validation + ": Send no bomb from " + origin->getName() + " to " + target->getName() + "\n";
         logStringEffect = target->getName() + " still has " + to_string(target->getArmies()) + " armies and is under the ownership of " + target->getOwner()->getName() + "\n";
     }
+
     return logStringPlayer + logStringOrder + logStringEffect;
 }
 
 /****************************** Blockade *******************************/
 
 // Default constructor
-Blockade::Blockade() : Order(false, "blockade"){
+Blockade::Blockade() : Order(false, "blockade") {
     playerIssuing = nullptr;
     target = nullptr;
 }
 
 // Parameterize Constructor
-Blockade::Blockade(Player* p) : Order(false, "blockade"){
+Blockade::Blockade(Player* p) : Order(false, "blockade") {
     playerIssuing = p;
     // Condition checked: If target territory is already Neutral (protected), take next in toDefend()
     vector<Territory*> toDefendList = p->toDefend(game->getMap());
     unsigned i = 0;
     target = p->toDefend(game->getMap()).at(i);
-    while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral"){
+
+    while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral") {
         target = p->toDefend(game->getMap()).at(i+1);
         i++;
     }
 }
 
-Blockade::Blockade(Player* p, Territory* target) : Order (false,"blockade"){
+Blockade::Blockade(Player* p, Territory* target) : Order (false,"blockade") {
     playerIssuing = p;
     this->target = target;
 }
@@ -746,7 +754,7 @@ Blockade::~Blockade() {
     playerIssuing = nullptr;
     target = nullptr;
 }
-Blockade &Blockade::operator=(const Blockade &o) {
+Blockade &Blockade::operator = (const Blockade &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     target = o.target;
@@ -780,11 +788,11 @@ void Blockade::validate() {
     if (target->getOwnerName() == playerIssuing->getName()) {
         validated = true;
         cout << "Valid!" << endl;
-    } else {
+    }
+    else {
         validated = false;
         cout << "Invalid! - You don't own this territory" << endl;
     }
-
 }
 
 void Blockade::execute() {
@@ -797,6 +805,7 @@ void Blockade::execute() {
         target->setOwner(game->getNeutralPlayer());
         cout << "Execution successful!\n" << endl;
     }
+
     notify(this);
 }
 
@@ -806,11 +815,12 @@ string Blockade::stringToLog() {
     string validation = (validated) ? "executed" : "validation failed";
 
     string logStringPlayer = "(Player " + playerIssuing->getName() + ") \n";
-    if(validated){
+    if (validated) {
         logStringOrder = "Blockade " + validation + ": successfully transfer the ownership of " + target->getName() + " to Neutral Player\n";
         logStringEffect = target->getName() + " has " + to_string(target->getArmies())
                         + " armies and is under the ownership of the " + target->getOwner()->getName() + " player \n";
-    } else {
+    }
+    else {
         logStringOrder = "Blockade " + validation + ": unsuccessful transfer the ownership of " + target->getName() + " to Neutral Player\n";
         logStringEffect = target->getName() + " has " + to_string(target->getArmies())
                           + " armies and is still under the ownership of the " + target->getOwner()->getName() + " player \n";
@@ -821,7 +831,7 @@ string Blockade::stringToLog() {
 /****************************** Negotiate *******************************/
 
 // Default constructor
-Negotiate::Negotiate() : Order(false, "negotiate"){
+Negotiate::Negotiate() : Order(false, "negotiate") {
     playerIssuing = nullptr;
     targetPlayer = nullptr;
 }
@@ -833,6 +843,7 @@ Negotiate::Negotiate(Player* p) : Order(false, "negotiate") {
     string playerTargetName = "";
     cin >> playerTargetName;
     unsigned i = 0;
+
     for (int i = 0; i < game->getplayer_list().size(); i++) {
         if (game->getplayer_list().at(i)->getName() == playerTargetName) {
             targetPlayer = game->getplayer_list().at(i);
@@ -858,7 +869,7 @@ Negotiate::~Negotiate() {
     targetPlayer = nullptr;
 }
 
-Negotiate &Negotiate::operator=(const Negotiate &o) {
+Negotiate &Negotiate::operator = (const Negotiate &o) {
     Order::operator=(o);
     playerIssuing = o.playerIssuing;
     targetPlayer = o.targetPlayer;
@@ -878,24 +889,20 @@ Player* Negotiate::getPlayerIssuing() { return playerIssuing; }
 Player* Negotiate::getTargetPlayer() { return targetPlayer; }
 
 // Mutators
-void Negotiate::setDescription(string d) {
-    description = d;
-}
+void Negotiate::setDescription(string d) { description = d; }
 
-void Negotiate::setValidated(bool v) {
-    validated = v;
-}
+void Negotiate::setValidated(bool v) { validated = v; }
 
 void Negotiate::validate() {
     cout << "... Negotiate ";
     if (playerIssuing->getName() == targetPlayer->getName() || targetPlayer->getName() == "Neutral") {
         validated = false;
         cout << "Invalid! - Negotiate must be done with a different player, excluding the Neutral player" << endl;
-    } else {
+    }
+    else {
         validated = true;
         cout << "Valid!" << endl;
     }
-
 }
 
 void Negotiate::execute() {
@@ -920,6 +927,7 @@ string Negotiate::stringToLog() {
     } else {
         logStringOrder = "Negotiate " + validation + ": no alliance is formed between " + playerIssuing->getName() + " and " + targetPlayer->getName()+ "\n";
     }
+
     return logStringPlayer + logStringOrder;
 }
 
@@ -936,35 +944,28 @@ OrdersList::OrdersList(vector<Order *> vo) {
 }
 
 // Copy constructor
-OrdersList::OrdersList(const OrdersList &original)
-{
-    for (int i = 0; i < original.playerOrderList.size(); i++)
-    {
-        if (original.playerOrderList.at(i)->getDescription() == "deploy")
-        {
+OrdersList::OrdersList(const OrdersList &original) {
+    for (int i = 0; i < original.playerOrderList.size(); i++) {
+        if (original.playerOrderList.at(i)->getDescription() == "deploy") {
             playerOrderList.push_back(new Deploy());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "advance")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "advance") {
             playerOrderList.push_back(new Advance());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "bomb")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "bomb") {
             playerOrderList.push_back(new Bomb());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "blockade")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "blockade") {
             playerOrderList.push_back(new Blockade());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "airlift")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "airlift") {
             playerOrderList.push_back(new Airlift());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "negotiate")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "negotiate") {
             playerOrderList.push_back(new Negotiate());
         }
     }
+
     cout << "Copy constructor for OrdersList class has been called" << endl;
 }
 
@@ -987,37 +988,30 @@ vector<Order *> OrdersList::getOrderList() { return playerOrderList; }
 // Mutators
 void OrdersList::setOrderList(vector<Order *> vo) { playerOrderList = vo; }
 
-
 // Assignment Operator overloading, will have the same behavior as the Copy constructor. Deep copy of Vector through = operator.
 OrdersList OrdersList::operator=(const OrdersList &original) {
 
-    for (int i = 0; i < original.playerOrderList.size(); i++)
-    {
-        if (original.playerOrderList.at(i)->getDescription() == "deploy")
-        {
+    for (int i = 0; i < original.playerOrderList.size(); i++) {
+        if (original.playerOrderList.at(i)->getDescription() == "deploy") {
             playerOrderList.push_back(new Deploy());
         }
-        else if (original.playerOrderList.at(i)->getDescription()  == "advance")
-        {
+        else if (original.playerOrderList.at(i)->getDescription()  == "advance") {
             this->playerOrderList.push_back(new Advance());
         }
-        else if (original.playerOrderList.at(i)->getDescription()  == "bomb")
-        {
+        else if (original.playerOrderList.at(i)->getDescription()  == "bomb") {
             this->playerOrderList.push_back(new Bomb());
         }
-        else if (original.playerOrderList.at(i)->getDescription()  == "blockade")
-        {
+        else if (original.playerOrderList.at(i)->getDescription()  == "blockade") {
             this->playerOrderList.push_back(new Blockade());
         }
-        else if (original.playerOrderList.at(i)->getDescription()  == "airlift")
-        {
+        else if (original.playerOrderList.at(i)->getDescription()  == "airlift") {
             this->playerOrderList.push_back(new Airlift());
         }
-        else if (original.playerOrderList.at(i)->getDescription() == "negotiate")
-        {
+        else if (original.playerOrderList.at(i)->getDescription() == "negotiate") {
             this->playerOrderList.push_back(new Negotiate());
         }
     }
+
     cout << "Assignment operator for OrdersList class has been called" << endl;
     return *this;
 }
@@ -1028,9 +1022,9 @@ ostream &operator<<(ostream &os, const OrdersList &ordersList) {
     for (int i = 0; i < ordersList.playerOrderList.size(); i++) {
         os << i << " - " << *(ordersList.playerOrderList.at(i)) << " | ";
     }
+
     return os;
 }
-
 
 void OrdersList::addOrder(Order *order) {
     playerOrderList.push_back(order);
@@ -1056,7 +1050,8 @@ void OrdersList::move(int i, int j) {
         for (j = j; j > i; j--) {
             swap(playerOrderList[i], playerOrderList[j]);
         }
-    } else {
+    }
+    else {
         cout << " wrong order index or wrong destination index" << endl;
     }
 }
@@ -1065,38 +1060,32 @@ string OrdersList::stringToLog() {
     Order *lastOrderAdded = NULL;
     lastOrderAdded = playerOrderList.at(playerOrderList.size() - 1);
     string logString = "";
-    if (lastOrderAdded->getDescription() == "deploy")
-    {
+    if (lastOrderAdded->getDescription() == "deploy") {
         Deploy *temp = dynamic_cast<Deploy*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
     }
-    else if (lastOrderAdded->getDescription() == "advance")
-    {
+    else if (lastOrderAdded->getDescription() == "advance") {
         Advance *temp = dynamic_cast<Advance*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
     }
-    else if (lastOrderAdded->getDescription() == "bomb")
-    {
+    else if (lastOrderAdded->getDescription() == "bomb") {
         Bomb *temp = dynamic_cast<Bomb*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
     }
-    else if (lastOrderAdded->getDescription() == "blockade")
-    {
+    else if (lastOrderAdded->getDescription() == "blockade") {
         Blockade *temp = dynamic_cast<Blockade*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
     }
-    else if (lastOrderAdded->getDescription() == "airlift")
-    {
+    else if (lastOrderAdded->getDescription() == "airlift") {
         Airlift *temp = dynamic_cast<Airlift*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
     }
-    else if (lastOrderAdded->getDescription() == "negotiate")
-    {
+    else if (lastOrderAdded->getDescription() == "negotiate") {
         Negotiate *temp = dynamic_cast<Negotiate*>(lastOrderAdded);
         logString = "Added the Order " + temp->getDescription() +" to "+ temp->getPlayerIssuing()->getName()+ "'s OrderList" "\n";
         temp = NULL;
@@ -1107,19 +1096,19 @@ string OrdersList::stringToLog() {
 
 /******************************* DRAFT *******************************/
 // Advance execute()
-//            origin->setArmies(origin->getArmies()-numToAdvance);
-//            // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
-//            // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
-//            int attackPower = origin->getArmies()*0.6;
-//            int defendPower = target->getArmies()*0.7;
-//            if (attackPower == defendPower) {
-//                target->setArmies(0);
-//            }
-//            else if (attackPower > defendPower){
-//                target->setArmies((attackPower - defendPower)/0.6);
-//                target->setOwner(playerIssuing);
+//    origin->setArmies(origin->getArmies()-numToAdvance);
+//    // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
+//    // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
+//    int attackPower = origin->getArmies()*0.6;
+//    int defendPower = target->getArmies()*0.7;
+//    if (attackPower == defendPower) {
+//        target->setArmies(0);
+//    }
+//    else if (attackPower > defendPower) {
+//        target->setArmies((attackPower - defendPower)/0.6);
+//        target->setOwner(playerIssuing);
 //
-//                playerIssuing->getHand()->drawCard(*game->getDeck());
-//            }
-//            else{}
-//        }
+//        playerIssuing->getHand()->drawCard(*game->getDeck());
+//    }
+//    else{}
+//}

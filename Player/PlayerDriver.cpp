@@ -3,8 +3,7 @@
 #include "../Cards/Cards.h"
 #include "Player.h"
 
-int PlayerMain() {
-
+int playerMain() {
 	// cout << "\nPlayer Test Default Constructor" <<endl;
 	// //test default constructor
 	// Player p1;
