@@ -5,8 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int Ordersmain() {
-
+int ordersMain() {
     /****************************** CREATING A GAME *******************************/
 
     // Create Map Loader

@@ -4,8 +4,7 @@
 #include "../Cards/Cards.h"
 #include "../Orders/Orders.h"
 
-int main() {
-
+int gameLoopMain() {
     // Create Players List
     vector<Player *> players;
     Player *player1 = new Player();

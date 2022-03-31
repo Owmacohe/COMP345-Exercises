@@ -80,10 +80,10 @@ GameEngine& GameEngine::operator = (const GameEngine& gm) {
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
     phaseEnd = gm.phaseEnd;
-    this->deck = gm.deck;
+    deck = gm.deck;
     neutralPlayer = gm.neutralPlayer;
     for (Player* p : gm.player_list) {
-        this->player_list.push_back(p);
+        player_list.push_back(p);
     }
 
     return *this;
@@ -110,34 +110,36 @@ vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
 Deck *GameEngine::getDeck() { return deck; }
-set<pair<Player*, Player*>> GameEngine::getAlliances() {return alliances;};
+set<pair<Player*, Player*>> GameEngine::getAlliances() { return alliances; }
 bool GameEngine::existingAlliance(Player* p1, Player* p2) {
-    for(auto x : alliances) {
+    for (auto x : alliances) {
         if(x.first == p1) {
-            if (x.second == p2)
+            if (x.second == p2) {
                 return true;
+            }
         }
-        else if(x.first == p2) {
-            if (x.second == p1)
+        else if (x.first == p2) {
+            if (x.second == p1) {
                 return true;
+            }
         }
     }
     return false;
 }
 vector<int> GameEngine::getPlayerOrder() { return playerOrder; }
-Player* GameEngine::getNeutralPlayer() {return neutralPlayer;}
+Player* GameEngine::getNeutralPlayer() { return neutralPlayer; }
 
 // Mutators
-void GameEngine::setState(const State &st) { *s = st;}
-void GameEngine::setNumberOfPlayers(int x) { this->NumberOfPlayers = x; }
-void GameEngine::setNumberOfTerritories(int x) { this->NumberOfTerritories = x; }
-void GameEngine::setEndOfState(bool b) { this->phaseEnd = b; }
-void GameEngine::setplayer_list(vector<Player*> pl){player_list = pl;}
+void GameEngine::setState(const State &st) { *s = st; }
+void GameEngine::setNumberOfPlayers(int x) { NumberOfPlayers = x; }
+void GameEngine::setNumberOfTerritories(int x) { NumberOfTerritories = x; }
+void GameEngine::setEndOfState(bool b) { phaseEnd = b; }
+void GameEngine::setplayer_list(vector<Player*> pl){ player_list = pl;}
 void GameEngine::setProcessor(CommandProcessor *cp) { processor = cp; }
 void GameEngine::setMap(Map* m) { map = m; }
-void GameEngine::setDeck(Deck* d){ deck = d;}
-void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) {alliances = all;}
-void GameEngine::addAlliances(Player* p1, Player* p2) {alliances.insert(make_pair(p1,p2));}
+void GameEngine::setDeck(Deck* d){ deck = d; }
+void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) { alliances = all; }
+void GameEngine::addAlliances(Player* p1, Player* p2) { alliances.insert(make_pair(p1,p2)); }
 void GameEngine::resetAlliances() {
     for(auto x : alliances) {
         x.first = NULL;
@@ -152,75 +154,17 @@ void GameEngine::setPlayerOrder(vector<int> po) {
         playerOrder.push_back(i);
     }
 }
-void GameEngine::setNeutralPlayer(Player* np) {neutralPlayer = np;};
-
-// TODO WE DELETE THIS ?
-// THE FOLLOWING METHODS ARE UNNECESSARY NOW, BUT WE SHOULD KEEP THEM COMMENTED JUST IN CASE
-
-/*
-// Phases, states, and commands
-void GameEngine::startGame() {
-    *s = start;
-    cout << "Welcome to Warzone" << endl;
-    cout << "Please enter the number of players" << endl;
-    cin >> this->NumberOfPlayers;
-    cout << "end of start phase" << endl;
-
-   startupPhase();
-}
-
-void GameEngine::loadMap() {
-    *s = mapLoaded;
-
-    string mapName;
-    cout << "enter map name" << endl;
-    cin >> mapName;
-
-    while(mapName != "canada" || mapName != "europe") {
-        cout << "incorrect, please re-enter map name" << endl;
-        cin >> mapName;
-    }
-
-    Map m = ml->load(mapName + ".map");
-
-    cout << "Loaded map" << endl;
-}
-
-void GameEngine::validateMap() {
-    *s = mapValidated;
-    cout << "End of map validated phase" << endl;
-}
-
-void GameEngine::addPlayer() {
-    *s = playersAdded;
-
-    for(int i = 0; i < NumberOfPlayers; i++) {
-        string name;
-        Player *p = new Player;
-        cout << "Please enter the player's name" << endl;
-        cin >> name;
-        p->setName(name);
-        player_list.push_back(p);
-    }
-
-    cout << "End of players added phase" << endl;
-}
-
-void GameEngine::assignCountries() {
-    cout << "End of assign countries command" << endl;
-}
-*/
+void GameEngine::setNeutralPlayer(Player* np) { neutralPlayer = np; }
 
 // Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
-
     transition(assignReinforcement);
 
     cout << "\nAssign reinforcement phase\n" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
         //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
-        int num = floor((p->getNumberOfTerritories())/3);
+        int num = floor(p->getNumberOfTerritories() / 3);
 
         if (num < 3) {
             p->addToReinforcePool(3); // Minimum number of armies per turn for any player is 3
@@ -267,12 +211,12 @@ void GameEngine::issueOrdersPhase() {
         Player *p = player_list.at(playerOrder.at(i));
         bool goodinput = false;
 
-        cout << "\nIssuing the orders for player " << p->getName() <<"\n"<<endl;
+        cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
         int num = p->getReinforcePool();
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num; i++) { // TODO: this shouldn't also be named i!!!
             p->issueOrder("deploy");
             cout << "Deploy of army " << i + 1 << "/" << num << " issued" << endl;
         }
@@ -280,7 +224,7 @@ void GameEngine::issueOrdersPhase() {
         // Issue advance orders
         cout << "\n" << p->getName() << "'s turn" << endl;
         cout << "\nIssuing advance orders" << endl;
-        while (goodinput == false) {
+        while (!goodinput) {
             cout << "\nWould " << p->getName() << " like to issue an Advance order ? y/n " << endl;
             cin >> input;
             if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
@@ -300,7 +244,7 @@ void GameEngine::issueOrdersPhase() {
         goodinput = false;
         // Issue card orders
         cout << "\nIssuing card orders" << endl;
-        while (goodinput == false) {
+        while (!goodinput) {
             cout << "\nThe following is " << p->getName() << "'s hand: " << endl;
             cout << *(p->getHand()) << endl;
             cout << "\nWould " << p->getName() << " like to play any cards ? y/n " << endl;
@@ -342,8 +286,9 @@ void GameEngine::endIssueOrderPhase() {
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
     for (Order * o : p->getOrder()->getOrderList()){
-        if (equalsIgnoreCase(o->getDescription(), "deploy"))
+        if (equalsIgnoreCase(o->getDescription(), "deploy")) {
             return true;
+        }
     }
     return false;
 }
@@ -358,7 +303,7 @@ void GameEngine::executeOrdersPhase() {
     bool hasMoreDeployOrders = true;
     bool allOrdersDone = false;
 
-    while (hasMoreDeployOrders == true ){
+    while (hasMoreDeployOrders) {
         // Loop will loop based on the playing order
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
@@ -369,29 +314,29 @@ void GameEngine::executeOrdersPhase() {
                     p->getOrder()->remove(i);
                     break;
                 }
-
             }
-
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
             if (!hasMoreDeploy(p))
                 playersWithoutDeploy++;
         }
-        if (playersWithoutDeploy == NumberOfPlayers)
+        if (playersWithoutDeploy == NumberOfPlayers) {
             hasMoreDeployOrders = false;
-        else
+        }
+        else {
             playersWithoutDeploy = 0;
+        }
     }
 
-    while (allOrdersDone == false ){
+    while (!allOrdersDone) {
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
             for(int i = 0 ; i < p->getOrder()->getOrderList().size(); i++) {
-                    p->getOrder()->getOrderList().at(i)->validate();
-                    p->getOrder()->getOrderList().at(i)->execute();
-                    p->getOrder()->remove(i);
-                    break;
+                p->getOrder()->getOrderList().at(i)->validate();
+                p->getOrder()->getOrderList().at(i)->execute();
+                p->getOrder()->remove(i);
+                break;
             }
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
@@ -399,10 +344,12 @@ void GameEngine::executeOrdersPhase() {
             if (p->getOrder()->getOrderList().empty())
                 playersWithoutOrders ++;
         }
-        if (playersWithoutOrders == NumberOfPlayers)
+        if (playersWithoutOrders == NumberOfPlayers) {
             allOrdersDone = true;
-        else
+        }
+        else {
             playersWithoutOrders = 0;
+        }
     }
     endexecuteOrdersPhase();
 }
@@ -431,69 +378,8 @@ void GameEngine::playAgain() {
 
 void GameEngine::transition(State transitionState) {
     *s = transitionState;
-    notify(this);}
-
-// THE FOLLOWING METHOD IS UNNECESSARY NOW, BUT WE SHOULD KEEP IT COMMENTED JUST IN CASE
-
-/*
-void GameEngine::gameStartupTransitions(string str) {
-    if (str == "loadmap" && (getState() == 1 || getState() == 2)) {
-        loadMap();
-    }
-    else if (str == "validatemap" && getState() == 2) {
-        validateMap();
-    }
-    else if (str == "addplayer" && (getState() ==3 || getState() == 4)) {
-       addPlayer();
-    }
-    else if (str == "assigncountries" && getState() ==4) {
-        assignCountries();
-        assignReinforcementPhase();
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
+    notify(this);
 }
-
-void GameEngine::gamePlayTransitions(string str, Player *p) {
-    if (str == "issueorder" && (*getState() == 5 || *getState() == 6)) {
-        issueOrdersPhase();
-    }
-    else if (str == "endissueorders" && *getState() == 6) {
-        endIssueOrderPhase();
-    }
-    else if (str == "execorder" && *getState() == 7) {
-        executeOrdersPhase();
-    }
-    else if (str == "endexecorders" && *getState() == 7) {
-        endexecuteOrdersPhase();
-    }
-    else if (str == "win" && *getState() == 7) {
-        winPhase(p);
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
-}
-
-void GameEngine::gameEndTransitions(string str) {
-    if (str == "end" && *getState() == 8) {
-        endPhase();
-    }
-    else if (str == "play" && *getState() == 8) {
-        playAgain();
-    }
-    else {
-        cout << "Invalid command!" << endl;
-    }
-
-    notify(this); // FROM SUBJECT
-}
-*/
 
 // Free method to determine whether an int vector contains a given int
 bool doesContain(vector<int> arr, int in) {
@@ -723,7 +609,7 @@ bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
     string input;
-    while (playing == true) {
+    while (playing) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
         executeOrdersPhase(); // Begin execute orders phase for all players
@@ -745,18 +631,13 @@ bool GameEngine::mainGameLoop() {
         string effect = "";
 
         if (command == "replay") {
-            //playAgain();
-
             effect = "Replaying game";
             cout << effect << "!" << endl;
             continueplaying = true;
 
-            *s = start; // Switch to start up for replay
             transition(start);
         }
         else if (command == "quit") {
-            //endPhase();
-
             effect = "Quitting game";
             cout << effect << "!" << endl;
             continueplaying = false;
@@ -787,7 +668,9 @@ bool GameEngine::checkForWinner() {
             return true;
         }
     }
-    cout<<"\nNo winner, therefore continue\n"<<endl;
+
+    cout << "\nNo winner, therefore continue\n" << endl;
+
     return false;
 }
 
@@ -797,15 +680,20 @@ void GameEngine::checkPlayers() {
     for (int i = 0; i <player_list.size(); i++) {
         int ordervalue = playerOrder[i];
         Player *p = player_list.at(ordervalue);
+
         if (p->getNumberOfTerritories() == 0) {
             cout << "\nPlayer " << p->getName() << " has been eliminated\n" <<endl;
             NumberOfPlayers = NumberOfPlayers - 1; // Lowers player count
             player_list.erase(player_list.begin() + playerOrder[i]); // Removes player from player_list
+
             for (int j = i; j <= player_list.size()-1; j++) { // Removes from playing order
                 playerOrder[j] = (playerOrder[j+1]);
             }
+
             for (int k = 0; k < player_list.size(); k++) { // Accommodates playerOrder for change in playerlist size
-                if (playerOrder[k] > ordervalue) playerOrder[k] = playerOrder[k] - 1;
+                if (playerOrder[k] > ordervalue) {
+                    playerOrder[k] = playerOrder[k] - 1;
+                }
             }
         }
     }
@@ -814,10 +702,12 @@ void GameEngine::checkPlayers() {
 // Check that a card type is in a specific hand
 int GameEngine::checkCardInHand(string type, Hand* h) {
     int index = 0; // Returns index of card in hand, -1 if card is not in hand
+
     for (Card* c : h->hand) {
         if (equalsIgnoreCase(c->getType(), type)) return index;
         index = index + 1;
     }
+
     return -1;
 }
 
@@ -826,8 +716,13 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
    // Change to lower case
    transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
    transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
-   if (s1 == s2) return true;
-   else return false;
+
+   if (s1 == s2) {
+       return true;
+   }
+   else {
+       return false;
+   }
 }
 
 // From Iloggable
