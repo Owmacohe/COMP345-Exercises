@@ -457,8 +457,6 @@ void GameEngine::startupPhase() {
 
         // Making sure the command is in fact valid
         if (processor->validate(temp)) {
-            string word1 = "";
-            string word2 = "";
             bool hasReachedSpace = false;
 
             // Splitting the input into words (if it can be split)
@@ -471,15 +469,18 @@ void GameEngine::startupPhase() {
                         word1 += i;
                     }
                 }
-                else {
+                else if (hasReachedSpace && word1 != "tournament") {
                     if (i != '<' && i != '>') {
                         word2 += i;
                     }
                 }
             }
 
+            if (word1 == "tournament") {
+
+            }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
-            if (word1 == "loadmap") {
+            else if (word1 == "loadmap") {
                 if (map != NULL) {
                     delete map;
                     map = NULL;
@@ -496,7 +497,7 @@ void GameEngine::startupPhase() {
 
                     NumberOfTerritories = m->getTerritories().size();
 
-                    *s = mapLoaded;
+                    transition(mapLoaded);
                 }
                 else {
                     effect = "Unable to load Map";
@@ -584,7 +585,7 @@ void GameEngine::startupPhase() {
 
                     for (Player* k : player_list) {
                         // Give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                        k->addToReinforcePool(50); //TODO :: im just using this todo to mark where its initialized to 50
+                        k->addToReinforcePool(50);
 
                         // Let each player draw 2 initial cards from the deck using the deck’s draw() method
                         k->getHand()->drawCard(*deck);
@@ -601,6 +602,7 @@ void GameEngine::startupPhase() {
 
         temp->saveEffect(effect);
     }
+
     notify(this); // FROM SUBJECT
 }
 

@@ -9,6 +9,8 @@ using namespace std;
 #include "../LoggingObserver/LoggingObserver.h"
 
 class GameEngine;
+class Map;
+class PlayerStrategy;
 
 // Class representing one Command that gets executed in (primarily) the startup phase
 class Command :public Iloggable, public Subject {
@@ -16,6 +18,7 @@ class Command :public Iloggable, public Subject {
         Command(); // Default constructor
         Command(string); // Parameterized constructor 1 (un-parameterized Commands)
         Command(string, string); // Parameterized constructor 2 (parameterized Commands)
+        Command(string, string, string, int, int); // Parameterized constructor 2 (tournament Commands)
         Command(const Command &c); // Copy constructor
         ~Command(); // Destructor
         friend ostream& operator<<(ostream &strm, const Command &c); // Stream insertion operator
@@ -50,9 +53,11 @@ class CommandProcessor : public Iloggable, public Subject {
         // Accessors
         GameEngine *getEngine();
         vector<Command*> getCommands();
+        vector<Map*> getMaps();
+        vector<PlayerStrategy*> getPlayerStrategies();
 
         // Mutators
-        void setEngine(GameEngine*), setCommands(vector<Command*>);
+        void setEngine(GameEngine*), setCommands(vector<Command*>), setMaps(vector<Map*>), setPlayerStrategies(vector<PlayerStrategy*>);
 
         Command *readCommand(); // Gets command from console
         void saveCommand(Command*); // Stores the gotten Command in the array
@@ -64,6 +69,10 @@ class CommandProcessor : public Iloggable, public Subject {
     protected:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         vector<Command*> commands; // Array of current and past Commands
+
+        vector<Map*> maps; // Maps for the tournament
+        vector<PlayerStrategy*> playerStrategies; // PlayerStrategies for the tournament
+        int numberOfGames, maxTurns; // Number of games and maximum number of turns for the tournament
 };
 
 // Class used by FileCommandProcessorAdapter to read sequential lines from a file

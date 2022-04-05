@@ -49,14 +49,14 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
     effect = "";
 
     if (c == "loadmap") {
-        this->addValidInState(1);
-        this->addValidInState(2);
+        addValidInState(1);
+        addValidInState(2);
         transitionsTo = "maploaded";
 
     }
     else if (c == "addplayer") {
-        this->addValidInState(3);
-        this->addValidInState(4);
+        addValidInState(3);
+        addValidInState(4);
         transitionsTo = "playersadded";
     }
     else {
@@ -64,6 +64,22 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
     }
 
     //cout << "[" + command + " Command parameterized constructor]" << endl;
+}
+
+// Command parameterized constructor 3 (tournament Commands)
+Command::Command(string c, string m, string p, int g, int d) : command(c + " -M <" + m + ">" + " -P <" + p + ">" + " -G <" + to_string(g) + ">" + " -D <" + to_string(d) + ">") {
+    if (c == "tournament") {
+        transitionsTo = "";
+        effect = "";
+
+        validIn = vector<int>();
+        addValidInState(1);
+    }
+    else {
+        cout << "Invalid command!" << endl;
+    }
+
+    //cout << "[" + command + " Command tournament constructor]" << endl;
 }
 
 // Command copy constructor
@@ -144,12 +160,18 @@ CommandProcessor::CommandProcessor() {
     engine = NULL;
     commands = vector<Command*>();
 
+    maps = vector<Map*>();
+    playerStrategies = vector<PlayerStrategy*>();
+
     //cout << "[CommandProcessor default constructor]" << endl;
 }
 
 // CommandProcessor parameterized constructor
 CommandProcessor::CommandProcessor(GameEngine *e) : engine(e) {
     commands = vector<Command*>();
+
+    maps = vector<Map*>();
+    playerStrategies = vector<PlayerStrategy*>();
 
     //cout << "[CommandProcessor parameterized constructor]" << endl;
 }
@@ -159,6 +181,11 @@ CommandProcessor::CommandProcessor(const CommandProcessor &cp) {
     engine = cp.engine;
     setCommands(cp.commands);
 
+    setMaps(cp.maps);
+    setPlayerStrategies(cp.playerStrategies);
+    numberOfGames = cp.numberOfGames;
+    maxTurns = cp.maxTurns;
+
     //cout << "[CommandProcessor copy constructor]" << endl;
 }
 
@@ -167,6 +194,16 @@ CommandProcessor::~CommandProcessor() {
     for (Command *i : commands) {
         delete i;
         i = NULL;
+    }
+
+    for (Map *j : maps) {
+        delete j;
+        j = NULL;
+    }
+
+    for (PlayerStrategy *k : playerStrategies) {
+        delete k;
+        k = NULL;
     }
 
     //cout << "[CommandProcessor destructor]" << endl;
@@ -199,14 +236,20 @@ ostream& CommandProcessor::write(ostream &strm) const {
 CommandProcessor& CommandProcessor::operator = (const CommandProcessor& toAssign) {
     engine = toAssign.engine;
     commands = toAssign.commands;
+
+    maps = toAssign.maps;
+    playerStrategies = toAssign.playerStrategies;
+    numberOfGames = toAssign.numberOfGames;
+    maxTurns = toAssign.maxTurns;
+
     return *this;
 }
 
 // Accessors
-vector<Command*> CommandProcessor::getCommands() {
-    return commands;
-}
 GameEngine *CommandProcessor::getEngine() { return engine; }
+vector<Command*> CommandProcessor::getCommands() { return commands; }
+vector<Map*> CommandProcessor::getMaps() { return maps; }
+vector<PlayerStrategy*> CommandProcessor::getPlayerStrategies() { return playerStrategies; }
 
 // Mutators
 void CommandProcessor::setEngine(GameEngine *e) { engine = e; }
@@ -216,10 +259,34 @@ void CommandProcessor::setCommands(vector<Command*> c) {
         i = NULL;
     }
 
-    c = vector<Command*>();
+    commands = vector<Command*>();
 
     for (Command *j : c) {
         commands.push_back(j);
+    }
+}
+void CommandProcessor::setMaps(vector<Map*> m) {
+    for (Map *i : maps) {
+        delete i;
+        i = NULL;
+    }
+
+    maps = vector<Map*>();
+
+    for (Map *j : m) {
+        maps.push_back(j);
+    }
+}
+void CommandProcessor::setPlayerStrategies(vector<PlayerStrategy*> ps) {
+    for (PlayerStrategy *i : playerStrategies) {
+        delete i;
+        i = NULL;
+    }
+
+    playerStrategies = vector<PlayerStrategy*>();
+
+    for (PlayerStrategy *j : ps) {
+        playerStrategies.push_back(j);
     }
 }
 
@@ -229,34 +296,60 @@ Command *CommandProcessor::readCommand() {
     fflush(stdin); // Making sure to flush the console
     getline(cin, temp);
 
-    string word1 = "";
-    string word2 = "";
-    bool hasReachedSpace = false;
+    vector<string> words = vector<string>();
+    string tempWord = "";
 
     // Splitting the input into words (if it can be split)
     for (char i : temp) {
-        if (!hasReachedSpace) {
-            if (i == ' ') {
-                hasReachedSpace = true;
-            }
-            else {
-                word1 += i;
-            }
+        if (i == ' ') {
+            words.push_back(tempWord);
         }
         else {
-            if (i != '<' && i != '>') {
-                word2 += i;
-            }
+            tempWord += i;
         }
     }
 
     // Single word command
-    if (word1 != "" && word2 == "") {
-        return new Command(word1);
+    if (words.size() == 1) {
+        return new Command(words[0]);
     }
     // Double word command
-    else if (word1 != "" && word2 != "") {
-        return new Command(word1, word2);
+    else if (words.size() == 2) {
+        return new Command(words[0], words[1]);
+    }
+    // Tournament command
+    else if (words.size() > 2) {
+        string mapWords, playerStrategyWords;
+        int tournamentParamNum;
+        MapLoader loader;
+
+        for (int j = 1; j < words.size(); j++) {
+            if (words[j] == "-M") {
+                tournamentParamNum = 0;
+            }
+            else if (words[j] == "-P") {
+                tournamentParamNum = 1;
+            }
+            else if (words[j] == "-G") {
+                numberOfGames = stoi(words[++j]);
+            }
+            else if (words[j] == "-D") {
+                maxTurns = stoi(words[++j]);
+            }
+            else {
+                if (tournamentParamNum == 0) {
+                    maps.push_back(loader.load(words[j]));
+                    mapWords += words[j] + " ";
+                }
+                else if (tournamentParamNum == 1) {
+                    PlayerStrategy *ps; // TODO: need to use proper PlayerStrategy construction
+                    playerStrategies.push_back(ps);
+                    playerStrategyWords += words[j] + " ";
+                }
+            }
+        }
+
+        return new Command(words[0], mapWords, playerStrategyWords, numberOfGames, maxTurns);
     }
     else {
         cout << "Invalid command!" << endl;

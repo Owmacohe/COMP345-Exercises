@@ -356,9 +356,9 @@ void Advance::validate() {
 void Advance::execute() {
     if (validated) {
         // Advance
+        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         if (validateResult == "move") {
             cout << "... Advance execute ";
-            origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
             cout << "successfully!\n" << endl;
         }
