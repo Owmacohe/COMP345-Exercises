@@ -174,4 +174,3 @@ int gameLoopMain() {
 //All of this except the issueOrder() method must be implemented in a single .cpp/.h file duo named GameEngine.cpp/GameEngine.h.
     return 0;
 }
-
