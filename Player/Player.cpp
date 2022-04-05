@@ -1,7 +1,10 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../Cards/Cards.h"
+#include "PlayerStrategy/PlayerStrategies.h"
 #include "Player.h"
+
+// TODO: constructor assigns Player Strategy to that player
 
 // Default constructor
 Player::Player() {
@@ -282,4 +285,17 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
         "\n    Players hand, " << *p.hand <<
         "\n    Players orders, " << *p.orders <<
         "\n    Players reinforcement pool has, " << p.reinforcePool << " armies"<<endl;
+}
+
+// Assignment 3 method
+vector<Territory*> Player::toDefend(Map *m, PlayerStrategies *ps) {
+    ps->toDefend();
+}
+
+vector<Territory*> Player::toAttack(Map *m, PlayerStrategies *ps) {
+    ps->toAttack();
+}
+
+void Player::issueOrder(PlayerStrategies *ps) {
+    ps->issueOrder();
 }

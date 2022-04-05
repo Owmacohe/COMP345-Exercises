@@ -116,7 +116,7 @@ int ordersMain() {
     cout << bomb1->stringToLog() << endl;
 
     // Target territory is your own territory -> failed
-    cout << "\n--------- Player 2 (Target belongs to another player)" << endl;
+    cout << "\n--------- Player 2 (Target belongs to player issuing)" << endl;
     Bomb* bomb2 = new Bomb(player1, Ontario_South, Ontario_North);
     cout << "Order: " << *bomb2 << endl;
     bomb2->validate();
@@ -133,6 +133,7 @@ int ordersMain() {
 
     cout << "\n-------------------- ADVANCE --------------------" << endl;
     // Attack
+    cout << "\n--------- Player 2 (Type Attack)" << endl;
     Advance* advance1 = new Advance(player2, Quebec_North, Quebec_Central);
     cout << "Order: " << *advance1 << endl;
     advance1->validate();
@@ -140,6 +141,7 @@ int ordersMain() {
     cout << advance1->stringToLog() << endl;
 
     // Move armies
+    cout << "\n--------- Player 2 (Type Move)" << endl;
     Advance* advance2 = new Advance(player2, Ontario_West, Manitoba_South);
     cout << "Order: " << *advance2 << endl;
     advance2->validate();
@@ -147,6 +149,7 @@ int ordersMain() {
     cout << advance2->stringToLog() << endl;
 
     // Territories are not adjacent
+    cout << "\n--------- Player 1 (Origin & Target are not adjacent)" << endl;
     Advance* advance3 = new Advance(player1, Ontario_North, Quebec_North);
     cout << "Order: " << *advance3 << endl;
     advance3->validate();
@@ -175,8 +178,8 @@ int ordersMain() {
     blockade2->execute();
     cout << blockade2->stringToLog() << endl;
 
-    // Target territory belongs to enemy -> failed + The effect of Neural Player persist
-    cout << "\n--------- Player 2 (Territory under ownership of Neutral Player, cannot be blocked)" << endl;
+    // The effect of Neural Player persist
+    cout << "\n--------- Player 2" << endl;
     Blockade* blockade3 = new Blockade(player2, Quebec_Central);
     cout << "Order: " << *blockade3 << endl;
     blockade3->validate();
@@ -192,9 +195,12 @@ int ordersMain() {
     cout << bomb4->stringToLog() << endl;
 
     // Territory is under protection of blockade -> failed
+    cout << "\n--------- Player 1 (Territory under blockade protection + territory does not belong to playerIssuing)" << endl;
     Advance* advance5 = new Advance(player1,Quebec_North , Quebec_Central);
     cout << "Order: " << *advance5 << endl;
     advance5->validate();
+    advance5->execute();
+    cout << advance5->stringToLog() << endl;
 
     cout << "\n-------------------- NEGOTIATE --------------------" << endl;
     cout << "\n--------- Player 1 & Player 2" << endl;
@@ -220,8 +226,8 @@ int ordersMain() {
     bomb5->execute();
     cout << bomb5->stringToLog() << endl;
 
-    // Target territory is under negotiate, cannot be attack -> failed
-    cout << "\n--------- Player 1 (Territory is in negotiation, cannot be attacked)" << endl;
+
+    cout << "\n--------- Player 1" << endl;
     Advance* advance6 = new Advance(player1,Ontario_South, Quebec_South);
     cout << "Order: " << *advance6 << endl;
     advance6->validate();
