@@ -88,7 +88,7 @@ Deploy::Deploy(Player *p, Territory *target) : Order(false, "deploy") {
     playerIssuing = p;
     target = target;
 
-    // Condition checked: If there's no more armies to airlift
+    // Condition checked: If there's no more armies to deploy
     if (p->getReinforcePool() == 0) {
         numToDeploy = 0;
     } else {
@@ -161,6 +161,7 @@ void Deploy::validate() {
 
 void Deploy::execute() {
     cout << "... Deploy ";
+    // In the gameEngine all deploy orders are executed at the same time, so each execution must deploy to a new territory
     target = playerIssuing->toDefend(this->game->getMap()).at(0);
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
@@ -242,7 +243,7 @@ Advance::Advance(Player* p) : Order(false, "advance") {
     }
 }
 
-Advance::Advance(Player* p, Territory* origin, Territory* target) {
+Advance::Advance(Player* p, Territory* origin, Territory* target) : Order(false, "advance") {
     playerIssuing = p;
     this->origin = origin;
     this->target = target;
@@ -320,13 +321,13 @@ void Advance::validate() {
         cout << "Invalid! - Territories are not adjacent" << endl;
         validated = false;
     }
-    // Check if Territory belongs to the Player
+    // Check if there's no more armies left to advance
     else if (numToAdvance == 0 ) {
         cout << "Invalid! - No more armies left to advance" << endl;
         validated = false;
     }
     // Condition checked: If origin is owned by Player && target and origin are adjacent
-    // Sub-condition: If target is owned by Player Issuing (Yes: Advance || No: Attack)
+    // Sub-condition: If target is owned by Player Issuing (Yes: Move || No: Attack)
     else {
         // Yes: Target is owned by player issuing -> Move armies
         if (target->getOwnerName() == playerIssuing->getName()){
@@ -355,6 +356,7 @@ void Advance::validate() {
 
 void Advance::execute() {
     if (validated) {
+        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         // Advance
         origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         if (validateResult == "move") {
@@ -371,17 +373,13 @@ void Advance::execute() {
             bool isExhaust = false;
             while (!isExhaust){
                 int numToAdvance2 = numToAdvance;
-                // numToAdvance = attacker | target armies = defender
+                // numToAdvance is the attacker && target armies is the defender
 
                 defend_die = deathCalculation(numToAdvance2,0.6);
                 defend_alive = target->getArmies() - defend_die;
-//                cout << "Enemy's armies: " << target->getArmies() << " die: " << defend_die << endl;
-//                cout << "Enemy's alive: " << defend_alive << endl;
 
                 attack_die = deathCalculation(target->getArmies(), 0.7);
                 attack_alive = numToAdvance2 - attack_die;
-//                cout << "Player's armies: " << numToAdvance << " die: " << attack_die << endl;
-//                cout << "Player's alive: " << attack_alive <<endl;
 
                 target->setArmies(defend_alive);
                 numToAdvance2 = attack_alive;
