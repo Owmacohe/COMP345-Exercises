@@ -218,7 +218,9 @@ void GameEngine::issueOrdersPhase() {
         int num = p->getReinforcePool();
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
+
         for (int j = 0; j < num; i++) {
+
             p->issueOrder("deploy");
             cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
@@ -365,6 +367,7 @@ void GameEngine::endexecuteOrdersPhase() {
 void GameEngine::winPhase(Player *p) {
     transition(win);
     cout << "Victory for player: " << p->getName() << endl;
+    // TODO DO A DRAWPHASE()?
 }
 
 void GameEngine::endPhase() {
@@ -418,6 +421,7 @@ void GameEngine::startupPhase() {
 
         cout << "Please give a command: " << endl;
     }
+
     // Creating a new FileCommandProcessorAdapter if reading from a file
     else {
         cout << "Please provide the file name to read from:" << endl;
@@ -471,7 +475,12 @@ void GameEngine::startupPhase() {
             isTournament = true;
 
             for (int j = 0; j < processor->getNumberOfGames(); j++) {
+                gameNumber = j;
+                mapNumber = 0;
+
                 for (string k : processor->getMaps()) {
+                    mapNumber++;
+
                     if (j > 0) {
                         s = new State;
                         *s = null;
@@ -505,8 +514,6 @@ void GameEngine::startupPhase() {
 
                     mainGameLoop();
 
-                    // TODO: save tournament attributes
-
                     if (j < processor->getMaps().size() - 1) {
                         delete deck;
                         deck = NULL;
@@ -531,6 +538,8 @@ void GameEngine::startupPhase() {
             }
 
             // TODO: save tournament's effect
+            effect = "This will print the Results table, loop through 2D vector and add pretty lines";
+            temp->saveEffect(effect);
         }
         else {
             startupCommands(true, false);
@@ -720,7 +729,7 @@ bool GameEngine::mainGameLoop() {
     bool continueplaying;
     string input;
     while (playing) {
-        // TODO: restrict number of turns to processor->getMaxTurns()
+        // TODO: restrict number of turns to processor->getMaxTurns() --- MJ: we can put it in check for winner since it does it every turn, then in Winphase
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
         executeOrdersPhase(); // Begin execute orders phase for all players
@@ -764,6 +773,10 @@ bool GameEngine::mainGameLoop() {
 
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
+    // TODO : Check the counter of turns here instead of going through the loop etc
+    // return true if already reached max so has to be draw
+    // winphase() with no player? and then save 'Draw in results'
+
     int lost = 0;
     for (Player* p : player_list) {
         string player = p->getName();
