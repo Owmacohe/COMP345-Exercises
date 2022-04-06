@@ -527,6 +527,45 @@ void GameEngine::startupPhase() {
                     cout << effect << "!" << endl;
                 }
                 else {
+//                    // 4 strategies
+//                    int strategyType;
+//
+//                    cout << "" << endl;
+//                    cout << "Assigning player strategies " << endl;
+//                    int chooseType;
+//
+//                    for (int i = 0; i < player_list.size(); i++) {
+//
+//                        cout<<"Please choose a strategy for player  "<< player_list[i]->getName() <<endl;
+//                        cout<<"Aggressive == 0 : Enter 0 "<<endl;
+//                        cout<<"Benevolent == 1 : Enter 1"<<endl;
+//                        cout<<"Neutral == 2 : Enter 2"<<endl;
+//                        cout<<"Cheater == 3 : Enter 3"<<endl;
+//                        cout<<"Human == 4: Enter 4"<<endl;
+//                        cin>>chooseType;
+//
+//                        if ( chooseType== 0) // Aggresive
+//                        {
+//                            player_list[i]->setStrategy(new AggressivePlayerStrategy);
+//                            cout << "Aggressive" << endl;
+//                        } else if (chooseType == 1) //Benevolent
+//                        {
+//                            player_list[i]->setStrategy(new BenevolentPlayerStrategy);
+//                            cout << "Benevolent" << endl;
+//                        } else if (chooseType == 2) //Neutral
+//                        {
+//                            player_list[i]->setStrategy(new NeutralPlayerStrategy);
+//                            cout << "Neutral" << endl;
+//                        } else if (chooseType == 3)//Cheater
+//                        {
+//                            player_list[i]->setStrategy(new Cheater);
+//                            cout << "Cheater" << endl;
+//                        }
+//                        else{
+//                            player_list[i]->setStrategy(new HumanPlayerStrategy);
+//                            cout << "Human" << endl;
+//                        }
+
                     if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                         Player *p = new Player(word2);
                         player_list.push_back(p);
