@@ -7,9 +7,8 @@
 
 int gameEngineMain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine;
+    Order::game = gameEngine; // TODO: what is this line for?
 
-    string input;
     bool isPlaying = true;
 
     while (isPlaying) {
