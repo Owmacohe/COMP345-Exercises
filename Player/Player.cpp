@@ -191,6 +191,18 @@ void Player::issueOrder(string type) {
         cout << "Invalid order" << endl;
     }
 }
+// Return bool based on if territory is owned by player
+Territory* Player::checkTerritoryOwn(string name) {
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+    for (Territory* t : territories) {
+        string comparename = t->getName();
+        transform(comparename.begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
+        if (name == comparename) return t;
+    }
+    return NULL;
+
+}
 
 // Return number of armies player has
 int Player::getNumberOfArmies() {
@@ -233,6 +245,7 @@ OrdersList* Player::getDeployList() { return deployList; }
 
 void Player::addToReinforcePool(int armies) { reinforcePool += armies; }
 void Player::removeFromReinforcePool(int armies) { reinforcePool = reinforcePool - armies; }
+void Player::addOrderList(Order *o) { orders->addOrder(o); }
 
 // Mutators and Accessors
 void Player::setName(string n) { name = n; }
@@ -247,12 +260,14 @@ void Player::removeTerritory(int index) { territories.erase(territories.begin()+
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
 void Player::setReinforcementPool(int armies) { reinforcePool = armies; }
+void Player::setStrategy(PlayerStrategies* ps) { playerStrategy = ps; }
 
 string Player::getName() { return name; }
 vector<Territory*> Player::getTerritoryList() { return territories; }
 Hand* Player::getHand() { return hand; }
 OrdersList* Player::getOrder() { return orders; }
 int Player::getReinforcePool(){ return reinforcePool; }
+PlayerStrategies* Player::getPlayerStrategy() { return playerStrategy; }
 
 // End of Mutators and Accessors
 
@@ -289,13 +304,13 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
 
 // Assignment 3 method
 vector<Territory*> Player::toDefend(Map *m, PlayerStrategies *ps) {
-    ps->toDefend();
+    ps->toDefend(m);
 }
 
 vector<Territory*> Player::toAttack(Map *m, PlayerStrategies *ps) {
-    ps->toAttack();
+    ps->toAttack(m);
 }
 
-void Player::issueOrder(PlayerStrategies *ps) {
-    ps->issueOrder();
+void Player::issueOrder(string input, PlayerStrategies *ps) {
+    ps->issueOrder(input);
 }

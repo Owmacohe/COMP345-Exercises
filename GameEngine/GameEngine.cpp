@@ -201,6 +201,7 @@ void GameEngine::assignReinforcementPhase() {
 
 // Issue order phase
 void GameEngine::issueOrdersPhase() {
+    //TODO :: fix changes done for advances and wether they play cards and blah blah
     *s = issueOrder;
     string input;
     string response;
@@ -217,9 +218,9 @@ void GameEngine::issueOrdersPhase() {
         int num = p->getReinforcePool();
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
-        for (int i = 0; i < num; i++) { // TODO: this shouldn't also be named i!!!
+        for (int j = 0; j < num; i++) {
             p->issueOrder("deploy");
-            cout << "Deploy of army " << i + 1 << "/" << num << " issued" << endl;
+            cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
 
         // Issue advance orders

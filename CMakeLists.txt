@@ -31,4 +31,5 @@ add_executable(
         Player/PlayerDriver.cpp
         PlayerStrategy/PlayerStrategies.h
         PlayerStrategy/PlayerStrategies.cpp
-        )
+)
+
