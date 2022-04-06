@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 class Player;
 class Territory;
 class Order;
@@ -24,6 +25,9 @@ class PlayerStrategies {
         // Copy constructor
         PlayerStrategies(const PlayerStrategies& other);
 
+        //Accessor
+        virtual Player *getPlayer();
+  
         virtual void issueOrder(string type) = 0;
         virtual vector<Territory*> toAttack(Map* m) = 0;
         virtual vector<Territory*> toDefend(Map* m) = 0;
@@ -33,7 +37,7 @@ class PlayerStrategies {
 
         // Stream insertion operator Overload
         friend std::ostream& operator<< (std::ostream& os, const PlayerStrategies& ps);
-
+  
     private:
         Player* p;
 };
