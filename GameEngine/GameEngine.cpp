@@ -201,17 +201,13 @@ void GameEngine::assignReinforcementPhase() {
 
 // Issue order phase
 void GameEngine::issueOrdersPhase() {
-    //TODO :: fix changes done for advances and wether they play cards and blah blah
     *s = issueOrder;
     string input;
     string response;
-    int deployed = 0;
-    int hasMoreTroops = 0;
 
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
-        bool goodinput = false;
 
         cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
@@ -221,31 +217,15 @@ void GameEngine::issueOrdersPhase() {
 
         for (int j = 0; j < num; i++) {
 
-            p->issueOrder("deploy");
+            p->issueOrder("deploy", p->getPlayerStrategy());
             cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
 
         // Issue advance orders
         cout << "\n" << p->getName() << "'s turn" << endl;
         cout << "\nIssuing advance orders" << endl;
-        while (!goodinput) {
-            cout << "\nWould " << p->getName() << " like to issue an Advance order ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                goodinput = true;
-                p->issueOrder("advance");
-                break;
-            }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
-                goodinput = true;
-                break;
-            }
-            else {
-                cout<< "Invalid input !" <<endl;
-                break;
-            }
-        }
-        goodinput = false;
+        p->issueOrder("advance", p->getPlayerStrategy());
+
         // Issue card orders
         cout << "\nIssuing card orders" << endl;
         while (!goodinput) {
