@@ -59,14 +59,14 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Map* m) {
     bool flag = false;
     while (flag == false) {
         for (Territory* t : territories) {
-            if (equalsIgnoreCase(t->getName(), input)) {
+            if (equalsIgnoreCase(t->getName(), input) && (t->getOwner()->getName() != p->getName())) {
                 returnTerritories.push_back(t);
                 flag = true;
                 break;
             }
         }
         if (flag == false) {
-            cout << "\nInvalid input " << p->getName() << "Player does not own territory ! Try Again." << endl;
+            cout << "\nInvalid input ! Try Again." << endl;
             cin >> input;
         }
     }
