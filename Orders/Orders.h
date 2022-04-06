@@ -35,10 +35,7 @@ class Order :public Iloggable, public Subject {
         virtual void execute() = 0; //Pure virtual execute function
 
         // From Iloggable
-
         string stringToLog();
-        // string stringToLog() override; TODO SOMEONE ADDED THE KEYWORD, ILL CHECK IT AFTER - MJ
-
 
         bool validated; // Status of validation54
         string description; // Description of the Order

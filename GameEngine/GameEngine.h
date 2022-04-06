@@ -100,5 +100,13 @@ class GameEngine : public Iloggable, public Subject {
         int currentPlayer;
         Player* neutralPlayer;
 
+        // Tournament
         bool isTournament;
+        /// Track the game being played
+        int gameNumber;
+        /// Track the map being played
+        int mapNumber;
+        /// Store the results of each game
+        vector<string> results;
+
 };
