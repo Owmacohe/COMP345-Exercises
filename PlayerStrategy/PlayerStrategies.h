@@ -1,29 +1,36 @@
 #pragma once
+
 #include <vector>
+#include <iostream>
+#include <vector>
+
+using namespace std;
 
 class Player;
 class Territory;
 
 class PlayerStrategies {
-public:
-    // Default constructor
-    PlayerStrategies();
+    public:
+        // Default constructor
+        PlayerStrategies();
 
-    // Copy constructor
-    PlayerStrategies(const PlayerStrategies& other);
+        // Copy constructor
+        PlayerStrategies(const PlayerStrategies& other);
 
-    virtual void issueOrder() = 0;
-    virtual std::vector<Territory*> toAttack() = 0;
-    virtual std::vector<Territory*> toDefend() = 0;
+        // Accessor
+        virtual Player *getPlayer();
 
-    // Assignment Operator Overload
-    const PlayerStrategies& operator= (const PlayerStrategies &ps);
+        virtual void issueOrder() = 0;
+        virtual std::vector<Territory*> toAttack() = 0;
+        virtual std::vector<Territory*> toDefend() = 0;
 
-    // Stream insertion operator Overload
-    friend std::ostream& operator<< (std::ostream& os, const PlayerStrategies& ps);
+        // Assignment Operator Overload
+        const PlayerStrategies& operator= (const PlayerStrategies &ps);
 
-private:
-    Player* p;
+        // Stream insertion operator Overload
+        friend std::ostream& operator<< (std::ostream& os, const PlayerStrategies& ps);
+    private:
+        Player* p;
 };
 
 class HumanPlayerStrategy : PlayerStrategies{

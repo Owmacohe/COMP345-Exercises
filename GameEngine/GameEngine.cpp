@@ -4,6 +4,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../PlayerStrategy/PlayerStrategies.h"
 
 class OrdersList;
 class Player;
@@ -392,10 +393,7 @@ bool doesContain(vector<int> arr, int in) {
     return false;
 }
 
-// Reads (startup) commands sequentially from the console
 void GameEngine::startupPhase() {
-    transition(start);
-
     cout << "Welcome to Warzone!" << endl;
 
     // Creating the (possibly unused) FileCommandProcessorAdapter
@@ -446,17 +444,117 @@ void GameEngine::startupPhase() {
     processor->setEngine(this);
     setProcessor(processor);
 
-    while (*s < 5) {
-        cout << "Enter a command: " << endl;
+    transition(start);
 
-        // Getting the next Command, and accessing it for local use
-        processor->getCommand();
+    cout << "Enter a command: " << endl;
+
+    // Getting the next Command, and accessing it for local use
+    processor->getCommand();
+    Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
+
+    string effect = "";
+
+    // Making sure the command is in fact valid
+    if (processor->validate(temp)) {
+        // Splitting the input into words (if it can be split)
+        for (char i : temp->getCommand()) {
+            if (i == ' ') {
+                break;
+            }
+            else {
+                word1 += i;
+            }
+        }
+
+        if (word1 == "tournament") {
+            isTournament = true;
+
+            for (int j = 0; j < processor->getNumberOfGames(); j++) {
+                for (string k : processor->getMaps()) {
+                    if (j > 0) {
+                        s = new State;
+                        *s = null;
+                        NumberOfPlayers = 0;
+                        NumberOfTerritories = 0;
+                        deck = new Deck(20);
+                        player_list = vector<Player*>();
+                        map = NULL;
+                        alliances = set<pair<Player*, Player*>>();
+
+                        // Add Neutral Player to Game
+                        neutralPlayer = new Player();
+                        neutralPlayer->setName("Neutral");
+
+                        transition(start);
+                    }
+
+                    processor->saveCommand(new Command("loadmap", k));
+                    startupCommands(true, true);
+
+                    processor->saveCommand(new Command("validatemap"));
+                    startupCommands(true, true);
+
+                    for (string ps : processor->getPlayerStrategies()) {
+                        processor->saveCommand(new Command("addplayer", ps)); // TODO: need to construct PlayerStrategy properly
+                        startupCommands(true, true);
+                    }
+
+                    processor->saveCommand(new Command("gamestart"));
+                    startupCommands(true, true);
+
+                    mainGameLoop();
+
+                    // TODO: save tournament attributes
+
+                    if (j < processor->getMaps().size() - 1) {
+                        delete deck;
+                        deck = NULL;
+
+                        for (Player* p : player_list) {
+                            delete p;
+                            p = NULL;
+                        }
+
+                        delete map;
+                        map = NULL;
+
+                        for (auto x : alliances) {
+                            x.first = NULL;
+                            x.second = NULL;
+                        }
+
+                        delete neutralPlayer;
+                        neutralPlayer = NULL;
+                    }
+                }
+            }
+
+            // TODO: save tournament's effect
+        }
+        else {
+            startupCommands(true, false);
+        }
+    }
+}
+
+// Reads (startup) commands sequentially from the console
+void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
+    while (*s < 5) {
+        if (!skipFirstGetCommand) {
+            cout << "Enter a command: " << endl;
+
+            // Getting the next Command
+            processor->getCommand();
+        }
+
+        // Accessing it for local use
         Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
         string effect = "";
 
         // Making sure the command is in fact valid
         if (processor->validate(temp)) {
+            string word1, word2;
             bool hasReachedSpace = false;
 
             // Splitting the input into words (if it can be split)
@@ -469,18 +567,14 @@ void GameEngine::startupPhase() {
                         word1 += i;
                     }
                 }
-                else if (hasReachedSpace && word1 != "tournament") {
+                else {
                     if (i != '<' && i != '>') {
                         word2 += i;
                     }
                 }
             }
-
-            if (word1 == "tournament") {
-
-            }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
-            else if (word1 == "loadmap") {
+            if (word1 == "loadmap") {
                 if (map != NULL) {
                     delete map;
                     map = NULL;
@@ -598,9 +692,22 @@ void GameEngine::startupPhase() {
                     transition(assignReinforcement);
                 }
             }
+            else {
+                // TODO: reject other Commands
+            }
+        }
+        else {
+            // TODO: reject invalid Commands
         }
 
         temp->saveEffect(effect);
+
+        if (runOnce) {
+            break;
+        }
+        else {
+            skipFirstGetCommand = false;
+        }
     }
 
     notify(this); // FROM SUBJECT
@@ -612,6 +719,7 @@ bool GameEngine::mainGameLoop() {
     bool continueplaying;
     string input;
     while (playing) {
+        // TODO: restrict number of turns to processor->getMaxTurns()
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
         executeOrdersPhase(); // Begin execute orders phase for all players
@@ -622,7 +730,7 @@ bool GameEngine::mainGameLoop() {
         playing = !checkForWinner(); // Check for winner
     }
 
-    while (*s == 8) {
+    while (!isTournament && *s == 8) {
         cout << "Replay or quit? " << endl;
 
         processor->getCommand();

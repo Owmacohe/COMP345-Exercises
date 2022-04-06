@@ -1,8 +1,7 @@
 #include "PlayerStrategies.h"
-#include <iostream>
-#include <vector>
 
-using namespace std;
+Player *PlayerStrategies::getPlayer() { return p; }
+
 /****************************** Human Player Strategy*******************************/
 /* requires user interactions to make decisions
  */

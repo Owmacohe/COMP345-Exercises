@@ -53,7 +53,7 @@ class GameEngine : public Iloggable, public Subject {
         void setProcessor(CommandProcessor*);
         void setMap(Map*);
         void setDeck(Deck*);
-        void setAlliances (const  set<pair<Player*, Player*>> all);
+        void setAlliances (const  set<pair<Player*, Player*>>);
         void addAlliances(Player*, Player*);
         void resetAlliances();
         void setPlayerOrder(vector<int>);
@@ -75,7 +75,8 @@ class GameEngine : public Iloggable, public Subject {
         void gamePlayTransitions(string, Player*);
         void gameEndTransitions(string);
 
-        void startupPhase(); // Reads (startup) commands sequentially from the console
+        void startupPhase();
+        void startupCommands(bool, bool); // Reads (startup) commands sequentially from the console
 
         // Checks
         bool checkForWinner();
@@ -98,4 +99,6 @@ class GameEngine : public Iloggable, public Subject {
         vector<int> playerOrder;
         int currentPlayer;
         Player* neutralPlayer;
+
+        bool isTournament;
 };
