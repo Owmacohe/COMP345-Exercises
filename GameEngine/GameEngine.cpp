@@ -477,6 +477,11 @@ void GameEngine::startupPhase() {
             }
 
             if (word1 == "tournament") {
+            // TODO : Owen so here we would create the command with all additional parameters, create players and their strategy
+            // I think making a command an attribute of the GameEngine could be a good way to keep how many Maps and Games we have to do, but also other attributes in GameEngine to keep track of where we are at
+            // Then load Map 1 for Game 1, run the game until D turns then DRAW --> this Draw info I will keep it in a 2D Vector that is an attribute of GameEngine
+            // Then keep same map but reset all territories and armies (this could be a method, like 'ResetPhase', then redo the startup
+            //  The logging is pretty easy, I will just have a condition to see if it is tournament and it will print the Command info and at the end I will add the results table form the 2D vector
 
             }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
