@@ -29,4 +29,6 @@ add_executable(
         Player/Player.h
         Player/Player.cpp
         Player/PlayerDriver.cpp
-        )
+        PlayerStrategy/PlayerStrategies.h
+        PlayerStrategy/PlayerStrategies.cpp
+)
