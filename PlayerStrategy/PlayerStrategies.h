@@ -73,8 +73,8 @@ class AggressivePlayerStrategy : PlayerStrategies{
         AggressivePlayerStrategy(const AggressivePlayerStrategy& other);
 
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
+        std::vector<Territory*> toAttack(Map* m) override;
+        std::vector<Territory*> toDefend(Map* m) override;
 
         //Assignment Operator Overload
         const AggressivePlayerStrategy& operator= (const AggressivePlayerStrategy& aggressivePs);
@@ -95,8 +95,8 @@ class BenevolentPlayerStrategy : PlayerStrategies{
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other);
 
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
+        std::vector<Territory*> toAttack(Map* m) override;
+        std::vector<Territory*> toDefend(Map* m) override;
 
         //Assignment Operator Overload
         const BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy& benevolentPs);
@@ -139,8 +139,8 @@ class CheaterPlayerStrategy : PlayerStrategies{
         CheaterPlayerStrategy(const CheaterPlayerStrategy& other);
 
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
+        std::vector<Territory*> toAttack(Map* m) override;
+        std::vector<Territory*> toDefend(Map* m) override;
 
         //Assignment Operator Overload
         const CheaterPlayerStrategy& operator= (const CheaterPlayerStrategy& cheaterPs);
