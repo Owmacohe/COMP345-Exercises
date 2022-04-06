@@ -5,7 +5,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "Orders.h"
 
-int ordersMain() {
+int Ordersmain() {
 
     /****************************** CREATING A GAME *******************************/
 

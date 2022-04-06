@@ -203,7 +203,7 @@ LogObserver* Subject::logObs=logger;
         cout << "In output file : Added the Order deploy to MJ's OrderList." << endl;
         cout << "In output file : Added the Order deploy to Audrey's OrderList." << endl;
         player1->getOrder()->addOrder(deploy1);
-        player1->getOrder()->addOrder(deploy2);
+        player2->getOrder()->addOrder(deploy2);
         player1->getOrder()->addOrder(deploy3);
 
         cout << "\n-------------------- Order::execute() --------------------" << endl;

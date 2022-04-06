@@ -156,7 +156,7 @@ void Deploy::validate() {
 
 void Deploy::execute() {
     cout << "... Deploy ";
-    target = playerIssuing->toDefend(this->game->getMap()).at(0);
+   // target = playerIssuing->toDefend(this->game->getMap()).at(0);
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
@@ -342,9 +342,9 @@ void Advance::validate() {
 void Advance::execute() {
     if (validated) {
         // Advance
+        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         if (validateResult == "move") {
             cout << "... Advance execute ";
-            origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
             cout << "successfully!\n" << endl;
         }
@@ -899,7 +899,7 @@ string Negotiate::stringToLog() {
 
     string logStringPlayer = "(Player " + playerIssuing->getName() + ")\n";
     if (validated){
-        logStringOrder = "Negotiate " + validation + ": an alliance is form between " + playerIssuing->getName() + " and " + targetPlayer->getName()
+        logStringOrder = "Negotiate " + validation + ": an alliance is formed between " + playerIssuing->getName() + " and " + targetPlayer->getName()
                          + " - cannot attack each other \n";
     } else {
         logStringOrder = "Negotiate " + validation + ": no alliance is formed between " + playerIssuing->getName() + " and " + targetPlayer->getName()+ "\n";
