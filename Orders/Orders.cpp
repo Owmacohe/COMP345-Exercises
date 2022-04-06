@@ -204,17 +204,8 @@ Advance::Advance() : Order(false, "advance") {
 }
 
 // Parameterize Constructor
-Advance::Advance(Player* p) : Order(false, "advance") {
+Advance::Advance(Player* p, string input) : Order(false, "advance") {
     playerIssuing = p;
-
-    string input = "";
-    int x =  rand() % 2;
-
-    if (x == 0) {
-        input = "move";
-    } else {
-        input = "attack";
-    }
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {

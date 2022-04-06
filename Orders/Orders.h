@@ -79,7 +79,7 @@ class Deploy : public Order {
 class Advance : public Order {
     public:
         Advance(); // Constructor
-        Advance(Player* p);  // Parameterized Constructor
+        Advance(Player* p, string input);  // Parameterized Constructor
         Advance(Player* p, Territory* origin, Territory* target);
         Advance(const Advance& original);  // Copy Constructor
         ~Advance(); //Destructor
