@@ -2,6 +2,7 @@
 #include "../Orders/Orders.h"
 #include "../Player/Player.h"
 #include "../Map/Map.h"
+#include "../Cards/Cards.h"
 
 Player *PlayerStrategies::getPlayer() { return p; }
 
@@ -35,7 +36,28 @@ void HumanPlayerStrategy::issueOrder(string type) {
             p->addOrderList(a);
         }
     }
-        // Orders that involve card will be issued using playCard()
+    //TODO :: i have it just as card because the actually type doesnt matter because the player will pick anyway and thats what gets issued
+    else if (type == "card") {
+        int index = -1;
+        cout << "\nWhich card would you like to play ? (airlift, bomb, blockade, negotiate, none)" << endl;
+        cin >> input;
+
+        if (!equalsIgnoreCase("none", input)) {
+            while (index < 0) {
+                index = checkCardInHand(input, p->getHand());
+                if (index >= 0) {
+                    //TODO :: we can just add deck to the parameter that wouldnt be tooo weird
+                    p->getHand()->playCard(index, *deck, *p->getOrder(), p); //TODO :: i feel like it would make more sense do this in issue order because its unique to the strategies but issues
+                    break;
+                }
+                else {
+                    cout << "\nInvalid input" << p->getName() << " does not have that card type in hand"
+                         << " ! Try Again." << endl;
+                    cin >> input;
+                }
+            }
+        }
+    }
     else {
         cout << "Invalid order" << endl;
     }
@@ -116,7 +138,15 @@ void AggressivePlayerStrategy::issueOrder(string type) {
         Advance* a = new Advance(p, "attack");
         p->addOrderList(a);
     }
-        // Orders that involve card will be issued using playCard()
+        // Orders that involve card will be issued using playCard() //TODO:: add the car play, would only play aggressive cards
+        //TODO :: logic check if they have any aggressive card then play aggressive card else dont play card
+    else if (type == "card") {
+        int index = -1;
+        index = checkCardInHand(type, p->getHand());
+        if (index >= 0) {
+            p->getHand()->playCard(index, *deck, *p->getOrder(), p); //TODO :: i feel like it would make more sense do this in issue order because its unique to the strategies but issues
+        }
+    }
     else {
         cout << "Invalid order" << endl;
     }
@@ -280,4 +310,16 @@ bool equalsIgnoreCase(string s1, string s2) {
     else {
         return false;
     }
+}
+
+// Check that a card type is in a specific hand
+int checkCardInHand(string type, Hand* h) {
+    int index = 0; // Returns index of card in hand, -1 if card is not in hand
+
+    for (Card* c : h->hand) {
+        if (equalsIgnoreCase(c->getType(), type)) return index;
+        index = index + 1;
+    }
+
+    return -1;
 }

@@ -12,8 +12,10 @@ class Player;
 class Territory;
 class Order;
 class Map;
+class Hand;
 
 bool equalsIgnoreCase(string, string);
+int checkCardInHand(string, Hand*);
 
 class PlayerStrategies {
     public:
