@@ -573,7 +573,6 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
                     }
                 }
             }
-
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
             if (word1 == "loadmap") {
                 if (map != NULL) {

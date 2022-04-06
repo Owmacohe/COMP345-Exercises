@@ -1,13 +1,20 @@
 #include "LoggingObserver.h"
 
 /****************************** Iloggable *******************************/
+
+Iloggable::Iloggable() {};
+
+Iloggable::~Iloggable() {};
+
 string Iloggable::stringToLog(){
     return "";
 }
 
 /****************************** Observer *******************************/
-Observer::Observer() { }; // Constructor
-Observer::~Observer() { }; // Destructor
+
+Observer::Observer() { };
+
+Observer::~Observer() { };
 
 /****************************** LogObserver *******************************/
 
@@ -23,16 +30,20 @@ LogObserver::LogObserver(string name) {
 
 LogObserver::~LogObserver() {
     outputFile.close();
-} // Destructor
+}
 
 void LogObserver::update(Iloggable* il) {
-//    cout << "writing stringToLog to output file." << endl;
     outputFile << (*il).stringToLog() << "\n";
 }
 
 /****************************** Subject *******************************/
+
 Subject::Subject() { }
-Subject::~Subject() { };  // Destructor
+
+Subject::~Subject() { };
+
 LogObserver* Subject::getLogObserver(){ return logObs; }
+
 void Subject::setLogObserver(LogObserver* lo){ logObs = lo; }
+
 void Subject::notify(Iloggable* il){ logObs->update(il); }

@@ -53,7 +53,7 @@ class GameEngine : public Iloggable, public Subject {
         void setProcessor(CommandProcessor*);
         void setMap(Map*);
         void setDeck(Deck*);
-        void setAlliances (const  set<pair<Player*, Player*>> all);
+        void setAlliances (const  set<pair<Player*, Player*>>);
         void addAlliances(Player*, Player*);
         void resetAlliances();
         void setPlayerOrder(vector<int>);

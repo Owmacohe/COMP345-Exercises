@@ -8,10 +8,18 @@
 
 using namespace std;
 
-class Player; // Forward declaration of Player
+/// Forward declaration of Player
+class Player;
 
-bool doesContain(vector<string>, int, string); // Free method to determine whether a string vector contains a given string
-vector<string> stringSplit(string, char); // Free method to split a given string into a string vector based on a given delimiter
+/// Free method to determine whether a string vector contains a given string
+bool doesContain(vector<string>, int, string);
+
+/**
+ Free method to split a given string into a string vector based on a given delimiter
+ @param string to be split, char as the delimiter
+ @return Vector with strings resulting from the split
+ */
+vector<string> stringSplit(string, char);
 
 // Class representing a node on the graph
 class Territory {
