@@ -3,6 +3,8 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 
+Player *PlayerStrategies::getPlayer() { return p; }
+
 /****************************** Human Player Strategy*******************************/
 /*
  * Requires user interaction :
