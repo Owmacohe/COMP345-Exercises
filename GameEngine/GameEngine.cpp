@@ -6,8 +6,8 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../PlayerStrategy/PlayerStrategies.h"
 
-class OrdersList;
-class Player;
+//class OrdersList;
+//class Player;
 
 // Default constructor
 GameEngine::GameEngine() {
@@ -204,7 +204,7 @@ void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
     string response;
-
+    bool goodinput = false;
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
@@ -217,14 +217,14 @@ void GameEngine::issueOrdersPhase() {
 
         for (int j = 0; j < num; i++) {
 
-            p->issueOrder("deploy", p->getPlayerStrategy());
+            p->issueOrder("deploy");
             cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
 
         // Issue advance orders
         cout << "\n" << p->getName() << "'s turn" << endl;
         cout << "\nIssuing advance orders" << endl;
-        p->issueOrder("advance", p->getPlayerStrategy());
+        p->issueOrder("advance");
 
         // Issue card orders
         cout << "\nIssuing card orders" << endl;

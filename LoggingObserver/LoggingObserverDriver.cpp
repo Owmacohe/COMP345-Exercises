@@ -9,7 +9,7 @@
 LogObserver* logger = new LogObserver("gamelog.txt");
 LogObserver* Subject::logObs = logger;
 
-int loggingObserverMain() {
+int main() {
     /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
 
     bool subjectGameEngine = is_base_of<Subject, GameEngine>::value;

@@ -15,17 +15,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategyDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" beforeDir="false" afterPath="$PROJECT_DIR$/CommandProcessing/CommandProcessing.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LoggingObserver/LoggingObserverDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.h" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,11 +99,6 @@
       </method>
     </configuration>
     <configuration name="COMP345-Exercises" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="COMP345_Assignment" TARGET_NAME="COMP345-Exercises" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="COMP345_Assignment" RUN_TARGET_NAME="COMP345-Exercises">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
