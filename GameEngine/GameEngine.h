@@ -43,6 +43,11 @@ class GameEngine : public Iloggable, public Subject {
         vector<int> getPlayerOrder();
         int getCurrentPlayer();
         Player* getNeutralPlayer();
+        bool getIsTournament();
+        int getGameNumber();
+        int getMapNumber();
+        vector<string> getTournamentResults();
+        int getNumberOfTurns();
 
         // Mutators
         void setState(const State &s);
@@ -59,6 +64,11 @@ class GameEngine : public Iloggable, public Subject {
         void setPlayerOrder(vector<int>);
         void setCurrentPlayer(int);
         void setNeutralPlayer(Player* np);
+        void setIsTournament(bool);
+        void setGameNumber(int);
+        void setMapNumber(int);
+        void setTournamentResults(vector<string>);
+        void setNumberOfTurns(int);
 
         void assignReinforcementPhase();
         void issueOrdersPhase();
@@ -67,6 +77,7 @@ class GameEngine : public Iloggable, public Subject {
         void executeOrdersPhase();
         void endexecuteOrdersPhase();
         void winPhase(Player*);
+        void drawPhase();
         void endPhase();
         void playAgain();
         void transition(State);
@@ -102,11 +113,9 @@ class GameEngine : public Iloggable, public Subject {
 
         // Tournament
         bool isTournament;
-        /// Track the game being played
-        int gameNumber;
-        /// Track the map being played
-        int mapNumber;
-        /// Store the results of each game
-        vector<string> results;
+        int gameNumber; // Track the game being played
+        int mapNumber; // Track the map being played
+        vector<string> tournamentResults; // Store the results of each game
+        int numberOfTurns; // Track number of turns in current game
 
 };
