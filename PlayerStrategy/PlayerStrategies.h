@@ -30,6 +30,9 @@ public:
 
     // Accessor
     virtual Player *getPlayer();
+
+    // Mutator
+    virtual void setPlayer(Player*);
   
     virtual void issueOrder(string type) = 0;
     virtual vector<Territory*> toAttack(Map* m) = 0;
@@ -155,4 +158,3 @@ public:
 private:
     Player* p;
 };
-
