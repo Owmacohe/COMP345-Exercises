@@ -204,17 +204,8 @@ Advance::Advance() : Order(false, "advance") {
 }
 
 // Parameterize Constructor
-Advance::Advance(Player* p) : Order(false, "advance") {
+Advance::Advance(Player* p, string input) : Order(false, "advance") {
     playerIssuing = p;
-
-    string input = "";
-    int x =  rand() % 2;
-
-    if (x == 0) {
-        input = "move";
-    } else {
-        input = "attack";
-    }
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
@@ -388,6 +379,9 @@ void Advance::execute() {
                 if (defend_alive <= 0 && attack_alive > 0 ){
                     target->setArmies(attack_alive); // Attacker survived conquered the territory
                     target->setOwner(playerIssuing); // The territory now belong to player issuing
+                    //TODO REMOVE TERRITORY TO OLD PLAYER's
+                    // TODO ADD TERRITORY IN PLAYER's TERRITORIES
+
                     cout << "Card drawn: ";
                     playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory
                     isExhaust = true;
@@ -729,6 +723,7 @@ Blockade::Blockade(Player* p) : Order(false, "blockade") {
     unsigned i = 0;
     target = p->toDefend(game->getMap()).at(i);
 
+    // Player change of owenership correctly by removing that territory from the Player's vector of territories
     while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral") {
         target = p->toDefend(game->getMap()).at(i+1);
         i++;

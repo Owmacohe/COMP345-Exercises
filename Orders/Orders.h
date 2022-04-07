@@ -35,10 +35,7 @@ class Order :public Iloggable, public Subject {
         virtual void execute() = 0; //Pure virtual execute function
 
         // From Iloggable
-
         string stringToLog();
-        // string stringToLog() override; TODO SOMEONE ADDED THE KEYWORD, ILL CHECK IT AFTER - MJ
-
 
         bool validated; // Status of validation54
         string description; // Description of the Order
@@ -82,7 +79,7 @@ class Deploy : public Order {
 class Advance : public Order {
     public:
         Advance(); // Constructor
-        Advance(Player* p);  // Parameterized Constructor
+        Advance(Player* p, string input);  // Parameterized Constructor
         Advance(Player* p, Territory* origin, Territory* target);
         Advance(const Advance& original);  // Copy Constructor
         ~Advance(); //Destructor
