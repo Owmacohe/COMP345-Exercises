@@ -349,7 +349,6 @@ void Advance::execute() {
     if (validated) {
         origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         // Advance
-        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         if (validateResult == "move") {
             cout << "... Advance execute ";
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
@@ -377,10 +376,16 @@ void Advance::execute() {
 
                 // Attack successful
                 if (defend_alive <= 0 && attack_alive > 0 ){
+                    //Remove the territory from enemy territory list before transfer ownership // TODO: double check when PlayerStrategies is done
+                    for (int i = 0; i<target->getOwner()->getTerritoryList().size(); i++){
+                        if (target == target->getOwner()->getTerritoryList().at(i)){
+                            target->getOwner()->removeTerritory(i);
+                        }
+                    }
+                    // Player issuing action: ownership transfer + terri added to the terri list + alive armies conquered the teri
                     target->setArmies(attack_alive); // Attacker survived conquered the territory
                     target->setOwner(playerIssuing); // The territory now belong to player issuing
-                    //TODO REMOVE TERRITORY TO OLD PLAYER's
-                    // TODO ADD TERRITORY IN PLAYER's TERRITORIES
+                    playerIssuing->assignTerritory(target); // Add territory in player's territories list
 
                     cout << "Card drawn: ";
                     playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory

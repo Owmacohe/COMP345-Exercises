@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(){
+int Strategymain(){
 
     // Create Map Loader
     MapLoader* loader;
