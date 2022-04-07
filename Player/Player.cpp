@@ -5,6 +5,7 @@
 #include "Player.h"
 
 // TODO: constructor assigns Player Strategy to that player
+// TODO: destructor destroys Player Strategy?
 
 // Default constructor
 Player::Player() {
