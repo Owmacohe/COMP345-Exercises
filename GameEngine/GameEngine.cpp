@@ -399,6 +399,7 @@ bool doesContain(vector<int> arr, int in) {
     return false;
 }
 
+// Checks to see if a tournament command has been entered, and manages calling startupCommands
 void GameEngine::startupPhase() {
     cout << "Welcome to Warzone!" << endl;
 
@@ -506,8 +507,30 @@ void GameEngine::startupPhase() {
                     startupCommands(true, true);
 
                     for (string ps : processor->getPlayerStrategies()) {
-                        processor->saveCommand(new Command("addplayer", ps)); // TODO: need to construct PlayerStrategy properly
+                        processor->saveCommand(new Command("addplayer", "Player " + to_string(player_list.size() + 1) + " (" + ps + ")"));
                         startupCommands(true, true);
+
+                        PlayerStrategies *tempStrategy;
+                        Player *tempPlayer = player_list[player_list.size() - 1];
+
+                        if (ps == "Human") {
+                            tempStrategy = new HumanPlayerStrategy();
+                        }
+                        else if (ps == "Aggressive") {
+                            tempStrategy = new AggressivePlayerStrategy();
+                        }
+                        else if (ps == "Benevolent") {
+                            tempStrategy = new BenevolentPlayerStrategy();
+                        }
+                        else if (ps == "Neutral") {
+                            tempStrategy = new NeutralPlayerStrategy();
+                        }
+                        else if (ps == "Cheater") {
+                            tempStrategy = new CheaterPlayerStrategy();
+                        }
+
+                        tempStrategy->setPlayer(tempPlayer);
+                        tempPlayer->setStrategy(tempStrategy);
                     }
 
                     processor->saveCommand(new Command("gamestart"));
@@ -537,12 +560,15 @@ void GameEngine::startupPhase() {
                     }
                 }
             }
+
             // Tournament Mode Effect
+
             // M
             string tournamentMaps = "";
             for(int i= 0; i < processor->getMaps().size(); i++) {
                 tournamentMaps += ", "+ processor->getMaps().at(i);
             }
+
             // P
             string tournamentPS = "";
             for(int i= 0; i < processor->getPlayerStrategies().size(); i++) {
@@ -714,11 +740,13 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
                 }
             }
             else {
-                // TODO: reject other Commands
+                effect = "Command does not exist";
+                cout << effect << "!" << endl;
             }
         }
         else {
-            // TODO: reject invalid Commands
+            effect = "Command is invalid in the current state";
+            cout << effect << "!" << endl;
         }
 
         temp->saveEffect(effect);

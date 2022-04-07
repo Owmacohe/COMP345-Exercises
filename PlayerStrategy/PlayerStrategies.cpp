@@ -5,14 +5,17 @@
 #include "../Cards/Cards.h"
 #include "../GameEngine/GameEngine.h"
 
-GameEngine* PlayerStrategies::game = new GameEngine();
-Player* PlayerStrategies::getPlayer() { return p; }
-
-
 /****************************** Player Strategy *******************************/
 PlayerStrategies::PlayerStrategies() {
     cout << "PlayerStrategies constructor called" << endl;
 }
+
+GameEngine* PlayerStrategies::game = new GameEngine();
+
+Player* PlayerStrategies::getPlayer() { return p; }
+
+void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
+
 // Stream insertion operator overloading
 ostream& operator<< (ostream& os, const PlayerStrategies& ps){
     os << "Player Strategy" << endl;

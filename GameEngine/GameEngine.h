@@ -86,7 +86,7 @@ class GameEngine : public Iloggable, public Subject {
         void gamePlayTransitions(string, Player*);
         void gameEndTransitions(string);
 
-        void startupPhase();
+        void startupPhase(); // Checks to see if a tournament command has been entered, and manages calling startupCommands
         void startupCommands(bool, bool); // Reads (startup) commands sequentially from the console
 
         // Checks
