@@ -309,6 +309,7 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
 
     return strm <<
         "PLAYER: " << p.name <<
+        "\n    Strategy: " << p.playerStrategy->getType() <<
         "\n    Territories: " <<endl<< t.substr(0, t.length() - 2) <<
         "\n    Players hand, " << *p.hand <<
         "\n    Players orders, " << *p.orders <<

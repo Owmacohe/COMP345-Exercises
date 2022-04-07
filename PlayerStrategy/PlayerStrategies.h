@@ -24,12 +24,14 @@ public:
 
     // Default constructor
     PlayerStrategies();
+    PlayerStrategies(string type);
 
     // Copy constructor
     PlayerStrategies(const PlayerStrategies& other);
 
     // Accessor
     virtual Player *getPlayer();
+    string getType();
 
     // Mutator
     virtual void setPlayer(Player*);
@@ -47,6 +49,7 @@ public:
 
     private:
         Player* p;
+        string type;
 };
 
 class HumanPlayerStrategy : public PlayerStrategies{
