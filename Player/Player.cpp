@@ -41,6 +41,16 @@ Player::Player(string n) : name(n) {
     //cout << "[Player param constructor]" << endl;
 }
 
+// Parameterized Constructor (Player Strategy only)
+Player::Player(PlayerStrategies* initialPs){
+    territories = vector<Territory*>();
+    hand = new Hand;
+    orders = new OrdersList;
+    reinforcePool = 0;
+    deployList = new OrdersList;
+    playerStrategy = initialPs;
+}
+
 // Copy constructor
 Player::Player(const Player &p) {
     name = p.name;
@@ -204,7 +214,6 @@ Territory* Player::checkTerritoryOwn(string name) {
     return NULL;
 
 }
-
 // Return number of armies player has
 int Player::getNumberOfArmies() {
     int sum = 0;
@@ -261,7 +270,9 @@ void Player::removeTerritory(int index) { territories.erase(territories.begin()+
 void Player::setHand(Hand* h) { hand = h; }
 void Player::setOrder(OrdersList* o) { orders = o; }
 void Player::setReinforcementPool(int armies) { reinforcePool = armies; }
-void Player::setStrategy(PlayerStrategies* ps) { playerStrategy = ps; }
+void Player::setStrategy(PlayerStrategies* newPs) {
+    playerStrategy = newPs;
+}
 
 string Player::getName() { return name; }
 vector<Territory*> Player::getTerritoryList() { return territories; }
@@ -304,14 +315,17 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
 }
 
 // Assignment 3 method
-vector<Territory*> Player::toDefend(Map *m, PlayerStrategies *ps) {
-    ps->toDefend(m);
+vector<Territory*> Player::toDefend(Map *m) {
+    cout << "toDefend() in Player called" << endl;
+    playerStrategy->toDefend(m);
 }
 
-vector<Territory*> Player::toAttack(Map *m, PlayerStrategies *ps) {
-    ps->toAttack(m);
+vector<Territory*> Player::toAttack(Map *m) {
+    cout << "toAttack() in Player called" << endl;
+    playerStrategy->toAttack(m);
 }
 
-void Player::issueOrder(string input, PlayerStrategies *ps) {
-    ps->issueOrder(input);
+void Player::issueOrder(string input) {
+    cout << "issueOrder() in Player called" << endl;
+    playerStrategy->issueOrder(input);
 }

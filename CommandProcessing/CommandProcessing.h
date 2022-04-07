@@ -32,7 +32,7 @@ class Command :public Iloggable, public Subject {
 
         void addValidInState(int); // Method to add a new state in which the Command is valid
 
-        string stringToLog(); // From Iloggable
+        string stringToLog() override; // From Iloggable
     private:
         string command, transitionsTo, effect; // Command name, next state, and effect of the command
         vector<int> validIn; // Which states it valid in
@@ -64,7 +64,7 @@ class CommandProcessor : public Iloggable, public Subject {
 
         bool validate(Command*); // Checks if the current Command is in the valid state
 
-        string stringToLog(); // From Iloggable
+        string stringToLog() override; // From Iloggable
     protected:
         GameEngine *engine; // GameEngine on which the CommandProcessor is dependant for states
         vector<Command*> commands; // Array of current and past Commands
@@ -96,7 +96,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
 
         // Mutators
         void setCurrentFile(string), setCurrentLine(int);
-        string stringToLog(); // From Iloggable
+        string stringToLog() override; // From Iloggable
 
         void getCommand() override; // Reads and then saves a command from a file
     private:

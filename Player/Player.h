@@ -12,62 +12,99 @@ class Hand;
 class OrdersList;
 class Territory;
 class Map;
+class Order;
 
 class PlayerStrategies;
 
 class Player {
-    public:
-        Player(); // Default constructor
-        Player(string, vector<Territory*>, Hand*, OrdersList*, int); // Parameterized constructor (everything)
-        Player(string); // Parameterized constructor (name only)
-        Player(const Player &p); // Copy constructor
+public:
+    // Default constructor
+    Player();
 
-        ~Player(); // Destructor
+    // Parameterized constructor
+    Player(string, vector<Territory*>, Hand*, OrdersList*, int);
+    Player(string name);
+    Player(PlayerStrategies* ps);
 
-//        vector<Territory*> toDefend(Map* m); // Territories for player to defend
-//        vector<Territory*> toAttack(Map* m); // Territories for player to attack
+    // Copy constructor
+    Player(const Player &p);
+
+    // Destructor
+    ~Player();
+
+//    vector<Territory*> toDefend(Map* m); // Territories for player to defend
+//    vector<Territory*> toAttack(Map* m); // Territories for player to attack
 //
-//        void issueOrder(string type); //  Create order and adds order to players order list
+//    void issueOrder(string type); //  Create order and adds order to players order list
 
-        int getNumberOfArmies(); // Get number of armies player has
-        int getNumberOfTerritories(); // Get number of territories player owns
-        void addToReinforcePool(int armies); // Add to reinforcement pool
-        void removeFromReinforcePool(int armies); // Remove from reinforcement pool
-        Territory*  checkTerritoryOwn(string name); // Check if player owns a territory by name
+    // Add to reinforcement pool
+    void addToReinforcePool(int armies);
 
-        Territory* getOriginTerritory(Territory* target_territory, Map* m); // Returns a territory of the player that is adjacent to the one they would like to attack
+    // Remove from reinforcement pool
+    void removeFromReinforcePool(int armies);
 
-        // Accessors
-        void setName(string n), setTerritory(vector<Territory*> t), setHand(Hand* h), setOrder(OrdersList* o), setReinforcementPool(int armies), setStrategy(PlayerStrategies* ps);
+    // Check if player owns a territory by name
+    Territory*  checkTerritoryOwn(string name);
 
-        // Mutators
-        void assignTerritory(Territory* t);
-        void removeTerritory(int index);
-        void addOrderList(Order* o);
-        string getName();
-        vector<Territory*> getTerritoryList();
-        Hand* getHand();
-        OrdersList* getOrder();
-        int getReinforcePool();
-        OrdersList* getDeployList();
-        PlayerStrategies* getPlayerStrategy();
+    // Returns a territory of the player that is adjacent to the one they would like to attack
+    Territory* getOriginTerritory(Territory* target_territory, Map* m);
 
-        Player& operator = (const Player& player); 	// Assignment Operator
-        friend ostream& operator<<(ostream& os, const Player& player); // Stream insertion operator
+    // Add a territory to player territories list
+    void assignTerritory(Territory* t);
 
-        // Assignment 3
-        vector<Territory*> toDefend(Map* m, PlayerStrategies* ps); // Territories for player to defend
-        vector<Territory*> toAttack(Map* m, PlayerStrategies* ps); // Territories for player to attack
-        void issueOrder(string input, PlayerStrategies* ps); //  Create order and adds order to players order list
+    // Remove a territory from a player territories list by index
+    void removeTerritory(int index);
 
-    private:
-        string name; // Name of Player
-        vector<Territory*> territories; // List of players territories
-        Hand* hand; // Player hand
-        OrdersList* orders; // Player list of orders
-        int reinforcePool; // Number of reinforcements player has
-        OrdersList* deployList; // List of deploy orders to be executed before the other orders
+    // Add order to player order list
+    void addOrderList(Order* o);
 
-        // Strategy pattern implementation
-        PlayerStrategies* playerStrategy;
+    // Accessors
+    void setName(string n);
+    void setHand(Hand* h);
+    void setReinforcementPool(int armies);
+    void setTerritory(vector<Territory*> t);
+    void setOrder(OrdersList* o);
+    void setStrategy(PlayerStrategies* ps);
+
+    // Mutators
+    string getName();
+    Hand* getHand();
+    int getReinforcePool();
+    int getNumberOfArmies();
+    int getNumberOfTerritories(); // Get number of territories player owns
+    OrdersList* getOrder();
+    OrdersList* getDeployList();
+    PlayerStrategies* getPlayerStrategy();
+    vector<Territory*> getTerritoryList();
+
+    // Operator overloading
+    Player& operator = (const Player& player);
+    friend ostream& operator<<(ostream& os, const Player& player);
+
+    // Assignment 3
+    vector<Territory*> toDefend(Map* m); // Territories for player to defend
+    vector<Territory*> toAttack(Map* m); // Territories for player to attack
+    void issueOrder(string input); //  Create order and adds order to players order list
+
+private:
+    // Name of Player
+    string name;
+
+    // Player hand
+    Hand* hand;
+
+    // Number of reinforcements player has
+    int reinforcePool;
+
+    // List of players territories
+    vector<Territory*> territories;
+
+    // Player list of orders
+    OrdersList* orders;
+
+    // List of deploy orders to be executed before the other orders
+    OrdersList* deployList;
+
+    // Strategy pattern implementation
+    PlayerStrategies* playerStrategy;
 };

@@ -47,3 +47,5 @@ LogObserver* Subject::getLogObserver(){ return logObs; }
 void Subject::setLogObserver(LogObserver* lo){ logObs = lo; }
 
 void Subject::notify(Iloggable* il){ logObs->update(il); }
+
+LogObserver* Subject::logObs = new LogObserver();
