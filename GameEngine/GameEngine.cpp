@@ -23,6 +23,9 @@ GameEngine::GameEngine() {
     // Add Neutral Player to Game
     neutralPlayer = new Player();
     neutralPlayer->setName("Neutral");
+
+    int numberOfTurns = 0;
+
 }
 
 // Copy constructor
@@ -31,6 +34,7 @@ GameEngine::GameEngine(const GameEngine &gm) {
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
     deck = gm.deck;
+    numberOfTurns = gm.numberOfTurns;
 
     for (Player* p : gm.player_list) {
         player_list.push_back(p);
@@ -73,6 +77,8 @@ GameEngine::~GameEngine() {
 
     delete neutralPlayer;
     neutralPlayer = NULL;
+
+    //TODO Vector of Results for tournament mode?--depends on type that i will choose
 }
 
 // Assignment operator
@@ -129,6 +135,11 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
 }
 vector<int> GameEngine::getPlayerOrder() { return playerOrder; }
 Player* GameEngine::getNeutralPlayer() { return neutralPlayer; }
+bool GameEngine::getIsTournament(){return isTournament;}
+int GameEngine::getGameNumber(){return gameNumber;}
+int GameEngine::getMapNumber(){return mapNumber;}
+vector<string> GameEngine::getTournamentResults(){return tournamentResults;}
+int GameEngine::getNumberOfTurns(){return numberOfTurns;}
 
 // Mutators
 void GameEngine::setState(const State &st) { *s = st; }
@@ -156,6 +167,11 @@ void GameEngine::setPlayerOrder(vector<int> po) {
     }
 }
 void GameEngine::setNeutralPlayer(Player* np) { neutralPlayer = np; }
+void GameEngine::setIsTournament(bool it){isTournament = it;}
+void GameEngine::setGameNumber(int gn){ gameNumber = gn;}
+void GameEngine::setMapNumber(int mn) {mapNumber = mn;}
+void GameEngine::setTournamentResults(const vector<string> tr){tournamentResults = tr;}
+void GameEngine::setNumberOfTurns(int nt){ numberOfTurns = nt;}
 
 // Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
@@ -346,8 +362,14 @@ void GameEngine::endexecuteOrdersPhase() {
 
 void GameEngine::winPhase(Player *p) {
     transition(win);
+    // tournamentResults.push_back(ps) TODO ACCESS STRATEGY OF PLAYER
     cout << "Victory for player: " << p->getName() << endl;
-    // TODO DO A DRAWPHASE()?
+}
+
+void GameEngine::drawPhase() {
+    transition(win);
+    tournamentResults.push_back("Draw");
+    cout << "Draw game." << endl;
 }
 
 void GameEngine::endPhase() {
@@ -453,7 +475,6 @@ void GameEngine::startupPhase() {
 
         if (word1 == "tournament") {
             isTournament = true;
-
             for (int j = 0; j < processor->getNumberOfGames(); j++) {
                 gameNumber = j;
                 mapNumber = 0;
@@ -516,9 +537,19 @@ void GameEngine::startupPhase() {
                     }
                 }
             }
+            // Tournament Mode Effect
+            // M
+            string tournamentMaps = "";
+            for(int i= 0; i < processor->getMaps().size(); i++) {
+                tournamentMaps += ", "+ processor->getMaps().at(i);
+            }
+            // P
+            string tournamentPS = "";
+            for(int i= 0; i < processor->getPlayerStrategies().size(); i++) {
+                tournamentMaps += ", " + processor->getPlayerStrategies().at(i);
+            }
 
-            // TODO: save tournament's effect
-            effect = "This will print the Results table, loop through 2D vector and add pretty lines";
+            effect = "Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD:" + to_string(processor->getMaxTurns()) + "\n";
             temp->saveEffect(effect);
         }
         else {
@@ -709,15 +740,21 @@ bool GameEngine::mainGameLoop() {
     bool continueplaying;
     string input;
     while (playing) {
-        // TODO: restrict number of turns to processor->getMaxTurns() --- MJ: we can put it in check for winner since it does it every turn, then in Winphase
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
         executeOrdersPhase(); // Begin execute orders phase for all players
         checkPlayers(); // Check if any players need to be removed
         resetAlliances(); // Reset Alliances
 
+        // Track number of Turns in this game
+        numberOfTurns++;
+
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
+    }
+
+    if (isTournament && *s ==8){
+        //TODO trigger the stringToLog? ---- already included in condition above (to test)
     }
 
     while (!isTournament && *s == 8) {
@@ -753,9 +790,11 @@ bool GameEngine::mainGameLoop() {
 
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
-    // TODO : Check the counter of turns here instead of going through the loop etc
-    // return true if already reached max so has to be draw
-    // winphase() with no player? and then save 'Draw in results'
+    // Check to verify that the number of turns is not maxed out
+    if (numberOfTurns == processor->getMaxTurns()){
+        drawPhase();
+        return true;
+    }
 
     int lost = 0;
     for (Player* p : player_list) {
@@ -833,6 +872,27 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
 string GameEngine::stringToLog() {
     string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
                            "issueOrder", "executeOrder", "win"};
-    string logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
+    string logString = "";
+    if (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
+    }
+    /* TODO PRINT TABLE OF RESULTS
+    else if (enumStates[*s] == "win" && mapNumber == processor->getMaps().size()-1 && gameNumber == processor->getNumberOfGames()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
+        string title = "Results:";
+        string headers = "\t\t\t |";
+        for (int i = 0; i < gameNumber; i++){
+            headers += " Game " + to_string(i+1) + "\t|";
+        }
+        for(int i= 0; i < tournamentResults.size()-1; i++){
+            for (int j = 0; j < gameNumber+1; i++){
+
+            }
+        }
+    }*/
+    else{
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
+    }
+
     return logString;
 }
