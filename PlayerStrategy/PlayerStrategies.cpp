@@ -5,6 +5,8 @@
 #include "../Cards/Cards.h"
 #include "../GameEngine/GameEngine.h"
 
+// Initialize the Game Engine
+GameEngine* PlayerStrategies::game = new GameEngine();
 /****************************** Player Strategy *******************************/
 // Default Constructor
 PlayerStrategies::PlayerStrategies() {
@@ -16,9 +18,6 @@ PlayerStrategies::PlayerStrategies() {
 PlayerStrategies::PlayerStrategies(string type) {
     this->type = type;
 }
-
-
-GameEngine* PlayerStrategies::game = new GameEngine();
 
 Player* PlayerStrategies::getPlayer() { return p; }
 string PlayerStrategies::getType() { return type;}
