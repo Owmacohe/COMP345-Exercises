@@ -44,6 +44,17 @@ Player::Player(string n) : name(n) {
 
 // Parameterized Constructor (Player Strategy only)
 Player::Player(PlayerStrategies* initialPs){
+    name = "empty";
+    territories = vector<Territory*>();
+    hand = new Hand;
+    orders = new OrdersList;
+    reinforcePool = 0;
+    deployList = new OrdersList;
+    playerStrategy = initialPs;
+}
+
+// Parameterized Constructor (Player Strategy and name)
+Player::Player(PlayerStrategies* initialPs, string n) : name(n) {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
@@ -76,6 +87,7 @@ Player::~Player() {
     //cout << "[Player destructor]" << endl;
 }
 
+//  THESE ARE THE OLD METHODS
 //// Returns a vector list of territories for player to defend in priority
 //// Priority is determined by which territories are surrounded by the most enemy territories
 //vector<Territory*> Player::toDefend(Map* m) {
