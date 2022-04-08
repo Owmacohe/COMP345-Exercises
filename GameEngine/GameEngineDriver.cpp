@@ -5,9 +5,9 @@
 #include "GameEngine.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
-int gameEngineMain() {
+int gameEnginemain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine; // TODO: what is this line for?
+    Order::game = gameEngine; // TODO: what is this line for? ANSWER : basically order has a game engine attribute so this just initializes it, it is necessary line of code very important
 
     bool isPlaying = true;
 

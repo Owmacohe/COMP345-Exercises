@@ -219,8 +219,7 @@ void GameEngine::assignReinforcementPhase() {
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
-    string response;
-    bool goodinput = false;
+
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
@@ -244,36 +243,7 @@ void GameEngine::issueOrdersPhase() {
 
         // Issue card orders
         cout << "\nIssuing card orders" << endl;
-        while (!goodinput) {
-            cout << "\nThe following is " << p->getName() << "'s hand: " << endl;
-            cout << *(p->getHand()) << endl;
-            cout << "\nWould " << p->getName() << " like to play any cards ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                goodinput = true;
-                cout << "Which card would you like to play ?" << endl;
-                cin >> response;
-                int index = -1;
-                while (index < 0) {
-                    index = checkCardInHand(response, p->getHand());
-                    if (index >= 0) {
-                        p->getHand()->playCard(index, *deck, *p->getOrder(), p);
-                        break;
-                    }
-                    else {
-                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again"<< endl;
-                    }
-                }
-            }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
-                goodinput = true;
-                break;
-            }
-            else {
-                cout<< "Invalid input !" <<endl;
-                break;
-            }
-        }
+        p->issueOrder("card");
     }
     endIssueOrderPhase();
 }
