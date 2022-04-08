@@ -48,6 +48,8 @@ class PlayerStrategies {
         static GameEngine* game;
 
         private:
+    // TODO :: maybe to keep track of if a neutral player has been attack we can check the attacked territory in aggressive, human, and cheater, and then if it is a neutral player
+    // TODO :: we set off a boolean stored here
             Player* p;
             string type;
 };
