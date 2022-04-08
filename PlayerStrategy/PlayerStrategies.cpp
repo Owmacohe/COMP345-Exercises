@@ -20,9 +20,11 @@ PlayerStrategies::PlayerStrategies(string type) {
 }
 
 Player* PlayerStrategies::getPlayer() { return p; }
-string PlayerStrategies::getType() { return type;}
+string PlayerStrategies::getType() { return type; }
+bool PlayerStrategies::getNeutralAttack() { return neutralAttack; }
 
 void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
+void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b;}
 
 // Stream insertion operator overloading
 ostream& operator<< (ostream& os, const PlayerStrategies& ps){
@@ -125,6 +127,12 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
             cin >> input;
         }
     }
+
+    //TODO :: this is my attempt at the neutral player thingy
+    if (returnTerritories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
+        setNeutralAttack(true);
+    }
+
     return returnTerritories;
 }
 
@@ -245,6 +253,11 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
         }
     }
 
+    //TODO :: this is my attempt at the neutral player thingy
+    if (attack_territories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
+            setNeutralAttack(true);
+    }
+
     return attack_territories;
 }
 
@@ -358,6 +371,11 @@ NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Benevolent"){
 // TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
 void NeutralPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Strategy called" << endl;
+    //TODO :: this is my attempt at the neutral player thingy
+    if (getNeutralAttack() == true) {
+        cout << "The Neutral Player was attacked, and is now an aggressive player" << endl;
+        p->setStrategy(new AggressivePlayerStrategy());
+    }
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {

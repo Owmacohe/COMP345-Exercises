@@ -32,9 +32,11 @@ class PlayerStrategies {
         // Accessor
         virtual Player *getPlayer();
         string getType();
+        bool getNeutralAttack();
 
         // Mutator
         virtual void setPlayer(Player*);
+        virtual void setNeutralAttack(bool);
 
         virtual void issueOrder(string type) = 0;
         virtual vector<Territory*> toAttack() = 0;
@@ -48,8 +50,7 @@ class PlayerStrategies {
         static GameEngine* game;
 
         private:
-    // TODO :: maybe to keep track of if a neutral player has been attack we can check the attacked territory in aggressive, human, and cheater, and then if it is a neutral player
-    // TODO :: we set off a boolean stored here
+            bool neutralAttack;
             Player* p;
             string type;
 };
