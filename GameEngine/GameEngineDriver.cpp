@@ -18,3 +18,16 @@ int gameEngineMain() {
 
     return 0;
 }
+
+int main() {
+    // tournament -M europe.map -P Aggressive Benevolent -G 1 -D 10
+
+//    CommandProcessor cp;
+//    cp.getCommand();
+//    cout << *cp.getCommands()[cp.getCommands().size() - 1] << endl;
+
+    GameEngine* gameEngine = new GameEngine;
+    gameEngine->startupPhase();
+
+    return 0;
+}

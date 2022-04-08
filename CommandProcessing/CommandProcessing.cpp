@@ -53,7 +53,6 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
         addValidInState(1);
         addValidInState(2);
         transitionsTo = "maploaded";
-
     }
     else if (c == "addplayer") {
         addValidInState(3);
@@ -70,7 +69,7 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
 // Command parameterized constructor 3 (tournament Command)
 Command::Command(string c, string m, string p, int g, int d) : command(c + " -M <" + m + ">" + " -P <" + p + ">" + " -G <" + to_string(g) + ">" + " -D <" + to_string(d) + ">") {
     if (c == "tournament") {
-        transitionsTo = "";
+        transitionsTo = "none";
         effect = "";
 
         validIn = vector<int>();
@@ -288,11 +287,14 @@ Command *CommandProcessor::readCommand() {
     for (char i : temp) {
         if (i == ' ') {
             words.push_back(tempWord);
+            tempWord = "";
         }
         else {
             tempWord += i;
         }
     }
+
+    words.push_back(tempWord);
 
     // Single word command
     if (words.size() == 1) {
@@ -305,8 +307,7 @@ Command *CommandProcessor::readCommand() {
     // Tournament command
     else if (words.size() > 2) {
         string mapWords, playerStrategyWords;
-        int tournamentParamNum;
-        MapLoader loader;
+        int tournamentParamNum = -1;
 
         for (int j = 1; j < words.size(); j++) {
             if (words[j] == "-M") {
@@ -316,24 +317,80 @@ Command *CommandProcessor::readCommand() {
                 tournamentParamNum = 1;
             }
             else if (words[j] == "-G") {
-                numberOfGames = stoi(words[++j]);
+                tournamentParamNum = -1;
+
+                int tempNumberOfGames = stoi(words[j + 1]);
+
+                if (tempNumberOfGames >= 1) {
+                    if (tempNumberOfGames <= 5) {
+                        numberOfGames = tempNumberOfGames;
+                    }
+                    else {
+                        cout << "INVALID TOURNAMENT: too many games!" << endl;
+                        return NULL;
+                    }
+                }
+                else {
+                    cout << "INVALID TOURNAMENT: not enough games!" << endl;
+                    return NULL;
+                }
             }
             else if (words[j] == "-D") {
-                maxTurns = stoi(words[++j]);
+                tournamentParamNum = -1;
+
+                int tempMaxTurns = stoi(words[j + 1]);
+
+                if (tempMaxTurns >= 10) {
+                    if (tempMaxTurns <= 50) {
+                        maxTurns = tempMaxTurns;
+                    }
+                    else {
+                        cout << "INVALID TOURNAMENT: too many turns!" << endl;
+                        return NULL;
+                    }
+                }
+                else {
+                    cout << "INVALID TOURNAMENT: not enough turns!" << endl;
+                    return NULL;
+                }
             }
             else {
                 if (tournamentParamNum == 0) {
-                    maps.push_back(words[j]);
-                    mapWords += words[j] + " ";
+                    if (maps.size() < 5) {
+                        maps.push_back(words[j]);
+                        mapWords += words[j] + " ";
+                    }
+                    else {
+                        cout << "INVALID TOURNAMENT: too many maps!" << endl;
+                        return NULL;
+                    }
                 }
                 else if (tournamentParamNum == 1) {
-                    playerStrategies.push_back(words[j]);
-                    playerStrategyWords += words[j] + " ";
+                    if (maps.size() >= 1) {
+                        if (playerStrategies.size() < 4) {
+                            playerStrategies.push_back(words[j]);
+                            playerStrategyWords += words[j] + " ";
+                        }
+                        else {
+                            cout << "INVALID TOURNAMENT: too many players!" << endl;
+                            return NULL;
+                        }
+                    }
+                    else {
+                        cout << "INVALID TOURNAMENT: not enough maps!" << endl;
+                        return NULL;
+                    }
                 }
             }
         }
 
-        return new Command(words[0], mapWords, playerStrategyWords, numberOfGames, maxTurns);
+        if (playerStrategies.size() >= 2) {
+            return new Command(words[0], mapWords, playerStrategyWords, numberOfGames, maxTurns);
+        }
+        else {
+            cout << "INVALID TOURNAMENT: not enough players!" << endl;
+            return NULL;
+        }
     }
     else {
         cout << "Invalid command!" << endl;
@@ -410,46 +467,90 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
         }
     }
 
+    words.push_back(tempWord);
+
     // Single word command
     if (words.size() == 1) {
         return new Command(words[0]);
     }
-        // Double word command
+    // Double word command
     else if (words.size() == 2) {
         return new Command(words[0], words[1]);
     }
     // Tournament command
     else if (words.size() > 2) {
         string mapWords, playerStrategyWords;
-        int tournamentParamNum;
-        MapLoader loader;
+        int tournamentParamNum = -1;
 
         for (int j = 1; j < words.size(); j++) {
             if (words[j] == "-M") {
                 tournamentParamNum = 0;
-            }
-            else if (words[j] == "-P") {
+            } else if (words[j] == "-P") {
                 tournamentParamNum = 1;
-            }
-            else if (words[j] == "-G") {
-                cp->setNumberOfGames(stoi(words[++j]));
-            }
-            else if (words[j] == "-D") {
-                cp->setMaxTurns(stoi(words[++j]));
-            }
-            else {
-                if (tournamentParamNum == 0) {
-                    cp->getMaps().push_back(words[j]);
-                    mapWords += words[j] + " ";
+            } else if (words[j] == "-G") {
+                tournamentParamNum = -1;
+
+                int tempNumberOfGames = stoi(words[j + 1]);
+
+                if (tempNumberOfGames >= 1) {
+                    if (tempNumberOfGames <= 5) {
+                        cp->setNumberOfGames(tempNumberOfGames);
+                    } else {
+                        cout << "INVALID TOURNAMENT: too many games!" << endl;
+                        return NULL;
+                    }
+                } else {
+                    cout << "INVALID TOURNAMENT: not enough games!" << endl;
+                    return NULL;
                 }
-                else if (tournamentParamNum == 1) {
-                    cp->getPlayerStrategies().push_back(words[j]);
-                    playerStrategyWords += words[j] + " ";
+            } else if (words[j] == "-D") {
+                tournamentParamNum = -1;
+
+                int tempMaxTurns = stoi(words[j + 1]);
+
+                if (tempMaxTurns >= 10) {
+                    if (tempMaxTurns <= 50) {
+                        cp->setMaxTurns(tempMaxTurns);
+                    } else {
+                        cout << "INVALID TOURNAMENT: too many turns!" << endl;
+                        return NULL;
+                    }
+                } else {
+                    cout << "INVALID TOURNAMENT: not enough turns!" << endl;
+                    return NULL;
+                }
+            } else {
+                if (tournamentParamNum == 0) {
+                    if (cp->getMaps().size() < 5) {
+                        cp->getMaps().push_back(words[j]);
+                        mapWords += words[j] + " ";
+                    } else {
+                        cout << "INVALID TOURNAMENT: too many maps!" << endl;
+                        return NULL;
+                    }
+                } else if (tournamentParamNum == 1) {
+                    if (cp->getMaps().size() >= 1) {
+                        if (cp->getPlayerStrategies().size() < 4) {
+                            cp->getPlayerStrategies().push_back(words[j]);
+                            playerStrategyWords += words[j] + " ";
+                        } else {
+                            cout << "INVALID TOURNAMENT: too many players!" << endl;
+                            return NULL;
+                        }
+                    } else {
+                        cout << "INVALID TOURNAMENT: not enough maps!" << endl;
+                        return NULL;
+                    }
                 }
             }
         }
 
-        return new Command(words[0], mapWords, playerStrategyWords, cp->getNumberOfGames(), cp->getMaxTurns());
+        if (cp->getPlayerStrategies().size() >= 2) {
+            return new Command(words[0], mapWords, playerStrategyWords, cp->getNumberOfGames(), cp->getMaxTurns());
+        } else {
+            cout << "INVALID TOURNAMENT: not enough players!" << endl;
+            return NULL;
+        }
     }
     else {
         cout << "Invalid command!" << endl;

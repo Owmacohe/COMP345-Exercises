@@ -4,12 +4,12 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "../GameEngine/GameEngine.h"
-#include "../CommandProcessing//CommandProcessing.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 LogObserver* logger = new LogObserver("gamelog.txt");
 LogObserver* Subject::logObs = logger;
 
-int main() {
+int loggingObserverMain() {
     /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
 
     bool subjectGameEngine = is_base_of<Subject, GameEngine>::value;

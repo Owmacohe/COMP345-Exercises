@@ -464,6 +464,8 @@ void GameEngine::startupPhase() {
 
     // Making sure the command is in fact valid
     if (processor->validate(temp)) {
+        word1 = "";
+
         // Splitting the input into words (if it can be split)
         for (char i : temp->getCommand()) {
             if (i == ' ') {
@@ -536,7 +538,7 @@ void GameEngine::startupPhase() {
                     processor->saveCommand(new Command("gamestart"));
                     startupCommands(true, true);
 
-                    mainGameLoop();
+                    mainGameLoop(); // TODO: currently loops infinitely
 
                     if (j < processor->getMaps().size() - 1) {
                         delete deck;
@@ -558,7 +560,11 @@ void GameEngine::startupPhase() {
                         delete neutralPlayer;
                         neutralPlayer = NULL;
                     }
+
+                    cout << "Tournament map " << k << " done!" << endl;
                 }
+
+                cout << "Tournament game " << to_string(j+1) << " done!" << endl;
             }
 
             // Tournament Mode Effect
