@@ -50,12 +50,12 @@ void HumanPlayerStrategy::issueOrder(string type) {
     transform(type.begin(), type.end(), type.begin(), ::tolower);
     string input;
 
-    if (type == "deploy") {
+    if (equalsIgnoreCase("deploy", type)) {
         // Issues deploy orders based on toDefend()
         Deploy* d = new Deploy(p);
         p->addOrderList(d);// Add order to list
     }
-    else if (type == "advance") {
+    else if (equalsIgnoreCase("advance", type)) {
         cout << "\nWhat type of advance would " << p->getName() << " Player like to issue ? (move, attack, none)" << endl;
         cin >> input;
         while (!equalsIgnoreCase("move", input) || !equalsIgnoreCase("attack", input) || !equalsIgnoreCase("none", input)) {
@@ -67,7 +67,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
             p->addOrderList(a);
         }
     }
-    else if (type == "card") {
+    else if (equalsIgnoreCase("card", type)) {
         int index = -1;
         cout << "\nWhich card would you like to play ? (airlift, bomb, blockade, negotiate, none)" << endl;
         cin >> input;
@@ -175,17 +175,17 @@ void AggressivePlayerStrategy::issueOrder(string type) {
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
 
-    if (type == "deploy") {
+    if (equalsIgnoreCase("deploy", type)) {
         // Issues deploy orders based on toDefend()
         Deploy* d = new Deploy(p);
-        p->addOrderList(d); // Add order to list
+        p->addOrderList(d); // Add order to the list
     }
-    else if (type == "advance") {
+    else if (equalsIgnoreCase("advance", type)) {
         Advance* a = new Advance(p, "attack");
         p->addOrderList(a);
     }
         // Orders that involve card will be issued using playCard()
-    else if (type == "card") {
+    else if (equalsIgnoreCase("card", type)) {
         int index = -1;
         index = checkCardInHand("bomb", p->getHand());
         if (index >= 0) {
@@ -363,14 +363,12 @@ void NeutralPlayerStrategy::issueOrder(string type) {
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
-    Map* m = game->getMap();
     return attack_territories;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
-    Map* m = game->getMap();
     return defend_territories;
 }
 
