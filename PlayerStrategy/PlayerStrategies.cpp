@@ -68,7 +68,6 @@ void HumanPlayerStrategy::issueOrder(string type) {
             p->addOrderList(a);
         }
     }
-    //TODO :: i have it just as card because the actually type doesnt matter because the player will pick anyway and thats what gets issued
     else if (type == "card") {
         int index = -1;
         cout << "\nWhich card would you like to play ? (airlift, bomb, blockade, negotiate, none)" << endl;
@@ -78,8 +77,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
             while (index < 0) {
                 index = checkCardInHand(input, p->getHand());
                 if (index >= 0) {
-                    //TODO :: we can just add deck to the parameter that wouldnt be tooo weird
-                    p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p); //TODO :: i feel like it would make more sense do this in issue order because its unique to the strategies but issues
+                    p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
                     break;
                 }
                 else {
@@ -95,8 +93,9 @@ void HumanPlayerStrategy::issueOrder(string type) {
     }
 }
 
-vector<Territory*> HumanPlayerStrategy::toAttack(Map* m) {
+vector<Territory*> HumanPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
+    Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
 
@@ -130,8 +129,9 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Map* m) {
     return returnTerritories;
 }
 
-vector<Territory*> HumanPlayerStrategy::toDefend(Map* m) {
+vector<Territory*> HumanPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
+    Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
 
@@ -185,13 +185,13 @@ void AggressivePlayerStrategy::issueOrder(string type) {
         Advance* a = new Advance(p, "attack");
         p->addOrderList(a);
     }
-        // Orders that involve card will be issued using playCard() //TODO:: add the car play, would only play aggressive cards
-        //TODO :: logic check if they have any aggressive card then play aggressive card else dont play card
+        // Orders that involve card will be issued using playCard()
     else if (type == "card") {
         int index = -1;
-        index = checkCardInHand(type, p->getHand());
+        index = checkCardInHand("bomb", p->getHand());
         if (index >= 0) {
-            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p); //TODO :: i feel like it would make more sense do this in issue order because its unique to the strategies but issues
+            // Only is able to play bomb card
+            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
         }
     }
     else {
@@ -199,11 +199,12 @@ void AggressivePlayerStrategy::issueOrder(string type) {
     }
 }
 
-vector<Territory*> AggressivePlayerStrategy::toAttack(Map* m) {
+vector<Territory*> AggressivePlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs;
     vector<pair<int, Territory*>> ordering;
+    Map* m = game->getMap();
 
     for (Territory* territory : p->getTerritoryList()) { // Looping through the player's territories
         int number_armies = 0;
@@ -248,11 +249,12 @@ vector<Territory*> AggressivePlayerStrategy::toAttack(Map* m) {
     return attack_territories;
 }
 
-vector<Territory*> AggressivePlayerStrategy::toDefend(Map* m) {
+vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
     pair<int, Territory *> pairs;
     vector<pair<int, Territory *>> ordering;
+    Map* m = game->getMap();
 
     for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
 
@@ -321,15 +323,18 @@ void BenevolentPlayerStrategy::issueOrder(string type){
 }
 
 // TODO :: Benevolent only defend and never advance to enemy territories -> no use for toAttack()
-vector<Territory*> BenevolentPlayerStrategy::toAttack(Map* m) {
+vector<Territory*> BenevolentPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
+    Map* m = game->getMap();
+
     return attack_territories;
 }
 
-vector<Territory*> BenevolentPlayerStrategy::toDefend(Map* m) {
+vector<Territory*> BenevolentPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
+    Map* m = game->getMap();
     return defend_territories;
 }
 
@@ -356,15 +361,17 @@ void NeutralPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Strategy called" << endl;
 }
 
-vector<Territory*> NeutralPlayerStrategy::toAttack(Map* m) {
+vector<Territory*> NeutralPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
+    Map* m = game->getMap();
     return attack_territories;
 }
 
-vector<Territory*> NeutralPlayerStrategy::toDefend(Map* m) {
+vector<Territory*> NeutralPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
+    Map* m = game->getMap();
     return defend_territories;
 }
 
@@ -391,15 +398,17 @@ void CheaterPlayerStrategy::issueOrder(string type) {
 }
 
 // TODO :: Cheater does not need to attack or defend to conquered a territory, no use for toAttack() & toDefend()
-vector<Territory*> CheaterPlayerStrategy::toAttack(Map* m) {
+vector<Territory*> CheaterPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
+    Map* m = game->getMap();
     return attack_territories;
 }
 
-vector<Territory*> CheaterPlayerStrategy::toDefend(Map* m) {
+vector<Territory*> CheaterPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
+    Map* m = game->getMap();
     return defend_territories;
 }
 
