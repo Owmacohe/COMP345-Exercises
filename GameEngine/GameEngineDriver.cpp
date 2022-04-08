@@ -19,7 +19,7 @@ int gameEngineMain() {
     return 0;
 }
 
-int main() {
+int tournamentMain() {
     // tournament -M europe.map -P Aggressive Benevolent -G 1 -D 10
 
 //    CommandProcessor cp;
