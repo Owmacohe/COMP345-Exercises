@@ -317,14 +317,16 @@ std::ostream& operator<<(std::ostream &strm, const Player &p) {
 }
 
 // Assignment 3 method
-vector<Territory*> Player::toDefend(Map *m) {
+vector<Territory*> Player::toDefend() {
     cout << "toDefend() in Player called" << endl;
-    playerStrategy->toDefend(m);
+    vector<Territory*> returnTeriList = playerStrategy->toDefend();
+    return returnTeriList;
 }
 
-vector<Territory*> Player::toAttack(Map *m) {
+vector<Territory*> Player::toAttack() {
     cout << "toAttack() in Player called" << endl;
-    playerStrategy->toAttack(m);
+    vector<Territory*> returnTeriList = playerStrategy->toAttack();
+    return returnTeriList;
 }
 
 void Player::issueOrder(string input) {

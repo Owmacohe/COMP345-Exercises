@@ -82,8 +82,8 @@ public:
     friend ostream& operator<<(ostream& os, const Player& player);
 
     // Assignment 3
-    vector<Territory*> toDefend(Map* m); // Territories for player to defend
-    vector<Territory*> toAttack(Map* m); // Territories for player to attack
+    vector<Territory*> toDefend(); // Territories for player to defend
+    vector<Territory*> toAttack(); // Territories for player to attack
     void issueOrder(string input); //  Create order and adds order to players order list
 
 private:
