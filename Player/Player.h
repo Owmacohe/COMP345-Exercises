@@ -25,6 +25,7 @@ public:
     Player(string, vector<Territory*>, Hand*, OrdersList*, int);
     Player(string name);
     Player(PlayerStrategies* ps);
+    Player(PlayerStrategies* ps, string name);
 
     // Copy constructor
     Player(const Player &p);
