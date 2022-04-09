@@ -155,23 +155,112 @@ bool doesContain(vector<Edge*>, Territory, Territory); // TODO : Removed in as p
 /// Class representing the graph data structure
 class Map {
     public:
-        Map(); // Default constructor
-        Map(string); // Parameterized constructor
-        Map(const Map &m); // Copy constructor
-        ~Map(); // Destructor
-        friend ostream& operator<<(ostream &strm, const Map &m); // Stream insertion operator
+
+        /// Default constructor
+        Map();
+
+        /**
+        Parameterized Constructor for a Map Object
+        @param string that is the name of the Map
+        */
+        Map(string);
+
+        /**
+        Copy Constructor for a Map Object
+        @param reference of a Map
+        */
+        Map(const Map &m);
+
+        /// Destructor
+        ~Map();
+
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the Map as a constant reference
+        @return output stream reference
+        */
+        friend ostream& operator<<(ostream &strm, const Map &m);
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param Map reference that will be copied and assigned
+        @return Map reference
+        */
         Map& operator = (const Map& toAssign); // Assignment operator
 
-        // Accessors
+        /**
+        Accessor for the name of the Map
+        @param None
+        @return string that is the name of the Map
+        */
         string getName();
+
+        /**
+        Accessor for the vector of continents of the Map
+        @param None
+        @return vector of continents that are strings
+        */
         vector<string> getContinents();
+
+        /**
+        Accessor for the vector of continent bonuses in the Map
+        @param None
+        @return vector of continent bonuses that are int
+        */
         vector<int> getContinentBonuses();
+
+        /**
+        Accessor for the vector of territories pointers in the Map
+        @param None
+        @return vector of Territories (user-defined) pointers
+        */
         vector<Territory*> getTerritories();
+
+        /**
+        Accessor for the vector of Edges pointers in the Map
+        @param None
+        @return vector of Edges (user-defined) pointers
+        */
         vector<Edge*> getEdges();
 
-        // Mutators
-        void setName(string), setContinents(vector<string>), setContinentBonuses(vector<int>), setTerritories(vector<Territory*>), setEdges(vector<Edge*>);
+        /**
+        Mutator for the Map name
+        @param string that is the name of the Map
+        @return None
+        */
+        void setName(string);
 
+        /**
+        Mutator for the continents of the Map
+        @param vector of strings that are the continent
+        @return None
+        */
+        void setContinents(vector<string>);
+
+        /**
+        Mutator for the continent bonuses
+        @param vector of the continent bonuses that are of int type
+        @return None
+        */
+        void setContinentBonuses(vector<int>);
+
+        /**
+        Mutator for the Territories of the Map
+        @param vector of Territories pointers
+        @return None
+        */
+        void setTerritories(vector<Territory*>);
+
+        /**
+        Mutator for the Edges of the Map
+        @param vector of Edges pointers
+        @return None
+        */
+        void setEdges(vector<Edge*>);
+
+        // TODO CONTINUE COMMENTS HERE
         void addContinent(string); // Method to add a new continent
         void addContinentBonus(int); // Method to add a new continent bonus
         void addTerritory(Territory*); // Method to add a new Territory
@@ -192,8 +281,13 @@ class Map {
         vector<Edge*> edges; // Array of edges between the Territories
 };
 
-// Class to load in new graphs
+/// Class to load in new graphs
 class MapLoader {
     public:
-        Map *load(string); // Method to read a .map file with the given name, and output it as a Map
+    /**
+     * Method to read a .map file with the given name, and output it as a Map
+     * @param string that is the Map file name
+     * @return Map
+     */
+        Map *load(string);
 };
