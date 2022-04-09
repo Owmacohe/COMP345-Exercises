@@ -56,23 +56,27 @@ int playerStrategyMain() {
     return 0;
 }
 
-int temp() {
-    // Create Map Loader
-    MapLoader* loader;
-    Map *mainmap = loader->load("../Orders/canada.map");
-
-    Player *tempPlayer = new Player("Player1");
-
-    for (Territory *i : mainmap->getTerritories()) {
-        i->setOwner(tempPlayer);
-        tempPlayer->assignTerritory(i);
-    }
-
-    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(tempPlayer);
-    tempPlayer->setStrategy(aps);
-
-    aps->getPlayer()->toDefend();
-    //tempPlayer->toDefend();
-
-    return 0;
-}
+//int temp() {
+//    // Create Map Loader
+//    MapLoader* loader;
+//    Map *mainmap = loader->load("../Orders/canada.map");
+//
+//    // Create & Set up Game Engine
+//    GameEngine* mainGE = new GameEngine();
+//    mainGE->setMap(mainmap);
+//    PlayerStrategies::game = mainGE;
+//
+//    Player *tempPlayer = new Player("Player1");
+//
+//    for (Territory *i : mainmap->getTerritories()) {
+//        i->setOwner(tempPlayer);
+//        tempPlayer->assignTerritory(i);
+//    }
+//
+//    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(tempPlayer);
+//    tempPlayer->setStrategy(aps);
+//
+//    tempPlayer->toDefend();
+//
+//    return 0;
+//}

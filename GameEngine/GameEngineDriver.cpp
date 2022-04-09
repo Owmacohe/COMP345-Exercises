@@ -4,6 +4,7 @@
 #include "../Player/Player.h"
 #include "GameEngine.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../PlayerStrategy/PlayerStrategies.h"
 
 int gameEngineMain() {
     GameEngine* gameEngine = new GameEngine;
@@ -32,6 +33,8 @@ int tournamentMain() {
     // tournament -M europe.map -P Aggressive Aggressive -G 1 -D 10
 
     GameEngine* gameEngine = new GameEngine;
+    PlayerStrategies::game = gameEngine;
+
     gameEngine->startupPhase();
 
     Order::logObs->outputFile.close();

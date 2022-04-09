@@ -18,10 +18,10 @@ bool equalsIgnoreCase(string, string);
 int checkCardInHand(string, Hand*);
 
 class PlayerStrategies {
-        friend Player;
-        friend GameEngine;
-    public:
+    friend Player;
+    friend GameEngine;
 
+    public:
         // Default constructor
         PlayerStrategies();
         PlayerStrategies(string type);
@@ -49,11 +49,10 @@ class PlayerStrategies {
 
         // A static game Engine to get Map and Deck
         static GameEngine* game;
-
-        private:
-            bool neutralAttack;
-            Player* p;
-            string type;
+    protected:
+        bool neutralAttack;
+        Player* p;
+        string type;
 };
 
 class HumanPlayerStrategy : public PlayerStrategies{
@@ -73,9 +72,6 @@ class HumanPlayerStrategy : public PlayerStrategies{
 
         //Stream insertion operator Overload
         friend std::ostream& operator<< (std::ostream& os, const HumanPlayerStrategy& humanPs);
-
-    private:
-        Player* p;
 };
 
 class AggressivePlayerStrategy : public PlayerStrategies{
@@ -98,9 +94,6 @@ class AggressivePlayerStrategy : public PlayerStrategies{
 
         //Stream Insertion Operator Overload
         friend std::ostream& operator<< (std::ostream& os, const AggressivePlayerStrategy& aggressivePs);
-
-    private:
-        Player* p;
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategies{
@@ -120,9 +113,6 @@ class BenevolentPlayerStrategy : public PlayerStrategies{
 
         //Stream Insertion Operator Overload
         friend std::ostream& operator<< (std::ostream& os, const BenevolentPlayerStrategy& benevolentPs);
-
-    private:
-        Player* p;
 };
 
 class NeutralPlayerStrategy  : public PlayerStrategies{
@@ -142,9 +132,6 @@ class NeutralPlayerStrategy  : public PlayerStrategies{
 
         //Stream Insertion Operator Overload
         friend std::ostream& operator<< (std::ostream& os, const NeutralPlayerStrategy& neutralPs);
-
-    private:
-         Player* p;
 };
 
 class CheaterPlayerStrategy : public PlayerStrategies{
@@ -164,7 +151,4 @@ class CheaterPlayerStrategy : public PlayerStrategies{
 
         //Stream Insertion Operator Overload
         friend std::ostream& operator<< (std::ostream& os, const CheaterPlayerStrategy& cheaterPs);
-
-    private:
-        Player* p;
 };

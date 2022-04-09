@@ -15,6 +15,8 @@ Player::Player() {
     orders = new OrdersList;
     reinforcePool = 0;
     deployList = new OrdersList;
+    playerStrategy = NULL;
+
     //cout << "[Player default constructor]" << endl;
 }
 
@@ -28,6 +30,8 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r) : 
     hand = new Hand(*h);
     orders = new OrdersList(*o);
 
+    playerStrategy = NULL;
+
     //cout << "[Player param constructor]" << endl;
 }
 
@@ -39,18 +43,19 @@ Player::Player(string n) : name(n) {
     reinforcePool = 0;
     deployList = new OrdersList;
 
+    playerStrategy = NULL;
+
     //cout << "[Player param constructor]" << endl;
 }
 
 // Parameterized Constructor (Player Strategy only)
-Player::Player(PlayerStrategies* initialPs) {
+Player::Player(PlayerStrategies* initialPs) : playerStrategy(initialPs) {
     name = "empty";
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
     deployList = new OrdersList;
-    playerStrategy = initialPs;
 }
 
 // Parameterized Constructor (Player Strategy and name)
@@ -73,6 +78,8 @@ Player::Player(const Player &p) {
     hand = new Hand(*(p.hand));
     orders = new OrdersList(*(p.orders));
     reinforcePool = p.reinforcePool;
+
+    playerStrategy = p.playerStrategy;
     //cout << "[Player copy constructor]" << endl;
 }
 
