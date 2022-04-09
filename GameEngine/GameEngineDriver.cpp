@@ -5,32 +5,36 @@
 #include "GameEngine.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
-int gameEnginemain() {
+int gameEngineMain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine;
-    // TODO: what is this line for? ANSWER : basically order has a game engine attribute so this just initializes it, it is necessary line of code very important
+    Order::game = gameEngine; // TODO: this causes an infinitely loop if trying to do a tournament command
 
     bool isPlaying = true;
 
     while (isPlaying) {
         gameEngine->startupPhase();
-        isPlaying = gameEngine->mainGameLoop();
+
+        // TODO: this might cause errors when running a tournament, so feel free to comment it out
+        if (!gameEngine->getIsTournament()) {
+            isPlaying = gameEngine->mainGameLoop();
+        }
+        else {
+            isPlaying = false;
+        }
     }
 
     Order::logObs->outputFile.close();
+
     return 0;
 }
 
 int tournamentMain() {
     // tournament -M europe.map -P Aggressive Benevolent -G 1 -D 10
 
-//    CommandProcessor cp;
-//    cp.getCommand();
-//    cout << *cp.getCommands()[cp.getCommands().size() - 1] << endl;
-
     GameEngine* gameEngine = new GameEngine;
     gameEngine->startupPhase();
 
     Order::logObs->outputFile.close();
+
     return 0;
 }
