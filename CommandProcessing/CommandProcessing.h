@@ -33,6 +33,8 @@ class Command :public Iloggable, public Subject {
         void addValidInState(int); // Method to add a new state in which the Command is valid
 
         string stringToLog() override; // From Iloggable
+
+        bool isPossibleCommand;
     private:
         string command, transitionsTo, effect; // Command name, next state, and effect of the command
         vector<int> validIn; // Which states it valid in

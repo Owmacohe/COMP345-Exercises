@@ -118,5 +118,4 @@ class GameEngine : public Iloggable, public Subject {
         int mapNumber; // Track the map being played
         vector<vector<string>> tournamentResults; // Store the results of each game
         int numberOfTurns; // Track number of turns in current game
-
 };

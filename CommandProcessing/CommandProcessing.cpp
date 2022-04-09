@@ -21,6 +21,8 @@ Command::Command(string c) : command(c) {
     validIn = vector<int>();
     effect = "";
 
+    isPossibleCommand = true;
+
     if (c == "validatemap") {
         addValidInState(2);
         transitionsTo = "mapvalidated";
@@ -38,6 +40,10 @@ Command::Command(string c) : command(c) {
         transitionsTo = "exit program";
     }
     else {
+        if (c != "loadmap" && c != "addplayer" && c != "tournament") {
+            isPossibleCommand = false;
+        }
+
         cout << "Invalid command!" << endl;
     }
 
@@ -48,6 +54,8 @@ Command::Command(string c) : command(c) {
 Command::Command(string c, string p) : command(c + " <" + p + ">") {
     validIn = vector<int>();
     effect = "";
+
+    isPossibleCommand = true;
 
     if (c == "loadmap") {
         addValidInState(1);
@@ -60,6 +68,10 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
         transitionsTo = "playersadded";
     }
     else {
+        if (c != "validatemap" && c != "gamestart" && c != "replay" && c != "quit" && c != "tournament") {
+            isPossibleCommand = false;
+        }
+
         cout << "Invalid command!" << endl;
     }
 
@@ -68,6 +80,8 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
 
 // Command parameterized constructor 3 (tournament Command)
 Command::Command(string c, string m, string p, int g, int d) : command(c + " -M <" + m + ">" + " -P <" + p + ">" + " -G <" + to_string(g) + ">" + " -D <" + to_string(d) + ">") {
+    isPossibleCommand = true;
+
     if (c == "tournament") {
         transitionsTo = "none";
         effect = "";
@@ -76,6 +90,10 @@ Command::Command(string c, string m, string p, int g, int d) : command(c + " -M 
         addValidInState(1);
     }
     else {
+        if (c != "loadmap" && c != "validatemap" && c != "addplayer" && c != "gamestart" && c != "replay" && c != "quit" && c != "tournament") {
+            isPossibleCommand = false;
+        }
+
         cout << "Invalid command!" << endl;
     }
 
@@ -93,6 +111,8 @@ Command::Command(const Command &c) {
     for (int i : c.validIn) {
         validIn.push_back(i);
     }
+
+    isPossibleCommand = c.isPossibleCommand;
 
     //cout << "[" + command + " Command copy constructor]" << endl;
 }
@@ -123,6 +143,7 @@ Command& Command::operator = (const Command& toAssign) {
     transitionsTo = toAssign.transitionsTo;
     effect = toAssign.effect;
     validIn = toAssign.validIn;
+    isPossibleCommand = toAssign.isPossibleCommand;
     return *this;
 }
 
