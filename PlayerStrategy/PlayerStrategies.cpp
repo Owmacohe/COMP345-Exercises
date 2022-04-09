@@ -25,7 +25,7 @@ string PlayerStrategies::getType() { return type; }
 bool PlayerStrategies::getNeutralAttack() { return neutralAttack; }
 
 void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
-void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b;}
+void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b; }
 
 // Stream insertion operator overloading
 ostream& operator<< (ostream& os, const PlayerStrategies& ps){
