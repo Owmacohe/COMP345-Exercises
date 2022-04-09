@@ -7,7 +7,8 @@
 
 int gameEnginemain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine; // TODO: what is this line for? ANSWER : basically order has a game engine attribute so this just initializes it, it is necessary line of code very important
+    Order::game = gameEngine;
+    // TODO: what is this line for? ANSWER : basically order has a game engine attribute so this just initializes it, it is necessary line of code very important
 
     bool isPlaying = true;
 
@@ -16,6 +17,7 @@ int gameEnginemain() {
         isPlaying = gameEngine->mainGameLoop();
     }
 
+    Order::logObs->outputFile.close();
     return 0;
 }
 
@@ -29,5 +31,6 @@ int tournamentMain() {
     GameEngine* gameEngine = new GameEngine;
     gameEngine->startupPhase();
 
+    Order::logObs->outputFile.close();
     return 0;
 }
