@@ -777,19 +777,31 @@ bool GameEngine::mainGameLoop() {
         string command = temp->getCommand();
         string effect = "";
 
-        if (command == "replay") {
-            effect = "Replaying game";
-            cout << effect << "!" << endl;
-            continueplaying = true;
+        if (processor->validate(temp)) {
+            if (command == "replay") {
+                effect = "Replaying game";
+                cout << effect << "!" << endl;
+                continueplaying = true;
 
-            transition(start);
-        }
-        else if (command == "quit") {
-            effect = "Quitting game";
-            cout << effect << "!" << endl;
-            continueplaying = false;
+                transition(start);
+            }
+            else if (command == "quit") {
+                effect = "Quitting game";
+                cout << effect << "!" << endl;
+                continueplaying = false;
 
-            transition(null);
+                transition(null);
+            }
+            else {
+                if (temp->isPossibleCommand) {
+                    effect = "Command is invalid in the current state";
+                    cout << effect << "!" << endl;
+                }
+                else {
+                    effect = "Command does not exist";
+                    cout << effect << "!" << endl;
+                }
+            }
         }
 
         temp->saveEffect(effect);

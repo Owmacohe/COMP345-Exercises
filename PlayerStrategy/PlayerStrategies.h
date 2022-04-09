@@ -25,6 +25,7 @@ class PlayerStrategies {
         // Default constructor
         PlayerStrategies();
         PlayerStrategies(string type);
+        PlayerStrategies(Player*, string);
 
         // Copy constructor
         PlayerStrategies(const PlayerStrategies& other);
@@ -81,6 +82,9 @@ class AggressivePlayerStrategy : public PlayerStrategies{
     public:
         // Default constructor
         AggressivePlayerStrategy();
+
+        // Parameterized constructor
+        AggressivePlayerStrategy(Player*);
 
         // Copy constructor
         AggressivePlayerStrategy(const AggressivePlayerStrategy& other);

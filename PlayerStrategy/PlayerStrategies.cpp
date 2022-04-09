@@ -15,9 +15,10 @@ PlayerStrategies::PlayerStrategies() {
 }
 
 // Parameterized Constructor
-PlayerStrategies::PlayerStrategies(string type) {
-    this->type = type;
-}
+PlayerStrategies::PlayerStrategies(string t) : type(t) { }
+
+// Parameterized Constructor
+PlayerStrategies::PlayerStrategies(Player *pl, string t) : p(pl), type(t) { }
 
 Player* PlayerStrategies::getPlayer() { return p; }
 string PlayerStrategies::getType() { return type; }
@@ -174,8 +175,13 @@ ostream& operator<< (ostream& os, const HumanPlayerStrategy& ps){
  */
 
 // Default constructor
-AggressivePlayerStrategy::AggressivePlayerStrategy() : PlayerStrategies("Aggressive"){
+AggressivePlayerStrategy::AggressivePlayerStrategy() : PlayerStrategies("Aggressive") {
     cout << "Aggressive Strategy Default constructor called" << endl;
+}
+
+// Parameterized constructor
+AggressivePlayerStrategy::AggressivePlayerStrategy(Player *pl) : PlayerStrategies(pl, "Aggressive") {
+    cout << "Aggressive Strategy Parameterized constructor called" << endl;
 }
 
 void AggressivePlayerStrategy::issueOrder(string type) {
@@ -209,8 +215,8 @@ void AggressivePlayerStrategy::issueOrder(string type) {
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
-    pair<int, Territory*> pairs;
-    vector<pair<int, Territory*>> ordering;
+    pair<int, Territory*> pairs = pair<int, Territory*>();
+    vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
 
     for (Territory* territory : p->getTerritoryList()) { // Looping through the player's territories
@@ -263,13 +269,12 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
-    vector<Territory *> defend_territories = vector<Territory *>();
-    pair<int, Territory *> pairs;
-    vector<pair<int, Territory *>> ordering;
+    vector<Territory*> defend_territories = vector<Territory*>();
+    pair<int, Territory*> pairs = pair<int, Territory*>();
+    vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
 
     for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
-
         int number_surrounding = 0;
         string name = territory->getName();
 
@@ -302,8 +307,7 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
         sort(ordering.begin(), ordering.end());
 
         for (pair<int, Territory *> p: ordering) {
-            defend_territories.insert(defend_territories.begin(),
-                                      p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
+            defend_territories.insert(defend_territories.begin(), p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
             p.second = nullptr; // Dangling pointer avoidance
         }
 
@@ -313,7 +317,7 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
 
 // Stream insertion operator overloading
 ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps){
-    os << "Aggressive Player Strategy";
+    os << "Aggressive Player Strategy of: " << ps.p->getName();
     return os;
 }
 

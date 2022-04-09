@@ -7,7 +7,7 @@
 
 int gameEngineMain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine; // TODO: this causes an infinitely loop if trying to do a tournament command
+    Order::game = gameEngine; // TODO: this causes an infinite loop if trying to do a tournament command
 
     bool isPlaying = true;
 
@@ -29,7 +29,7 @@ int gameEngineMain() {
 }
 
 int tournamentMain() {
-    // tournament -M europe.map -P Aggressive Benevolent -G 1 -D 10
+    // tournament -M europe.map -P Aggressive Aggressive -G 1 -D 10
 
     GameEngine* gameEngine = new GameEngine;
     gameEngine->startupPhase();

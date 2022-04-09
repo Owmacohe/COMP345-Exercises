@@ -7,8 +7,7 @@
 
 using namespace std;
 
-int playerStrategyMain(){
-
+int playerStrategyMain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -53,6 +52,32 @@ int playerStrategyMain(){
 
     cout << player1->getPlayerStrategy()->getType() << endl; // This one will print out the right Strategy
     cout << *player1->getPlayerStrategy() << endl; // This one don't :<
+
+    return 0;
+}
+
+int temp() {
+    // Create Map Loader
+    MapLoader* loader;
+    Map *mainmap = loader->load("../Orders/canada.map");
+
+    Player *p = new Player("Player1");
+
+    for (Territory *i : mainmap->getTerritories()) {
+        i->setOwner(p);
+        p->assignTerritory(i);
+    }
+
+    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(p);
+    p->setStrategy(aps);
+
+    p->toDefend();
+
+    return 0;
+}
+
+int main() {
+    temp();
 
     return 0;
 }
