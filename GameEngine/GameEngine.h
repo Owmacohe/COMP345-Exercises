@@ -4,6 +4,7 @@
 #include <iostream>
 #include <set>
 #include <cmath>
+#include <sstream>
 
 using namespace std;
 
@@ -46,7 +47,7 @@ class GameEngine : public Iloggable, public Subject {
         bool getIsTournament();
         int getGameNumber();
         int getMapNumber();
-        vector<string> getTournamentResults();
+        vector<vector<string>> getTournamentResults();
         int getNumberOfTurns();
 
         // Mutators
@@ -67,7 +68,7 @@ class GameEngine : public Iloggable, public Subject {
         void setIsTournament(bool);
         void setGameNumber(int);
         void setMapNumber(int);
-        void setTournamentResults(vector<string>);
+        void setTournamentResults(vector<vector<string>>);
         void setNumberOfTurns(int);
 
         void assignReinforcementPhase();
@@ -115,7 +116,7 @@ class GameEngine : public Iloggable, public Subject {
         bool isTournament;
         int gameNumber; // Track the game being played
         int mapNumber; // Track the map being played
-        vector<string> tournamentResults; // Store the results of each game
+        vector<vector<string>> tournamentResults; // Store the results of each game
         int numberOfTurns; // Track number of turns in current game
 
 };

@@ -78,7 +78,10 @@ GameEngine::~GameEngine() {
     delete neutralPlayer;
     neutralPlayer = NULL;
 
-    //TODO Vector of Results for tournament mode?--depends on type that i will choose
+    for(int i = 0; i<tournamentResults.size()-1; i++){
+        tournamentResults.at(i).clear();
+    }
+    tournamentResults.clear();
 }
 
 // Assignment operator
@@ -138,7 +141,7 @@ Player* GameEngine::getNeutralPlayer() { return neutralPlayer; }
 bool GameEngine::getIsTournament(){return isTournament;}
 int GameEngine::getGameNumber(){return gameNumber;}
 int GameEngine::getMapNumber(){return mapNumber;}
-vector<string> GameEngine::getTournamentResults(){return tournamentResults;}
+vector<vector<string>> GameEngine::getTournamentResults(){return tournamentResults;}
 int GameEngine::getNumberOfTurns(){return numberOfTurns;}
 
 // Mutators
@@ -170,7 +173,7 @@ void GameEngine::setNeutralPlayer(Player* np) { neutralPlayer = np; }
 void GameEngine::setIsTournament(bool it){isTournament = it;}
 void GameEngine::setGameNumber(int gn){ gameNumber = gn;}
 void GameEngine::setMapNumber(int mn) {mapNumber = mn;}
-void GameEngine::setTournamentResults(const vector<string> tr){tournamentResults = tr;}
+void GameEngine::setTournamentResults(const vector<vector<string>> tr){tournamentResults = tr;}
 void GameEngine::setNumberOfTurns(int nt){ numberOfTurns = nt;}
 
 // Assign reinforcement phase
@@ -331,15 +334,19 @@ void GameEngine::endexecuteOrdersPhase() {
 }
 
 void GameEngine::winPhase(Player *p) {
+    // Adds the result in the correct column of the current game and Map
+   tournamentResults.at(gameNumber).push_back(p->getPlayerStrategy()->getType());
     transition(win);
-    // tournamentResults.push_back(ps) TODO ACCESS STRATEGY OF PLAYER
     cout << "Victory for player: " << p->getName() << endl;
+
 }
 
 void GameEngine::drawPhase() {
+    // Adds the result in the correct column of the current game and Map
+    tournamentResults.at(gameNumber).push_back("Draw");
     transition(win);
-    tournamentResults.push_back("Draw");
     cout << "Draw game." << endl;
+
 }
 
 void GameEngine::endPhase() {
@@ -451,6 +458,10 @@ void GameEngine::startupPhase() {
             for (int j = 0; j < processor->getNumberOfGames(); j++) {
                 gameNumber = j;
                 mapNumber = 0;
+
+                // Insert a column in the Results Table
+                vector<string> column;
+                tournamentResults.push_back(column);
 
                 for (string k : processor->getMaps()) {
                     mapNumber++;
@@ -757,10 +768,6 @@ bool GameEngine::mainGameLoop() {
         playing = !checkForWinner(); // Check for winner
     }
 
-    if (isTournament && *s ==8){
-        //TODO trigger the stringToLog? ---- already included in condition above (to test)
-    }
-
     while (!isTournament && *s == 8) {
         cout << "Replay or quit? " << endl;
 
@@ -880,20 +887,35 @@ string GameEngine::stringToLog() {
     if (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
     }
-    /* TODO PRINT TABLE OF RESULTS
+
     else if (enumStates[*s] == "win" && mapNumber == processor->getMaps().size()-1 && gameNumber == processor->getNumberOfGames()) {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
-        string title = "Results:";
-        string headers = "\t\t\t |";
-        for (int i = 0; i < gameNumber; i++){
-            headers += " Game " + to_string(i+1) + "\t|";
-        }
-        for(int i= 0; i < tournamentResults.size()-1; i++){
-            for (int j = 0; j < gameNumber+1; i++){
 
-            }
+        // Following lines help format the Table
+        int ws = 15;
+        ostringstream resultsTable;
+        resultsTable << "Results:\n";
+        resultsTable.width(ws);
+        resultsTable << " |";
+
+        for (int i = 0; i <= gameNumber; i++){
+            resultsTable.width(ws);
+            resultsTable << "Game "+ to_string(i+1) + " |";
         }
-    }*/
+        resultsTable <<"\n";
+
+        for(int j = 0; j <= mapNumber; j++){
+            resultsTable.width(ws);
+            resultsTable << processor->getMaps().at(j) + " |";
+
+            for(int k = 0; k <= gameNumber; k++){
+                resultsTable.width(ws);
+                resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
+            }
+            resultsTable << "\n";
+        }
+        logString += resultsTable.str();
+    }
     else{
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
     }
