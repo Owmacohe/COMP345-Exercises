@@ -261,7 +261,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
     //TODO :: this is my attempt at the neutral player thingy
     if (attack_territories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
-            setNeutralAttack(true);
+        setNeutralAttack(true);
     }
 
     return attack_territories;
@@ -273,6 +273,8 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
+
+    cout << m->getName() << endl;
 
     for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
         int number_surrounding = 0;
