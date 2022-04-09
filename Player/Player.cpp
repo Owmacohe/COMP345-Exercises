@@ -22,7 +22,7 @@ Player::Player() {
 Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r) : name(n), reinforcePool(r) {
     territories = vector<Territory*>();
     for (Territory* i : t) {
-        territories.push_back(new Territory(*i));
+        territories.push_back(i);
     }
 
     hand = new Hand(*h);
@@ -43,7 +43,7 @@ Player::Player(string n) : name(n) {
 }
 
 // Parameterized Constructor (Player Strategy only)
-Player::Player(PlayerStrategies* initialPs){
+Player::Player(PlayerStrategies* initialPs) {
     name = "empty";
     territories = vector<Territory*>();
     hand = new Hand;
@@ -54,13 +54,12 @@ Player::Player(PlayerStrategies* initialPs){
 }
 
 // Parameterized Constructor (Player Strategy and name)
-Player::Player(PlayerStrategies* initialPs, string n) : name(n) {
+Player::Player(PlayerStrategies* initialPs, string n) : playerStrategy(initialPs), name(n) {
     territories = vector<Territory*>();
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
     deployList = new OrdersList;
-    playerStrategy = initialPs;
 }
 
 // Copy constructor

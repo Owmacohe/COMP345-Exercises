@@ -61,23 +61,18 @@ int temp() {
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
 
-    Player *p = new Player("Player1");
+    Player *tempPlayer = new Player("Player1");
 
     for (Territory *i : mainmap->getTerritories()) {
-        i->setOwner(p);
-        p->assignTerritory(i);
+        i->setOwner(tempPlayer);
+        tempPlayer->assignTerritory(i);
     }
 
-    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(p);
-    p->setStrategy(aps);
+    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(tempPlayer);
+    tempPlayer->setStrategy(aps);
 
-    p->toDefend();
-
-    return 0;
-}
-
-int main() {
-    temp();
+    aps->getPlayer()->toDefend();
+    //tempPlayer->toDefend();
 
     return 0;
 }
