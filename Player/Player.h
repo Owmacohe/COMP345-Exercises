@@ -201,22 +201,6 @@ class Player {
         vector<Territory*> getTerritoryList();
 
         /**
-        Assignment Operator overloading to assign a deep copy
-        @overload
-        @param Player reference that will be copied and assigned
-        @return Player reference
-        */
-        Player& operator = (const Player& player);
-
-        /**
-        Friend method to override the stream insertion operator
-        @overload
-        @param output stream reference and the player as a constant reference
-        @return output stream reference
-        */
-        friend ostream& operator<<(ostream& os, const Player& player);
-
-        /**
          * Method to determine which territories the player should defend in priority
          * @return vector of Territory pointers player should defend
          */
@@ -234,6 +218,22 @@ class Player {
          * @param string input type of order (deploy, advance or a card)
          */
         void issueOrder(string input);
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param Player reference that will be copied and assigned
+        @return Player reference
+        */
+        Player& operator = (const Player& player);
+
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
+        friend ostream& operator<<(ostream& os, const Player& player);
 
     private:
         /// Name of Player

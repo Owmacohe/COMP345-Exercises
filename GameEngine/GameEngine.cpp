@@ -751,6 +751,7 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
+//TODO: check neutral player
 bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
