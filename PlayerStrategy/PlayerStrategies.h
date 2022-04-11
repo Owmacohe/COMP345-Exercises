@@ -119,7 +119,7 @@ class PlayerStrategies {
         virtual vector<Territory*> toDefend() = 0;
 
         /**
-        Assignment Operator overloading to assign a deep copy
+        * Assignment Operator overloading to assign a deep copy
         @overload
         @param PlayerStrategies reference that will be copied and assigned
         @return PlayerStrategies reference
@@ -127,12 +127,14 @@ class PlayerStrategies {
         const PlayerStrategies& operator= (const PlayerStrategies &ps);
 
         /**
-        Friend method to override the stream insertion operator
+        * Friend method to override the stream insertion operator
+        * Stream insertion operator (virtual for derived class)
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const PlayerStrategies& ps);
+        virtual ostream& write(ostream &strm) const;
+        friend ostream& operator<<(ostream &strm, PlayerStrategies const &cp) { return cp.write(strm); };
 
         /// A static game Engine to access Map and Deck related
         static GameEngine* game;
@@ -198,12 +200,12 @@ class HumanPlayerStrategy : public PlayerStrategies{
         const HumanPlayerStrategy& operator= (const HumanPlayerStrategy& humanPs);
 
         /**
-        Friend method to override the stream insertion operator
+        Method to override the stream insertion operator
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const HumanPlayerStrategy& humanPs);
+        ostream& write(ostream &strm) const override;
 };
 
 /**
@@ -215,7 +217,7 @@ class AggressivePlayerStrategy : public PlayerStrategies{
         AggressivePlayerStrategy();
 
         /**
-        * Parameterized constructor that creates new player based on parameters
+        Parameterized constructor that creates new player based on parameters
         * @param Player pointer pointing to the player the strategy object belongs too
         */
         AggressivePlayerStrategy(Player*);
@@ -228,19 +230,19 @@ class AggressivePlayerStrategy : public PlayerStrategies{
         AggressivePlayerStrategy(const AggressivePlayerStrategy& other);
 
         /**
-        * Override Method to issue orders into the player orderlist
+        Override Method to issue orders into the player orderlist
         * @param string input type of order (deploy, advance or a card) type
         */
         void issueOrder(string type) override;
 
         /**
-        * Override Method to determine which territories the player should attack in priority
+        Override Method to determine which territories the player should attack in priority
         * @return vector of Territory pointers player should attack
         */
         vector<Territory*> toAttack() override;
 
         /**
-        * Override Method to determine which territories the player should defend in priority
+        Override Method to determine which territories the player should defend in priority
         * @return vector of Territory pointers player should defend
         */
         vector<Territory*> toDefend() override;
@@ -254,12 +256,12 @@ class AggressivePlayerStrategy : public PlayerStrategies{
         const AggressivePlayerStrategy& operator= (const AggressivePlayerStrategy& aggressivePs);
 
         /**
-        Friend method to override the stream insertion operator
+        Method to override the stream insertion operator
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const AggressivePlayerStrategy& aggressivePs);
+        ostream& write(ostream &strm) const override;
 };
 
 /**
@@ -271,7 +273,7 @@ class BenevolentPlayerStrategy : public PlayerStrategies{
         BenevolentPlayerStrategy();
 
         /**
-        * Parameterized constructor that creates new player based on parameters
+        Parameterized constructor that creates new player based on parameters
         * @param Player pointer pointing to the player the strategy object belongs too
         */
         BenevolentPlayerStrategy(Player*);
@@ -284,19 +286,19 @@ class BenevolentPlayerStrategy : public PlayerStrategies{
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other);
 
         /**
-        * Override Method to issue orders into the player orderlist
+        Override Method to issue orders into the player orderlist
         * @param string input type of order (deploy, advance or a card) type
         */
         void issueOrder(string type) override;
 
         /**
-        * Override Method to determine which territories the player should attack in priority
+        Override Method to determine which territories the player should attack in priority
         * @return vector of Territory pointers player should attack
         */
         vector<Territory*> toAttack() override;
 
         /**
-        * Override Method to determine which territories the player should defend in priority
+        Override Method to determine which territories the player should defend in priority
         * @return vector of Territory pointers player should defend
         */
         vector<Territory*> toDefend() override;
@@ -310,12 +312,12 @@ class BenevolentPlayerStrategy : public PlayerStrategies{
         const BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy& benevolentPs);
 
         /**
-        Friend method to override the stream insertion operator
+        Method to override the stream insertion operator
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const BenevolentPlayerStrategy& benevolentPs);
+        ostream& write(ostream &strm) const override;
 };
 
 class NeutralPlayerStrategy  : public PlayerStrategies{
@@ -324,7 +326,7 @@ class NeutralPlayerStrategy  : public PlayerStrategies{
         NeutralPlayerStrategy();
 
         /**
-        * Parameterized constructor that creates new player based on parameters
+        Parameterized constructor that creates new player based on parameters
         * @param Player pointer pointing to the player the strategy object belongs too
         */
         NeutralPlayerStrategy(Player*);
@@ -337,19 +339,19 @@ class NeutralPlayerStrategy  : public PlayerStrategies{
         NeutralPlayerStrategy(const NeutralPlayerStrategy& other);
 
         /**
-        * Override Method to issue orders into the player orderlist
+        Override Method to issue orders into the player orderlist
         * @param string input type of order (deploy, advance or a card) type
         */
         void issueOrder(string type) override;
 
         /**
-        * Override Method to determine which territories the player should attack in priority
+        Override Method to determine which territories the player should attack in priority
         * @return vector of Territory pointers player should attack
         */
         vector<Territory*> toAttack() override;
 
         /**
-        * Override Method to determine which territories the player should defend in priority
+        Override Method to determine which territories the player should defend in priority
         * @return vector of Territory pointers player should defend
         */
         vector<Territory*> toDefend() override;
@@ -363,12 +365,12 @@ class NeutralPlayerStrategy  : public PlayerStrategies{
         const NeutralPlayerStrategy& operator= (const NeutralPlayerStrategy& neutralPs);
 
         /**
-        Friend method to override the stream insertion operator
+        Method to override the stream insertion operator
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const NeutralPlayerStrategy& neutralPs);
+        ostream& write(ostream &strm) const override;
 };
 
 class CheaterPlayerStrategy : public PlayerStrategies{
@@ -416,10 +418,10 @@ class CheaterPlayerStrategy : public PlayerStrategies{
         const CheaterPlayerStrategy& operator= (const CheaterPlayerStrategy& cheaterPs);
 
         /**
-        Friend method to override the stream insertion operator
+        Method to override the stream insertion operator
         @overload
         @param output stream reference and the player as a constant reference
         @return output stream reference
         */
-        friend std::ostream& operator<< (std::ostream& os, const CheaterPlayerStrategy& cheaterPs);
+        ostream& write(ostream &strm) const override;
 };

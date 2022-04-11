@@ -28,9 +28,8 @@ void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
 void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b; }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const PlayerStrategies& ps) {
-    os << "Player Strategy";
-    return os;
+ostream& PlayerStrategies::write(ostream &strm) const {
+    return strm << "Player Strategy";
 }
 
 
@@ -167,9 +166,8 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const HumanPlayerStrategy& ps) {
-    os << "Human Player Strategy";
-    return os;
+ostream& HumanPlayerStrategy::write(ostream &strm) const {
+    return strm << "Human Player Strategy";
 }
 
 
@@ -320,9 +318,8 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps) {
-    os << "Aggressive Player Strategy of: " << ps.p->getName();
-    return os;
+ostream& AggressivePlayerStrategy::write(ostream &strm) const {
+    return strm << "Aggressive Player Strategy";
 }
 
 
@@ -364,9 +361,8 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps) {
-    os << "Benevolent Player Strategy";
-    return os;
+ostream& BenevolentPlayerStrategy::write(ostream &strm) const {
+    return strm << "Benevolent Player Strategy";
 }
 
 
@@ -404,9 +400,8 @@ vector<Territory*> NeutralPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps) {
-    os << "Neutral Player Strategy";
-    return os;
+ostream& NeutralPlayerStrategy::write(ostream &strm) const {
+    return strm << "Neutral Player Strategy";
 }
 
 
@@ -447,9 +442,8 @@ vector<Territory*> CheaterPlayerStrategy::toDefend() {
 
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const CheaterPlayerStrategy& ps) {
-    os << "Cheater Player Strategy";
-    return os;
+ostream& CheaterPlayerStrategy::write(ostream &strm) const {
+    return strm << "Cheater Player Strategy";
 }
 
 

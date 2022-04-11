@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int playerStrategyMain() {
+int main() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -50,33 +50,10 @@ int playerStrategyMain() {
         cout << endl;
     }
 
-    cout << player1->getPlayerStrategy()->getType() << endl; // This one will print out the right Strategy
-    cout << *player1->getPlayerStrategy() << endl; // This one don't :<
+    for (Player* p : mainGE->getplayer_list()) {
+        cout << p->getPlayerStrategy()->getType() << endl; 
+        cout << *(p->getPlayerStrategy()) << endl;
+    }
 
     return 0;
 }
-
-//int temp() {
-//    // Create Map Loader
-//    MapLoader* loader;
-//    Map *mainmap = loader->load("../Orders/canada.map");
-//
-//    // Create & Set up Game Engine
-//    GameEngine* mainGE = new GameEngine();
-//    mainGE->setMap(mainmap);
-//    PlayerStrategies::game = mainGE;
-//
-//    Player *tempPlayer = new Player("Player1");
-//
-//    for (Territory *i : mainmap->getTerritories()) {
-//        i->setOwner(tempPlayer);
-//        tempPlayer->assignTerritory(i);
-//    }
-//
-//    AggressivePlayerStrategy *aps = new AggressivePlayerStrategy(tempPlayer);
-//    tempPlayer->setStrategy(aps);
-//
-//    tempPlayer->toDefend();
-//
-//    return 0;
-//}
