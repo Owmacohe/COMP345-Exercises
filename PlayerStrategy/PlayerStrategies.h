@@ -60,6 +60,9 @@ class HumanPlayerStrategy : public PlayerStrategies{
         // Default constructor
         HumanPlayerStrategy();
 
+        // Parameterized constructor
+        HumanPlayerStrategy(Player*);
+
         // Copy constructor
         HumanPlayerStrategy(const HumanPlayerStrategy& other);
 
@@ -101,6 +104,9 @@ class BenevolentPlayerStrategy : public PlayerStrategies{
         // Default constructor
         BenevolentPlayerStrategy();
 
+        // Parameterized constructor
+        BenevolentPlayerStrategy(Player*);
+
         // Copy constructor
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other);
 
@@ -120,6 +126,9 @@ class NeutralPlayerStrategy  : public PlayerStrategies{
         // Default constructor
         NeutralPlayerStrategy();
 
+        // Parameterized constructor
+        NeutralPlayerStrategy(Player*);
+
         // Copy constructor
         NeutralPlayerStrategy(const NeutralPlayerStrategy& other);
 
@@ -138,6 +147,9 @@ class CheaterPlayerStrategy : public PlayerStrategies{
     public:
         // Default constructor
         CheaterPlayerStrategy();
+
+        // Parameterized constructor
+        CheaterPlayerStrategy(Player*);
 
         // Copy constructor
         CheaterPlayerStrategy(const CheaterPlayerStrategy& other);

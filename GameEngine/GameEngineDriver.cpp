@@ -8,7 +8,7 @@
 
 int gameEngineMain() {
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine; // TODO: this causes an infinite loop if trying to do a tournament command
+    Order::game = gameEngine;
 
     bool isPlaying = true;
 
@@ -32,7 +32,11 @@ int gameEngineMain() {
 int tournamentMain() {
     // tournament -M europe.map -P Aggressive Aggressive -G 1 -D 10
 
+    // TODO: currently breaks when using more than 1 map (players' territories become null)
+    // TODO: currently loops infinitely when playing more than 1 game (not sure why)
+
     GameEngine* gameEngine = new GameEngine;
+    Order::game = gameEngine;
     PlayerStrategies::game = gameEngine;
 
     gameEngine->startupPhase();

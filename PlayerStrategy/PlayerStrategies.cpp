@@ -28,7 +28,7 @@ void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
 void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b; }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const PlayerStrategies& ps){
+ostream& operator<< (ostream& os, const PlayerStrategies& ps) {
     os << "Player Strategy";
     return os;
 }
@@ -43,8 +43,13 @@ ostream& operator<< (ostream& os, const PlayerStrategies& ps){
  */
 
 // Default Constructor
-HumanPlayerStrategy::HumanPlayerStrategy(): PlayerStrategies("Human"){
+HumanPlayerStrategy::HumanPlayerStrategy(): PlayerStrategies("Human") {
     cout << "Human Strategy Default constructor called" << endl;
+}
+
+// Parameterized constructor
+HumanPlayerStrategy::HumanPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Human") {
+    cout << "Human Strategy Parameterized constructor called" << endl;
 }
 
 void HumanPlayerStrategy::issueOrder(string type) {
@@ -162,7 +167,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const HumanPlayerStrategy& ps){
+ostream& operator<< (ostream& os, const HumanPlayerStrategy& ps) {
     os << "Human Player Strategy";
     return os;
 }
@@ -274,8 +279,6 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
 
-    cout << m->getName() << endl;
-
     for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
         int number_surrounding = 0;
         string name = territory->getName();
@@ -318,7 +321,7 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps){
+ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps) {
     os << "Aggressive Player Strategy of: " << ps.p->getName();
     return os;
 }
@@ -331,11 +334,16 @@ ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps){
  */
 
 // Default constructor
-BenevolentPlayerStrategy::BenevolentPlayerStrategy() : PlayerStrategies("Benevolent"){
+BenevolentPlayerStrategy::BenevolentPlayerStrategy() : PlayerStrategies("Benevolent") {
     cout << "Benevolent Strategy Default constructor called" << endl;
 }
 
-void BenevolentPlayerStrategy::issueOrder(string type){
+// Parameterized constructor
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Benevolent") {
+    cout << "Benevolent Strategy Parameterized constructor called" << endl;
+}
+
+void BenevolentPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Strategy called" << endl;
 
 }
@@ -357,7 +365,7 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps){
+ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps) {
     os << "Benevolent Player Strategy";
     return os;
 }
@@ -370,8 +378,13 @@ ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps){
  */
 
 // Default constructor
-NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Benevolent"){
+NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Neutral") {
     cout << "Neutral Strategy Default constructor called" << endl;
+}
+
+// Parameterized constructor
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Neutral") {
+    cout << "Neutral Strategy Parameterized constructor called" << endl;
 }
 
 // TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
@@ -397,7 +410,7 @@ vector<Territory*> NeutralPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps){
+ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps) {
     os << "Neutral Player Strategy";
     return os;
 }
@@ -409,8 +422,13 @@ ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps){
  */
 
 // Default constructor
-CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategies("Cheater"){
+CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategies("Cheater") {
     cout << "Cheater Strategy Default constructor called" << endl;
+}
+
+// Parameterized constructor
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Cheater") {
+    cout << "Cheater Strategy Parameterized constructor called" << endl;
 }
 
 void CheaterPlayerStrategy::issueOrder(string type) {
@@ -435,7 +453,7 @@ vector<Territory*> CheaterPlayerStrategy::toDefend() {
 
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const CheaterPlayerStrategy& ps){
+ostream& operator<< (ostream& os, const CheaterPlayerStrategy& ps) {
     os << "Cheater Player Strategy";
     return os;
 }
