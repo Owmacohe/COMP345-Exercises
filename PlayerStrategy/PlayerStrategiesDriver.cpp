@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main() {
+int PlayerStrategymain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -49,9 +49,10 @@ int main() {
         }
         cout << endl;
     }
+    cout << endl;
 
     for (Player* p : mainGE->getplayer_list()) {
-        cout << p->getPlayerStrategy()->getType() << endl; 
+        cout << p->getPlayerStrategy()->getType() << endl;
         cout << *(p->getPlayerStrategy()) << endl;
     }
 
