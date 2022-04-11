@@ -113,7 +113,7 @@ class PlayerStrategies {
         virtual vector<Territory*> toAttack() = 0;
 
         /**
-         * Method to determine which territories the player should defend in priority
+         * Virtual Method to determine which territories the player should defend in priority
          * @return vector of Territory pointers player should defend
          */
         virtual vector<Territory*> toDefend() = 0;
@@ -148,112 +148,278 @@ class PlayerStrategies {
         string type;
 };
 
+//TODO: idk if my comments related to abstract classes makes sense
+
+/**
+ Class representing the the Human Player Strategy implements abstract PlayerStrategies class
+ */
 class HumanPlayerStrategy : public PlayerStrategies{
     public:
-        // Default constructor
+        /// Default constructor
         HumanPlayerStrategy();
 
-        // Parameterized constructor
+        /**
+        * Parameterized constructor that creates new player based on parameters
+        * @param Player pointer pointing to the player the strategy object belongs too
+        */
         HumanPlayerStrategy(Player*);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant HumanPlayerStrategies reference
+        @return pointer to the HumanPlayerStrategies created
+        */
         HumanPlayerStrategy(const HumanPlayerStrategy& other);
 
+        /**
+        * Override Method to issue orders into the player orderlist
+        * @param string input type of order (deploy, advance or a card) type
+        */
         void issueOrder(string type) override;
+
+        /**
+        * Override Method to determine which territories the player should attack in priority
+        * @return vector of Territory pointers player should attack
+        */
         vector<Territory*> toAttack() override;
+
+        /**
+        * Override Method to determine which territories the player should defend in priority
+        * @return vector of Territory pointers player should defend
+        */
         vector<Territory*> toDefend() override;
 
-        //Assignment Operator Overload
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param HumanPlayerStrategies reference that will be copied and assigned
+        @return HumanPlayerStrategies reference
+        */
         const HumanPlayerStrategy& operator= (const HumanPlayerStrategy& humanPs);
 
-        //Stream insertion operator Overload
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const HumanPlayerStrategy& humanPs);
 };
 
+/**
+ Class representing the the Aggressive Player Strategy implements abstract PlayerStrategies class
+ */
 class AggressivePlayerStrategy : public PlayerStrategies{
     public:
-        // Default constructor
+        /// Default constructor
         AggressivePlayerStrategy();
 
-        // Parameterized constructor
+        /**
+        * Parameterized constructor that creates new player based on parameters
+        * @param Player pointer pointing to the player the strategy object belongs too
+        */
         AggressivePlayerStrategy(Player*);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant AggressivePlayerStrategies reference
+        @return pointer to the AggressivePlayerStrategies created
+        */
         AggressivePlayerStrategy(const AggressivePlayerStrategy& other);
 
+        /**
+        * Override Method to issue orders into the player orderlist
+        * @param string input type of order (deploy, advance or a card) type
+        */
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
 
-        //Assignment Operator Overload
+        /**
+        * Override Method to determine which territories the player should attack in priority
+        * @return vector of Territory pointers player should attack
+        */
+        vector<Territory*> toAttack() override;
+
+        /**
+        * Override Method to determine which territories the player should defend in priority
+        * @return vector of Territory pointers player should defend
+        */
+        vector<Territory*> toDefend() override;
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param AggressivePlayerStrategies reference that will be copied and assigned
+        @return AggressivePlayerStrategies reference
+        */
         const AggressivePlayerStrategy& operator= (const AggressivePlayerStrategy& aggressivePs);
 
-        //Stream Insertion Operator Overload
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const AggressivePlayerStrategy& aggressivePs);
 };
 
+/**
+ Class representing the the Benevolent Player Strategy implements abstract PlayerStrategies class
+ */
 class BenevolentPlayerStrategy : public PlayerStrategies{
     public:
-        // Default constructor
+        /// Default constructor
         BenevolentPlayerStrategy();
 
-        // Parameterized constructor
+        /**
+        * Parameterized constructor that creates new player based on parameters
+        * @param Player pointer pointing to the player the strategy object belongs too
+        */
         BenevolentPlayerStrategy(Player*);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant BenevolentPlayerStrategies reference
+        @return pointer to the BenevolentPlayerStrategies created
+        */
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy& other);
 
+        /**
+        * Override Method to issue orders into the player orderlist
+        * @param string input type of order (deploy, advance or a card) type
+        */
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
 
-        //Assignment Operator Overload
+        /**
+        * Override Method to determine which territories the player should attack in priority
+        * @return vector of Territory pointers player should attack
+        */
+        vector<Territory*> toAttack() override;
+
+        /**
+        * Override Method to determine which territories the player should defend in priority
+        * @return vector of Territory pointers player should defend
+        */
+        vector<Territory*> toDefend() override;
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param BenevolentPlayerStrategies reference that will be copied and assigned
+        @return BenevolentPlayerStrategies reference
+        */
         const BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy& benevolentPs);
 
-        //Stream Insertion Operator Overload
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const BenevolentPlayerStrategy& benevolentPs);
 };
 
 class NeutralPlayerStrategy  : public PlayerStrategies{
     public:
-        // Default constructor
+        /// Default constructor
         NeutralPlayerStrategy();
 
-        // Parameterized constructor
+        /**
+        * Parameterized constructor that creates new player based on parameters
+        * @param Player pointer pointing to the player the strategy object belongs too
+        */
         NeutralPlayerStrategy(Player*);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant NeutralPlayerStrategies reference
+        @return pointer to the NeutralPlayerStrategies created
+        */
         NeutralPlayerStrategy(const NeutralPlayerStrategy& other);
 
+        /**
+        * Override Method to issue orders into the player orderlist
+        * @param string input type of order (deploy, advance or a card) type
+        */
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
 
-        //Assignment Operator Overload
+        /**
+        * Override Method to determine which territories the player should attack in priority
+        * @return vector of Territory pointers player should attack
+        */
+        vector<Territory*> toAttack() override;
+
+        /**
+        * Override Method to determine which territories the player should defend in priority
+        * @return vector of Territory pointers player should defend
+        */
+        vector<Territory*> toDefend() override;
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param NeutralPlayerStrategies reference that will be copied and assigned
+        @return NeutralPlayerStrategies reference
+        */
         const NeutralPlayerStrategy& operator= (const NeutralPlayerStrategy& neutralPs);
 
-        //Stream Insertion Operator Overload
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const NeutralPlayerStrategy& neutralPs);
 };
 
 class CheaterPlayerStrategy : public PlayerStrategies{
     public:
-        // Default constructor
+        /// Default constructor
         CheaterPlayerStrategy();
 
-        // Parameterized constructor
+        /**
+        * Parameterized constructor that creates new player based on parameters
+        * @param Player pointer pointing to the player the strategy object belongs too
+        */
         CheaterPlayerStrategy(Player*);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant CheaterPlayerStrategies reference
+        @return pointer to the CheaterPlayerStrategies created
+        */
         CheaterPlayerStrategy(const CheaterPlayerStrategy& other);
 
+        /**
+        * Override Method to issue orders into the player orderlist
+        * @param string input type of order (deploy, advance or a card) type
+        */
         void issueOrder(string type) override;
-        std::vector<Territory*> toAttack() override;
-        std::vector<Territory*> toDefend() override;
 
-        //Assignment Operator Overload
+        /**
+        * Override Method to determine which territories the player should attack in priority
+        * @return vector of Territory pointers player should attack
+        */
+        vector<Territory*> toAttack() override;
+
+        /**
+        * Override Method to determine which territories the player should defend in priority
+        * @return vector of Territory pointers player should defend
+        */
+        vector<Territory*> toDefend() override;
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param CheaterPlayerStrategies reference that will be copied and assigned
+        @return CheaterPlayerStrategies reference
+        */
         const CheaterPlayerStrategy& operator= (const CheaterPlayerStrategy& cheaterPs);
 
-        //Stream Insertion Operator Overload
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const CheaterPlayerStrategy& cheaterPs);
 };
