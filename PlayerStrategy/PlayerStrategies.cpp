@@ -389,11 +389,6 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
 // TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
 void NeutralPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Strategy called" << endl;
-    //TODO :: this is my attempt at the neutral player thingy
-    if (getNeutralAttack() == true) {
-        cout << "The Neutral Player was attacked, and is now an aggressive player" << endl;
-        p->setStrategy(new AggressivePlayerStrategy());
-    }
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {

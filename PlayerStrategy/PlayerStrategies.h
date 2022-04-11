@@ -39,40 +39,112 @@ int checkCardInHand(string, Hand*);
  Class representing the abstract class for different strategy types
  */
 class PlayerStrategies {
+    ///PlayerStrategies is friend of Player
     friend Player;
+
+    ///PlayerStrategies is friend of GameEngine
     friend GameEngine;
 
     public:
-        // Default constructor
+
+        /// Default constructor
         PlayerStrategies();
+
+        /**
+         * Parameterized constructor that creates new player based on parameters
+         * @param string type of player strategy (Human, Aggressive, Benevolent, Cheater, Neutral)
+         */
         PlayerStrategies(string type);
+
+        /**
+         * Parameterized constructor that creates new player based on parameters
+         * @param string type of player strategy (Human, Aggressive, Benevolent, Cheater, Neutral)
+         * @param Player pointer pointing to the player the strategy object belongs too
+         */
         PlayerStrategies(Player*, string);
 
-        // Copy constructor
+        /**
+        Copy constructor that creates a deep copy
+        @param constant PlayerStrategies reference
+        @return pointer to the PlayerStrategies created
+        */
         PlayerStrategies(const PlayerStrategies& other);
 
-        // Accessor
-        virtual Player *getPlayer();
+        /**
+         * Virtual Accessor method for Player
+         * @return Player pointer
+         */
+        virtual Player* getPlayer();
+
+        /**
+         * Accessor method for strategy type
+         * @return string type
+         */
         string getType();
+
+        /**
+         * Accessor method for boolean flag for neutral player attack
+         * @return boolean if a neutral player was attacked
+         */
         bool getNeutralAttack();
 
-        // Mutator
+        /**
+         * VirtualMutator method for setting player
+         * @param Player pointer
+         */
         virtual void setPlayer(Player*);
+
+        /**
+         * Virtual Mutator method for setting neutral attack boolean
+         * @param boolean
+         */
         virtual void setNeutralAttack(bool);
 
+        /**
+         * Virtual Method to issue orders into the player orderlist
+         * @param string input type of order (deploy, advance or a card)type
+         */
         virtual void issueOrder(string type) = 0;
+
+        /**
+         * Virtual Method to determine which territories the player should attack in priority
+         * @return vector of Territory pointers player should attack
+         */
         virtual vector<Territory*> toAttack() = 0;
+
+        /**
+         * Method to determine which territories the player should defend in priority
+         * @return vector of Territory pointers player should defend
+         */
         virtual vector<Territory*> toDefend() = 0;
 
-        // Operator overloading
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param PlayerStrategies reference that will be copied and assigned
+        @return PlayerStrategies reference
+        */
         const PlayerStrategies& operator= (const PlayerStrategies &ps);
+
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
         friend std::ostream& operator<< (std::ostream& os, const PlayerStrategies& ps);
 
-        // A static game Engine to get Map and Deck
+        /// A static game Engine to access Map and Deck related
         static GameEngine* game;
+
     protected:
+        /// Boolean to check if a neutral player has been attacked
         bool neutralAttack;
+
+        /// Player related to strategy object
         Player* p;
+
+        /// Strategy type (Human, Aggressive, Benevolent, Cheater, Neutral)
         string type;
 };
 
