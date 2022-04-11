@@ -7,105 +7,250 @@
 
 using namespace std;
 
-
+/// Forward declaration of Hand
 class Hand;
+/// Forward declaration of Orderslist
 class OrdersList;
+/// Forward declaration of Territory
 class Territory;
+/// Forward declaration of Map
 class Map;
+/// Forward declaration of Order
 class Order;
-
+/// Forward declaration of PlayerStrategies
 class PlayerStrategies;
 
+/**
+ Class representing the player
+ */
 class Player {
-public:
-    // Default constructor
-    Player();
+    public:
+        /// Default constructor
+        Player();
 
-    // Parameterized constructor
-    Player(string, vector<Territory*>, Hand*, OrdersList*, int);
-    Player(string name);
-    Player(PlayerStrategies* ps);
-    Player(PlayerStrategies* ps, string name);
+        /**
+        Parameterized constructor that creates a new player based on parameters
+        @param string player name
+        @param vector of Territory pointers to represent players territory list
+        @param hand pointer to represent players hand
+        @param orderslist pointer to represent the players order list
+        @param int number in players reinforcement pool
+        @return pointer to the Player created
+        */
+        Player(string, vector<Territory*>, Hand*, OrdersList*, int);
 
-    // Copy constructor
-    Player(const Player &p);
+        /**
+        Parameterized constructor that creates a new player based on parameters
+        @param string player name
+        @return pointer to the Player created
+        */
+        Player(string name);
 
-    // Destructor
-    ~Player();
+        /**
+        Parameterized constructor that creates a new player based on parameters
+        @param PlayerStrategy pointer to represent players playing type
+        @return pointer to the Player created
+        */
+        Player(PlayerStrategies* ps);
 
-//    vector<Territory*> toDefend(Map* m); // Territories for player to defend
-//    vector<Territory*> toAttack(Map* m); // Territories for player to attack
-//
-//    void issueOrder(string type); //  Create order and adds order to players order list
+        /**
+        Parameterized constructor that creates a new player based on parameters
+        @param PlayerStrategy pointer to represent players playing type
+        @param string player name
+        @return pointer to the Player created
+        */
+        Player(PlayerStrategies* ps, string name);
 
-    // Add to reinforcement pool
-    void addToReinforcePool(int armies);
+        /**
+        Copy constructor that creates a deep copy
+        @param constant Players reference
+        @return pointer to the Player created
+        */
+        Player(const Player &p);
 
-    // Remove from reinforcement pool
-    void removeFromReinforcePool(int armies);
+        /// Destructor
+        ~Player();
 
-    // Check if player owns a territory by name
-    Territory*  checkTerritoryOwn(string name);
+        /**
+        Method for adding to player reinforcement pool
+        @param int number of armies to add to reinforcement pool
+        */
+        void addToReinforcePool(int armies);
 
-    // Returns a territory of the player that is adjacent to the one they would like to attack
-    Territory* getOriginTerritory(Territory* target_territory, Map* m);
+        /**
+        Method for removing from player reinforcement pool
+        @param int number of armies to remove from reinforcement pool
+        */
+        void removeFromReinforcePool(int armies);
 
-    // Add a territory to player territories list
-    void assignTerritory(Territory* t);
+        /**
+        Method for checking if a territory is owned by the player
+        @param string name of territory
+        @return pointer to Territory of name string parameter name
+        */
+        Territory* checkTerritoryOwn(string name);
 
-    // Remove a territory from a player territories list by index
-    void removeTerritory(int index);
+        /**
+         * Method for finding a territory owned by player that is adjacent to the territory the player wants to attack
+         * @param Territory pointer target_territory territory we are checking for
+         * @param Map m map of game
+         * @return pointer to Territory of origin
+         */
+        Territory* getOriginTerritory(Territory* target_territory, Map* m);
 
-    // Add order to player order list
-    void addOrderList(Order* o);
+        /**
+         * Method for adding a single territory to the players territory list
+         * @param Territory pointer t
+         */
+        void assignTerritory(Territory* t);
 
-    // Accessors
-    void setName(string n);
-    void setHand(Hand* h);
-    void setReinforcementPool(int armies);
-    void setTerritory(vector<Territory*> t);
-    void setOrder(OrdersList* o);
-    void setStrategy(PlayerStrategies* ps);
+        /**
+         * Method for removing a territory from player territory list by index
+         * @param int index
+         */
+        void removeTerritory(int index);
 
-    // Mutators
-    string getName();
-    Hand* getHand();
-    int getReinforcePool();
-    int getNumberOfArmies();
-    int getNumberOfTerritories(); // Get number of territories player owns
-    OrdersList* getOrder();
-    OrdersList* getDeployList();
-    PlayerStrategies* getPlayerStrategy();
-    vector<Territory*> getTerritoryList();
+        /**
+         * Method for adding an order to the players orderlist
+         * @param Order o
+         */
+        void addOrderList(Order* o);
 
-    // Operator overloading
-    Player& operator = (const Player& player);
-    friend ostream& operator<<(ostream& os, const Player& player);
+        /**
+         * Mutator method for player name
+         * @param string player name
+         */
+        void setName(string n);
 
-    // Assignment 3
-    vector<Territory*> toDefend(); // Territories for player to defend
-    vector<Territory*> toAttack(); // Territories for player to attack
-    void issueOrder(string input); //  Create order and adds order to players order list
+        /**
+         * Mutator method for player hand
+         * @param Hand h
+         */
+        void setHand(Hand* h);
 
-private:
-    // Name of Player
-    string name;
+        /**
+         * Mutator method for player reinforcement pool
+         * @param int armies
+         */
+        void setReinforcementPool(int armies);
 
-    // Player hand
-    Hand* hand;
+        /**
+         * Mutator for player territory list
+         * @param vector of Territory pointers t
+         */
+        void setTerritory(vector<Territory*> t);
 
-    // Number of reinforcements player has
-    int reinforcePool;
+        /**
+         * Mutator for player orderlist
+         * @param OrdersList o
+         */
+        void setOrder(OrdersList* o);
 
-    // List of players territories
-    vector<Territory*> territories;
+        /**
+         * Mutator for player strategy
+         * @param PlayerStrategies ps
+         */
+        void setStrategy(PlayerStrategies* ps);
 
-    // Player list of orders
-    OrdersList* orders;
+        /**
+         * Accessor for player name
+         * @return string player name
+         */
+        string getName();
 
-    // List of deploy orders to be executed before the other orders
-    OrdersList* deployList;
+        /**
+         * Accessor for player hand
+         * @return Hand player hand
+         */
+        Hand* getHand();
 
-    // Strategy pattern implementation
-    PlayerStrategies* playerStrategy;
+        /**
+         * Accessor for player reinforcement pool
+         * @return int reinforcement pool
+         */
+        int getReinforcePool();
+
+        /**
+         * Accessor for number of armies player has
+         * @return int number of armies
+         */
+        int getNumberOfArmies();
+
+        /**
+         * Accessor for number of Territories player has
+         * @return int number of Territories
+         */
+        int getNumberOfTerritories();
+
+        /**
+         * Accessor for player orderlist
+         * @return OrdersList player order list
+         */
+        OrdersList* getOrder();
+
+        /**
+         * Accessor for player strategy
+         * @return PlayerStrategy of player
+         */
+        PlayerStrategies* getPlayerStrategy();
+
+        /**
+         * Accessor for player territory list
+         * @return vector of Territory pointers player territory list
+         */
+        vector<Territory*> getTerritoryList();
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param Player reference that will be copied and assigned
+        @return Player reference
+        */
+        Player& operator = (const Player& player);
+
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the player as a constant reference
+        @return output stream reference
+        */
+        friend ostream& operator<<(ostream& os, const Player& player);
+
+        /**
+         * Method to determine which territories the player should defend in priority
+         * @return vector of Territory pointers player should defend
+         */
+        vector<Territory*> toDefend();
+
+        /**
+         * Method to determine which territories the player should attack in priority
+         * @return vector of Territory pointers player should attack
+         */
+        vector<Territory*> toAttack();
+
+        /**
+         * Method to issue orders into the player orderlist
+         * Creates an order and adds it to player orderlist
+         * @param string input type of order (deploy, advance or a card)
+         */
+        void issueOrder(string input);
+
+    private:
+        /// Name of Player
+        string name;
+
+        /// Player hand
+        Hand* hand;
+
+        /// Number of reinforcements player has
+        int reinforcePool;
+
+        /// List of players territories
+        vector<Territory*> territories;
+
+        /// Player list of orders
+        OrdersList* orders;
+
+        /// Strategy pattern implementation
+        PlayerStrategies* playerStrategy;
 };

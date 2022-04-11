@@ -315,9 +315,8 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
             defend_territories.insert(defend_territories.begin(), p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
             p.second = nullptr; // Dangling pointer avoidance
         }
-
-        return defend_territories;
     }
+    return defend_territories;
 }
 
 // Stream insertion operator overloading
