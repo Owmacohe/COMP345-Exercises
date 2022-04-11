@@ -233,8 +233,7 @@ void GameEngine::issueOrdersPhase() {
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
 
-        for (int j = 0; j < num; i++) {
-
+        for (int j = 0; j < num; j++) {
             p->issueOrder("deploy");
             cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
@@ -449,6 +448,7 @@ void GameEngine::startupPhase() {
 
     if (word1 == "tournament" && processor->validate(temp)) {
         isTournament = true;
+
         for (int j = 0; j < processor->getNumberOfGames(); j++) {
             gameNumber = j;
             mapNumber = 0;
@@ -491,22 +491,24 @@ void GameEngine::startupPhase() {
                     Player *tempPlayer = player_list[player_list.size() - 1];
 
                     if (ps == "Human") {
-                        tempStrategy = new HumanPlayerStrategy();
+                        tempStrategy = new HumanPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Aggressive") {
-                        tempStrategy = new AggressivePlayerStrategy();
+                        tempStrategy = new AggressivePlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Benevolent") {
-                        tempStrategy = new BenevolentPlayerStrategy();
+                        tempStrategy = new BenevolentPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Neutral") {
-                        tempStrategy = new NeutralPlayerStrategy();
+                        tempStrategy = new NeutralPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Cheater") {
-                        tempStrategy = new CheaterPlayerStrategy();
+                        tempStrategy = new CheaterPlayerStrategy(tempPlayer);
+                    }
+                    else {
+                        cout << "INVALID PLAYERSTRATEGY: " << ps << "!" << endl;
                     }
 
-                    tempStrategy->setPlayer(tempPlayer);
                     tempPlayer->setStrategy(tempStrategy);
                 }
 
@@ -753,6 +755,7 @@ bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
     string input;
+
     while (playing) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
@@ -766,6 +769,8 @@ bool GameEngine::mainGameLoop() {
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
     }
+
+    cout << "done loop" << endl;
 
     while (!isTournament && *s == 8) {
         cout << "Replay or quit? " << endl;
