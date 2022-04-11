@@ -7,16 +7,37 @@
 
 using namespace std;
 
+/// Forward declaration of Player
 class Player;
+/// Forward declaration of Territory
 class Territory;
+/// Forward declaration of Order
 class Order;
+/// Forward declaration of Map
 class Map;
+/// Forward declaration of Hand
 class Hand;
+/// Forward declaration of GameEngine
 class GameEngine;
 
+/**
+ Free method to compare strings while ignoring case
+ @param string to be compared
+ @param string to be compared
+ @return Boolean, true if string are equal and false if they are not
+ */
 bool equalsIgnoreCase(string, string);
+/**
+ Free method to check if a specific card is in a player hand
+ @param string representing the card type (bomb, negotiate, airlift ..etc)
+ @param Hand pointer pointing to the hand we are checking
+ @return int, index of the card in hand (or -1 if card not in hand)
+ */
 int checkCardInHand(string, Hand*);
 
+/**
+ Class representing the abstract class for different strategy types
+ */
 class PlayerStrategies {
     friend Player;
     friend GameEngine;

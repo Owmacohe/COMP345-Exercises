@@ -29,10 +29,11 @@ class Territory {
         /// Default constructor
         Territory();
 
+        //TODO: FIX THIS COMMENT
         /**
         Free method to split a given string into a string vector based on a given delimiter
         @param string to be split, char as the delimiter
-        @return Vector with strings resulting from the split
+        @return pointer to the Territory created
         */
         Territory(string, string, Player*, int);
 
