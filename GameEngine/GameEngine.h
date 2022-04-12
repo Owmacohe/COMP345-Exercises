@@ -4,6 +4,7 @@
 #include <iostream>
 #include <set>
 #include <cmath>
+#include <sstream>
 
 using namespace std;
 
@@ -43,6 +44,11 @@ class GameEngine : public Iloggable, public Subject {
         vector<int> getPlayerOrder();
         int getCurrentPlayer();
         Player* getNeutralPlayer();
+        bool getIsTournament();
+        int getGameNumber();
+        int getMapNumber();
+        vector<vector<string>> getTournamentResults();
+        int getNumberOfTurns();
 
         // Mutators
         void setState(const State &s);
@@ -53,12 +59,17 @@ class GameEngine : public Iloggable, public Subject {
         void setProcessor(CommandProcessor*);
         void setMap(Map*);
         void setDeck(Deck*);
-        void setAlliances (const  set<pair<Player*, Player*>> all);
+        void setAlliances (const  set<pair<Player*, Player*>>);
         void addAlliances(Player*, Player*);
         void resetAlliances();
         void setPlayerOrder(vector<int>);
         void setCurrentPlayer(int);
         void setNeutralPlayer(Player* np);
+        void setIsTournament(bool);
+        void setGameNumber(int);
+        void setMapNumber(int);
+        void setTournamentResults(vector<vector<string>>);
+        void setNumberOfTurns(int);
 
         void assignReinforcementPhase();
         void issueOrdersPhase();
@@ -67,6 +78,7 @@ class GameEngine : public Iloggable, public Subject {
         void executeOrdersPhase();
         void endexecuteOrdersPhase();
         void winPhase(Player*);
+        void drawPhase();
         void endPhase();
         void playAgain();
         void transition(State);
@@ -75,7 +87,8 @@ class GameEngine : public Iloggable, public Subject {
         void gamePlayTransitions(string, Player*);
         void gameEndTransitions(string);
 
-        void startupPhase(); // Reads (startup) commands sequentially from the console
+        void startupPhase(); // Checks to see if a tournament command has been entered, and manages calling startupCommands
+        void startupCommands(bool, bool); // Reads (startup) commands sequentially from the console
 
         // Checks
         bool checkForWinner();
@@ -98,4 +111,11 @@ class GameEngine : public Iloggable, public Subject {
         vector<int> playerOrder;
         int currentPlayer;
         Player* neutralPlayer;
+
+        // Tournament
+        bool isTournament;
+        int gameNumber; // Track the game being played
+        int mapNumber; // Track the map being played
+        vector<vector<string>> tournamentResults; // Store the results of each game
+        int numberOfTurns; // Track number of turns in current game
 };

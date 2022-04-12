@@ -4,9 +4,10 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../PlayerStrategy/PlayerStrategies.h"
 
-class OrdersList;
-class Player;
+//class OrdersList;
+//class Player;
 
 // Default constructor
 GameEngine::GameEngine() {
@@ -22,6 +23,9 @@ GameEngine::GameEngine() {
     // Add Neutral Player to Game
     neutralPlayer = new Player();
     neutralPlayer->setName("Neutral");
+
+    int numberOfTurns = 0;
+
 }
 
 // Copy constructor
@@ -30,6 +34,7 @@ GameEngine::GameEngine(const GameEngine &gm) {
     NumberOfPlayers = gm.NumberOfPlayers;
     NumberOfTerritories = gm.NumberOfTerritories;
     deck = gm.deck;
+    numberOfTurns = gm.numberOfTurns;
 
     for (Player* p : gm.player_list) {
         player_list.push_back(p);
@@ -72,6 +77,11 @@ GameEngine::~GameEngine() {
 
     delete neutralPlayer;
     neutralPlayer = NULL;
+
+    for(int i = 0; i<tournamentResults.size()-1; i++) {
+        tournamentResults.at(i).clear();
+    }
+    tournamentResults.clear();
 }
 
 // Assignment operator
@@ -128,16 +138,21 @@ bool GameEngine::existingAlliance(Player* p1, Player* p2) {
 }
 vector<int> GameEngine::getPlayerOrder() { return playerOrder; }
 Player* GameEngine::getNeutralPlayer() { return neutralPlayer; }
+bool GameEngine::getIsTournament() { return isTournament; }
+int GameEngine::getGameNumber() { return gameNumber; }
+int GameEngine::getMapNumber() { return mapNumber; }
+vector<vector<string>> GameEngine::getTournamentResults() { return tournamentResults; }
+int GameEngine::getNumberOfTurns() { return numberOfTurns; }
 
 // Mutators
 void GameEngine::setState(const State &st) { *s = st; }
 void GameEngine::setNumberOfPlayers(int x) { NumberOfPlayers = x; }
 void GameEngine::setNumberOfTerritories(int x) { NumberOfTerritories = x; }
 void GameEngine::setEndOfState(bool b) { phaseEnd = b; }
-void GameEngine::setplayer_list(vector<Player*> pl){ player_list = pl;}
+void GameEngine::setplayer_list(vector<Player*> pl) { player_list = pl; }
 void GameEngine::setProcessor(CommandProcessor *cp) { processor = cp; }
 void GameEngine::setMap(Map* m) { map = m; }
-void GameEngine::setDeck(Deck* d){ deck = d; }
+void GameEngine::setDeck(Deck* d) { deck = d; }
 void GameEngine::setAlliances(const set<pair<Player *, Player *>> all) { alliances = all; }
 void GameEngine::addAlliances(Player* p1, Player* p2) { alliances.insert(make_pair(p1,p2)); }
 void GameEngine::resetAlliances() {
@@ -155,6 +170,11 @@ void GameEngine::setPlayerOrder(vector<int> po) {
     }
 }
 void GameEngine::setNeutralPlayer(Player* np) { neutralPlayer = np; }
+void GameEngine::setIsTournament(bool it) {isTournament = it; }
+void GameEngine::setGameNumber(int gn) { gameNumber = gn; }
+void GameEngine::setMapNumber(int mn) {mapNumber = mn; }
+void GameEngine::setTournamentResults(const vector<vector<string>> tr) {tournamentResults = tr; }
+void GameEngine::setNumberOfTurns(int nt) { numberOfTurns = nt; }
 
 // Assign reinforcement phase
 void GameEngine::assignReinforcementPhase() {
@@ -202,78 +222,30 @@ void GameEngine::assignReinforcementPhase() {
 void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
-    string response;
-    int deployed = 0;
-    int hasMoreTroops = 0;
 
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
-        bool goodinput = false;
 
         cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
         int num = p->getReinforcePool();
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
-        for (int i = 0; i < num; i++) { // TODO: this shouldn't also be named i!!!
+
+        for (int j = 0; j < num; j++) {
             p->issueOrder("deploy");
-            cout << "Deploy of army " << i + 1 << "/" << num << " issued" << endl;
+            cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
 
         // Issue advance orders
         cout << "\n" << p->getName() << "'s turn" << endl;
         cout << "\nIssuing advance orders" << endl;
-        while (!goodinput) {
-            cout << "\nWould " << p->getName() << " like to issue an Advance order ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                goodinput = true;
-                p->issueOrder("advance");
-                break;
-            }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
-                goodinput = true;
-                break;
-            }
-            else {
-                cout<< "Invalid input !" <<endl;
-                break;
-            }
-        }
-        goodinput = false;
+        p->issueOrder("advance");
+
         // Issue card orders
         cout << "\nIssuing card orders" << endl;
-        while (!goodinput) {
-            cout << "\nThe following is " << p->getName() << "'s hand: " << endl;
-            cout << *(p->getHand()) << endl;
-            cout << "\nWould " << p->getName() << " like to play any cards ? y/n " << endl;
-            cin >> input;
-            if (equalsIgnoreCase(input, "y") || equalsIgnoreCase(input, "yes")) {
-                goodinput = true;
-                cout << "Which card would you like to play ?" << endl;
-                cin >> response;
-                int index = -1;
-                while (index < 0) {
-                    index = checkCardInHand(response, p->getHand());
-                    if (index >= 0) {
-                        p->getHand()->playCard(index, *deck, *p->getOrder(), p);
-                        break;
-                    }
-                    else {
-                        cout << p->getName() << " does not have that card type in hand, and therefore it cannot be played, try again"<< endl;
-                    }
-                }
-            }
-            else if (equalsIgnoreCase(input, "n") || equalsIgnoreCase(input, "no")) {
-                goodinput = true;
-                break;
-            }
-            else {
-                cout<< "Invalid input !" <<endl;
-                break;
-            }
-        }
+        p->issueOrder("card");
     }
     endIssueOrderPhase();
 }
@@ -285,7 +257,7 @@ void GameEngine::endIssueOrderPhase() {
 
 // Checks for deploy orders in orderlist
 bool GameEngine::hasMoreDeploy(Player *p) {
-    for (Order * o : p->getOrder()->getOrderList()){
+    for (Order * o : p->getOrder()->getOrderList()) {
         if (equalsIgnoreCase(o->getDescription(), "deploy")) {
             return true;
         }
@@ -361,8 +333,19 @@ void GameEngine::endexecuteOrdersPhase() {
 }
 
 void GameEngine::winPhase(Player *p) {
+    // Adds the result in the correct column of the current game and Map
+   tournamentResults.at(gameNumber).push_back(p->getPlayerStrategy()->getType());
     transition(win);
     cout << "Victory for player: " << p->getName() << endl;
+
+}
+
+void GameEngine::drawPhase() {
+    // Adds the result in the correct column of the current game and Map
+    tournamentResults.at(gameNumber).push_back("Draw");
+    transition(win);
+    cout << "Draw game." << endl;
+
 }
 
 void GameEngine::endPhase() {
@@ -392,10 +375,8 @@ bool doesContain(vector<int> arr, int in) {
     return false;
 }
 
-// Reads (startup) commands sequentially from the console
+// Checks to see if a tournament command has been entered, and manages calling startupCommands
 void GameEngine::startupPhase() {
-    transition(start);
-
     cout << "Welcome to Warzone!" << endl;
 
     // Creating the (possibly unused) FileCommandProcessorAdapter
@@ -416,9 +397,8 @@ void GameEngine::startupPhase() {
     if (word1 == "console") {
         CommandProcessor *temp = new CommandProcessor;
         processor = temp;
-
-        cout << "Please give a command: " << endl;
     }
+
     // Creating a new FileCommandProcessorAdapter if reading from a file
     else {
         cout << "Please provide the file name to read from:" << endl;
@@ -446,17 +426,164 @@ void GameEngine::startupPhase() {
     processor->setEngine(this);
     setProcessor(processor);
 
-    while (*s < 5) {
-        cout << "Enter a command: " << endl;
+    transition(start);
 
-        // Getting the next Command, and accessing it for local use
-        processor->getCommand();
+    cout << "Enter a command: " << endl;
+
+    // Getting the next Command, and accessing it for local use
+    processor->getCommand();
+    Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
+
+    word1 = "";
+
+    // Splitting the input into words (if it can be split)
+    for (char i : temp->getCommand()) {
+        if (i == ' ') {
+            break;
+        }
+        else {
+            word1 += i;
+        }
+    }
+
+    if (word1 == "tournament" && processor->validate(temp)) {
+        isTournament = true;
+
+        for (int j = 0; j < processor->getNumberOfGames(); j++) {
+            gameNumber = j;
+            mapNumber = 0;
+
+            // Insert a column in the Results Table
+            vector<string> column;
+            tournamentResults.push_back(column);
+
+            for (string k : processor->getMaps()) {
+                mapNumber++;
+
+                if (j > 0) {
+                    s = new State;
+                    *s = null;
+                    NumberOfPlayers = 0;
+                    NumberOfTerritories = 0;
+                    deck = new Deck(20);
+                    player_list = vector<Player*>();
+                    map = NULL;
+                    alliances = set<pair<Player*, Player*>>();
+
+                    // Add Neutral Player to Game
+                    neutralPlayer = new Player();
+                    neutralPlayer->setName("Neutral");
+
+                    transition(start);
+                }
+
+                processor->saveCommand(new Command("loadmap", k));
+                startupCommands(true, true);
+
+                processor->saveCommand(new Command("validatemap"));
+                startupCommands(true, true);
+
+                for (string ps : processor->getPlayerStrategies()) {
+                    processor->saveCommand(new Command("addplayer", "Player " + to_string(player_list.size() + 1) + " (" + ps + ")"));
+                    startupCommands(true, true);
+
+                    PlayerStrategies *tempStrategy;
+                    Player *tempPlayer = player_list[player_list.size() - 1];
+
+                    if (ps == "Human") {
+                        tempStrategy = new HumanPlayerStrategy(tempPlayer);
+                    }
+                    else if (ps == "Aggressive") {
+                        tempStrategy = new AggressivePlayerStrategy(tempPlayer);
+                    }
+                    else if (ps == "Benevolent") {
+                        tempStrategy = new BenevolentPlayerStrategy(tempPlayer);
+                    }
+                    else if (ps == "Neutral") {
+                        tempStrategy = new NeutralPlayerStrategy(tempPlayer);
+                    }
+                    else if (ps == "Cheater") {
+                        tempStrategy = new CheaterPlayerStrategy(tempPlayer);
+                    }
+                    else {
+                        cout << "INVALID PLAYERSTRATEGY: " << ps << "!" << endl;
+                    }
+
+                    tempPlayer->setStrategy(tempStrategy);
+                }
+
+                processor->saveCommand(new Command("gamestart"));
+                startupCommands(true, true);
+
+                mainGameLoop();
+
+                if (j < processor->getMaps().size() - 1) {
+                    delete deck;
+                    deck = NULL;
+
+                    for (Player* p : player_list) {
+                        delete p;
+                        p = NULL;
+                    }
+
+                    delete map;
+                    map = NULL;
+
+                    for (auto x : alliances) {
+                        x.first = NULL;
+                        x.second = NULL;
+                    }
+
+                    delete neutralPlayer;
+                    neutralPlayer = NULL;
+                }
+
+                cout << "Tournament map " << k << " done!" << endl;
+            }
+
+            cout << "Tournament game " << to_string(j+1) << " done!" << endl;
+        }
+
+        // Tournament Mode Effect
+
+        // M
+        string tournamentMaps = "";
+        for(int i= 0; i < processor->getMaps().size(); i++) {
+            tournamentMaps += ", "+ processor->getMaps().at(i);
+        }
+
+        // P
+        string tournamentPS = "";
+        for(int i= 0; i < processor->getPlayerStrategies().size(); i++) {
+            tournamentMaps += ", " + processor->getPlayerStrategies().at(i);
+        }
+
+        string effect = "Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD:" + to_string(processor->getMaxTurns()) + "\n";
+        temp->saveEffect(effect);
+    }
+    else {
+        startupCommands(true, false);
+    }
+}
+
+// Reads (startup) commands sequentially from the console
+void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
+    while (*s < 5) {
+        if (!skipFirstGetCommand) {
+            cout << "Enter a command: " << endl;
+
+            // Getting the next Command
+            processor->getCommand();
+        }
+
+        // Accessing it for local use
         Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
         string effect = "";
 
         // Making sure the command is in fact valid
         if (processor->validate(temp)) {
+            string word1, word2;
             bool hasReachedSpace = false;
 
             // Splitting the input into words (if it can be split)
@@ -469,18 +596,14 @@ void GameEngine::startupPhase() {
                         word1 += i;
                     }
                 }
-                else if (hasReachedSpace && word1 != "tournament") {
+                else {
                     if (i != '<' && i != '>') {
                         word2 += i;
                     }
                 }
             }
-
-            if (word1 == "tournament") {
-
-            }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
-            else if (word1 == "loadmap") {
+            if (word1 == "loadmap") {
                 if (map != NULL) {
                     delete map;
                     map = NULL;
@@ -637,19 +760,42 @@ void GameEngine::startupPhase() {
                     transition(assignReinforcement);
                 }
             }
+            else {
+                effect = "Command does not exist";
+                cout << effect << "!" << endl;
+            }
+        }
+        else {
+            if (temp->isPossibleCommand) {
+                effect = "Command is invalid in the current state";
+                cout << effect << "!" << endl;
+            }
+            else {
+                effect = "Command does not exist";
+                cout << effect << "!" << endl;
+            }
         }
 
         temp->saveEffect(effect);
+
+        if (runOnce) {
+            break;
+        }
+        else {
+            skipFirstGetCommand = false;
+        }
     }
 
     notify(this); // FROM SUBJECT
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
+//TODO: check neutral player
 bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
     string input;
+
     while (playing) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
@@ -657,11 +803,22 @@ bool GameEngine::mainGameLoop() {
         checkPlayers(); // Check if any players need to be removed
         resetAlliances(); // Reset Alliances
 
+        // Check if Neutral Player was attacked
+        for (Player* p : player_list) {
+            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr)
+                p->getPlayerStrategy()->getNeutralAttack()->setStrategy(new AggressivePlayerStrategy());
+        }
+
+        // Track number of Turns in this game
+        numberOfTurns++;
+
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
     }
 
-    while (*s == 8) {
+    cout << "done loop" << endl;
+
+    while (!isTournament && *s == 8) {
         cout << "Replay or quit? " << endl;
 
         processor->getCommand();
@@ -671,19 +828,31 @@ bool GameEngine::mainGameLoop() {
         string command = temp->getCommand();
         string effect = "";
 
-        if (command == "replay") {
-            effect = "Replaying game";
-            cout << effect << "!" << endl;
-            continueplaying = true;
+        if (processor->validate(temp)) {
+            if (command == "replay") {
+                effect = "Replaying game";
+                cout << effect << "!" << endl;
+                continueplaying = true;
 
-            transition(start);
-        }
-        else if (command == "quit") {
-            effect = "Quitting game";
-            cout << effect << "!" << endl;
-            continueplaying = false;
+                transition(start);
+            }
+            else if (command == "quit") {
+                effect = "Quitting game";
+                cout << effect << "!" << endl;
+                continueplaying = false;
 
-            transition(null);
+                transition(null);
+            }
+            else {
+                if (temp->isPossibleCommand) {
+                    effect = "Command is invalid in the current state";
+                    cout << effect << "!" << endl;
+                }
+                else {
+                    effect = "Command does not exist";
+                    cout << effect << "!" << endl;
+                }
+            }
         }
 
         temp->saveEffect(effect);
@@ -694,6 +863,12 @@ bool GameEngine::mainGameLoop() {
 
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
+    // Check to verify that the number of turns is not maxed out
+    if (numberOfTurns == processor->getMaxTurns()) {
+        drawPhase();
+        return true;
+    }
+
     int lost = 0;
     for (Player* p : player_list) {
         string player = p->getName();
@@ -770,6 +945,42 @@ bool GameEngine::equalsIgnoreCase(string s1, string s2) {
 string GameEngine::stringToLog() {
     string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
                            "issueOrder", "executeOrder", "win"};
-    string logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
+    string logString = "";
+    if (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
+    }
+
+    else if (enumStates[*s] == "win" && mapNumber == processor->getMaps().size()-1 && gameNumber == processor->getNumberOfGames()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
+
+        // Following lines help format the Table
+        int ws = 15;
+        ostringstream resultsTable;
+        resultsTable << "Results:\n";
+        resultsTable.width(ws);
+        resultsTable << " |";
+
+        for (int i = 0; i <= gameNumber; i++) {
+            resultsTable.width(ws);
+            resultsTable << "Game "+ to_string(i+1) + " |";
+        }
+        resultsTable <<"\n";
+
+        for(int j = 0; j <= mapNumber; j++) {
+            resultsTable.width(ws);
+            resultsTable << processor->getMaps().at(j) + " |";
+
+            for(int k = 0; k <= gameNumber; k++) {
+                resultsTable.width(ws);
+                resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
+            }
+            resultsTable << "\n";
+        }
+        logString += resultsTable.str();
+    }
+    else{
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
+    }
+
     return logString;
 }

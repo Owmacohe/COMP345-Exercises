@@ -79,8 +79,9 @@ Deploy::Deploy() : Order(false, "deploy") {
 
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy") {
-    playerIssuing = p;
-    target = p->toDefend(game->getMap()).at(0);
+    playerIssuing = p;TODO:
+//    target = p->toDefend(game->getMap()).at(0); // TODO: Old version
+    target = p->toDefend().at(0); // TODO: Check if it's working
     numToDeploy = 1;
 }
 
@@ -162,7 +163,9 @@ void Deploy::validate() {
 void Deploy::execute() {
     cout << "... Deploy ";
     // In the gameEngine all deploy orders are executed at the same time, so each execution must deploy to a new territory
-    target = playerIssuing->toDefend(this->game->getMap()).at(0);
+    // target = playerIssuing->toDefend(this->game->getMap()).at(0); // TODO: Old version
+    // New version
+    target = playerIssuing->toDefend().at(0);
     if (validated) {
         target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
         playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
@@ -204,25 +207,20 @@ Advance::Advance() : Order(false, "advance") {
 }
 
 // Parameterize Constructor
-Advance::Advance(Player* p) : Order(false, "advance") {
+Advance::Advance(Player* p, string input) : Order(false, "advance") {
     playerIssuing = p;
-
-    string input = "";
-    int x =  rand() % 2;
-
-    if (x == 0) {
-        input = "move";
-    } else {
-        input = "attack";
-    }
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
-        target = p->toDefend(game->getMap()).at(0);
+        // target = p->toDefend(game->getMap()).at(0); // TODO: Old version
+        // New Version
+        target = p->toDefend().at(0);
         cout << p->getName() << " is issuing a "<< input << " Advance"<<endl;
     }
     else if (input == "attack") {
-        target = p->toAttack(game->getMap()).at(0);
+        // target = p->toAttack(game->getMap()).at(0); //TODO: old version
+        // New Version
+        target = p->toAttack().at(0);
         cout << p->getName() << " is issuing an "<< input << " Advance"<<endl;
     }
 
@@ -358,7 +356,6 @@ void Advance::execute() {
     if (validated) {
         origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         // Advance
-        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
         if (validateResult == "move") {
             cout << "... Advance execute ";
             target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
@@ -386,8 +383,17 @@ void Advance::execute() {
 
                 // Attack successful
                 if (defend_alive <= 0 && attack_alive > 0 ){
+                    //Remove the territory from enemy territory list before transfer ownership // TODO: double check when PlayerStrategies is done
+                    for (int i = 0; i<target->getOwner()->getTerritoryList().size(); i++){
+                        if (target == target->getOwner()->getTerritoryList().at(i)){
+                            target->getOwner()->removeTerritory(i);
+                        }
+                    }
+                    // Player issuing action: ownership transfer + terri added to the terri list + alive armies conquered the teri
                     target->setArmies(attack_alive); // Attacker survived conquered the territory
                     target->setOwner(playerIssuing); // The territory now belong to player issuing
+                    playerIssuing->assignTerritory(target); // Add territory in player's territories list
+
                     cout << "Card drawn: ";
                     playerIssuing->getHand()->drawCard(*game->getDeck()); // given a card if successfully conquered a territory
                     isExhaust = true;
@@ -462,8 +468,9 @@ Airlift::Airlift(Player* p) : Order(false, "airlift") {
         }
     }
     origin = territory_most_armies; // Origin = territory with the most armies
-    target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most
-
+    // target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most // TODO: old version
+    // New Version
+    target = p->toDefend().at(0);
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;
@@ -604,7 +611,9 @@ Bomb::Bomb() : Order(false, "bomb") {
 // Parameterize Constructor
 Bomb::Bomb(Player* p) : Order(false, "bomb") {
     playerIssuing = p;
-    target = p->toAttack(game->getMap()).at(0);
+    // target = p->toAttack(game->getMap()).at(0); // TODO: old version
+    // New version
+    target = p->toAttack().at(0);
     origin = p->getOriginTerritory(target,game->getMap());
 }
 
@@ -725,12 +734,20 @@ Blockade::Blockade() : Order(false, "blockade") {
 Blockade::Blockade(Player* p) : Order(false, "blockade") {
     playerIssuing = p;
     // Condition checked: If target territory is already Neutral (protected), take next in toDefend()
-    vector<Territory*> toDefendList = p->toDefend(game->getMap());
-    unsigned i = 0;
-    target = p->toDefend(game->getMap()).at(i);
 
+    // vector<Territory*> toDefendList = p->toDefend(game->getMap()); // TODO: old version
+    // New Version
+    vector<Territory*> toDefendList = p->toDefend();
+    unsigned i = 0;
+    // target = p->toDefend(game->getMap()).at(i); // TODO: old version
+    // New Version
+    target = p->toDefend().at(i);
+
+    // Player change of owenership correctly by removing that territory from the Player's vector of territories
     while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral") {
-        target = p->toDefend(game->getMap()).at(i+1);
+        // target = p->toDefend(game->getMap()).at(i+1); // TODO: Old version
+        // New Version
+        target = p->toDefend().at(0);
         i++;
     }
 }

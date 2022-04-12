@@ -14,11 +14,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a69c3c93-f1d6-4845-90bf-c1d74f3f6017" name="Changes" comment="">
+    <list default="true" id="118e179f-1daa-4043-bd9b-012b5ab1bcad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cards/CardsDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Cards/CardsDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngine.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/GameEngine/GameEngineDriver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.h" beforeDir="false" afterPath="$PROJECT_DIR$/PlayerStrategy/PlayerStrategies.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +84,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cmake-build-debug" />
       <recent name="C:\Users\Owen Hellum\Documents\GitHub\COMP345-Exercises\cmake-build-debug" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -89,6 +93,11 @@
   </component>
   <component name="RunManager">
     <configuration name="COMP345-Exercises" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="COMP345_Assignment" TARGET_NAME="COMP345-Exercises" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="COMP345_Assignment" RUN_TARGET_NAME="COMP345-Exercises">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -134,6 +143,15 @@
       <workItem from="1648753777490" duration="30000" />
       <workItem from="1648754150197" duration="1669000" />
       <workItem from="1649115762559" duration="3988000" />
+      <workItem from="1649258504391" duration="3639000" />
+      <workItem from="1649262195959" duration="2769000" />
+      <workItem from="1649343838567" duration="1133000" />
+      <workItem from="1649436121703" duration="2451000" />
+      <workItem from="1649444050179" duration="1728000" />
+      <workItem from="1649448024525" duration="5000" />
+      <workItem from="1649506962312" duration="3241000" />
+      <workItem from="1649523435043" duration="8085000" />
+      <workItem from="1649680571886" duration="2422000" />
     </task>
     <servers />
   </component>

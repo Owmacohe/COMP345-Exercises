@@ -4,12 +4,13 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "../GameEngine/GameEngine.h"
-#include "../CommandProcessing//CommandProcessing.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 LogObserver* logger = new LogObserver("gamelog.txt");
 LogObserver* Subject::logObs = logger;
 
-int loggingObserverMain() {
+int LoggingObservermain() {
+
     /****************************** CLASSES INHERITING FROM SUBJECT & ILOGGABLE *******************************/
 
     bool subjectGameEngine = is_base_of<Subject, GameEngine>::value;
@@ -230,6 +231,58 @@ int loggingObserverMain() {
     deploy3->execute();
 
     logger->outputFile << "\n-------------------- Closing the gamelog file --------------------" << endl;
+    // TESTING FOR ASSIGNMENT 3
+/*
+    int gameNumber = 2;
+    int mapNumber = 2;
+    vector<string> processor;
+    processor.push_back("Map A");
+    processor.push_back("Map B");
+    processor.push_back("Map C");
+
+    vector<vector<string>> tournamentResults;
+    for (int i = 0; i <= gameNumber+1; i++){
+        vector<string> row;
+        tournamentResults.push_back(row);
+    }
+    tournamentResults.at(0).push_back("draw1");
+    tournamentResults.at(0).push_back("Neutral");
+    tournamentResults.at(0).push_back("Cheater");
+
+    tournamentResults.at(1).push_back("Draw2");
+    tournamentResults.at(1).push_back("Neutral");
+    tournamentResults.at(1).push_back("Cheater");
+
+    tournamentResults.at(2).push_back("Draw3");
+    tournamentResults.at(2).push_back("Neutral");
+    tournamentResults.at(2).push_back("Cheater");
+
+    int ws = 15;
+    ostringstream resultsTable;
+    resultsTable << "Results:\n";
+    resultsTable.width(ws);
+    resultsTable << " |";
+
+    for (int i = 0; i <= gameNumber; i++){
+        resultsTable.width(ws);
+        resultsTable << "Game "+ to_string(i+1) + " |";
+        }
+        resultsTable <<"\n";
+
+    for(int j = 0; j <= mapNumber; j++){
+        resultsTable.width(ws);
+        resultsTable << processor.at(j) + " |";
+
+        for(int k = 0; k <= gameNumber; k++){
+            resultsTable.width(ws);
+            resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
+        }
+
+        resultsTable << "\n";
+    }
+
+    cout << resultsTable.str();
+    */
     Order::logObs->outputFile.close();
 
     return 0;
