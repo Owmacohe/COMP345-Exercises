@@ -12,20 +12,25 @@ GameEngine* PlayerStrategies::game = new GameEngine();
 PlayerStrategies::PlayerStrategies() {
     cout << "PlayerStrategies constructor called" << endl;
     type = "";
+    neutralAttack = nullptr;
 }
 
 // Parameterized Constructor
-PlayerStrategies::PlayerStrategies(string t) : type(t) { }
+PlayerStrategies::PlayerStrategies(string t) : type(t) {
+    neutralAttack = nullptr;
+}
 
 // Parameterized Constructor
-PlayerStrategies::PlayerStrategies(Player *pl, string t) : p(pl), type(t) { }
+PlayerStrategies::PlayerStrategies(Player *pl, string t) : p(pl), type(t) {
+    neutralAttack = nullptr;
+}
 
 Player* PlayerStrategies::getPlayer() { return p; }
 string PlayerStrategies::getType() { return type; }
-bool PlayerStrategies::getNeutralAttack() { return neutralAttack; }
+Player* PlayerStrategies::getNeutralAttack() { return neutralAttack; }
 
 void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
-void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b; }
+void PlayerStrategies::setNeutralAttack(Player* p) { neutralAttack = p; }
 
 // Stream insertion operator overloading
 ostream& PlayerStrategies::write(ostream &strm) const {
@@ -135,7 +140,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
 
     //TODO :: this is my attempt at the neutral player thingy
     if (returnTerritories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
-        setNeutralAttack(true);
+        setNeutralAttack(returnTerritories.at(0)->getOwner());
     }
 
     return returnTerritories;
@@ -264,7 +269,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
     //TODO :: this is my attempt at the neutral player thingy
     if (attack_territories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
-        setNeutralAttack(true);
+        setNeutralAttack(attack_territories.at(0)->getOwner());
     }
 
     return attack_territories;
@@ -348,8 +353,6 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
     cout << "toAttack() in Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
-    Map* m = game->getMap();
-
     return attack_territories;
 }
 
