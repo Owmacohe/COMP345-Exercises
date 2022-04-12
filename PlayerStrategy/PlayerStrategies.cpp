@@ -346,8 +346,33 @@ BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player *pl) : PlayerStrategie
 
 void BenevolentPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Strategy called" << endl;
+    // Set to all lowercase
+    transform(type.begin(), type.end(), type.begin(), ::tolower);
 
+    if (equalsIgnoreCase("deploy", type)) {
+        // Issues deploy orders based on toDefend()
+        Deploy* d = new Deploy(p);
+        p->addOrderList(d); // Add order to the list
+    }
+    else if (equalsIgnoreCase("advance", type)) {
+        Advance* a = new Advance(p, "attack");
+        p->addOrderList(a);
+    }
+        // Orders that involve card will be issued using playCard()
+    else if (equalsIgnoreCase("card", type)) {
+        int index = -1;
+        index = checkCardInHand("airlift", p->getHand());
+        if (index >= 0) {
+            // Only is able to play airlift card
+            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+        }
+    }
+    else {
+        cout << "Invalid order" << endl;
+    }
 }
+
+
 
 // TODO :: Benevolent only defend and never advance to enemy territories -> no use for toAttack()
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
@@ -360,6 +385,17 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
     cout << "toDefend() in Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
     Map* m = game->getMap();
+    int min = p->getTerritoryList()[0]->getArmies();
+    int teriWithMinArmiesIndex = 0;
+
+    // check for the weakest territory
+    for (int i = 0; i < p->getTerritoryList().size(); i++) {
+        if (p->getTerritoryList()[i]->getArmies() < min) {
+            min = p->getTerritoryList()[i]->getArmies();
+            teriWithMinArmiesIndex = i;
+        }
+    }
+    defend_territories.push_back(p->getTerritoryList().at(teriWithMinArmiesIndex));
     return defend_territories;
 }
 
