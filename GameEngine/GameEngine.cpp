@@ -868,7 +868,7 @@ bool GameEngine::mainGameLoop() {
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     // Check to verify that the number of turns is not maxed out
-    if (numberOfTurns = processor->getMaxTurns()) {
+    if (numberOfTurns == processor->getMaxTurns()) {
         drawPhase();
         return true;
     }
