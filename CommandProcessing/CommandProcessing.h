@@ -60,6 +60,8 @@ class CommandProcessor : public Iloggable, public Subject {
         // Mutators
         void setEngine(GameEngine*), setCommands(vector<Command*>), setMaps(vector<string>), setPlayerStrategies(vector<string>), setNumberOfGames(int), setMaxTurns(int);
 
+        void addMap(string), addPlayerStrategy(string);
+
         Command *readCommand(); // Gets command from console
         void saveCommand(Command*); // Stores the gotten Command in the array
         virtual void getCommand(); // Reads and then saves a command from the console

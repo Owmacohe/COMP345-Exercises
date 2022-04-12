@@ -460,7 +460,7 @@ void GameEngine::startupPhase() {
             for (string k : processor->getMaps()) {
                 mapNumber++;
 
-                if (j > 0) {
+                if (mapNumber > 1 || j > 0) {
                     s = new State;
                     *s = null;
                     NumberOfPlayers = 0;
@@ -548,13 +548,13 @@ void GameEngine::startupPhase() {
 
         // M
         string tournamentMaps = "";
-        for(int i= 0; i < processor->getMaps().size(); i++) {
+        for(int i = 0; i < processor->getMaps().size(); i++) {
             tournamentMaps += ", "+ processor->getMaps().at(i);
         }
 
         // P
         string tournamentPS = "";
-        for(int i= 0; i < processor->getPlayerStrategies().size(); i++) {
+        for(int i = 0; i < processor->getPlayerStrategies().size(); i++) {
             tournamentMaps += ", " + processor->getPlayerStrategies().at(i);
         }
 
@@ -604,7 +604,7 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
             }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
             if (word1 == "loadmap") {
-                if (map != NULL) {
+                if (!isTournament && map != NULL) {
                     delete map;
                     map = NULL;
                 }
@@ -864,7 +864,7 @@ bool GameEngine::mainGameLoop() {
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     // Check to verify that the number of turns is not maxed out
-    if (numberOfTurns == processor->getMaxTurns()) {
+    if (numberOfTurns >= processor->getMaxTurns()) {
         drawPhase();
         return true;
     }
