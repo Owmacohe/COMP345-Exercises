@@ -358,7 +358,10 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
         Advance* a = new Advance(p, "attack");
         p->addOrderList(a);
     }
-        // Orders that involve card will be issued using playCard()
+    //TODO: should be able to use airlift, negotiate, and blockade cards
+    // I would suggest getting all card indexes for each type, putting them in an array and then shuffle the array using shuffle(array, array+3, default_random_engine(0)) , (the 3 being the size of the array)
+    // then looping through the array until you find an value that is not -1 (-1 means the card is not in the hand) and play the card at that index then break from loop so only one card is played
+    // Orders that involve card will be issued using playCard()
     else if (equalsIgnoreCase("card", type)) {
         int index = -1;
         index = checkCardInHand("airlift", p->getHand());
@@ -395,6 +398,7 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
             teriWithMinArmiesIndex = i;
         }
     }
+
     defend_territories.push_back(p->getTerritoryList().at(teriWithMinArmiesIndex));
     return defend_territories;
 }
