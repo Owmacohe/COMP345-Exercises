@@ -25,6 +25,7 @@ GameEngine::GameEngine() {
     neutralPlayer->setName("Neutral");
 
     int numberOfTurns = 0;
+    endOfTournament = false;
 
 }
 
@@ -448,9 +449,25 @@ void GameEngine::startupPhase() {
 
     if (word1 == "tournament" && processor->validate(temp)) {
         isTournament = true;
+        // Tournament Mode Effect
+        // M
+        string tournamentMaps = "";
+        for(string i : processor->getMaps()) {
+            tournamentMaps += i + ", ";
+        }
+
+        // P
+        string tournamentPS = "";
+        for(string i: processor->getPlayerStrategies()) {
+            tournamentPS += i + ", ";
+        }
+
+        string effect ="Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD: " + to_string(processor->getMaxTurns()) + "\n";
+       temp->saveEffect(effect);
 
         for (int j = 0; j < processor->getNumberOfGames(); j++) {
             gameNumber = j;
+            cout << "GAMENUMBER " + to_string(j) <<endl;
             mapNumber = 0;
 
             // Insert a column in the Results Table
@@ -458,7 +475,8 @@ void GameEngine::startupPhase() {
             tournamentResults.push_back(column);
 
             for (string k : processor->getMaps()) {
-                mapNumber++;
+                mapNumber = mapNumber+1;
+                cout << "MAPNUMBER " + mapNumber <<endl;
 
                 if (mapNumber > 1 || j > 0) {
                     s = new State;
@@ -536,30 +554,18 @@ void GameEngine::startupPhase() {
 
                     delete neutralPlayer;
                     neutralPlayer = NULL;
+
+                    numberOfTurns = 0;
                 }
 
                 cout << "Tournament map " << k << " done!" << endl;
             }
 
             cout << "Tournament game " << to_string(j+1) << " done!" << endl;
+            endOfTournament = true;
+            notify(this); //print table results
         }
 
-        // Tournament Mode Effect
-
-        // M
-        string tournamentMaps = "";
-        for(int i = 0; i < processor->getMaps().size(); i++) {
-            tournamentMaps += ", "+ processor->getMaps().at(i);
-        }
-
-        // P
-        string tournamentPS = "";
-        for(int i = 0; i < processor->getPlayerStrategies().size(); i++) {
-            tournamentMaps += ", " + processor->getPlayerStrategies().at(i);
-        }
-
-        string effect = "Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD:" + to_string(processor->getMaxTurns()) + "\n";
-        temp->saveEffect(effect);
     }
     else {
         startupCommands(true, false);
@@ -864,7 +870,7 @@ bool GameEngine::mainGameLoop() {
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     // Check to verify that the number of turns is not maxed out
-    if (numberOfTurns >= processor->getMaxTurns()) {
+    if (numberOfTurns = processor->getMaxTurns()) {
         drawPhase();
         return true;
     }
@@ -950,7 +956,7 @@ string GameEngine::stringToLog() {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
     }
 
-    else if (enumStates[*s] == "win" && mapNumber == processor->getMaps().size()-1 && gameNumber == processor->getNumberOfGames()) {
+    else if (endOfTournament) {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
 
         // Following lines help format the Table
@@ -960,17 +966,17 @@ string GameEngine::stringToLog() {
         resultsTable.width(ws);
         resultsTable << " |";
 
-        for (int i = 0; i <= gameNumber; i++) {
+        for (int i = 0; i < gameNumber; i++) {
             resultsTable.width(ws);
             resultsTable << "Game "+ to_string(i+1) + " |";
         }
         resultsTable <<"\n";
 
-        for(int j = 0; j <= mapNumber; j++) {
+        for(int j = 0; j < mapNumber; j++) {
             resultsTable.width(ws);
             resultsTable << processor->getMaps().at(j) + " |";
 
-            for(int k = 0; k <= gameNumber; k++) {
+            for(int k = 0; k < gameNumber; k++) {
                 resultsTable.width(ws);
                 resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
             }
