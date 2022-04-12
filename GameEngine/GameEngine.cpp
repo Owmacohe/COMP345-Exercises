@@ -764,6 +764,12 @@ bool GameEngine::mainGameLoop() {
         checkPlayers(); // Check if any players need to be removed
         resetAlliances(); // Reset Alliances
 
+        // Check if Neutral Player was attacked
+        for (Player* p : player_list) {
+            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr)
+                p->getPlayerStrategy()->getNeutralAttack()->setStrategy(new AggressivePlayerStrategy());
+        }
+
         // Track number of Turns in this game
         numberOfTurns++;
 

@@ -86,7 +86,7 @@ class PlayerStrategies {
          * Accessor method for boolean flag for neutral player attack
          * @return boolean if a neutral player was attacked
          */
-        bool getNeutralAttack();
+        Player* getNeutralAttack();
 
         /**
          * VirtualMutator method for setting player
@@ -98,7 +98,7 @@ class PlayerStrategies {
          * Virtual Mutator method for setting neutral attack boolean
          * @param boolean
          */
-        virtual void setNeutralAttack(bool);
+        virtual void setNeutralAttack(Player*);
 
         /**
          * Virtual Method to issue orders into the player orderlist
@@ -140,8 +140,8 @@ class PlayerStrategies {
         static GameEngine* game;
 
     protected:
-        /// Boolean to check if a neutral player has been attacked
-        bool neutralAttack;
+        /// Player to check if a neutral player has been attacked, will point to attacked neutral player
+        Player* neutralAttack;
 
         /// Player related to strategy object
         Player* p;
