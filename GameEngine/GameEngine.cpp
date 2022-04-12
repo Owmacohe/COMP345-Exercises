@@ -467,7 +467,6 @@ void GameEngine::startupPhase() {
 
         for (int j = 0; j < processor->getNumberOfGames(); j++) {
             gameNumber = j;
-            cout << "GAMENUMBER " + to_string(j) <<endl;
             mapNumber = 0;
 
             // Insert a column in the Results Table
@@ -476,7 +475,6 @@ void GameEngine::startupPhase() {
 
             for (string k : processor->getMaps()) {
                 mapNumber = mapNumber+1;
-                cout << "MAPNUMBER " + mapNumber <<endl;
 
                 if (mapNumber > 1 || j > 0) {
                     s = new State;
@@ -560,12 +558,12 @@ void GameEngine::startupPhase() {
 
                 cout << "Tournament map " << k << " done!" << endl;
             }
-
             cout << "Tournament game " << to_string(j+1) << " done!" << endl;
-            endOfTournament = true;
-            notify(this); //print table results
         }
 
+        endOfTournament = true;
+        notify(this); //print table results
+        cout << "End of the Tournament. Please consult the log file for detailed results." <<endl;
     }
     else {
         startupCommands(true, false);
@@ -952,11 +950,7 @@ string GameEngine::stringToLog() {
     string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
                            "issueOrder", "executeOrder", "win"};
     string logString = "";
-    if (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
-        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
-    }
-
-    else if (endOfTournament) {
+    if (endOfTournament) {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
 
         // Following lines help format the Table
@@ -966,7 +960,7 @@ string GameEngine::stringToLog() {
         resultsTable.width(ws);
         resultsTable << " |";
 
-        for (int i = 0; i < gameNumber; i++) {
+        for (int i = 0; i <= gameNumber; i++) {
             resultsTable.width(ws);
             resultsTable << "Game "+ to_string(i+1) + " |";
         }
@@ -976,13 +970,17 @@ string GameEngine::stringToLog() {
             resultsTable.width(ws);
             resultsTable << processor->getMaps().at(j) + " |";
 
-            for(int k = 0; k < gameNumber; k++) {
+            for(int k = 0; k <= gameNumber; k++) {
                 resultsTable.width(ws);
                 resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
             }
             resultsTable << "\n";
         }
         logString += resultsTable.str();
+    }
+
+    else if     (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
     }
     else{
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
