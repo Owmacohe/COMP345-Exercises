@@ -972,7 +972,7 @@ string GameEngine::stringToLog() {
 
             for(int k = 0; k <= gameNumber; k++) {
                 resultsTable.width(ws);
-                resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
+                resultsTable <<  " " + tournamentResults.at(k).at(j) + " |"; // TODO: IS IT SAVING THEM IN THE RIGHT INDEX?
             }
             resultsTable << "\n";
         }
