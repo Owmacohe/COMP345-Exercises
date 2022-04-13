@@ -222,11 +222,10 @@ Territory* Player::checkTerritoryOwn(string name) {
 
     for (Territory* t : territories) {
         string comparename = t->getName();
-        transform(comparename.begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
+        transform(t->getName().begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
         if (name == comparename) return t;
     }
     return NULL;
-
 }
 // Return number of armies player has
 int Player::getNumberOfArmies() {
