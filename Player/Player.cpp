@@ -4,7 +4,6 @@
 #include "PlayerStrategy/PlayerStrategies.h"
 #include "Player.h"
 
-// TODO: constructor assigns Player Strategy to that player
 // TODO: destructor destroys Player Strategy?
 
 // Default constructor
@@ -14,7 +13,6 @@ Player::Player() {
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
-    deployList = new OrdersList;
     playerStrategy = NULL;
 
     //cout << "[Player default constructor]" << endl;
@@ -41,7 +39,6 @@ Player::Player(string n) : name(n) {
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
-    deployList = new OrdersList;
 
     playerStrategy = NULL;
 
@@ -55,7 +52,6 @@ Player::Player(PlayerStrategies* initialPs) : playerStrategy(initialPs) {
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
-    deployList = new OrdersList;
 }
 
 // Parameterized Constructor (Player Strategy and name)
@@ -64,7 +60,6 @@ Player::Player(PlayerStrategies* initialPs, string n) : playerStrategy(initialPs
     hand = new Hand;
     orders = new OrdersList;
     reinforcePool = 0;
-    deployList = new OrdersList;
 }
 
 // Copy constructor
@@ -227,11 +222,10 @@ Territory* Player::checkTerritoryOwn(string name) {
 
     for (Territory* t : territories) {
         string comparename = t->getName();
-        transform(comparename.begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
+        transform(t->getName().begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
         if (name == comparename) return t;
     }
     return NULL;
-
 }
 // Return number of armies player has
 int Player::getNumberOfArmies() {
@@ -268,9 +262,6 @@ Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
 
     return NULL;
 }
-
-// Return deploy list
-OrdersList* Player::getDeployList() { return deployList; }
 
 void Player::addToReinforcePool(int armies) { reinforcePool += armies; }
 void Player::removeFromReinforcePool(int armies) { reinforcePool = reinforcePool - armies; }

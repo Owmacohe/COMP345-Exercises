@@ -6,16 +6,42 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../PlayerStrategy/PlayerStrategies.h"
 
+
 int gameEngineMain() {
+    // tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+    /*
+    tournament -M canada.map europe.map -P Aggressive Aggressive -G 4 -D 50
+    tournament -M canada.map europe.map -P Aggressive Benevolent -G 4 -D 10 // TODO OUT OF RANGE ERROR
+    tournament -M canada.map europe.map -P Aggressive Cheater -G 4 -D 50
+    tournament -M canada.map europe.map -P Aggressive Neutral -G 4 -D 50
+
+    tournament -M canada.map europe.map -P Benevolent Benevolent -G 4 -D 10 // TODO STOPS IN THE MIDDLE OF A GAME
+    tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 10 // TODO OUT OF RANGE ERROR
+    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10 // TODO OUT OF RANGE ERROR
+
+    tournament -M canada.map europe.map -P Cheater Cheater -G 4 -D 50
+    tournament -M canada.map europe.map -P Cheater Neutral -G 4 -D 50
+    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10 // TODO OUT OF RANGE ERROR
+
+    // TODO TEST HUMAN
+    tournament -M canada.map europe.map -P Aggressive Human -G 2 -D 10
+    tournament -M canada.map europe.map -P Human Human -G 4 -D 10
+    tournament -M canada.map europe.map -P Human Benevolent -G 4 -D 10
+    tournament -M canada.map europe.map -P Human Cheater -G 4 -D 10
+    tournament -M canada.map europe.map -P Human Neutral -G 4 -D 10
+    */
+
+
     GameEngine* gameEngine = new GameEngine;
-    Order::game = gameEngine; // TODO: this causes an infinite loop if trying to do a tournament command
+    Order::game = gameEngine;
+    PlayerStrategies::game = gameEngine;
 
     bool isPlaying = true;
 
     while (isPlaying) {
         gameEngine->startupPhase();
 
-        // TODO: this might cause errors when running a tournament, so feel free to comment it out
         if (!gameEngine->getIsTournament()) {
             isPlaying = gameEngine->mainGameLoop();
         }
@@ -29,15 +55,8 @@ int gameEngineMain() {
     return 0;
 }
 
-int tournamentMain() {
-    // tournament -M europe.map -P Aggressive Aggressive -G 1 -D 10
-
-    GameEngine* gameEngine = new GameEngine;
-    PlayerStrategies::game = gameEngine;
-
-    gameEngine->startupPhase();
-
-    Order::logObs->outputFile.close();
-
-    return 0;
-}
+//int main() {
+//    gameEngineMain();
+//
+//    return 0;
+//}

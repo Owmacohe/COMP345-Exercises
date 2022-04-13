@@ -295,6 +295,9 @@ void CommandProcessor::setPlayerStrategies(vector<string> ps) {
 void CommandProcessor::setNumberOfGames(int n) { numberOfGames = n; }
 void CommandProcessor::setMaxTurns(int m) { maxTurns = m; }
 
+void CommandProcessor::addMap(string m) { maps.push_back(m); }
+void CommandProcessor::addPlayerStrategy(string ps) { playerStrategies.push_back(ps); }
+
 // Gets command from console
 Command *CommandProcessor::readCommand() {
     string temp;
@@ -482,6 +485,7 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
     for (char i : line) {
         if (i == ' ') {
             words.push_back(tempWord);
+            tempWord = "";
         }
         else {
             tempWord += i;
@@ -543,7 +547,7 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
             } else {
                 if (tournamentParamNum == 0) {
                     if (cp->getMaps().size() < 5) {
-                        cp->getMaps().push_back(words[j]);
+                        cp->addMap(words[j]);
                         mapWords += words[j] + " ";
                     } else {
                         cout << "INVALID TOURNAMENT: too many maps!" << endl;
@@ -552,7 +556,7 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
                 } else if (tournamentParamNum == 1) {
                     if (cp->getMaps().size() >= 1) {
                         if (cp->getPlayerStrategies().size() < 4) {
-                            cp->getPlayerStrategies().push_back(words[j]);
+                            cp->addPlayerStrategy(words[j]);
                             playerStrategyWords += words[j] + " ";
                         } else {
                             cout << "INVALID TOURNAMENT: too many players!" << endl;

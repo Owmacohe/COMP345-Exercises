@@ -8,36 +8,141 @@ using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
 
+/// Forward declaration of GameEngine and Map
 class GameEngine;
 class Map;
 
-// Class representing one Command that gets executed in (primarily) the startup phase
+/**
+ * Class representing one Command that gets executed in (primarily) the startup phase
+ */
 class Command :public Iloggable, public Subject {
     public:
-        Command(); // Default constructor
-        Command(string); // Parameterized constructor 1 (un-parameterized Commands)
-        Command(string, string); // Parameterized constructor 2 (parameterized Commands)
-        Command(string, string, string, int, int); // Parameterized constructor 2 (tournament Command)
-        Command(const Command &c); // Copy constructor
-        ~Command(); // Destructor
-        friend ostream& operator<<(ostream &strm, const Command &c); // Stream insertion operator
-        Command& operator = (const Command& toAssign);  // Assignment operator
+        /// Default constructor
+        Command();
 
-        // Accessors
-        string getCommand(), getTransitionsTo(), getEffect();
+        /**
+        Parameterized constructor for validatemap, gamestart, replay, and quit commands
+        @param string command name
+        @return the Command created
+        */
+        Command(string);
+
+        /**
+        Parameterized constructor for loadmap and addplayer commands
+        @param string command name, string command parameter
+        @return the Command created
+        */
+        Command(string, string);
+
+        /**
+        Parameterized constructor for tournament commands
+        @param string command name, string Map list, string PlayerStrategies list, int number of games, int max turns
+        @return the Command created
+        */
+        Command(string, string, string, int, int);
+
+        /**
+        Copy constructor that creates a deep copy
+        @param constant Commands reference
+        @return the Commands created
+        */
+        Command(const Command &c);
+
+        /// Destructor
+        ~Command();
+
+        /**
+        Friend method to override the stream insertion operator
+        @overload
+        @param output stream reference and the Command as a constant reference
+        @return output stream reference
+        */
+        friend ostream& operator<<(ostream &strm, const Command &c);
+
+        /**
+        Assignment Operator overloading to assign a deep copy
+        @overload
+        @param Command reference that will be copied and assigned
+        @return Command reference
+        */
+        Command& operator = (const Command& toAssign);
+
+        /**
+        Accessor for the name of the Command
+        @param None
+        @return string that is the name of the Command
+        */
+        string getCommand();
+
+        /**
+        Accessor for the name of the state the Command transitions to
+        @param None
+        @return string that is the name of the state the Command transitions to
+        */
+        string getTransitionsTo();
+
+        /**
+        Accessor for the effect of the Command
+        @param None
+        @return string that is the effect of the Command
+        */
+        string getEffect();
+
+        /**
+        Accessor for the states that the Command is valid in
+        @param None
+        @return vector of integers that is the states that the Command is valid in
+        */
         vector<int> getValidIn();
 
-        // Mutators
-        void setCommand(string), setValidIn(vector<int>), setTransitionsTo(string), saveEffect(string);
+        /**
+        Mutator for the name of the Command
+        @param string that is the name of the Command
+        @return None
+        */
+        void setCommand(string);
 
+        /**
+        Mutator for the name of the state the Command transitions to
+        @param string that is the name of the state the Command transitions to
+        @return None
+        */
+        void setTransitionsTo(string);
+
+        /**
+        Mutator for the effect of the Command
+        @param string that is the effect of the Command
+        @return None
+        */
+        void saveEffect(string);
+
+        /**
+        Mutator for the states that the Command is valid in
+        @param vector of integers that is the states that the Command is valid in
+        @return None
+        */
+        void setValidIn(vector<int>);
+
+        /**
+        Method to add a new state in which the Command is valid
+        @param int new state in which the Command is valid
+        @return None
+        */
         void addValidInState(int); // Method to add a new state in which the Command is valid
 
         string stringToLog() override; // From Iloggable
 
+        /// Whether the Command name has been inputted correctly, but the parameters are missing
         bool isPossibleCommand;
     private:
-        string command, transitionsTo, effect; // Command name, next state, and effect of the command
-        vector<int> validIn; // Which states it valid in
+        /// Name of the Command
+        string command;
+        /// The name of the state the Command transitions to
+        string transitionsTo;
+        /// Effect of the Command
+        string effect;
+        /// The states that the Command is valid in
+        vector<int> validIn;
 };
 
 // Class to get and store Commands from the console for use in drivers and phases
@@ -59,6 +164,8 @@ class CommandProcessor : public Iloggable, public Subject {
 
         // Mutators
         void setEngine(GameEngine*), setCommands(vector<Command*>), setMaps(vector<string>), setPlayerStrategies(vector<string>), setNumberOfGames(int), setMaxTurns(int);
+
+        void addMap(string), addPlayerStrategy(string);
 
         Command *readCommand(); // Gets command from console
         void saveCommand(Command*); // Stores the gotten Command in the array

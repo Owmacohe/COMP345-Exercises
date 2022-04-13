@@ -12,25 +12,29 @@ GameEngine* PlayerStrategies::game = new GameEngine();
 PlayerStrategies::PlayerStrategies() {
     cout << "PlayerStrategies constructor called" << endl;
     type = "";
+    neutralAttack = nullptr;
 }
 
 // Parameterized Constructor
-PlayerStrategies::PlayerStrategies(string t) : type(t) { }
+PlayerStrategies::PlayerStrategies(string t) : type(t) {
+    neutralAttack = nullptr;
+}
 
 // Parameterized Constructor
-PlayerStrategies::PlayerStrategies(Player *pl, string t) : p(pl), type(t) { }
+PlayerStrategies::PlayerStrategies(Player *pl, string t) : p(pl), type(t) {
+    neutralAttack = nullptr;
+}
 
 Player* PlayerStrategies::getPlayer() { return p; }
 string PlayerStrategies::getType() { return type; }
-bool PlayerStrategies::getNeutralAttack() { return neutralAttack; }
+Player* PlayerStrategies::getNeutralAttack() { return neutralAttack; }
 
 void PlayerStrategies::setPlayer(Player *pl) { p = pl; }
-void PlayerStrategies::setNeutralAttack(bool b) { neutralAttack = b; }
+void PlayerStrategies::setNeutralAttack(Player* p) { neutralAttack = p; }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const PlayerStrategies& ps){
-    os << "Player Strategy";
-    return os;
+ostream& PlayerStrategies::write(ostream &strm) const {
+    return strm << "Player Strategy";
 }
 
 
@@ -43,12 +47,17 @@ ostream& operator<< (ostream& os, const PlayerStrategies& ps){
  */
 
 // Default Constructor
-HumanPlayerStrategy::HumanPlayerStrategy(): PlayerStrategies("Human"){
+HumanPlayerStrategy::HumanPlayerStrategy(): PlayerStrategies("Human") {
     cout << "Human Strategy Default constructor called" << endl;
 }
 
+// Parameterized constructor
+HumanPlayerStrategy::HumanPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Human") {
+    cout << "Human Strategy Parameterized constructor called" << endl;
+}
+
 void HumanPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Human Strategy called" << endl;
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
     string input;
@@ -61,7 +70,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
     else if (equalsIgnoreCase("advance", type)) {
         cout << "\nWhat type of advance would " << p->getName() << " Player like to issue ? (move, attack, none)" << endl;
         cin >> input;
-        while (!equalsIgnoreCase("move", input) || !equalsIgnoreCase("attack", input) || !equalsIgnoreCase("none", input)) {
+        while (!equalsIgnoreCase("move", input) && !equalsIgnoreCase("attack", input) && !equalsIgnoreCase("none", input)) {
             cout << "\nInvalid input ! Try Again." << endl;
             cin >> input;
         }
@@ -96,7 +105,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Human Strategy called" << endl;
     Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
@@ -131,14 +140,14 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
 
     //TODO :: this is my attempt at the neutral player thingy
     if (returnTerritories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
-        setNeutralAttack(true);
+        setNeutralAttack(returnTerritories.at(0)->getOwner());
     }
 
     return returnTerritories;
 }
 
 vector<Territory*> HumanPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Human Strategy called" << endl;
     Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
@@ -162,9 +171,8 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const HumanPlayerStrategy& ps){
-    os << "Human Player Strategy";
-    return os;
+ostream& HumanPlayerStrategy::write(ostream &strm) const {
+    return strm << "Human Player Strategy";
 }
 
 
@@ -185,7 +193,7 @@ AggressivePlayerStrategy::AggressivePlayerStrategy(Player *pl) : PlayerStrategie
 }
 
 void AggressivePlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Aggressive Strategy called" << endl;
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -213,7 +221,7 @@ void AggressivePlayerStrategy::issueOrder(string type) {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Aggresive Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
@@ -261,20 +269,18 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
     //TODO :: this is my attempt at the neutral player thingy
     if (attack_territories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
-        setNeutralAttack(true);
+        setNeutralAttack(attack_territories.at(0)->getOwner());
     }
 
     return attack_territories;
 }
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Aggressive Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
-
-    cout << m->getName() << endl;
 
     for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
         int number_surrounding = 0;
@@ -312,15 +318,13 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
             defend_territories.insert(defend_territories.begin(), p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
             p.second = nullptr; // Dangling pointer avoidance
         }
-
-        return defend_territories;
     }
+    return defend_territories;
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps){
-    os << "Aggressive Player Strategy of: " << ps.p->getName();
-    return os;
+ostream& AggressivePlayerStrategy::write(ostream &strm) const {
+    return strm << "Aggressive Player Strategy";
 }
 
 
@@ -331,35 +335,77 @@ ostream& operator<< (ostream& os, const AggressivePlayerStrategy& ps){
  */
 
 // Default constructor
-BenevolentPlayerStrategy::BenevolentPlayerStrategy() : PlayerStrategies("Benevolent"){
+BenevolentPlayerStrategy::BenevolentPlayerStrategy() : PlayerStrategies("Benevolent") {
     cout << "Benevolent Strategy Default constructor called" << endl;
 }
 
-void BenevolentPlayerStrategy::issueOrder(string type){
-    cout << "issueOrder() in Strategy called" << endl;
-
+// Parameterized constructor
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Benevolent") {
+    cout << "Benevolent Strategy Parameterized constructor called" << endl;
 }
+
+void BenevolentPlayerStrategy::issueOrder(string type) {
+    cout << "issueOrder() in Benevolent Strategy called" << endl;
+    // Set to all lowercase
+    transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (equalsIgnoreCase("deploy", type)) {
+        // Issues deploy orders based on toDefend()
+        Deploy* d = new Deploy(p);
+        p->addOrderList(d); // Add order to the list
+    }
+    else if (equalsIgnoreCase("advance", type)) {
+        Advance* a = new Advance(p, "attack");
+        p->addOrderList(a);
+    }
+    //TODO: should be able to use airlift, negotiate, and blockade cards
+    // I would suggest getting all card indexes for each type, putting them in an array and then shuffle the array using shuffle(array, array+3, default_random_engine(0)) , (the 3 being the size of the array)
+    // then looping through the array until you find an value that is not -1 (-1 means the card is not in the hand) and play the card at that index then break from loop so only one card is played
+    // Orders that involve card will be issued using playCard()
+    else if (equalsIgnoreCase("card", type)) {
+        int index = -1;
+        index = checkCardInHand("airlift", p->getHand());
+        if (index >= 0) {
+            // Only is able to play airlift card
+            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+        }
+    }
+    else {
+        cout << "Invalid order" << endl;
+    }
+}
+
+
 
 // TODO :: Benevolent only defend and never advance to enemy territories -> no use for toAttack()
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Benevolent Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
-    Map* m = game->getMap();
-
     return attack_territories;
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Benevolent Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
     Map* m = game->getMap();
+    int min = p->getTerritoryList()[0]->getArmies();
+    int teriWithMinArmiesIndex = 0;
+
+    // check for the weakest territory
+    for (int i = 0; i < p->getTerritoryList().size(); i++) {
+        if (p->getTerritoryList()[i]->getArmies() < min) {
+            min = p->getTerritoryList()[i]->getArmies();
+            teriWithMinArmiesIndex = i;
+        }
+    }
+
+    defend_territories.push_back(p->getTerritoryList().at(teriWithMinArmiesIndex));
     return defend_territories;
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps){
-    os << "Benevolent Player Strategy";
-    return os;
+ostream& BenevolentPlayerStrategy::write(ostream &strm) const {
+    return strm << "Benevolent Player Strategy";
 }
 
 
@@ -370,36 +416,35 @@ ostream& operator<< (ostream& os, const BenevolentPlayerStrategy& ps){
  */
 
 // Default constructor
-NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Benevolent"){
+NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Neutral") {
     cout << "Neutral Strategy Default constructor called" << endl;
+}
+
+// Parameterized constructor
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Neutral") {
+    cout << "Neutral Strategy Parameterized constructor called" << endl;
 }
 
 // TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
 void NeutralPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
-    //TODO :: this is my attempt at the neutral player thingy
-    if (getNeutralAttack() == true) {
-        cout << "The Neutral Player was attacked, and is now an aggressive player" << endl;
-        p->setStrategy(new AggressivePlayerStrategy());
-    }
+    cout << "issueOrder() in Neutral Strategy called" << endl;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Neutral Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     return attack_territories;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Neutral Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     return defend_territories;
 }
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps){
-    os << "Neutral Player Strategy";
-    return os;
+ostream& NeutralPlayerStrategy::write(ostream &strm) const {
+    return strm << "Neutral Player Strategy";
 }
 
 
@@ -409,25 +454,30 @@ ostream& operator<< (ostream& os, const NeutralPlayerStrategy& ps){
  */
 
 // Default constructor
-CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategies("Cheater"){
+CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategies("Cheater") {
     cout << "Cheater Strategy Default constructor called" << endl;
 }
 
+// Parameterized constructor
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Cheater") {
+    cout << "Cheater Strategy Parameterized constructor called" << endl;
+}
+
 void CheaterPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Cheater Strategy called" << endl;
 
 }
 
 // TODO :: Cheater does not need to attack or defend to conquered a territory, no use for toAttack() & toDefend()
 vector<Territory*> CheaterPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Cheater Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     Map* m = game->getMap();
     return attack_territories;
 }
 
 vector<Territory*> CheaterPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Cheater Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     Map* m = game->getMap();
     return defend_territories;
@@ -435,9 +485,8 @@ vector<Territory*> CheaterPlayerStrategy::toDefend() {
 
 
 // Stream insertion operator overloading
-ostream& operator<< (ostream& os, const CheaterPlayerStrategy& ps){
-    os << "Cheater Player Strategy";
-    return os;
+ostream& CheaterPlayerStrategy::write(ostream &strm) const {
+    return strm << "Cheater Player Strategy";
 }
 
 

@@ -30,16 +30,16 @@ class Territory {
         Territory();
 
         /**
-        Free method to split a given string into a string vector based on a given delimiter
-        @param string to be split, char as the delimiter
-        @return Vector with strings resulting from the split
+        Parameterized constructor for name, continent, owner, and armies
+        @param string name, string continent, Player pointer owner, and int armies
+        @return the Territory created
         */
         Territory(string, string, Player*, int);
 
         /**
         Copy constructor that creates a deep copy
         @param constant Territory reference
-        @return pointer to the Territory created
+        @return the Territory created
         */
         Territory(const Territory &t);
 
@@ -124,7 +124,6 @@ class Territory {
         @return None
         */
         void setArmies(int);
-
     private:
         /// Name of the Territory
         string name;
@@ -260,25 +259,82 @@ class Map {
         */
         void setEdges(vector<Edge*>);
 
-        // TODO CONTINUE COMMENTS HERE
-        void addContinent(string); // Method to add a new continent
-        void addContinentBonus(int); // Method to add a new continent bonus
-        void addTerritory(Territory*); // Method to add a new Territory
-        void addEdge(Edge*); // Method to add a new Edge between Territories
+        /**
+        Method to add a new continent
+        @param string that is the name of the Continent to be added
+        @return None
+        */
+        void addContinent(string);
 
-        bool isGoodMap = true; // Whether the Map that has been attempted to be loaded is from a proper file
-        bool validateEdge(Map*, Territory*, Territory*); // Method to recursively determine if two given Territories are connected between edges on a Map
-        bool validate(); // Method to make sure the created Map is valid
+        /**
+        Method to add a new continent bonus
+        @param int that is the bonus armies
+        @return None
+        */
+        void addContinentBonus(int);
 
-        vector<Territory*> getConnectedTerritories(string); // Method to get all Territories that are connected to a given Territory
-        vector<Territory*> getContinentTerritories(string); // Method to get all Territories that are a part of a given Ccntinent
-        bool adjacentTerritories(Territory*, Territory*); // Method to check if two territories are adjacent
+        /**
+        Method to add a new Territory
+        @param Territory pointer of the Territory to be added
+        @return None
+        */
+        void addTerritory(Territory*);
+
+        /**
+        Method to add a new Edge between Territories
+        @param pointer to an Edge
+        @return None
+        */
+        void addEdge(Edge*);
+
+        /**
+        Method to recursively determine if two given Territories are connected between edges on a Map
+        @param pointers to a Map and to 2 Territories
+        @return boolean to confirm the validity of the Edge
+        */
+        bool validateEdge(Map*, Territory*, Territory*);
+
+        /**
+        Method to make sure the created Map is valid
+        @param none
+        @return boolean to confirm the validity of the Map
+        */
+        bool validate();
+
+        /**
+        Method to get all Territories that are connected to a given Territory
+        @param string that is the name of the Territory
+        @return Vector of Territory pointers that are connected to the Territory passed
+        */
+        vector<Territory*> getConnectedTerritories(string);
+
+        /**
+        Method to get all Territories that are a part of a given Continent
+        @param string that is the name of the continent
+        @return Vector of Territory Pointers
+        */
+        vector<Territory*> getContinentTerritories(string);
+
+        /**
+        Method to check if two territories are adjacent
+        @param two pointers to two Territories
+        @return boolean to confirm that the Territories are adjacent
+        */
+        bool adjacentTerritories(Territory*, Territory*);
+
+        /// To determine Whether the Map that has been attempted to be loaded is from a proper file
+        bool isGoodMap = true;
     private:
-        string name; // Name of the Map
-        vector<string> continents; // Array of strings of all the continent names
-        vector<int> continentBonuses; // Array of strings of all the continent names
-        vector<Territory*> territories; // Array of Territories
-        vector<Edge*> edges; // Array of edges between the Territories
+        /// Name of the Map
+        string name;
+        /// Array of strings of all the continent names
+        vector<string> continents;
+        /// Array of strings of all the continent names
+        vector<int> continentBonuses;
+        /// Array of Territories
+        vector<Territory*> territories;
+        /// Array of edges between the Territories
+        vector<Edge*> edges;
 };
 
 /// Class to load in new graphs

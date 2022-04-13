@@ -25,6 +25,7 @@ GameEngine::GameEngine() {
     neutralPlayer->setName("Neutral");
 
     int numberOfTurns = 0;
+    endOfTournament = false;
 
 }
 
@@ -233,8 +234,7 @@ void GameEngine::issueOrdersPhase() {
         // Only issue deploy orders while the player's reinforcement pool contains armies;
         if (num > 0) cout << "Issuing deploy orders" << endl;
 
-        for (int j = 0; j < num; i++) {
-
+        for (int j = 0; j < num; j++) {
             p->issueOrder("deploy");
             cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
         }
@@ -449,6 +449,22 @@ void GameEngine::startupPhase() {
 
     if (word1 == "tournament" && processor->validate(temp)) {
         isTournament = true;
+        // Tournament Mode Effect
+        // M
+        string tournamentMaps = "";
+        for(string i : processor->getMaps()) {
+            tournamentMaps += i + ", ";
+        }
+
+        // P
+        string tournamentPS = "";
+        for(string i: processor->getPlayerStrategies()) {
+            tournamentPS += i + ", ";
+        }
+
+        string effect ="Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD: " + to_string(processor->getMaxTurns()) + "\n";
+       temp->saveEffect(effect);
+
         for (int j = 0; j < processor->getNumberOfGames(); j++) {
             gameNumber = j;
             mapNumber = 0;
@@ -458,9 +474,9 @@ void GameEngine::startupPhase() {
             tournamentResults.push_back(column);
 
             for (string k : processor->getMaps()) {
-                mapNumber++;
+                mapNumber = mapNumber+1;
 
-                if (j > 0) {
+                if (mapNumber > 1 || j > 0) {
                     s = new State;
                     *s = null;
                     NumberOfPlayers = 0;
@@ -491,22 +507,24 @@ void GameEngine::startupPhase() {
                     Player *tempPlayer = player_list[player_list.size() - 1];
 
                     if (ps == "Human") {
-                        tempStrategy = new HumanPlayerStrategy();
+                        tempStrategy = new HumanPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Aggressive") {
-                        tempStrategy = new AggressivePlayerStrategy();
+                        tempStrategy = new AggressivePlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Benevolent") {
-                        tempStrategy = new BenevolentPlayerStrategy();
+                        tempStrategy = new BenevolentPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Neutral") {
-                        tempStrategy = new NeutralPlayerStrategy();
+                        tempStrategy = new NeutralPlayerStrategy(tempPlayer);
                     }
                     else if (ps == "Cheater") {
-                        tempStrategy = new CheaterPlayerStrategy();
+                        tempStrategy = new CheaterPlayerStrategy(tempPlayer);
+                    }
+                    else {
+                        cout << "INVALID PLAYERSTRATEGY: " << ps << "!" << endl;
                     }
 
-                    tempStrategy->setPlayer(tempPlayer);
                     tempPlayer->setStrategy(tempStrategy);
                 }
 
@@ -534,30 +552,18 @@ void GameEngine::startupPhase() {
 
                     delete neutralPlayer;
                     neutralPlayer = NULL;
+
+                    numberOfTurns = 0;
                 }
 
                 cout << "Tournament map " << k << " done!" << endl;
             }
-
             cout << "Tournament game " << to_string(j+1) << " done!" << endl;
         }
 
-        // Tournament Mode Effect
-
-        // M
-        string tournamentMaps = "";
-        for(int i= 0; i < processor->getMaps().size(); i++) {
-            tournamentMaps += ", "+ processor->getMaps().at(i);
-        }
-
-        // P
-        string tournamentPS = "";
-        for(int i= 0; i < processor->getPlayerStrategies().size(); i++) {
-            tournamentMaps += ", " + processor->getPlayerStrategies().at(i);
-        }
-
-        string effect = "Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD:" + to_string(processor->getMaxTurns()) + "\n";
-        temp->saveEffect(effect);
+        endOfTournament = true;
+        notify(this); //print table results
+        cout << "End of the Tournament. Please consult the log file for detailed results." <<endl;
     }
     else {
         startupCommands(true, false);
@@ -602,7 +608,7 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
             }
             // Use the loadmap <filename> command to select a map from a list of map files as stored in a directory, which results in the map being loaded in the game
             if (word1 == "loadmap") {
-                if (map != NULL) {
+                if (!isTournament && map != NULL) {
                     delete map;
                     map = NULL;
                 }
@@ -648,6 +654,45 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
                     cout << effect << "!" << endl;
                 }
                 else {
+//                    // 4 strategies
+//                    int strategyType;
+//
+//                    cout << "" << endl;
+//                    cout << "Assigning player strategies " << endl;
+//                    int chooseType;
+//
+//                    for (int i = 0; i < player_list.size(); i++) {
+//
+//                        cout<<"Please choose a strategy for player  "<< player_list[i]->getName() <<endl;
+//                        cout<<"Aggressive == 0 : Enter 0 "<<endl;
+//                        cout<<"Benevolent == 1 : Enter 1"<<endl;
+//                        cout<<"Neutral == 2 : Enter 2"<<endl;
+//                        cout<<"Cheater == 3 : Enter 3"<<endl;
+//                        cout<<"Human == 4: Enter 4"<<endl;
+//                        cin>>chooseType;
+//
+//                        if ( chooseType== 0) // Aggresive
+//                        {
+//                            player_list[i]->setStrategy(new AggressivePlayerStrategy);
+//                            cout << "Aggressive" << endl;
+//                        } else if (chooseType == 1) //Benevolent
+//                        {
+//                            player_list[i]->setStrategy(new BenevolentPlayerStrategy);
+//                            cout << "Benevolent" << endl;
+//                        } else if (chooseType == 2) //Neutral
+//                        {
+//                            player_list[i]->setStrategy(new NeutralPlayerStrategy);
+//                            cout << "Neutral" << endl;
+//                        } else if (chooseType == 3)//Cheater
+//                        {
+//                            player_list[i]->setStrategy(new Cheater);
+//                            cout << "Cheater" << endl;
+//                        }
+//                        else{
+//                            player_list[i]->setStrategy(new HumanPlayerStrategy);
+//                            cout << "Human" << endl;
+//                        }
+
                     if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                         Player *p = new Player(word2);
                         player_list.push_back(p);
@@ -749,10 +794,12 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
+//TODO: check neutral player
 bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
     string input;
+
     while (playing) {
         assignReinforcementPhase(); // Begin reinforcement phase for all players
         issueOrdersPhase(); // Begin issue orders phase for all players
@@ -760,12 +807,20 @@ bool GameEngine::mainGameLoop() {
         checkPlayers(); // Check if any players need to be removed
         resetAlliances(); // Reset Alliances
 
+        // Check if Neutral Player was attacked
+        for (Player* p : player_list) {
+            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr)
+                p->getPlayerStrategy()->getNeutralAttack()->setStrategy(new AggressivePlayerStrategy());
+        }
+
         // Track number of Turns in this game
         numberOfTurns++;
 
         // Win phase is started in check for winner
         playing = !checkForWinner(); // Check for winner
     }
+
+    cout << "done loop" << endl;
 
     while (!isTournament && *s == 8) {
         cout << "Replay or quit? " << endl;
@@ -895,11 +950,7 @@ string GameEngine::stringToLog() {
     string enumStates[] = {"null", "start", "mapLoaded", "mapValidated", "playersAdded", "assignReinforcement",
                            "issueOrder", "executeOrder", "win"};
     string logString = "";
-    if (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
-        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
-    }
-
-    else if (enumStates[*s] == "win" && mapNumber == processor->getMaps().size()-1 && gameNumber == processor->getNumberOfGames()) {
+    if (endOfTournament) {
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. The tournament has ended. \n";
 
         // Following lines help format the Table
@@ -915,17 +966,21 @@ string GameEngine::stringToLog() {
         }
         resultsTable <<"\n";
 
-        for(int j = 0; j <= mapNumber; j++) {
+        for(int j = 0; j < mapNumber; j++) {
             resultsTable.width(ws);
             resultsTable << processor->getMaps().at(j) + " |";
 
             for(int k = 0; k <= gameNumber; k++) {
                 resultsTable.width(ws);
-                resultsTable <<  " " + tournamentResults.at(j).at(k) + " |";
+                resultsTable <<  " " + tournamentResults.at(k).at(j) + " |";
             }
             resultsTable << "\n";
         }
         logString += resultsTable.str();
+    }
+
+    else if     (enumStates[*s] == "win" && numberOfTurns == processor->getMaxTurns()) {
+        logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state despite a Draw since the maximum number of turns has been reached for this game. \n";
     }
     else{
         logString = "The Game Engine has transitioned to the " + enumStates[*s] + "state. \n";
