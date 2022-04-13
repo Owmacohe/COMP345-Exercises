@@ -92,7 +92,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
                     break;
                 }
                 else {
-                    cout << "\nInvalid input" << p->getName() << " does not have that card type in hand"
+                    cout << "\nInvalid input " << p->getName() << " does not have that card type in hand"
                          << " ! Try Again." << endl;
                     cin >> input;
                 }
@@ -110,18 +110,18 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
     vector<Territory*> returnTerritories;
     string input;
 
-    cout << "\nWhat territory would" << p->getName() << " Player like to attack from ?" << endl;
+    cout << "\nWhat territory would " << p->getName() << " Player like to attack from ?" << endl;
     cin >> input;
 
     while (p->checkTerritoryOwn(input) == NULL) {
-        cout << "\nInvalid input " << p->getName() << "Player does not own territory ! Try Again." << endl;
+        cout << "\nInvalid input " << p->getName() << " Player does not own territory ! Try Again." << endl;
         cin >> input;
     }
 
     Territory* territory = p->checkTerritoryOwn(input);
     vector<Territory*> territories = m->getConnectedTerritories(territory->getName());
 
-    cout << "\nChosen territory : " << input <<". What territory would" << p->getName() << " Player like to attack ?" << endl;
+    cout << "\nChosen territory : " << input <<". What territory would " << p->getName() << " Player like to attack ?" << endl;
     cin >> input;
     bool flag = false;
     while (flag == false) {
@@ -152,7 +152,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
     vector<Territory*> returnTerritories;
     string input;
 
-    cout << "\nWhat territory would" << p->getName() << " Player like to defend ?" << endl;
+    cout << "\nWhat territory would " << p->getName() << " Player like to defend ?" << endl;
     cin >> input;
 
     while (p->checkTerritoryOwn(input) == NULL) {
