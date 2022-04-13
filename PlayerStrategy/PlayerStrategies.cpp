@@ -57,7 +57,7 @@ HumanPlayerStrategy::HumanPlayerStrategy(Player *pl) : PlayerStrategies(pl, "Hum
 }
 
 void HumanPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Human Strategy called" << endl;
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
     string input;
@@ -70,7 +70,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
     else if (equalsIgnoreCase("advance", type)) {
         cout << "\nWhat type of advance would " << p->getName() << " Player like to issue ? (move, attack, none)" << endl;
         cin >> input;
-        while (!equalsIgnoreCase("move", input) || !equalsIgnoreCase("attack", input) || !equalsIgnoreCase("none", input)) {
+        while (!equalsIgnoreCase("move", input) && !equalsIgnoreCase("attack", input) && !equalsIgnoreCase("none", input)) {
             cout << "\nInvalid input ! Try Again." << endl;
             cin >> input;
         }
@@ -105,7 +105,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Human Strategy called" << endl;
     Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
@@ -147,7 +147,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
 }
 
 vector<Territory*> HumanPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Human Strategy called" << endl;
     Map* m = game->getMap();
     vector<Territory*> returnTerritories;
     string input;
@@ -193,7 +193,7 @@ AggressivePlayerStrategy::AggressivePlayerStrategy(Player *pl) : PlayerStrategie
 }
 
 void AggressivePlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Aggressive Strategy called" << endl;
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -221,7 +221,7 @@ void AggressivePlayerStrategy::issueOrder(string type) {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Aggresive Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
@@ -276,7 +276,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Aggressive Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
@@ -345,7 +345,7 @@ BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player *pl) : PlayerStrategie
 }
 
 void BenevolentPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Benevolent Strategy called" << endl;
     // Set to all lowercase
     transform(type.begin(), type.end(), type.begin(), ::tolower);
 
@@ -379,13 +379,13 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
 
 // TODO :: Benevolent only defend and never advance to enemy territories -> no use for toAttack()
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Benevolent Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     return attack_territories;
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Benevolent Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
     Map* m = game->getMap();
     int min = p->getTerritoryList()[0]->getArmies();
@@ -427,17 +427,17 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
 
 // TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
 void NeutralPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Neutral Strategy called" << endl;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Neutral Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     return attack_territories;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Neutral Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     return defend_territories;
 }
@@ -464,20 +464,20 @@ CheaterPlayerStrategy::CheaterPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
 }
 
 void CheaterPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Strategy called" << endl;
+    cout << "issueOrder() in Cheater Strategy called" << endl;
 
 }
 
 // TODO :: Cheater does not need to attack or defend to conquered a territory, no use for toAttack() & toDefend()
 vector<Territory*> CheaterPlayerStrategy::toAttack() {
-    cout << "toAttack() in Strategy called" << endl;
+    cout << "toAttack() in Cheater Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     Map* m = game->getMap();
     return attack_territories;
 }
 
 vector<Territory*> CheaterPlayerStrategy::toDefend() {
-    cout << "toDefend() in Strategy called" << endl;
+    cout << "toDefend() in Cheater Strategy called" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     Map* m = game->getMap();
     return defend_territories;
