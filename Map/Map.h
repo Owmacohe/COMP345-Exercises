@@ -29,18 +29,17 @@ class Territory {
         /// Default constructor
         Territory();
 
-        //TODO: FIX THIS COMMENT --??? DID I WRITE THIS? DONT REMEMBER
         /**
-        Free method to split a given string into a string vector based on a given delimiter
-        @param string to be split, char as the delimiter
-        @return pointer to the Territory created
+        Parameterized constructor for name, continent, owner, and armies
+        @param string name, string continent, Player pointer owner, and int armies
+        @return the Territory created
         */
         Territory(string, string, Player*, int);
 
         /**
         Copy constructor that creates a deep copy
         @param constant Territory reference
-        @return pointer to the Territory created
+        @return the Territory created
         */
         Territory(const Territory &t);
 
@@ -125,7 +124,6 @@ class Territory {
         @return None
         */
         void setArmies(int);
-
     private:
         /// Name of the Territory
         string name;
@@ -324,9 +322,8 @@ class Map {
         */
         bool adjacentTerritories(Territory*, Territory*);
 
-        ///to determine Whether the Map that has been attempted to be loaded is from a proper file
+        /// To determine Whether the Map that has been attempted to be loaded is from a proper file
         bool isGoodMap = true;
-
     private:
         /// Name of the Map
         string name;

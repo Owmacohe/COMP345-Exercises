@@ -4,6 +4,7 @@
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
 #include "../GameEngine/GameEngine.h"
+#include <random>
 
 // Initialize the Game Engine
 GameEngine* PlayerStrategies::game = new GameEngine();
@@ -355,20 +356,41 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
         p->addOrderList(d); // Add order to the list
     }
     else if (equalsIgnoreCase("advance", type)) {
-        Advance* a = new Advance(p, "attack");
+        Advance* a = new Advance(p, "move");
         p->addOrderList(a);
     }
     //TODO: should be able to use airlift, negotiate, and blockade cards
     // I would suggest getting all card indexes for each type, putting them in an array and then shuffle the array using shuffle(array, array+3, default_random_engine(0)) , (the 3 being the size of the array)
     // then looping through the array until you find an value that is not -1 (-1 means the card is not in the hand) and play the card at that index then break from loop so only one card is played
     // Orders that involve card will be issued using playCard()
-    else if (equalsIgnoreCase("card", type)) {
-        int index = -1;
-        index = checkCardInHand("airlift", p->getHand());
-        if (index >= 0) {
-            // Only is able to play airlift card
-            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+
+    else if (equalsIgnoreCase("card", type)){
+        vector<int> indices = vector<int>();
+       //gets all indices of the cards of the types negotiate, airlift, blockade
+        for(int i =0 ; i<p->getHand()->numCardInHand; i++){
+            if (p->getHand()->hand[i]->getType() == "airlift"){
+                indices.push_back(i);
+            }
+            if (p->getHand()->hand[i]->getType() == "negotiate"){
+                indices.push_back(i);
+            }
+            if (p->getHand()->hand[i]->getType() == "blockade"){
+                indices.push_back(i);
+            }
         }
+        //shuffle the vector
+         shuffle(indices.begin(), indices.end(),default_random_engine());
+
+        //pick the first card in the vector to be played
+        p->getHand()->playCard(indices[0], *game->getDeck(), *p->getOrder(), p);
+//
+//
+//        int index = -1;
+//        index = checkCardInHand("airlift", p->getHand());
+//        if (index >= 0) {
+//            // Only is able to play airlift card
+//            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+//        }
     }
     else {
         cout << "Invalid order" << endl;
@@ -465,6 +487,29 @@ CheaterPlayerStrategy::CheaterPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
 
 void CheaterPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Cheater Strategy called" << endl;
+    transform(type.begin(), type.end(), type.begin(), ::tolower);
+
+    if (equalsIgnoreCase("deploy", type)) {
+        //Deploy in a random territory on his list
+        Deploy* d = new Deploy(p,p->getTerritoryList().at((rand()*p->getNumberOfTerritories())+1));
+        p->addOrderList(d); // Add order to the list
+    }
+    else if (equalsIgnoreCase("advance", type)) {
+        Advance* a = new Advance(p, "none");  //TODO: i'm not sure of this line if it's correct
+        p->addOrderList(a);
+    }
+        // Orders that involve card will be issued using playCard()
+    else if (equalsIgnoreCase("card", type)) {
+        int index = -1;
+        index = checkCardInHand("bomb", p->getHand()); //TODO: i think it's only bomb?
+        if (index >= 0) {
+            // Only is able to play bomb card
+            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+        }
+    }
+    else {
+        cout << "Invalid order" << endl;
+    }
 
 }
 
