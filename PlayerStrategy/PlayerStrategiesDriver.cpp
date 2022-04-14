@@ -1,6 +1,7 @@
 #include "PlayerStrategies.h"
 #include "../Player/Player.h"
 #include "../Map/Map.h"
+#include "../Orders/Orders.h"
 #include "../GameEngine/GameEngine.h"
 #include <iostream>
 #include <vector>
@@ -41,6 +42,7 @@ int PlayerStrategymain() {
     mainGE->setMap(mainmap);
     mainGE->setplayer_list(player_list);
     PlayerStrategies::game = mainGE;
+    Order::game = mainGE;
 
     // Assign Territories to Players
     int playerIndex = 0;
@@ -72,5 +74,6 @@ int PlayerStrategymain() {
     }
 
     player1->issueOrder("advance"); // attack, New_Brunswick, Prince_Edward_Island
+
     return 0;
 }
