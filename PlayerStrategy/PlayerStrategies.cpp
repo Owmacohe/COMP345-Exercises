@@ -501,20 +501,14 @@ void CheaterPlayerStrategy::issueOrder(string type) {
     // loop through the players territories and call the getConnectedTerritories(territoryname) and set all those territories in that vector to be owned by the cheater
     // so youll have an embeded loop in your loop for the territories
 
-    else if (equalsIgnoreCase("advance", type)) {
-        Advance* a = new Advance(p, "none");  //TODO: i'm not sure of this line if it's correct
-        p->addOrderList(a);
-    }
-
-    //TODO : i dont think they play any cards because they arent able to attack anyone close to them because they automatically take ownership
-    // so all the code card is not needed
-        // Orders that involve card will be issued using playCard()
-    else if (equalsIgnoreCase("card", type)) {
-        int index = -1;
-        index = checkCardInHand("bomb", p->getHand()); //TODO: i think it's only bomb?
-        if (index >= 0) {
-            // Only is able to play bomb card
-            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
+    else if (equalsIgnoreCase("advance", type)) {   //TODO: what's gonna be the condition here? i already added the 2 loops inside
+        vector<Territory*> territoriesToBeStolen = vector<Territory*>();
+        Map * m = game->getMap();
+        for (Territory * t : p->getTerritoryList()){
+            territoriesToBeStolen = m->getConnectedTerritories(t->getName());
+            for(Territory * ter: territoriesToBeStolen){
+                ter->setOwner(p);
+            }
         }
     }
     else {
