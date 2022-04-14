@@ -14,11 +14,26 @@ int PlayerStrategymain() {
 
     // Create Players List
     vector<Player*> player_list;
-    Player* player1 = new Player();player1->setStrategy(new HumanPlayerStrategy()); player1->setReinforcementPool(12); player1->setName("Audrey");
-    Player* player2 = new Player(new AggressivePlayerStrategy()); player2->setReinforcementPool(10); player2->setName("MJ");
-    Player* player3 = new Player(new BenevolentPlayerStrategy()); player3->setReinforcementPool(8); player3->setName("Gabbi");
-    Player* player4 = new Player(new NeutralPlayerStrategy()); player4->setReinforcementPool(6); player4->setName("Owen");
-    Player* player5 = new Player(new CheaterPlayerStrategy()); player5->setReinforcementPool(4); player5->setName("Joe");
+    Player* player1 = new Player();
+    HumanPlayerStrategy* humanstrat = new HumanPlayerStrategy(player1);
+    player1->setStrategy(humanstrat); player1->setReinforcementPool(12); player1->setName("Audrey");
+
+    Player* player2 = new Player();
+    AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
+    player2->setStrategy(aggressivestrat); player2->setReinforcementPool(10); player2->setName("MJ");
+
+    Player* player3 = new Player();
+    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
+    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
+
+    Player* player4 = new Player();
+    NeutralPlayerStrategy* neutralstrat = new NeutralPlayerStrategy(player4);
+    player4->setStrategy(neutralstrat); player4->setReinforcementPool(6); player4->setName("Owen");
+
+    Player* player5 = new Player();
+    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
+    player5->setStrategy(cheaterstrat); player5->setReinforcementPool(4); player5->setName("Joe");
+
     player_list.push_back(player1); player_list.push_back(player2); player_list.push_back(player3); player_list.push_back(player4); player_list.push_back(player5);
 
     // Create & Set up Game Engine
@@ -56,5 +71,6 @@ int PlayerStrategymain() {
         cout << *(p->getPlayerStrategy()) << endl;
     }
 
+    player1->issueOrder("advance"); // attack, New_Brunswick, Prince_Edward_Island
     return 0;
 }

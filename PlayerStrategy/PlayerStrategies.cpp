@@ -93,7 +93,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
                     break;
                 }
                 else {
-                    cout << "\nInvalid input" << p->getName() << " does not have that card type in hand"
+                    cout << "\nInvalid input " << p->getName() << " does not have that card type in hand"
                          << " ! Try Again." << endl;
                     cin >> input;
                 }
@@ -111,18 +111,18 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
     vector<Territory*> returnTerritories;
     string input;
 
-    cout << "\nWhat territory would" << p->getName() << " Player like to attack from ?" << endl;
+    cout << "\nWhat territory would " << p->getName() << " Player like to attack from ?" << endl;
     cin >> input;
 
     while (p->checkTerritoryOwn(input) == NULL) {
-        cout << "\nInvalid input " << p->getName() << "Player does not own territory ! Try Again." << endl;
+        cout << "\nInvalid input " << p->getName() << " Player does not own territory ! Try Again." << endl;
         cin >> input;
     }
 
     Territory* territory = p->checkTerritoryOwn(input);
     vector<Territory*> territories = m->getConnectedTerritories(territory->getName());
 
-    cout << "\nChosen territory : " << input <<". What territory would" << p->getName() << " Player like to attack ?" << endl;
+    cout << "\nChosen territory : " << input <<". What territory would " << p->getName() << " Player like to attack ?" << endl;
     cin >> input;
     bool flag = false;
     while (flag == false) {
@@ -153,7 +153,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
     vector<Territory*> returnTerritories;
     string input;
 
-    cout << "\nWhat territory would" << p->getName() << " Player like to defend ?" << endl;
+    cout << "\nWhat territory would " << p->getName() << " Player like to defend ?" << endl;
     cin >> input;
 
     while (p->checkTerritoryOwn(input) == NULL) {
@@ -494,10 +494,20 @@ void CheaterPlayerStrategy::issueOrder(string type) {
         Deploy* d = new Deploy(p,p->getTerritoryList().at((rand()*p->getNumberOfTerritories())+1));
         p->addOrderList(d); // Add order to the list
     }
+    //TODO : we shouldn't use advance tho because its an automatic ownership of all surrounding territories
+    // i would just use also else if so that when they arent doing a deploy they are cheating
+    // so the advance code isnt needed either
+    // we just want an else if that will set all surrounding territories to be owned by the cheater
+    // loop through the players territories and call the getConnectedTerritories(territoryname) and set all those territories in that vector to be owned by the cheater
+    // so youll have an embeded loop in your loop for the territories
+
     else if (equalsIgnoreCase("advance", type)) {
         Advance* a = new Advance(p, "none");  //TODO: i'm not sure of this line if it's correct
         p->addOrderList(a);
     }
+
+    //TODO : i dont think they play any cards because they arent able to attack anyone close to them because they automatically take ownership
+    // so all the code card is not needed
         // Orders that involve card will be issued using playCard()
     else if (equalsIgnoreCase("card", type)) {
         int index = -1;

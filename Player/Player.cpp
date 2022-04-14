@@ -219,10 +219,9 @@ Player::~Player() {
 // Return bool based on if territory is owned by player
 Territory* Player::checkTerritoryOwn(string name) {
     transform(name.begin(), name.end(), name.begin(), ::tolower);
-
     for (Territory* t : territories) {
         string comparename = t->getName();
-        transform(t->getName().begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
+        transform(comparename.begin(), comparename.end(), comparename.begin(), ::tolower);t->getName();
         if (name == comparename) return t;
     }
     return NULL;
