@@ -278,48 +278,65 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "toDefend() in Aggressive Strategy called" << endl;
-    vector<Territory*> defend_territories = vector<Territory*>();
-    pair<int, Territory*> pairs = pair<int, Territory*>();
-    vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
+//    vector<Territory *> defend_territories = vector<Territory *>();
+//    pair<int, Territory *> pairs = pair<int, Territory *>();
+//    vector<pair<int, Territory *>> ordering = vector<pair<int, Territory *>>();
+//    Map *m = game->getMap();
+//
+//    for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
+//        int number_surrounding = 0;
+//        string name = territory->getName();
+//
+//        vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
+//
+//        if (surrounded_territories.empty()) {
+//            number_surrounding = -1;
+//        }
+//            // step 1 check each territories numbers of enemies surrounding
+//        else {
+//            for (Territory *t: surrounded_territories) {
+//                if ((t->getOwner()->getName() != p->getName())) {
+//                    number_surrounding = number_surrounding + 1;
+//                }
+//            }
+//        }
+//
+//        // step 2 pair territory and their number of surrounding territories, add pair to vector
+//        if (number_surrounding != 0) {
+//            pairs.first = territory->getArmies();
+//            pairs.second = territory;
+//            ordering.push_back(pairs);
+//        }
+//
+//        for (Territory *i: surrounded_territories) { // Delete the vector of the surrounding to avoid memory leak
+//            i = nullptr;
+//        }
+//
+//        // step 3 sort and seperate territories in pair
+//        sort(ordering.begin(), ordering.end());
+//
+//        for (pair<int, Territory *> p: ordering) {
+//            defend_territories.insert(defend_territories.begin(),
+//                                      p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
+//            p.second = nullptr; // Dangling pointer avoidance
+//        }
+//    }
+//    return defend_territories;
+//}
+    vector<Territory *> defend_territories = vector<Territory *>();
     Map* m = game->getMap();
+    int max = p->getTerritoryList()[0]->getArmies();
+    int teriWithMaxArmiesIndex = 0;
 
-    for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
-        int number_surrounding = 0;
-        string name = territory->getName();
-
-        vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
-
-        if (surrounded_territories.empty()) {
-            number_surrounding = -1;
-        }
-            // step 1 check each territories numbers of enemies surrounding
-        else {
-            for (Territory *t: surrounded_territories) {
-                if ((t->getOwner()->getName() != p->getName())) {
-                    number_surrounding = number_surrounding + 1;
-                }
-            }
-        }
-
-        // step 2 pair territory and their number of surrounding territories, add pair to vector
-        if (number_surrounding != 0) {
-            pairs.first = territory->getArmies();
-            pairs.second = territory;
-            ordering.push_back(pairs);
-        }
-
-        for (Territory *i: surrounded_territories) { // Delete the vector of the surrounding to avoid memory leak
-            i = nullptr;
-        }
-
-        // step 3 sort and seperate territories in pair
-        sort(ordering.begin(), ordering.end());
-
-        for (pair<int, Territory *> p: ordering) {
-            defend_territories.insert(defend_territories.begin(), p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
-            p.second = nullptr; // Dangling pointer avoidance
+    // check for the strongest territory
+    for (int i = 0; i < p->getTerritoryList().size(); i++) {
+        if (p->getTerritoryList()[i]->getArmies() > max) {
+            max = p->getTerritoryList()[i]->getArmies();
+            teriWithMaxArmiesIndex = i;
         }
     }
+
+    defend_territories.push_back(p->getTerritoryList().at(teriWithMaxArmiesIndex));
     return defend_territories;
 }
 
