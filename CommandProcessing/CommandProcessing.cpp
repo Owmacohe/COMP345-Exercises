@@ -351,12 +351,12 @@ Command *CommandProcessor::readCommand() {
                     }
                     else {
                         cout << "INVALID TOURNAMENT: too many games!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 }
                 else {
                     cout << "INVALID TOURNAMENT: not enough games!" << endl;
-                    return NULL;
+                    return new Command("", "", "", 0, 0);
                 }
             }
             else if (words[j] == "-D") {
@@ -370,12 +370,12 @@ Command *CommandProcessor::readCommand() {
                     }
                     else {
                         cout << "INVALID TOURNAMENT: too many turns!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 }
                 else {
                     cout << "INVALID TOURNAMENT: not enough turns!" << endl;
-                    return NULL;
+                    return new Command("", "", "", 0, 0);
                 }
             }
             else {
@@ -386,7 +386,7 @@ Command *CommandProcessor::readCommand() {
                     }
                     else {
                         cout << "INVALID TOURNAMENT: too many maps!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 }
                 else if (tournamentParamNum == 1) {
@@ -397,12 +397,12 @@ Command *CommandProcessor::readCommand() {
                         }
                         else {
                             cout << "INVALID TOURNAMENT: too many players!" << endl;
-                            return NULL;
+                            return new Command("", "", "", 0, 0);
                         }
                     }
                     else {
                         cout << "INVALID TOURNAMENT: not enough maps!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 }
             }
@@ -413,12 +413,12 @@ Command *CommandProcessor::readCommand() {
         }
         else {
             cout << "INVALID TOURNAMENT: not enough players!" << endl;
-            return NULL;
+            return new Command("", "", "", 0, 0);
         }
     }
     else {
         cout << "Invalid command!" << endl;
-        return NULL;
+        return new Command("", "", "", 0, 0);
     }
 }
 
@@ -522,11 +522,11 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
                         cp->setNumberOfGames(tempNumberOfGames);
                     } else {
                         cout << "INVALID TOURNAMENT: too many games!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 } else {
                     cout << "INVALID TOURNAMENT: not enough games!" << endl;
-                    return NULL;
+                    return new Command("", "", "", 0, 0);
                 }
             } else if (words[j] == "-D") {
                 tournamentParamNum = -1;
@@ -538,11 +538,11 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
                         cp->setMaxTurns(tempMaxTurns);
                     } else {
                         cout << "INVALID TOURNAMENT: too many turns!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 } else {
                     cout << "INVALID TOURNAMENT: not enough turns!" << endl;
-                    return NULL;
+                    return new Command("", "", "", 0, 0);
                 }
             } else {
                 if (tournamentParamNum == 0) {
@@ -551,7 +551,7 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
                         mapWords += words[j] + " ";
                     } else {
                         cout << "INVALID TOURNAMENT: too many maps!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 } else if (tournamentParamNum == 1) {
                     if (cp->getMaps().size() >= 1) {
@@ -560,11 +560,11 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
                             playerStrategyWords += words[j] + " ";
                         } else {
                             cout << "INVALID TOURNAMENT: too many players!" << endl;
-                            return NULL;
+                            return new Command("", "", "", 0, 0);
                         }
                     } else {
                         cout << "INVALID TOURNAMENT: not enough maps!" << endl;
-                        return NULL;
+                        return new Command("", "", "", 0, 0);
                     }
                 }
             }
@@ -574,12 +574,12 @@ Command *FileLineReader::readLineFromFile(CommandProcessor *cp, string f, int l)
             return new Command(words[0], mapWords, playerStrategyWords, cp->getNumberOfGames(), cp->getMaxTurns());
         } else {
             cout << "INVALID TOURNAMENT: not enough players!" << endl;
-            return NULL;
+            return new Command("", "", "", 0, 0);
         }
     }
     else {
         cout << "Invalid command!" << endl;
-        return NULL;
+        return new Command("", "", "", 0, 0);
     }
 }
 

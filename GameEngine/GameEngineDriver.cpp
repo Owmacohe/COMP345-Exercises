@@ -6,7 +6,6 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../PlayerStrategy/PlayerStrategies.h"
 
-
 int gameEngineMain() {
     // tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
 

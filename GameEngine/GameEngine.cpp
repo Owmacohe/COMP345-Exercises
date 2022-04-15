@@ -429,144 +429,146 @@ void GameEngine::startupPhase() {
 
     transition(start);
 
-    cout << "Enter a command: " << endl;
+    while (true) {
+        cout << "Enter a command: " << endl;
 
-    // Getting the next Command, and accessing it for local use
-    processor->getCommand();
-    Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
+        // Getting the next Command, and accessing it for local use
+        processor->getCommand();
+        Command *temp = processor->getCommands()[processor->getCommands().size() - 1];
 
-    word1 = "";
+        word1 = "";
 
-    // Splitting the input into words (if it can be split)
-    for (char i : temp->getCommand()) {
-        if (i == ' ') {
-            break;
-        }
-        else {
-            word1 += i;
-        }
-    }
-
-    if (word1 == "tournament" && processor->validate(temp)) {
-        isTournament = true;
-        // Tournament Mode Effect
-        // M
-        string tournamentMaps = "";
-        for(string i : processor->getMaps()) {
-            tournamentMaps += i + ", ";
+        // Splitting the input into words (if it can be split)
+        for (char i : temp->getCommand()) {
+            if (i == ' ') {
+                break;
+            }
+            else {
+                word1 += i;
+            }
         }
 
-        // P
-        string tournamentPS = "";
-        for(string i: processor->getPlayerStrategies()) {
-            tournamentPS += i + ", ";
-        }
+        if (word1 == "tournament" && processor->validate(temp)) {
+            isTournament = true;
+            // Tournament Mode Effect
+            // M
+            string tournamentMaps = "";
+            for(string i : processor->getMaps()) {
+                tournamentMaps += i + ", ";
+            }
 
-        string effect ="Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD: " + to_string(processor->getMaxTurns()) + "\n";
-       temp->saveEffect(effect);
+            // P
+            string tournamentPS = "";
+            for(string i: processor->getPlayerStrategies()) {
+                tournamentPS += i + ", ";
+            }
 
-        for (int j = 0; j < processor->getNumberOfGames(); j++) {
-            gameNumber = j;
-            mapNumber = 0;
+            string effect ="Tournament mode: \nM: " + tournamentMaps + "\nP: " + tournamentPS + "\nG: " + to_string(processor->getNumberOfGames()) + "\nD: " + to_string(processor->getMaxTurns()) + "\n";
+            temp->saveEffect(effect);
 
-            // Insert a column in the Results Table
-            vector<string> column;
-            tournamentResults.push_back(column);
+            for (int j = 0; j < processor->getNumberOfGames(); j++) {
+                gameNumber = j;
+                mapNumber = 0;
 
-            for (string k : processor->getMaps()) {
-                mapNumber = mapNumber+1;
+                // Insert a column in the Results Table
+                vector<string> column;
+                tournamentResults.push_back(column);
 
-                if (mapNumber > 1 || j > 0) {
-                    s = new State;
-                    *s = null;
-                    NumberOfPlayers = 0;
-                    NumberOfTerritories = 0;
-                    deck = new Deck(20);
-                    player_list = vector<Player*>();
-                    map = NULL;
-                    alliances = set<pair<Player*, Player*>>();
+                for (string k : processor->getMaps()) {
+                    mapNumber = mapNumber+1;
 
-                    // Add Neutral Player to Game
-                    neutralPlayer = new Player();
-                    neutralPlayer->setName("Neutral");
+                    if (mapNumber > 1 || j > 0) {
+                        s = new State;
+                        *s = null;
+                        NumberOfPlayers = 0;
+                        NumberOfTerritories = 0;
+                        deck = new Deck(20);
+                        player_list = vector<Player*>();
+                        map = NULL;
+                        alliances = set<pair<Player*, Player*>>();
 
-                    transition(start);
-                }
+                        // Add Neutral Player to Game
+                        neutralPlayer = new Player();
+                        neutralPlayer->setName("Neutral");
 
-                processor->saveCommand(new Command("loadmap", k));
-                startupCommands(true, true);
+                        transition(start);
+                    }
 
-                processor->saveCommand(new Command("validatemap"));
-                startupCommands(true, true);
-
-                for (string ps : processor->getPlayerStrategies()) {
-                    processor->saveCommand(new Command("addplayer", "Player " + to_string(player_list.size() + 1) + " (" + ps + ")"));
+                    processor->saveCommand(new Command("loadmap", k));
                     startupCommands(true, true);
 
-                    PlayerStrategies *tempStrategy;
-                    Player *tempPlayer = player_list[player_list.size() - 1];
+                    processor->saveCommand(new Command("validatemap"));
+                    startupCommands(true, true);
 
-                    if (ps == "Human") {
-                        tempStrategy = new HumanPlayerStrategy(tempPlayer);
-                    }
-                    else if (ps == "Aggressive") {
-                        tempStrategy = new AggressivePlayerStrategy(tempPlayer);
-                    }
-                    else if (ps == "Benevolent") {
-                        tempStrategy = new BenevolentPlayerStrategy(tempPlayer);
-                    }
-                    else if (ps == "Neutral") {
-                        tempStrategy = new NeutralPlayerStrategy(tempPlayer);
-                    }
-                    else if (ps == "Cheater") {
-                        tempStrategy = new CheaterPlayerStrategy(tempPlayer);
-                    }
-                    else {
-                        cout << "INVALID PLAYERSTRATEGY: " << ps << "!" << endl;
+                    for (string ps : processor->getPlayerStrategies()) {
+                        processor->saveCommand(new Command("addplayer", "Player " + to_string(player_list.size() + 1) + " (" + ps + ")"));
+                        startupCommands(true, true);
+
+                        PlayerStrategies *tempStrategy;
+                        Player *tempPlayer = player_list[player_list.size() - 1];
+
+                        if (ps == "Aggressive") {
+                            tempStrategy = new AggressivePlayerStrategy(tempPlayer);
+                        }
+                        else if (ps == "Benevolent") {
+                            tempStrategy = new BenevolentPlayerStrategy(tempPlayer);
+                        }
+                        else if (ps == "Neutral") {
+                            tempStrategy = new NeutralPlayerStrategy(tempPlayer);
+                        }
+                        else if (ps == "Cheater") {
+                            tempStrategy = new CheaterPlayerStrategy(tempPlayer);
+                        }
+                        else {
+                            cout << "INVALID PLAYERSTRATEGY: " << ps << "!" << endl;
+                        }
+
+                        tempPlayer->setStrategy(tempStrategy);
                     }
 
-                    tempPlayer->setStrategy(tempStrategy);
+                    processor->saveCommand(new Command("gamestart"));
+                    startupCommands(true, true);
+
+                    mainGameLoop();
+
+                    if (j < processor->getMaps().size() - 1) {
+                        delete deck;
+                        deck = NULL;
+
+                        for (Player* p : player_list) {
+                            delete p;
+                            p = NULL;
+                        }
+
+                        delete map;
+                        map = NULL;
+
+                        for (auto x : alliances) {
+                            x.first = NULL;
+                            x.second = NULL;
+                        }
+
+                        delete neutralPlayer;
+                        neutralPlayer = NULL;
+
+                        numberOfTurns = 0;
+                    }
+
+                    cout << "Tournament map " << k << " done!" << endl;
                 }
-
-                processor->saveCommand(new Command("gamestart"));
-                startupCommands(true, true);
-
-                mainGameLoop();
-
-                if (j < processor->getMaps().size() - 1) {
-                    delete deck;
-                    deck = NULL;
-
-                    for (Player* p : player_list) {
-                        delete p;
-                        p = NULL;
-                    }
-
-                    delete map;
-                    map = NULL;
-
-                    for (auto x : alliances) {
-                        x.first = NULL;
-                        x.second = NULL;
-                    }
-
-                    delete neutralPlayer;
-                    neutralPlayer = NULL;
-
-                    numberOfTurns = 0;
-                }
-
-                cout << "Tournament map " << k << " done!" << endl;
+                cout << "Tournament game " << to_string(j+1) << " done!" << endl;
             }
-            cout << "Tournament game " << to_string(j+1) << " done!" << endl;
-        }
 
-        endOfTournament = true;
-        notify(this); //print table results
-        cout << "End of the Tournament. Please consult the log file for detailed results." <<endl;
-    }
-    else {
-        startupCommands(true, false);
+            endOfTournament = true;
+            notify(this); //print table results
+            cout << "End of the Tournament. Please consult the log file for detailed results." <<endl;
+
+            break;
+        }
+        else if (word1 != "tournament" && word1 != "") {
+            startupCommands(true, false);
+            break;
+        }
     }
 }
 
@@ -654,47 +656,14 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
                     cout << effect << "!" << endl;
                 }
                 else {
-//                    // 4 strategies
-//                    int strategyType;
-//
-//                    cout << "" << endl;
-//                    cout << "Assigning player strategies " << endl;
-//                    int chooseType;
-//
-//                    for (int i = 0; i < player_list.size(); i++) {
-//
-//                        cout<<"Please choose a strategy for player  "<< player_list[i]->getName() <<endl;
-//                        cout<<"Aggressive == 0 : Enter 0 "<<endl;
-//                        cout<<"Benevolent == 1 : Enter 1"<<endl;
-//                        cout<<"Neutral == 2 : Enter 2"<<endl;
-//                        cout<<"Cheater == 3 : Enter 3"<<endl;
-//                        cout<<"Human == 4: Enter 4"<<endl;
-//                        cin>>chooseType;
-//
-//                        if ( chooseType== 0) // Aggresive
-//                        {
-//                            player_list[i]->setStrategy(new AggressivePlayerStrategy);
-//                            cout << "Aggressive" << endl;
-//                        } else if (chooseType == 1) //Benevolent
-//                        {
-//                            player_list[i]->setStrategy(new BenevolentPlayerStrategy);
-//                            cout << "Benevolent" << endl;
-//                        } else if (chooseType == 2) //Neutral
-//                        {
-//                            player_list[i]->setStrategy(new NeutralPlayerStrategy);
-//                            cout << "Neutral" << endl;
-//                        } else if (chooseType == 3)//Cheater
-//                        {
-//                            player_list[i]->setStrategy(new Cheater);
-//                            cout << "Cheater" << endl;
-//                        }
-//                        else{
-//                            player_list[i]->setStrategy(new HumanPlayerStrategy);
-//                            cout << "Human" << endl;
-//                        }
-
                     if (word2.length() > 0 && word2[0] != ' ' && word2[word2.length() - 1] != ' ') {
                         Player *p = new Player(word2);
+
+                        if (!isTournament) {
+                            PlayerStrategies *tempStrategy = new HumanPlayerStrategy(p);
+                            p->setStrategy(tempStrategy);
+                        }
+
                         player_list.push_back(p);
                         NumberOfPlayers++;
 
@@ -794,7 +763,6 @@ void GameEngine::startupCommands(bool skipFirstGetCommand, bool runOnce) {
 }
 
 // Main game loop, includes reinforcement phase, issue order phase, execute order phase
-//TODO: check neutral player
 bool GameEngine::mainGameLoop() {
     bool playing = true;
     bool continueplaying;
@@ -868,7 +836,7 @@ bool GameEngine::mainGameLoop() {
 // Check if a player has won by looping through territories and checking owner
 bool GameEngine::checkForWinner() {
     // Check to verify that the number of turns is not maxed out
-    if (numberOfTurns == processor->getMaxTurns()) {
+    if (numberOfTurns >= processor->getMaxTurns()) {
         drawPhase();
         return true;
     }
