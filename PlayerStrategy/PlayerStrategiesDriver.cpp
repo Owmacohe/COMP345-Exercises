@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int PlayerStrategymain() {
+int playerStrategiesMain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -20,16 +20,16 @@ int PlayerStrategymain() {
     player1->setStrategy(humanstrat); player1->setReinforcementPool(12); player1->setName("Audrey");
 
     Player* player2 = new Player();
-    AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
-    player2->setStrategy(aggressivestrat); player2->setReinforcementPool(10); player2->setName("MJ");
+    NeutralPlayerStrategy* neutralstrat = new NeutralPlayerStrategy(player2);
+    player2->setStrategy(neutralstrat); player2->setReinforcementPool(10); player2->setName("MJ");
 
 //    Player* player3 = new Player();
 //    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
 //    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
 
     Player* player4 = new Player();
-    NeutralPlayerStrategy* neutralstrat = new NeutralPlayerStrategy(player4);
-    player4->setStrategy(neutralstrat); player4->setReinforcementPool(6); player4->setName("Owen");
+    AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
+    player4->setStrategy(aggressivestrat); player4->setReinforcementPool(6); player4->setName("Owen");
 
 //    Player* player5 = new Player();
 //    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
@@ -93,8 +93,17 @@ int PlayerStrategymain() {
 
     cout << player4->getPlayerStrategy()->getType() << endl;
 
+    /****************************** Human *******************************/
+//    player1->issueOrder("advance"); // attack - New_Brunswick -> Prince_Edward_Island
+//    cout << *player1->toAttack().at(0) << endl; // attack - Quebec-North -> Quebec-Central
+//    player1->issueOrder("deploy"); // move - Quebec-North -> New_Brunswick
+//    cout << *player1->toDefend().at(0) << endl; //Nunavut-Continental
 
+    /****************************** Aggressive *******************************/
+//    player2->issueOrder("deploy");
+//    player2->issueOrder("deploy");
+//    player2->issueOrder("advance");
 
-
+    /****************************** Benevolent *******************************/
     return 0;
 }
