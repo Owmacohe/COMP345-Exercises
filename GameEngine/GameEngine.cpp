@@ -221,12 +221,14 @@ void GameEngine::assignReinforcementPhase() {
 
 // Issue order phase
 void GameEngine::issueOrdersPhase() {
+    cout << "\nStart issue order phase\n" << endl;
     *s = issueOrder;
     string input;
 
     // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
+        cout << p->getPlayerStrategy()->getType() << endl;
 
         cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
@@ -247,7 +249,16 @@ void GameEngine::issueOrdersPhase() {
         // Issue card orders
         cout << "\nIssuing card orders" << endl;
         p->issueOrder("card");
+
+        // Check if Neutral Player was attacked
+        if (p->getPlayerStrategy()->getNeutralAttack() != nullptr) {
+            cout << "\n Neutral player was attacked ! Now is aggressive >:( !" << endl;
+            Player* neutralplayer = p->getPlayerStrategy()->getNeutralAttack();
+            AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(neutralplayer);
+            neutralplayer->setStrategy(aggressivestrat);
+        }
     }
+
     endIssueOrderPhase();
 }
 
@@ -806,12 +817,6 @@ bool GameEngine::mainGameLoop() {
         executeOrdersPhase(); // Begin execute orders phase for all players
         checkPlayers(); // Check if any players need to be removed
         resetAlliances(); // Reset Alliances
-
-        // Check if Neutral Player was attacked
-        for (Player* p : player_list) {
-            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr)
-                p->getPlayerStrategy()->getNeutralAttack()->setStrategy(new AggressivePlayerStrategy());
-        }
 
         // Track number of Turns in this game
         numberOfTurns++;

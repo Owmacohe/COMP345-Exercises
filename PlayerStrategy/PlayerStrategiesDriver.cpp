@@ -23,26 +23,39 @@ int PlayerStrategymain() {
     AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
     player2->setStrategy(aggressivestrat); player2->setReinforcementPool(10); player2->setName("MJ");
 
-    Player* player3 = new Player();
-    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
-    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
+//    Player* player3 = new Player();
+//    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
+//    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
 
     Player* player4 = new Player();
     NeutralPlayerStrategy* neutralstrat = new NeutralPlayerStrategy(player4);
     player4->setStrategy(neutralstrat); player4->setReinforcementPool(6); player4->setName("Owen");
 
-    Player* player5 = new Player();
-    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
-    player5->setStrategy(cheaterstrat); player5->setReinforcementPool(4); player5->setName("Joe");
+//    Player* player5 = new Player();
+//    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
+//    player5->setStrategy(cheaterstrat); player5->setReinforcementPool(4); player5->setName("Joe");
 
-    player_list.push_back(player1); player_list.push_back(player2); player_list.push_back(player3); player_list.push_back(player4); player_list.push_back(player5);
+    player_list.push_back(player1); player_list.push_back(player2); /*player_list.push_back(player3);*/ player_list.push_back(player4); /*player_list.push_back(player5);*/
 
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(mainmap);
     mainGE->setplayer_list(player_list);
+    mainGE->setNumberOfPlayers(3);
     PlayerStrategies::game = mainGE;
     Order::game = mainGE;
+
+    // Set up player order
+    vector<int> tempOrder;
+    for (int j = 0; j < mainGE->getplayer_list().size(); j++) {
+        int randOrder = rand() % mainGE->getplayer_list().size();
+
+        while (doesContain(tempOrder, randOrder)) {
+            randOrder = rand() % mainGE->getplayer_list().size();
+        }
+        tempOrder.push_back(randOrder);
+    }
+    mainGE->setPlayerOrder(tempOrder);
 
     // Assign Territories to Players
     int playerIndex = 0;
@@ -68,12 +81,20 @@ int PlayerStrategymain() {
     }
     cout << endl;
 
-    for (Player* p : mainGE->getplayer_list()) {
-        cout << p->getPlayerStrategy()->getType() << endl;
-        cout << *(p->getPlayerStrategy()) << endl;
-    }
+    // playing order
+    cout << player4->getPlayerStrategy()->getType() << endl;
 
-    player1->issueOrder("advance"); // attack, New_Brunswick, Prince_Edward_Island
+    mainGE->issueOrdersPhase();
+//    player1->issueOrder("advance");    // attack : New_Brunswick, Prince_Edward_Island
+//                                            // neutral attack : Ontario-North, Ontario-South
+//                                            // neutral attack : Nunavut-Continental, NU-Victoria_Island-East
+//
+// testing without benevolent or cheater use Quebec-Central and Quebec-North
+
+    cout << player4->getPlayerStrategy()->getType() << endl;
+
+
+
 
     return 0;
 }
