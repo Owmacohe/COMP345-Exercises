@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main() {
+int playerStrategiesMain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
