@@ -139,6 +139,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
         }
     }
 
+
     //TODO :: this is my attempt at the neutral player thingy
     if (returnTerritories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
         setNeutralAttack(returnTerritories.at(0)->getOwner());
