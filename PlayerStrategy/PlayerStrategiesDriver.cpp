@@ -42,7 +42,7 @@ int main() {
     GameEngine* mainGE = new GameEngine();
     mainGE->setMap(mainmap);
     mainGE->setplayer_list(player_list);
-    mainGE->setNumberOfPlayers(3);
+    mainGE->setNumberOfPlayers(5);
     PlayerStrategies::game = mainGE;
     Order::game = mainGE;
 
@@ -99,7 +99,7 @@ int main() {
 //    cout << *player1->toDefend().at(0) << endl; //Nunavut-Continental
 
     /****************************** Aggressive *******************************/
-    player4->issueOrder("deploy");
+ //   player4->issueOrder("deploy");
 //    player4->issueOrder("deploy");
 //    player4->issueOrder("advance");
 //    player4->getHand()->drawCard(*PlayerStrategies::game->getDeck());
@@ -107,11 +107,12 @@ int main() {
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human
     // Testing Neutral -> Aggressive
-    //    cout << player2->getPlayerStrategy()->getType() << endl;
-    //
-    //    mainGE->issueOrdersPhase(); // testing without benevolent or cheater use Quebec-Central and Quebec-North
-    //
-    //    cout << player2->getPlayerStrategy()->getType() << endl;
+//        cout << player2->getPlayerStrategy()->getType() << endl;
+//
+//        mainGE->issueOrdersPhase();
+//
+//        cout << player2->getPlayerStrategy()->getType() << endl;
+
     /****************************** Cheater *******************************/
     return 0;
 }
