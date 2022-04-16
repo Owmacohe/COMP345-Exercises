@@ -59,9 +59,11 @@ void Order::setValidated(bool v) {
     validated = v;
 }
 
-void Order::validate() { } // Virtual Method
+// Virtual Method
+void Order::validate() { }
 
-void Order::execute() { } // Virtual Method
+// Virtual Method
+void Order::execute() { }
 
 // From Iloggable
 string Order::stringToLog() {
@@ -80,8 +82,7 @@ Deploy::Deploy() : Order(false, "deploy") {
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy") {
     playerIssuing = p;TODO:
-//    target = p->toDefend(game->getMap()).at(0); // TODO: Old version
-    target = p->toDefend().at(0); // TODO: Check if it's working
+    target = p->toDefend().at(0);
     numToDeploy = 1;
 }
 
@@ -93,9 +94,10 @@ Deploy::Deploy(Player *p, Territory *target) : Order(false, "deploy") {
     if (p->getReinforcePool() == 0) {
         numToDeploy = 0;
     } else {
-        numToDeploy = rand() % p->getReinforcePool() + 1; // generate a random number
-
-        while (numToDeploy > p->getReinforcePool()) { // make sure the condition armies <= armies in origin
+        // generate a random number
+        numToDeploy = rand() % p->getReinforcePool() + 1;
+        // make sure the condition armies <= armies in origin
+        while (numToDeploy > p->getReinforcePool()) {
             numToDeploy = rand() % p->getReinforcePool() + 1;
         }
     }
@@ -163,12 +165,12 @@ void Deploy::validate() {
 void Deploy::execute() {
     cout << "... Deploy ";
     // In the gameEngine all deploy orders are executed at the same time, so each execution must deploy to a new territory
-    // target = playerIssuing->toDefend(this->game->getMap()).at(0); // TODO: Old version
-    // New version
     target = playerIssuing->toDefend().at(0);
     if (validated) {
-        target->setArmies(target->getArmies() + numToDeploy); // add armies to target territory;
-        playerIssuing->removeFromReinforcePool(numToDeploy);    // subtract armies from reinforcement pool
+        // add armies to target territory;
+        target->setArmies(target->getArmies() + numToDeploy);
+        // subtract armies from reinforcement pool
+        playerIssuing->removeFromReinforcePool(numToDeploy);
         cout << "Execution successful!\n" << endl;
     } else {
         cout << "Execution fail!\n" << endl;
@@ -212,14 +214,10 @@ Advance::Advance(Player* p, string input) : Order(false, "advance") {
 
     // Move armies -> target = 1st territory in toDefend() || Attack -> target = 1st territory in toAttack()
     if (input == "move") {
-        // target = p->toDefend(game->getMap()).at(0); // TODO: Old version
-        // New Version
         target = p->toDefend().at(0);
         cout << p->getName() << " is issuing a "<< input << " Advance"<<endl;
     }
     else if (input == "attack") {
-        // target = p->toAttack(game->getMap()).at(0); //TODO: old version
-        // New Version
         target = p->toAttack().at(0);
         cout << p->getName() << " is issuing an "<< input << " Advance"<<endl;
     }
@@ -233,9 +231,10 @@ Advance::Advance(Player* p, string input) : Order(false, "advance") {
         numToAdvance = 0;
     }
     else {
-        numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
-
-        while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
+        // generate a random number
+        numToAdvance = rand() % origin->getArmies() + 1;
+        // make sure the condition armies <= armies in origin
+        while (numToAdvance > origin->getArmies()) {
             numToAdvance = rand() % origin->getArmies() + 1;
         }
     }
@@ -250,8 +249,10 @@ Advance::Advance(Player* p, Territory* origin, Territory* target) : Order(false,
     if (origin->getArmies() == 0) {
         numToAdvance = 0;
     } else {
-        numToAdvance = rand() % origin->getArmies() + 1; // generate a random number
-        while (numToAdvance > origin->getArmies()) { // make sure the condition armies <= armies in origin
+        // generate a random number
+        numToAdvance = rand() % origin->getArmies() + 1;
+        // make sure the condition armies <= armies in origin
+        while (numToAdvance > origin->getArmies()) {
             numToAdvance = rand() % origin->getArmies() + 1;
         }
     }
@@ -354,11 +355,13 @@ void Advance::validate() {
 
 void Advance::execute() {
     if (validated) {
-        origin->setArmies(origin->getArmies() - numToAdvance); // subtract armies from source territory;
+        // subtract armies from source territory;
+        origin->setArmies(origin->getArmies() - numToAdvance);
         // Advance
         if (validateResult == "move") {
             cout << "... Advance execute ";
-            target->setArmies(target->getArmies() + numToAdvance); // add armies to target territory;
+            // add armies to target territory;
+            target->setArmies(target->getArmies() + numToAdvance);
             cout << "successfully!\n" << endl;
         }
         // Attack until exhaust
@@ -459,7 +462,8 @@ Airlift::Airlift() : Order(false, "airlift") {
 // Parameterize Constructor
 Airlift::Airlift(Player* p) : Order(false, "airlift") {
     playerIssuing = p;
-    Territory* territory_most_armies = p->getTerritoryList().at(0); // Choose 1 territory belongs to the player that has the most armies
+    // Choose 1 territory belongs to the player that has the most armies
+    Territory* territory_most_armies = p->getTerritoryList().at(0);
     int max_armies = 0 ;
     for (Territory* t : p->getTerritoryList()) {
         if (t->getArmies() > max_armies) {
@@ -467,17 +471,21 @@ Airlift::Airlift(Player* p) : Order(false, "airlift") {
             max_armies = t->getArmies();
         }
     }
-    origin = territory_most_armies; // Origin = territory with the most armies
-    // target = p->toDefend(game->getMap()).at(0); // Target = territory need to be defended most // TODO: old version
-    // New Version
+    // Origin = territory with the most armies
+    origin = territory_most_armies;
+
+    // Target = territory need to be defended most
     target = p->toDefend().at(0);
+
     // Condition checked: If there's no more armies to airlift
     if (origin->getArmies() == 0){
         numToAirlift = 0;
     }
     else {
-        numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
-        while (numToAirlift > origin->getArmies()){ // make sure the condition armies <= armies in origin
+        // generate a random number
+        numToAirlift = rand() % origin->getArmies() + 1;
+        // make sure the condition armies <= armies in origin
+        while (numToAirlift > origin->getArmies()){
             numToAirlift = rand() % origin->getArmies() + 1;
         }
     }
@@ -492,8 +500,11 @@ Airlift::Airlift(Player* p, Territory* origin, Territory* target) : Order (false
     if (origin->getArmies() == 0){
         numToAirlift = 0;
     } else {
-        numToAirlift = rand() % origin->getArmies() + 1; // generate a random number
-        while (numToAirlift > origin->getArmies()) { // make sure the condition armies <= armies in origin
+        // generate a random number
+        numToAirlift = rand() % origin->getArmies() + 1;
+        // make sure the condition armies <= armies in origin
+        while (numToAirlift > origin->getArmies()) {
+            numToAirlift = rand() % origin->getArmies() + 1;
         }
     }
 }
@@ -568,8 +579,10 @@ void Airlift::validate() {
 void Airlift::execute() {
     cout << "... Airlift ";
     if (validated) {
-        origin->setArmies(origin->getArmies()-numToAirlift); // Subtract armies from origin
-        target->setArmies(target->getArmies()+numToAirlift); // Add armies to target
+        // Subtract armies from origin
+        origin->setArmies(origin->getArmies()-numToAirlift);
+        // Add armies to target
+        target->setArmies(target->getArmies()+numToAirlift);
         cout << "Execution successful!\n" << endl;
     }
     else {
@@ -611,8 +624,6 @@ Bomb::Bomb() : Order(false, "bomb") {
 // Parameterize Constructor
 Bomb::Bomb(Player* p) : Order(false, "bomb") {
     playerIssuing = p;
-    // target = p->toAttack(game->getMap()).at(0); // TODO: old version
-    // New version
     target = p->toAttack().at(0);
     origin = p->getOriginTerritory(target,game->getMap());
 }
@@ -734,20 +745,13 @@ Blockade::Blockade() : Order(false, "blockade") {
 Blockade::Blockade(Player* p) : Order(false, "blockade") {
     playerIssuing = p;
     // Condition checked: If target territory is already Neutral (protected), take next in toDefend()
-
-    // vector<Territory*> toDefendList = p->toDefend(game->getMap()); // TODO: old version
-    // New Version
     vector<Territory*> toDefendList = p->toDefend();
     unsigned i = 0;
-    // target = p->toDefend(game->getMap()).at(i); // TODO: old version
-    // New Version
     target = p->toDefend().at(i);
 
     // Player change of owenership correctly by removing that territory from the Player's vector of territories
     while (i<toDefendList.size() && target->getOwner()->getName() == "Neutral") {
-        // target = p->toDefend(game->getMap()).at(i+1); // TODO: Old version
-        // New Version
-        target = p->toDefend().at(0);
+        target = p->toDefend().at(i+1);
         i++;
     }
 }
@@ -1108,22 +1112,3 @@ string OrdersList::stringToLog() {
 
     return logString;
 }
-
-/******************************* DRAFT *******************************/
-// Advance execute()
-//    origin->setArmies(origin->getArmies()-numToAdvance);
-//    // Target is defender -> Defend Power = Target Territory numOfArmies * 70%
-//    // Origin is Attacker -> Attack Power = Origin Territory numOfArmies * 60%
-//    int attackPower = origin->getArmies()*0.6;
-//    int defendPower = target->getArmies()*0.7;
-//    if (attackPower == defendPower) {
-//        target->setArmies(0);
-//    }
-//    else if (attackPower > defendPower) {
-//        target->setArmies((attackPower - defendPower)/0.6);
-//        target->setOwner(playerIssuing);
-//
-//        playerIssuing->getHand()->drawCard(*game->getDeck());
-//    }
-//    else{}
-//}
