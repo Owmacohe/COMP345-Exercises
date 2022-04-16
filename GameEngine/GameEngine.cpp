@@ -229,33 +229,34 @@ void GameEngine::issueOrdersPhase() {
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
         cout << p->getPlayerStrategy()->getType() << endl;
+        if(p->getPlayerStrategy()->getType() != "Neutral") {
+            cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
-        cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
+            int num = p->getReinforcePool();
+            // Only issue deploy orders while the player's reinforcement pool contains armies;
+            if (num > 0) cout << "Issuing deploy orders" << endl;
 
-        int num = p->getReinforcePool();
-        // Only issue deploy orders while the player's reinforcement pool contains armies;
-        if (num > 0) cout << "Issuing deploy orders" << endl;
+            for (int j = 0; j < num; j++) {
+                p->issueOrder("deploy");
+                cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
+            }
 
-        for (int j = 0; j < num; j++) {
-            p->issueOrder("deploy");
-            cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
-        }
+            // Issue advance orders
+            cout << "\n" << p->getName() << "'s turn" << endl;
+            cout << "\nIssuing advance orders" << endl;
+            p->issueOrder("advance");
 
-        // Issue advance orders
-        cout << "\n" << p->getName() << "'s turn" << endl;
-        cout << "\nIssuing advance orders" << endl;
-        p->issueOrder("advance");
+            // Issue card orders
+            cout << "\nIssuing card orders" << endl;
+            p->issueOrder("card");
 
-        // Issue card orders
-        cout << "\nIssuing card orders" << endl;
-        p->issueOrder("card");
-
-        // Check if Neutral Player was attacked
-        if (p->getPlayerStrategy()->getNeutralAttack() != nullptr) {
-            cout << "\n Neutral player was attacked ! Now is aggressive >:( !" << endl;
-            Player* neutralplayer = p->getPlayerStrategy()->getNeutralAttack();
-            AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(neutralplayer);
-            neutralplayer->setStrategy(aggressivestrat);
+            // Check if Neutral Player was attacked
+            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr) {
+                cout << "\n Neutral player was attacked ! Now is aggressive >:( !" << endl;
+                Player *neutralplayer = p->getPlayerStrategy()->getNeutralAttack();
+                AggressivePlayerStrategy *aggressivestrat = new AggressivePlayerStrategy(neutralplayer);
+                neutralplayer->setStrategy(aggressivestrat);
+            }
         }
     }
 

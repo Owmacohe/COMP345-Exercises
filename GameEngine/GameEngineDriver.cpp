@@ -11,17 +11,17 @@ int gameEngineMain() {
 
     /*
     tournament -M canada.map europe.map -P Aggressive Aggressive -G 4 -D 50
-    tournament -M canada.map europe.map -P Aggressive Benevolent -G 4 -D 10 // TODO OUT OF RANGE ERROR
-    tournament -M canada.map europe.map -P Aggressive Cheater -G 4 -D 50
+    tournament -M canada.map europe.map -P Aggressive Benevolent -G 4 -D 10
+    tournament -M canada.map europe.map -P Aggressive Cheater -G 4 -D 50 // TODO : HUGE DEPLOY
     tournament -M canada.map europe.map -P Aggressive Neutral -G 4 -D 50
 
-    tournament -M canada.map europe.map -P Benevolent Benevolent -G 4 -D 10 // TODO STOPS IN THE MIDDLE OF A GAME
-    tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 10 // TODO OUT OF RANGE ERROR
-    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10 // TODO OUT OF RANGE ERROR
+    tournament -M canada.map europe.map -P Benevolent Benevolent -G 4 -D 50
+    tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 50 // TODO : HUGE DEPLOY
+    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 50 // TODO : HUGE DEPLOY
 
     tournament -M canada.map europe.map -P Cheater Cheater -G 4 -D 50
     tournament -M canada.map europe.map -P Cheater Neutral -G 4 -D 50
-    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10 // TODO OUT OF RANGE ERROR
+    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10
 
     // TODO TEST HUMAN
     tournament -M canada.map europe.map -P Aggressive Human -G 2 -D 10
@@ -54,8 +54,8 @@ int gameEngineMain() {
     return 0;
 }
 
-//int main() {
-//    gameEngineMain();
-//
-//    return 0;
-//}
+int main() {
+    gameEngineMain();
+
+    return 0;
+}
