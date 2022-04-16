@@ -24,19 +24,19 @@ int playerStrategiesMain() {
     NeutralPlayerStrategy* neutralstrat = new NeutralPlayerStrategy(player2);
     player2->setStrategy(neutralstrat); player2->setReinforcementPool(10); player2->setName("MJ");
 
-//    Player* player3 = new Player();
-//    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
-//    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
+    Player* player3 = new Player();
+    BenevolentPlayerStrategy* benevolentstrat = new BenevolentPlayerStrategy(player3);
+    player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
 
     Player* player4 = new Player();
     AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
     player4->setStrategy(aggressivestrat); player4->setReinforcementPool(6); player4->setName("Owen");
 
-//    Player* player5 = new Player();
-//    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
-//    player5->setStrategy(cheaterstrat); player5->setReinforcementPool(4); player5->setName("Joe");
+    Player* player5 = new Player();
+    CheaterPlayerStrategy* cheaterstrat = new CheaterPlayerStrategy(player5);
+    player5->setStrategy(cheaterstrat); player5->setReinforcementPool(4); player5->setName("Joe");
 
-    player_list.push_back(player1); player_list.push_back(player2); /*player_list.push_back(player3);*/ player_list.push_back(player4); /*player_list.push_back(player5);*/
+    player_list.push_back(player1); player_list.push_back(player2); player_list.push_back(player3); player_list.push_back(player4); player_list.push_back(player5);
 
     // Create & Set up Game Engine
     GameEngine* mainGE = new GameEngine();
@@ -73,7 +73,7 @@ int playerStrategiesMain() {
 
     // Display Player list of Territories
     cout << endl;
-    for (int i=0; i<mainGE->getplayer_list().size();i++){
+    for (int i = 0; i < mainGE->getplayer_list().size(); i++){
         cout << mainGE->getplayer_list().at(i)->getName() << "'s territories: ";
         for(auto teri : mainGE->getplayer_list().at(i)->getTerritoryList()){
             cout << teri->getName() << " | ";
@@ -82,12 +82,12 @@ int playerStrategiesMain() {
     }
     cout << endl;
 
-//    Testing Neutral -> Aggressive
-//    cout << player4->getPlayerStrategy()->getType() << endl;
-//
-//    mainGE->issueOrdersPhase(); // testing without benevolent or cheater use Quebec-Central and Quebec-North
-//
-//    cout << player4->getPlayerStrategy()->getType() << endl;
+    // Give Player Cards
+    for (Player* p : mainGE->getplayer_list()) {
+        p->getHand()->drawCard(*(mainGE->getDeck()));
+        p->getHand()->drawCard(*(mainGE->getDeck()));
+        p->getHand()->drawCard(*(mainGE->getDeck()));
+    }
 
     /****************************** Human *******************************/
 //    player1->issueOrder("advance"); // attack - New_Brunswick -> Prince_Edward_Island
@@ -106,6 +106,12 @@ int playerStrategiesMain() {
     /****************************** Benevolent *******************************/
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human
+    // Testing Neutral -> Aggressive
+    //    cout << player4->getPlayerStrategy()->getType() << endl;
+    //
+    //    mainGE->issueOrdersPhase(); // testing without benevolent or cheater use Quebec-Central and Quebec-North
+    //
+    //    cout << player4->getPlayerStrategy()->getType() << endl;
     /****************************** Cheater *******************************/
     return 0;
 }
