@@ -138,6 +138,16 @@ int Player::getNumberOfTerritories() {
     return sum;
 }
 
+// Return index of Territory based on name
+int Player::getTerritoryIndex(string name) {
+    int index = 0;
+    for (Territory* t : territories) {
+        if (equalsIgnoreCase(t->getName(), name)) return index;
+        index =  index + 1;
+    }
+    return -1;
+}
+
 // Return an origin territory adjacent to a target territory
 Territory* Player::getOriginTerritory(Territory *target_territory, Map* m) {
     vector<Territory*> surround_territory = m->getConnectedTerritories(target_territory->getName());
