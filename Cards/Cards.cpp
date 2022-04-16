@@ -141,15 +141,21 @@ Deck& Deck::operator = (const Deck& toAssign) {
 }
 
 /*********************************** HAND ***********************************/
+// Default Constructor
 Hand::Hand() {
     numCardInHand = 0;
     hand = vector<Card*>();
     //cout << "Hand Default Constructor" << endl;
 }
 
+// Parameterized Constructor
+Hand::Hand(int numCardInHand){
+    this->numCardInHand = numCardInHand;
+    hand = vector<Card*>();
+}
+
 Hand::Hand(Hand &anotherHand) {
     numCardInHand = anotherHand.numCardInHand;
-
     hand = vector<Card*>();
 
     for (int i = 0; i < anotherHand.numCardInHand; i++) {

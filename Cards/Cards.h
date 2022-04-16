@@ -33,8 +33,6 @@ class Card {
         */
         Card(Card &anotherCard);
 
-        // TODO THERE IS NO CARD DESTRUCTOR
-
         /**
         Accessor for the type of the Card
         @param None
@@ -81,7 +79,7 @@ class Deck {
 
         /**
         Parameterized Constructor
-         Will create the Corresponding number of Card Objects
+        Will create the Corresponding number of Card Objects
         @param int that is the number of cards in the Deck
         */
         Deck(int numCard);
@@ -136,7 +134,12 @@ class Hand {
         */
         Hand();
 
-        // TODO : THERE IS NO PARAMETERIZED CONSTRUCTOR
+        /**
+        Parameterized Constructor
+        Will create the Corresponding number of Card Objects
+        @param int that is the number of cards in the Hand
+         */
+        Hand(int numCardInHand);
 
         /**
         Copy constructor that creates a deep copy
@@ -147,7 +150,7 @@ class Hand {
 
         /**
         Destructor
-         will delete all Cards in Heap and set the pointers to them to NULL
+        will delete all Cards in Heap and set the pointers to them to NULL
         */
         ~Hand();
 
