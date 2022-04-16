@@ -10,14 +10,26 @@ using namespace std;
 
 #include "../LoggingObserver/LoggingObserver.h"
 
+/// Forward declaration of Player
 class Player;
+/// Forward declaration of MapLoader
 class MapLoader;
+/// Forward declaration of Deck
 class Deck;
+/// Forward declaration of Hand
 class Hand;
+/// Forward declaration of CommandProcessor
 class CommandProcessor;
+/// Forward declaration of Map
 class Map;
 
-bool doesContain(vector<int>, int); // Free method to determine whether an int vector contains a given int
+/**
+ Free method to determine whether an int vector contains a given int
+ @param vector<int> vector to be compared
+ @param int to be checked if in vector
+ @return Boolean, true if int is in vector else false
+ */
+bool doesContain(vector<int>, int);
 
 enum State {
    null = 0, start = 1, mapLoaded = 2, mapValidated = 3, playersAdded = 4, assignReinforcement = 5, issueOrder = 6, executeOrder = 7, win = 8
