@@ -91,22 +91,22 @@ int main() {
 
     /****************************** Human *******************************/
     player1->issueOrder("deploy");
-    int k = 0;
+    int j = 0;
     for(Order * o : player3->getOrder()->getOrderList()){
         o->validate();
         o->execute();
-        player3->getOrder()->remove(k);
-        k++;
+        player3->getOrder()->remove(j);
+        j++;
     }
 
     player1->issueOrder("advance");
-    k=0;
+    j=0;
     for(Order * o : player3->getOrder()->getOrderList()){
         cout<< o->getDescription()<<endl;
         o->validate();
         o->execute();
-        player1->getOrder()->remove(k);
-        k++;
+        player1->getOrder()->remove(j);
+        j++;
     }
 
     cout<< player1->getName() << "Players hand"<<endl;
@@ -221,14 +221,14 @@ int main() {
 
     player5->issueOrder("deploy");
 
-    int k = 0;
+    int h = 0;
     for(Order * o : player5->getOrder()->getOrderList()){
         if (o->getDescription() == "deploy") {
             cout << o->getDescription() << endl;
             o->validate();
             o->execute();
             player5->getOrder()->remove(k);
-            k++;
+            h++;
         }
     }
     cout<< "after deploy"<<endl;
