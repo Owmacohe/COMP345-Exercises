@@ -38,15 +38,7 @@ ostream& PlayerStrategies::write(ostream &strm) const {
     return strm << "Player Strategy";
 }
 
-
 /****************************** Human Player Strategy *******************************/
-/*
- * Requires user interaction :
- * User chooses whether advance is to move or to attack
- * User chooses which territory is returned from their toAttack() method
- * User chooses which territory is returned from their toDefend() method
- */
-
 // Default Constructor
 HumanPlayerStrategy::HumanPlayerStrategy(): PlayerStrategies("Human") {
     cout << "Human Strategy Default constructor called" << endl;
@@ -66,7 +58,9 @@ void HumanPlayerStrategy::issueOrder(string type) {
     if (equalsIgnoreCase("deploy", type)) {
         // Issues deploy orders based on toDefend()
         Deploy* d = new Deploy(p);
-        p->addOrderList(d);// Add order to list
+        cout << *d << endl; // TODO: delete this cout after testing
+        // Add order to list
+        p->addOrderList(d);
     }
     else if (equalsIgnoreCase("advance", type)) {
         cout << "\nWhat type of advance would " << p->getName() << " Player like to issue ? (move, attack, none)" << endl;
@@ -77,6 +71,7 @@ void HumanPlayerStrategy::issueOrder(string type) {
         }
         if (!equalsIgnoreCase("none", input)) {
             Advance* a = new Advance(p, input);
+            cout << *a << endl; // TODO: delete this cout after testing
             p->addOrderList(a);
         }
     }
@@ -177,11 +172,6 @@ ostream& HumanPlayerStrategy::write(ostream &strm) const {
 
 
 /****************************** Aggressive Player Strategy *******************************/
-/* computer player that focuses on attack
- * deploys or advances armies on its strongest country
- * always advances to enemy territories until it cannot do so anymore
- */
-
 // Default constructor
 AggressivePlayerStrategy::AggressivePlayerStrategy() : PlayerStrategies("Aggressive") {
     cout << "Aggressive Strategy Default constructor called" << endl;
@@ -200,10 +190,14 @@ void AggressivePlayerStrategy::issueOrder(string type) {
     if (equalsIgnoreCase("deploy", type)) {
         // Issues deploy orders based on toDefend()
         Deploy* d = new Deploy(p);
-        p->addOrderList(d); // Add order to the list
+        cout << *d << endl; // TODO: delete this cout after testing
+        // Add order to the list
+        p->addOrderList(d);
     }
     else if (equalsIgnoreCase("advance", type)) {
-        Advance* a = new Advance(p, "attack");
+        Advance* a = new Advance(p, "attack"); // TODO: delete this cout after testing
+        cout << *a << endl;
+        // Add order to the list
         p->addOrderList(a);
     }
         // Orders that involve card will be issued using playCard()
@@ -227,14 +221,17 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
     Map* m = game->getMap();
 
-    for (Territory* territory : p->getTerritoryList()) { // Looping through the player's territories
+    // Looping through the player's territories
+    for (Territory* territory : p->getTerritoryList()) {
         int number_armies = 0;
         string name = territory->getName();
 
         // step 1 get connected territories
-        vector<Territory*> surround_territory = m->getConnectedTerritories(name); // Getting surrounding territories of the player's territory
+        // Getting surrounding territories of the player's territory
+        vector<Territory*> surround_territory = m->getConnectedTerritories(name);
 
-        if (surround_territory.empty()) { // If the territories do not have any surrounding or connected territories
+        // If the territories do not have any surrounding or connected territories
+        if (surround_territory.empty()) {
             cout << "Surround territory vector for that territory is empty."  << endl;
         }
 
@@ -248,8 +245,8 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
                 ordering.push_back(pairs);
             }
         }
-
-        for (Territory* i : surround_territory) { // Delete the vector of the surrounding to avoid memory leak
+        // Delete the vector of the surrounding to avoid memory leak
+        for (Territory* i : surround_territory) {
             i = nullptr;
         }
     }
@@ -274,6 +271,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
     return attack_territories;
 }
 
+// toDefend() = deploy to strongest territory (territory with most armies)
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "toDefend() in Aggressive Strategy called" << endl;
     vector<Territory *> defend_territories = vector<Territory *>();
@@ -297,13 +295,7 @@ ostream& AggressivePlayerStrategy::write(ostream &strm) const {
     return strm << "Aggressive Player Strategy";
 }
 
-
 /****************************** Benevolent Player Strategy *******************************/
-/* computer player that focuses on protecting its weak countries
- * deploys or advances armies on its weakest countries
- * never advances to enemy territories
- */
-
 // Default constructor
 BenevolentPlayerStrategy::BenevolentPlayerStrategy() : PlayerStrategies("Benevolent") {
     cout << "Benevolent Strategy Default constructor called" << endl;
@@ -322,10 +314,14 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
     if (equalsIgnoreCase("deploy", type)) {
         // Issues deploy orders based on toDefend()
         Deploy* d = new Deploy(p);
-        p->addOrderList(d); // Add order to the list
+        cout << *d << endl; // TODO: delete this cout after testing
+        // Add order to the list
+        p->addOrderList(d);
     }
     else if (equalsIgnoreCase("advance", type)) {
         Advance* a = new Advance(p, "move");
+        cout << *a << endl; // TODO: delete this cout after testing
+        // Add order to the list
         p->addOrderList(a);
     }
     //TODO: should be able to use airlift, negotiate, and blockade cards
@@ -335,23 +331,25 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
 
     else if (equalsIgnoreCase("card", type)){
         vector<int> indices = vector<int>();
-       //gets all indices of the cards of the types negotiate, airlift, blockade
+       //gets all indices of the cards of the types airlift, blockade
         for(int i =0 ; i<p->getHand()->numCardInHand; i++){
             if (p->getHand()->hand[i]->getType() == "airlift"){
-                indices.push_back(i);
-            }
-            if (p->getHand()->hand[i]->getType() == "negotiate"){
                 indices.push_back(i);
             }
             if (p->getHand()->hand[i]->getType() == "blockade"){
                 indices.push_back(i);
             }
         }
-        //shuffle the vector
-         shuffle(indices.begin(), indices.end(),default_random_engine());
 
-        //pick the first card in the vector to be played
-        p->getHand()->playCard(indices[0], *game->getDeck(), *p->getOrder(), p);
+        if(indices.size()>0) {
+            //shuffle the vector
+            shuffle(indices.begin(), indices.end(), default_random_engine());
+
+            //pick the first card in the vector to be played
+            p->getHand()->playCard(indices[0], *game->getDeck(), *p->getOrder(), p);
+        } else {
+            cout << "There is no airlift or blockade to be played, only other types" << endl;
+        }
     }
     else {
         cout << "Invalid order" << endl;
@@ -359,10 +357,8 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
 }
 
 
-
-// TODO :: Benevolent only defend and never advance to enemy territories -> no use for toAttack()
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
-    cout << "toAttack() in Benevolent Strategy called" << endl;
+    cout << "ERROR! - Benevolent player cannot call toAttack() - return empty vector" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     return attack_territories;
 }
@@ -393,11 +389,6 @@ ostream& BenevolentPlayerStrategy::write(ostream &strm) const {
 
 
 /****************************** Neutral Player Strategy *******************************/
-/*
- * Player never issues any orders
- * If a Neutral player is attacked, it becomes an Aggressive player
- */
-
 // Default constructor
 NeutralPlayerStrategy::NeutralPlayerStrategy() : PlayerStrategies("Neutral") {
     cout << "Neutral Strategy Default constructor called" << endl;
@@ -409,23 +400,18 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
 }
 
 void NeutralPlayerStrategy::issueOrder(string type) {
-    cout << "issueOrder() in Neutral Strategy called" << endl;
-    if (equalsIgnoreCase("deploy", type));
-    else if (equalsIgnoreCase("advance", type));
-    else if (equalsIgnoreCase("card", type));
-    else {
-        cout << "Invalid order" << endl;
-    }
+    cout << "ERROR! - Neutral player cannot call issueOrder()" << endl;
 }
 
+// Neutral player never issue an order. toAttack() & toDefend() returns an empty vector
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
-    cout << "toAttack() in Neutral Strategy called" << endl;
+    cout << "ERROR! - Neutral player cannot call toAttack() - return empty vector" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     return attack_territories;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend() {
-    cout << "toDefend() in Neutral Strategy called" << endl;
+    cout << "ERROR! -  Neutral player cannot call toDefend() - return empty vector" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     return defend_territories;
 }
@@ -435,12 +421,7 @@ ostream& NeutralPlayerStrategy::write(ostream &strm) const {
     return strm << "Neutral Player Strategy";
 }
 
-
 /****************************** Cheater Player Strategy *******************************/
-/* computer player that automatically conquers all territories that are adjacent to its own territories
- * only once per turn
- */
-
 // Default constructor
 CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategies("Cheater") {
     cout << "Cheater Strategy Default constructor called" << endl;
@@ -457,7 +438,7 @@ void CheaterPlayerStrategy::issueOrder(string type) {
 
     if (equalsIgnoreCase("deploy", type)) {
         //Deploy in a random territory on his list
-        Deploy* d = new Deploy(p,p->getTerritoryList().at((rand()*p->getNumberOfTerritories())+1));
+        Deploy* d = new Deploy(p);
         p->addOrderList(d); // Add order to the list
     }
     //TODO : we shouldn't use advance tho because its an automatic ownership of all surrounding territories
@@ -474,30 +455,30 @@ void CheaterPlayerStrategy::issueOrder(string type) {
             territoriesToBeStolen = m->getConnectedTerritories(t->getName());
             for(Territory * ter: territoriesToBeStolen){
                 ter->setOwner(p);
+                p->assignTerritory(ter);
                 if (ter->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
                     setNeutralAttack(ter->getOwner());
                 }
             }
         }
-    }
-    else if ((equalsIgnoreCase("card", type))) ; // Do nothing
-    else {
+    } else if ((equalsIgnoreCase("card", type))) {
+        cout<<"no cards are allowed for this strategy"<<endl;
+    } else {
         cout << "Invalid order" << endl;
     }
 }
 
-// TODO :: Cheater does not need to attack or defend to conquered a territory, no use for toAttack() & toDefend()
+// Cheater does not need to attack or defend to conquer a territory. toAttack() & toDefend() returns an empty vector
 vector<Territory*> CheaterPlayerStrategy::toAttack() {
-    cout << "toAttack() in Cheater Strategy called, ERROR" << endl;
+    cout << "ERROR! -  Cheater player cannot call toAttack() - return empty vector" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
-    Map* m = game->getMap();
     return attack_territories;
 }
 
 vector<Territory*> CheaterPlayerStrategy::toDefend() {
-    cout << "toDefend() in Cheater Strategy called, ERROR" << endl;
+    cout << "ERROR! -  Cheater player cannot call toDefend() - return empty vector" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
-    Map* m = game->getMap();
+    defend_territories = p->getTerritoryList();
     return defend_territories;
 }
 
@@ -526,11 +507,13 @@ bool equalsIgnoreCase(string s1, string s2) {
 // Check that a card type is in a specific hand
 int checkCardInHand(string type, Hand* h) {
     int index = 0; // Returns index of card in hand, -1 if card is not in hand
-
-    for (Card* c : h->hand) {
-        if (equalsIgnoreCase(c->getType(), type)) return index;
-        index = index + 1;
+    if (h->numCardInHand > 0) {
+        for (Card* c : h->hand) {
+            if (equalsIgnoreCase(c->getType(), type)) return index;
+            index = index + 1;
+        }
+    } else {
+        cout << "NOTIFY! - You have no card" << endl;
     }
-
     return -1;
 }

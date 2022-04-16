@@ -99,89 +99,89 @@ int main() {
 //    cout << *player1->toDefend().at(0) << endl; //Nunavut-Continental
 
     /****************************** Aggressive *******************************/
- //   player4->issueOrder("deploy");
+//    player4->issueOrder("deploy");
 //    player4->issueOrder("deploy");
 //    player4->issueOrder("advance");
 //    player4->getHand()->drawCard(*PlayerStrategies::game->getDeck());
+
     /****************************** Benevolent *******************************/
+
     cout<< "****************************** Benevolent *******************************"<<endl;
     cout<< " before deploy"<<endl;
-
-
 /*Setting the number of armies for each territory from 0-n to make sure that there is a territory having 0 armies which will be the weakest terrirtory in this case
  * and tests if the strategy will issue a deploy order to deploy armies to this territory*/
 
-        for(int i = 0; i<player3->getTerritoryList().size();i++){
-                player3->getTerritoryList().at(i)->setArmies(i);
-            }
+    for(int i = 0; i<player3->getTerritoryList().size();i++){
+        player3->getTerritoryList().at(i)->setArmies(i);
+    }
 
-        for (Territory *t : player3->getTerritoryList()){
-                cout<< t->getName()<< " " << t->getArmies()<<endl;
-            }
+    for (Territory *t : player3->getTerritoryList()){
+        cout<< t->getName()<< " " << t->getArmies()<<endl;
+    }
 
-        player3->setReinforcementPool(1);
+    player3->setReinforcementPool(1);
 
-        player3->issueOrder("deploy");
-        int j = 0;
-        for(Order * o : player3->getOrder()->getOrderList()){
+    player3->issueOrder("deploy");
+    int j = 0;
+    for(Order * o : player3->getOrder()->getOrderList()){
 
-                cout<< o->getDescription()<<endl;
-                o->validate();
-                o->execute();
-                player3->getOrder()->remove(j);
-                j++;
-            }
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player3->getOrder()->remove(j);
+        j++;
+    }
 
-        cout<< "after deploy"<<endl;
+    cout<< "after deploy"<<endl;
 
-        for (Territory *t : player3->getTerritoryList()){
-                cout<< t->getName()<< " " << t->getArmies()<<endl;
-            }
+    for (Territory *t : player3->getTerritoryList()){
+        cout<< t->getName()<< " " << t->getArmies()<<endl;
+    }
 
-            /*test for advance--> making sure that one of the territories has a weaker one connected to it to test the strategy for the advance order */
+    /*test for advance--> making sure that one of the territories has a weaker one connected to it to test the strategy for the advance order */
     cout<<"adding new territories which are connected to one of the players territories just to show that the advance will move armies to the weakest territory"<<endl;
-            vector<Territory*> conncetedTerrs = vector<Territory*>();
-            conncetedTerrs = mainmap->getConnectedTerritories(player3->getTerritoryList().at(0)->getName());
-            for (int i =0 ; i< conncetedTerrs.size() ; i++){
-                conncetedTerrs.at(i)->setOwner(player3);
-                conncetedTerrs.at(i)->setArmies(i);
-                player3->assignTerritory(conncetedTerrs.at(i));
+    vector<Territory*> conncetedTerrs = vector<Territory*>();
+    conncetedTerrs = mainmap->getConnectedTerritories(player3->getTerritoryList().at(0)->getName());
+    for (int i =0 ; i< conncetedTerrs.size() ; i++){
+        conncetedTerrs.at(i)->setOwner(player3);
+        conncetedTerrs.at(i)->setArmies(i);
+        player3->assignTerritory(conncetedTerrs.at(i));
 
-            }
-        cout<< "before advance"<<endl;
+    }
+    cout<< "before advance"<<endl;
 
-        for (Territory *t : player3->getTerritoryList()){
-            cout<< t->getName()<< " " << t->getArmies()<<endl;
-        }
-            player3->issueOrder("advance");
-        j=0;
-        for(Order * o : player3->getOrder()->getOrderList()){
-            cout<< o->getDescription()<<endl;
-            o->validate();
-            o->execute();
-            player3->getOrder()->remove(j);
-            j++;
-        }
+    for (Territory *t : player3->getTerritoryList()){
+        cout<< t->getName()<< " " << t->getArmies()<<endl;
+    }
+    player3->issueOrder("advance");
+    j=0;
+    for(Order * o : player3->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player3->getOrder()->remove(j);
+        j++;
+    }
 
-        cout<< "after advance"<<endl;
+    cout<< "after advance"<<endl;
 
-        for (Territory *t : player3->getTerritoryList()){
-            cout<< t->getName()<< " " << t->getArmies()<<endl;
-        }
+    for (Territory *t : player3->getTerritoryList()){
+        cout<< t->getName()<< " " << t->getArmies()<<endl;
+    }
 
 //TODO: there is an issue with draw card but testing the cards works with the cards the player has already in hand try to run it multiple times it will only get the 2 types of cards
-            /* test for cards --> drawing 10 random cards to show that any card issued will be only of type airlift or blockade*/
+    /* test for cards --> drawing 10 random cards to show that any card issued will be only of type airlift or blockade*/
 //            for(int i = 0 ; i<10 ; i++){
 //                player3->getHand()->drawCard(*PlayerStrategies::game->getDeck());
 //
 //            }
-cout<<"cards in hand"<<endl;
-            for(Card * c : player3->getHand()->hand){
-                cout<<c->getType()<<endl;
-            }
-            player3->issueOrder("card");
+    cout<<"cards in hand"<<endl;
+    for(Card * c : player3->getHand()->hand){
+        cout<<c->getType()<<endl;
+    }
+    player3->issueOrder("card");
 
-            //
+    //
 
     if (player3->getOrder()->getOrderList().size()>0)  cout<<"card played :" <<player3->getOrder()->getOrderList().at(0)->getDescription()<<endl;
     else  cout<<"the player doesn't have blockade or airlift so he's not allowed to play any other type of card"<<endl;
@@ -191,14 +191,12 @@ cout<<"cards in hand"<<endl;
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human
     // Testing Neutral -> Aggressive
-//        cout << player2->getPlayerStrategy()->getType() << endl;
-//
-//        mainGE->issueOrdersPhase();
-//
-//        cout << player2->getPlayerStrategy()->getType() << endl;
+
+//    cout << player2->getPlayerStrategy()->getType() << endl;
+//    mainGE->issueOrdersPhase();
+//    cout << player2->getPlayerStrategy()->getType() << endl;
 
     /****************************** Cheater *******************************/
-
     cout<<"/****************************** Cheater *******************************/"<<endl;
 
     /* test for deploy*/
@@ -233,7 +231,7 @@ cout<<"cards in hand"<<endl;
     conncetedTerrs.clear();
 
     for(Territory * t : player5->getTerritoryList()){
-       conncetedTerrs = mainmap->getConnectedTerritories(t->getName()) ;
+        conncetedTerrs = mainmap->getConnectedTerritories(t->getName()) ;
         for (Territory *ter : conncetedTerrs) {
             cout<< ter->getName() << "    "<< ter->getOwnerName()<< endl;
 
@@ -242,7 +240,7 @@ cout<<"cards in hand"<<endl;
 
     player5->issueOrder("advance");
 
-     k = 0;
+    k = 0;
     for(Order * o : player5->getOrder()->getOrderList()){
         if (o->getDescription() == "advance") {
             cout << o->getDescription() << endl;
@@ -258,6 +256,5 @@ cout<<"cards in hand"<<endl;
 
 /* test for cards*/
     player5->issueOrder("card");
-
     return 0;
 }
