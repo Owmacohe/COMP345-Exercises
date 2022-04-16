@@ -90,18 +90,24 @@ int main() {
     }
 
     /****************************** Human *******************************/
+
+    cout << endl;
+    cout << "number of armies on territory " << player1->getTerritoryList().at(0)->getName() << " : " << player1->getTerritoryList().at(0)->getArmies() <<endl;
+
     player1->issueOrder("deploy");
+
     int g = 0;
-    for(Order * o : player3->getOrder()->getOrderList()){
+    for(Order * o : player1->getOrder()->getOrderList()){
         o->validate();
         o->execute();
-        player3->getOrder()->remove(g);
+        player1->getOrder()->remove(g);
         g++;
     }
+    cout << "number of armies on territory " << player1->getTerritoryList().at(0)->getName() << " : " << player1->getTerritoryList().at(0)->getArmies() <<endl;
 
     player1->issueOrder("advance");
     g=0;
-    for(Order * o : player3->getOrder()->getOrderList()){
+    for(Order * o : player1->getOrder()->getOrderList()){
         cout<< o->getDescription()<<endl;
         o->validate();
         o->execute();
@@ -114,12 +120,17 @@ int main() {
         cout<<c->getType()<<endl;
     }
     player1->issueOrder("card");
+    for(Order * o : player1->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player1->getOrder()->remove(g);
+        g++;
+    }
 
     /****************************** Aggressive *******************************/
-//    player4->issueOrder("deploy");
-//    player4->issueOrder("deploy");
-//    player4->issueOrder("advance");
-//    player4->getHand()->drawCard(*PlayerStrategies::game->getDeck());
+    player4->issueOrder("deploy");
+    player4->issueOrder("advance");
 
     /****************************** Benevolent *******************************/
 
@@ -198,12 +209,20 @@ int main() {
     else  cout<<"the player doesn't have blockade or airlift so he's not allowed to play any other type of card"<<endl;
 
     /****************************** Neutral *******************************/
-    // show that neutral can turn into aggressive, test using the human
-    // Testing Neutral -> Aggressive
+//     show that neutral can turn into aggressive, test using the human
+//     Testing Neutral -> Aggressive
 
-//    cout << player2->getPlayerStrategy()->getType() << endl;
-//    mainGE->issueOrdersPhase();
-//    cout << player2->getPlayerStrategy()->getType() << endl;
+//New_Brunswick to PEI
+    cout << player2->getPlayerStrategy()->getType() << endl;
+    player1->issueOrder("advance");
+    int index = 0;
+    for (Order * o : player1->getOrder()->getOrderList()){
+        o->validate();
+        o->execute();
+        player1->getOrder()->remove(index);
+        index++;
+    }
+    cout << player2->getPlayerStrategy()->getType() << endl;
 
     /****************************** Cheater *******************************/
     cout<<"/****************************** Cheater *******************************/"<<endl;

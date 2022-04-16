@@ -150,8 +150,6 @@ class PlayerStrategies {
         string type;
 };
 
-//TODO: idk if my comments related to abstract classes makes sense
-
 /**
  Class representing the the Human Player Strategy implements abstract PlayerStrategies class
  */
