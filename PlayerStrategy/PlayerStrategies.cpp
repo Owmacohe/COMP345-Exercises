@@ -139,8 +139,6 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
         }
     }
 
-
-    //TODO :: this is my attempt at the neutral player thingy
     if (returnTerritories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
         setNeutralAttack(returnTerritories.at(0)->getOwner());
     }
@@ -223,7 +221,7 @@ void AggressivePlayerStrategy::issueOrder(string type) {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
-    cout << "toAttack() in Aggresive Strategy called" << endl;
+    cout << "toAttack() in Aggressive Strategy called" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     pair<int, Territory*> pairs = pair<int, Territory*>();
     vector<pair<int, Territory*>> ordering = vector<pair<int, Territory*>>();
@@ -269,7 +267,6 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
         }
     }
 
-    //TODO :: this is my attempt at the neutral player thingy
     if (attack_territories.at(0)->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
         setNeutralAttack(attack_territories.at(0)->getOwner());
     }
@@ -279,56 +276,10 @@ vector<Territory*> AggressivePlayerStrategy::toAttack() {
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "toDefend() in Aggressive Strategy called" << endl;
-//    vector<Territory *> defend_territories = vector<Territory *>();
-//    pair<int, Territory *> pairs = pair<int, Territory *>();
-//    vector<pair<int, Territory *>> ordering = vector<pair<int, Territory *>>();
-//    Map *m = game->getMap();
-//
-//    for (Territory *territory: p->getTerritoryList()) { // Looping through the player's territories
-//        int number_surrounding = 0;
-//        string name = territory->getName();
-//
-//        vector<Territory *> surrounded_territories = m->getConnectedTerritories(name);
-//
-//        if (surrounded_territories.empty()) {
-//            number_surrounding = -1;
-//        }
-//            // step 1 check each territories numbers of enemies surrounding
-//        else {
-//            for (Territory *t: surrounded_territories) {
-//                if ((t->getOwner()->getName() != p->getName())) {
-//                    number_surrounding = number_surrounding + 1;
-//                }
-//            }
-//        }
-//
-//        // step 2 pair territory and their number of surrounding territories, add pair to vector
-//        if (number_surrounding != 0) {
-//            pairs.first = territory->getArmies();
-//            pairs.second = territory;
-//            ordering.push_back(pairs);
-//        }
-//
-//        for (Territory *i: surrounded_territories) { // Delete the vector of the surrounding to avoid memory leak
-//            i = nullptr;
-//        }
-//
-//        // step 3 sort and seperate territories in pair
-//        sort(ordering.begin(), ordering.end());
-//
-//        for (pair<int, Territory *> p: ordering) {
-//            defend_territories.insert(defend_territories.begin(),
-//                                      p.second);// Pushes them in one by one because they are already sorted (insert at the front because it is highest number of armies to smallest)
-//            p.second = nullptr; // Dangling pointer avoidance
-//        }
-//    }
-//    return defend_territories;
-//}
     vector<Territory *> defend_territories = vector<Territory *>();
     Map* m = game->getMap();
     int max = p->getTerritoryList()[0]->getArmies();
     int teriWithMaxArmiesIndex = 0;
-
     // check for the strongest territory
     for (int i = 0; i < p->getTerritoryList().size(); i++) {
         if (p->getTerritoryList()[i]->getArmies() > max) {
@@ -401,14 +352,6 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
 
         //pick the first card in the vector to be played
         p->getHand()->playCard(indices[0], *game->getDeck(), *p->getOrder(), p);
-//
-//
-//        int index = -1;
-//        index = checkCardInHand("airlift", p->getHand());
-//        if (index >= 0) {
-//            // Only is able to play airlift card
-//            p->getHand()->playCard(index, *game->getDeck(), *p->getOrder(), p);
-//        }
     }
     else {
         cout << "Invalid order" << endl;
@@ -465,9 +408,14 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player *pl) : PlayerStrategies(pl, 
     cout << "Neutral Strategy Parameterized constructor called" << endl;
 }
 
-// TODO :: Neutral player doesn't issue orders, and therefore has no use for a toAttack() & toDefend() & issueOrder() is empty
 void NeutralPlayerStrategy::issueOrder(string type) {
     cout << "issueOrder() in Neutral Strategy called" << endl;
+    if (equalsIgnoreCase("deploy", type));
+    else if (equalsIgnoreCase("advance", type));
+    else if (equalsIgnoreCase("card", type));
+    else {
+        cout << "Invalid order" << endl;
+    }
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
@@ -526,25 +474,28 @@ void CheaterPlayerStrategy::issueOrder(string type) {
             territoriesToBeStolen = m->getConnectedTerritories(t->getName());
             for(Territory * ter: territoriesToBeStolen){
                 ter->setOwner(p);
+                if (ter->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
+                    setNeutralAttack(ter->getOwner());
+                }
             }
         }
     }
+    else if ((equalsIgnoreCase("card", type))) ; // Do nothing
     else {
         cout << "Invalid order" << endl;
     }
-
 }
 
 // TODO :: Cheater does not need to attack or defend to conquered a territory, no use for toAttack() & toDefend()
 vector<Territory*> CheaterPlayerStrategy::toAttack() {
-    cout << "toAttack() in Cheater Strategy called" << endl;
+    cout << "toAttack() in Cheater Strategy called, ERROR" << endl;
     vector<Territory*> attack_territories = vector<Territory*>();
     Map* m = game->getMap();
     return attack_territories;
 }
 
 vector<Territory*> CheaterPlayerStrategy::toDefend() {
-    cout << "toDefend() in Cheater Strategy called" << endl;
+    cout << "toDefend() in Cheater Strategy called, ERROR" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
     Map* m = game->getMap();
     return defend_territories;
