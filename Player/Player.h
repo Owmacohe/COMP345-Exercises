@@ -183,6 +183,13 @@ class Player {
         int getNumberOfTerritories();
 
         /**
+         * Returns the index of a territory passed on paramater territory name
+         * @param string territory name
+         * @return int index
+         */
+        int getTerritoryIndex(string);
+
+        /**
          * Accessor for player orderlist
          * @return OrdersList player order list
          */
