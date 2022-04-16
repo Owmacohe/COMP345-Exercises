@@ -111,8 +111,11 @@ class GameEngine : public Iloggable, public Subject {
         // From Iloggable
         string stringToLog();
     private:
+        /// State of GameEngine, what stage is game in
         State* s;
+        /// Number of Players playing game
         int NumberOfPlayers;
+        /// Total number of Territories
         int NumberOfTerritories;
         bool phaseEnd;
         Deck *deck;
