@@ -12,8 +12,6 @@ Command::Command() {
     validIn = vector<int>();
     transitionsTo = "";
     effect = "";
-
-    //cout << "[Command default constructor]" << endl;
 }
 
 // Command parameterized constructor 1 (un-parameterized Commands)
@@ -47,7 +45,6 @@ Command::Command(string c) : command(c) {
         cout << "Invalid command!" << endl;
     }
 
-    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Command parameterized constructor 2 (parameterized Commands)
@@ -75,7 +72,6 @@ Command::Command(string c, string p) : command(c + " <" + p + ">") {
         cout << "Invalid command!" << endl;
     }
 
-    //cout << "[" + command + " Command parameterized constructor]" << endl;
 }
 
 // Command parameterized constructor 3 (tournament Command)
@@ -97,7 +93,6 @@ Command::Command(string c, string m, string p, int g, int d) : command(c + " -M 
         cout << "Invalid command!" << endl;
     }
 
-    //cout << "[" + command + " Command tournament constructor]" << endl;
 }
 
 // Command copy constructor
@@ -114,12 +109,10 @@ Command::Command(const Command &c) {
 
     isPossibleCommand = c.isPossibleCommand;
 
-    //cout << "[" + command + " Command copy constructor]" << endl;
 }
 
 // Command destructor
 Command::~Command() {
-    //cout << "[" + command + " Command destructor]" << endl;
 }
 
 // Command stream insertion operator
@@ -184,7 +177,6 @@ CommandProcessor::CommandProcessor() {
     maps = vector<string>();
     playerStrategies = vector<string>();
 
-    //cout << "[CommandProcessor default constructor]" << endl;
 }
 
 // CommandProcessor parameterized constructor
@@ -194,7 +186,6 @@ CommandProcessor::CommandProcessor(GameEngine *e) : engine(e) {
     maps = vector<string>();
     playerStrategies = vector<string>();
 
-    //cout << "[CommandProcessor parameterized constructor]" << endl;
 }
 
 // CommandProcessor copy constructor
@@ -207,7 +198,6 @@ CommandProcessor::CommandProcessor(const CommandProcessor &cp) {
     setNumberOfGames(cp.numberOfGames);
     setMaxTurns(cp.maxTurns);
 
-    //cout << "[CommandProcessor copy constructor]" << endl;
 }
 
 // CommandProcessor destructor
@@ -217,7 +207,6 @@ CommandProcessor::~CommandProcessor() {
         i = NULL;
     }
 
-    //cout << "[CommandProcessor destructor]" << endl;
 }
 
 // CommandProcessor stream insertion operator
@@ -588,8 +577,6 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter() {
     currentFile = "";
     currentLine = 0;
     flr = new FileLineReader();
-
-    //cout << "[FileCommandProcessorAdapter default constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter parameterized constructor
@@ -597,7 +584,6 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f) :currentFile(
     currentLine = 0;
     flr = new FileLineReader();
 
-    //cout << "[FileCommandProcessorAdapter parameterized constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter copy constructor
@@ -609,7 +595,6 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProces
     currentFile = fcpa.currentFile;
     currentLine = fcpa.currentLine;
 
-    //cout << "[FileCommandProcessorAdapter copy constructor]" << endl;
 }
 
 // FileCommandProcessorAdapter destructor
@@ -617,7 +602,6 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
     delete flr;
     flr = NULL;
 
-    //cout << "[FileCommandProcessorAdapter destructor]" << endl;
 }
 
 // FileCommandProcessorAdapter stream insertion operator

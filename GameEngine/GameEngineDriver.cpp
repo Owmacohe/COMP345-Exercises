@@ -18,7 +18,6 @@ int gameEngineMain() {
     tournament -M canada.map europe.map -P Cheater Cheater -G 4 -D 50
     tournament -M canada.map europe.map -P Cheater Neutral -G 4 -D 10
     tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10
-
     tournament -M canada.map europe.map -P Aggressive Cheater Benevolent -G 4 -D 50
     tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 50
     tournament -M canada.map europe.map -P Cheater Benevolent -G 4 -D 50
@@ -43,12 +42,6 @@ int gameEngineMain() {
     }
 
     Order::logObs->outputFile.close();
-
-    return 0;
-}
-
-int main() {
-    gameEngineMain();
 
     return 0;
 }

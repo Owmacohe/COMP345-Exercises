@@ -4,7 +4,6 @@
 #include "PlayerStrategy/PlayerStrategies.h"
 #include "Player.h"
 
-// TODO: destructor destroys Player Strategy?
 
 // Default constructor
 Player::Player() {
@@ -15,7 +14,6 @@ Player::Player() {
     reinforcePool = 0;
     playerStrategy = NULL;
 
-    //cout << "[Player default constructor]" << endl;
 }
 
 // Parameterized constructor (everything)
@@ -29,8 +27,7 @@ Player::Player(string n, vector<Territory*> t, Hand* h, OrdersList* o, int r) : 
     orders = new OrdersList(*o);
 
     playerStrategy = NULL;
-
-    //cout << "[Player param constructor]" << endl;
+;
 }
 
 // Parameterized constructor (name only)
@@ -42,7 +39,6 @@ Player::Player(string n) : name(n) {
 
     playerStrategy = NULL;
 
-    //cout << "[Player param constructor]" << endl;
 }
 
 // Parameterized Constructor (Player Strategy only)
@@ -75,7 +71,6 @@ Player::Player(const Player &p) {
     reinforcePool = p.reinforcePool;
 
     playerStrategy = p.playerStrategy;
-    //cout << "[Player copy constructor]" << endl;
 }
 
 // Destructor
@@ -84,8 +79,9 @@ Player::~Player() {
     hand = NULL;
     delete orders;
     orders = NULL;
+    delete playerStrategy;
+    playerStrategy = NULL;
 
-    //cout << "[Player destructor]" << endl;
 }
 
 vector<Territory*> Player::toDefend() {

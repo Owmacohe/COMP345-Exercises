@@ -81,7 +81,7 @@ Deploy::Deploy() : Order(false, "deploy") {
 
 // Parameterize Constructor
 Deploy::Deploy(Player* p) : Order(false, "deploy") {
-    playerIssuing = p;TODO:
+    playerIssuing = p;
     target = p->toDefend().at(0);
     numToDeploy = 1;
 }
@@ -386,7 +386,7 @@ void Advance::execute() {
 
                 // Attack successful
                 if (defend_alive <= 0 && attack_alive > 0 ){
-                    //Remove the territory from enemy territory list before transfer ownership // TODO: double check when PlayerStrategies is done
+                    //Remove the territory from enemy territory list before transfer ownership
                     for (int i = 0; i<target->getOwner()->getTerritoryList().size(); i++){
                         if (target == target->getOwner()->getTerritoryList().at(i)){
                             target->getOwner()->removeTerritory(i);

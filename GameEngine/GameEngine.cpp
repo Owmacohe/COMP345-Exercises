@@ -6,9 +6,6 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../PlayerStrategy/PlayerStrategies.h"
 
-//class OrdersList;
-//class Player;
-
 // Default constructor
 GameEngine::GameEngine() {
     s = new State;
@@ -116,7 +113,6 @@ ostream& operator<<(ostream &os, const GameEngine& gm) {
 // Accessors
 State *GameEngine::getState() { return s; }
 int GameEngine::getNumberOfPlayers() { return NumberOfPlayers; }
-//bool GameEngine::endOfState() { return phaseEnd; }
 vector<Player*> GameEngine::getplayer_list() { return player_list; }
 CommandProcessor *GameEngine::getProcessor() { return processor; }
 Map *GameEngine::getMap() { return map; }
