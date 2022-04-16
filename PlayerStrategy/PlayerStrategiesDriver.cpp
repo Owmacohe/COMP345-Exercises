@@ -90,13 +90,30 @@ int main() {
     }
 
     /****************************** Human *******************************/
-//    player1->issueOrder("advance"); // attack - New_Brunswick -> Prince_Edward_Island
-                                                // to test neutral to aggressive switch
-//                                              // neutral attack : Ontario-North, Ontario-South
-//                                              // neutral attack : Nunavut-Continental, NU-Victoria_Island-East
-//    cout << *player1->toAttack().at(0) << endl; // attack - Quebec-North -> Quebec-Central
-//    player1->issueOrder("deploy"); // move - Quebec-North -> New_Brunswick
-//    cout << *player1->toDefend().at(0) << endl; //Nunavut-Continental
+    player1->issueOrder("deploy");
+    int k = 0;
+    for(Order * o : player3->getOrder()->getOrderList()){
+        o->validate();
+        o->execute();
+        player3->getOrder()->remove(k);
+        k++;
+    }
+
+    player1->issueOrder("advance");
+    k=0;
+    for(Order * o : player3->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player1->getOrder()->remove(k);
+        k++;
+    }
+
+    cout<< player1->getName() << "Players hand"<<endl;
+    for(Card * c : player1->getHand()->hand){
+        cout<<c->getType()<<endl;
+    }
+    player1->issueOrder("card");
 
     /****************************** Aggressive *******************************/
 //    player4->issueOrder("deploy");
@@ -169,12 +186,6 @@ int main() {
         cout<< t->getName()<< " " << t->getArmies()<<endl;
     }
 
-//TODO: there is an issue with draw card but testing the cards works with the cards the player has already in hand try to run it multiple times it will only get the 2 types of cards
-    /* test for cards --> drawing 10 random cards to show that any card issued will be only of type airlift or blockade*/
-//            for(int i = 0 ; i<10 ; i++){
-//                player3->getHand()->drawCard(*PlayerStrategies::game->getDeck());
-//
-//            }
     cout<<"cards in hand"<<endl;
     for(Card * c : player3->getHand()->hand){
         cout<<c->getType()<<endl;
@@ -185,8 +196,6 @@ int main() {
 
     if (player3->getOrder()->getOrderList().size()>0)  cout<<"card played :" <<player3->getOrder()->getOrderList().at(0)->getDescription()<<endl;
     else  cout<<"the player doesn't have blockade or airlift so he's not allowed to play any other type of card"<<endl;
-
-
 
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human

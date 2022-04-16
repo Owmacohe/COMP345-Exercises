@@ -89,19 +89,16 @@ Player::~Player() {
 }
 
 vector<Territory*> Player::toDefend() {
-    cout << "toDefend() in Player called" << endl;
     vector<Territory*> returnTeriList = playerStrategy->toDefend();
     return returnTeriList;
 }
 
 vector<Territory*> Player::toAttack() {
-    cout << "toAttack() in Player called" << endl;
     vector<Territory*> returnTeriList = playerStrategy->toAttack();
     return returnTeriList;
 }
 
 void Player::issueOrder(string input) {
-    cout << "issueOrder() in Player called" << endl;
     playerStrategy->issueOrder(input);
 }
 
