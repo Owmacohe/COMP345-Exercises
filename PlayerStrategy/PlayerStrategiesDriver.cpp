@@ -3,6 +3,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Orders.h"
 #include "../GameEngine/GameEngine.h"
+#include "../Cards/Cards.h"
 #include <iostream>
 #include <vector>
 
@@ -101,7 +102,7 @@ int playerStrategiesMain() {
 //    player2->issueOrder("deploy");
 //    player2->issueOrder("deploy");
 //    player2->issueOrder("advance");
-
+    player2->getHand()->drawCard(*PlayerStrategies::game->getDeck());
     /****************************** Benevolent *******************************/
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human
