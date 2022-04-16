@@ -417,6 +417,8 @@ void CheaterPlayerStrategy::issueOrder(string type) {
         for (Territory * t : p->getTerritoryList()){
             territoriesToBeStolen = m->getConnectedTerritories(t->getName());
             for(Territory * ter: territoriesToBeStolen){
+
+                //ter->getOwner()->removeTerritory();
                 ter->setOwner(p);
                 p->assignTerritory(ter);
                 if (ter->getOwner()->getPlayerStrategy()->getType() == "Neutral") {

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main() {
+int PSmain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
