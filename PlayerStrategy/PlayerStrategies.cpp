@@ -340,19 +340,22 @@ void BenevolentPlayerStrategy::issueOrder(string type) {
                 indices.push_back(i);
             }
         }
-        //shuffle the vector
-         shuffle(indices.begin(), indices.end(),default_random_engine());
 
-        //pick the first card in the vector to be played
-        if (p->getHand()->numCardInHand > 0 )
+        if(indices.size()>0) {
+            //shuffle the vector
+            shuffle(indices.begin(), indices.end(), default_random_engine());
+
+            //pick the first card in the vector to be played
             p->getHand()->playCard(indices[0], *game->getDeck(), *p->getOrder(), p);
-        else
-            cout << "NOTIFY! - You have no card" << endl;
+        } else {
+            cout << "There is no airlift or blockade to be played, only other types" << endl;
+        }
     }
     else {
         cout << "Invalid order" << endl;
     }
 }
+
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
     cout << "ERROR! - Benevolent player cannot call toAttack() - return empty vector" << endl;
@@ -435,7 +438,7 @@ void CheaterPlayerStrategy::issueOrder(string type) {
 
     if (equalsIgnoreCase("deploy", type)) {
         //Deploy in a random territory on his list
-        Deploy* d = new Deploy(p,p->getTerritoryList().at((rand()*p->getNumberOfTerritories())+1));
+        Deploy* d = new Deploy(p);
         p->addOrderList(d); // Add order to the list
     }
     //TODO : we shouldn't use advance tho because its an automatic ownership of all surrounding territories
@@ -452,14 +455,15 @@ void CheaterPlayerStrategy::issueOrder(string type) {
             territoriesToBeStolen = m->getConnectedTerritories(t->getName());
             for(Territory * ter: territoriesToBeStolen){
                 ter->setOwner(p);
+                p->assignTerritory(ter);
                 if (ter->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
                     setNeutralAttack(ter->getOwner());
                 }
             }
         }
-    }
-    else if ((equalsIgnoreCase("card", type))){}
-    else {
+    } else if ((equalsIgnoreCase("card", type))) {
+        cout<<"no cards are allowed for this strategy"<<endl;
+    } else {
         cout << "Invalid order" << endl;
     }
 }
@@ -474,6 +478,7 @@ vector<Territory*> CheaterPlayerStrategy::toAttack() {
 vector<Territory*> CheaterPlayerStrategy::toDefend() {
     cout << "ERROR! -  Cheater player cannot call toDefend() - return empty vector" << endl;
     vector<Territory*> defend_territories = vector<Territory*>();
+    defend_territories = p->getTerritoryList();
     return defend_territories;
 }
 
