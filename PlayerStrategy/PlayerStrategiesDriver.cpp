@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int playerStrategiesMain() {
+int main() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -29,7 +29,7 @@ int playerStrategiesMain() {
     player3->setStrategy(benevolentstrat); player3->setReinforcementPool(8); player3->setName("Gabbi");
 
     Player* player4 = new Player();
-    AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player2);
+    AggressivePlayerStrategy* aggressivestrat = new AggressivePlayerStrategy(player4);
     player4->setStrategy(aggressivestrat); player4->setReinforcementPool(6); player4->setName("Owen");
 
     Player* player5 = new Player();
@@ -99,19 +99,19 @@ int playerStrategiesMain() {
 //    cout << *player1->toDefend().at(0) << endl; //Nunavut-Continental
 
     /****************************** Aggressive *******************************/
-//    player2->issueOrder("deploy");
-//    player2->issueOrder("deploy");
-//    player2->issueOrder("advance");
-    player2->getHand()->drawCard(*PlayerStrategies::game->getDeck());
+    player4->issueOrder("deploy");
+//    player4->issueOrder("deploy");
+//    player4->issueOrder("advance");
+//    player4->getHand()->drawCard(*PlayerStrategies::game->getDeck());
     /****************************** Benevolent *******************************/
     /****************************** Neutral *******************************/
     // show that neutral can turn into aggressive, test using the human
     // Testing Neutral -> Aggressive
-    //    cout << player4->getPlayerStrategy()->getType() << endl;
+    //    cout << player2->getPlayerStrategy()->getType() << endl;
     //
     //    mainGE->issueOrdersPhase(); // testing without benevolent or cheater use Quebec-Central and Quebec-North
     //
-    //    cout << player4->getPlayerStrategy()->getType() << endl;
+    //    cout << player2->getPlayerStrategy()->getType() << endl;
     /****************************** Cheater *******************************/
     return 0;
 }
