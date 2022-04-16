@@ -10,25 +10,18 @@ int gameEngineMain() {
     // tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
 
     /*
-    tournament -M canada.map europe.map -P Aggressive Aggressive -G 4 -D 50
+    tournament -M canada.map europe.map -P Aggressive Aggressive -G 4 -D 10
     tournament -M canada.map europe.map -P Aggressive Benevolent -G 4 -D 10
-    tournament -M canada.map europe.map -P Aggressive Cheater -G 4 -D 50 // TODO : HUGE DEPLOY
     tournament -M canada.map europe.map -P Aggressive Neutral -G 4 -D 50
-
     tournament -M canada.map europe.map -P Benevolent Benevolent -G 4 -D 50
-    tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 50 // TODO : HUGE DEPLOY
-    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 50 // TODO : HUGE DEPLOY
-
+    tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 50
     tournament -M canada.map europe.map -P Cheater Cheater -G 4 -D 50
-    tournament -M canada.map europe.map -P Cheater Neutral -G 4 -D 50
+    tournament -M canada.map europe.map -P Cheater Neutral -G 4 -D 10
     tournament -M canada.map europe.map -P Benevolent Neutral -G 4 -D 10
 
-    // TODO TEST HUMAN
-    tournament -M canada.map europe.map -P Aggressive Human -G 2 -D 10
-    tournament -M canada.map europe.map -P Human Human -G 4 -D 10
-    tournament -M canada.map europe.map -P Human Benevolent -G 4 -D 10
-    tournament -M canada.map europe.map -P Human Cheater -G 4 -D 10
-    tournament -M canada.map europe.map -P Human Neutral -G 4 -D 10
+    tournament -M canada.map europe.map -P Aggressive Cheater Benevolent -G 4 -D 50
+    tournament -M canada.map europe.map -P Benevolent Cheater -G 4 -D 50
+    tournament -M canada.map europe.map -P Cheater Benevolent -G 4 -D 50
     */
 
 

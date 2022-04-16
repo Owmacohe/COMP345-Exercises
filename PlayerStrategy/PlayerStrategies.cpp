@@ -417,8 +417,7 @@ void CheaterPlayerStrategy::issueOrder(string type) {
         for (Territory * t : p->getTerritoryList()){
             territoriesToBeStolen = m->getConnectedTerritories(t->getName());
             for(Territory * ter: territoriesToBeStolen){
-
-                //ter->getOwner()->removeTerritory();
+                ter->getOwner()->removeTerritory(ter->getOwner()->getTerritoryIndex(ter->getName()));
                 ter->setOwner(p);
                 p->assignTerritory(ter);
                 if (ter->getOwner()->getPlayerStrategy()->getType() == "Neutral") {
@@ -431,6 +430,9 @@ void CheaterPlayerStrategy::issueOrder(string type) {
     } else {
         cout << "Invalid order" << endl;
     }
+
+    if(game->getMap()->getTerritories().size() == p->getNumberOfTerritories())
+        game->checkForWinner();
 }
 
 // Cheater does not need to attack or defend to conquer a territory. toAttack() & toDefend() returns an empty vector

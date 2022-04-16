@@ -184,7 +184,6 @@ void GameEngine::assignReinforcementPhase() {
     cout << "\nAssign reinforcement phase\n" << endl;
     for (int i = 0; i < NumberOfPlayers; i++) {
         Player *p = player_list.at(playerOrder.at(i));
-        //cout<<p->getName()<<": "<<p->getNumberOfTerritories()<<endl;
         int num = floor(p->getNumberOfTerritories() / 3);
 
         if (num < 3) {
@@ -225,41 +224,52 @@ void GameEngine::issueOrdersPhase() {
     *s = issueOrder;
     string input;
 
-    // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
-    for (int i = 0; i < NumberOfPlayers; i++) {
-        Player *p = player_list.at(playerOrder.at(i));
-        cout << p->getPlayerStrategy()->getType() << endl;
-        if(p->getPlayerStrategy()->getType() != "Neutral") {
-            cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
+   if (!checkForWinner())
+    {
 
-            int num = p->getReinforcePool();
-            // Only issue deploy orders while the player's reinforcement pool contains armies;
-            if (num > 0) cout << "Issuing deploy orders" << endl;
+        // Rubric says: Each player's issueOrder() method is called in round-robin fashion during the issue orders phase.
+        for (int i = 0; i < NumberOfPlayers; i++) {
+            Player *p = player_list.at(playerOrder.at(i));
+            cout << p->getPlayerStrategy()->getType() << endl;
+            if (p->getPlayerStrategy()->getType() != "Neutral") {
+                cout << "\nIssuing the orders for player " << p->getName() << "\n" << endl;
 
-            for (int j = 0; j < num; j++) {
-                p->issueOrder("deploy");
-                cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
+                int num = p->getReinforcePool();
+                // Only issue deploy orders while the player's reinforcement pool contains armies;
+                if (num > 0) cout << "Issuing deploy orders" << endl;
+
+                for (int j = 0; j < num; j++) {
+                    if(!(p->getTerritoryList().empty())){
+                    p->issueOrder("deploy");
+                    cout << "Deploy of army " << j + 1 << "/" << num << " issued" << endl;
+                    }
+                }
+
+                // Issue advance orders
+
+                    cout << "\n" << p->getName() << "'s turn" << endl;
+                    cout << "\nIssuing advance orders" << endl;
+                if(!(p->getTerritoryList().empty())) {
+                    p->issueOrder("advance");
+                }
+                // Issue card orders
+                cout << "\nIssuing card orders" << endl;
+                if(!(p->getTerritoryList().empty())) {
+                    p->issueOrder("card");
+                }
+                // Check if Neutral Player was attacked
+                if (p->getPlayerStrategy()->getNeutralAttack() != nullptr) {
+                    cout << "\n Neutral player was attacked ! Now is aggressive >:( !" << endl;
+                    Player *neutralplayer = p->getPlayerStrategy()->getNeutralAttack();
+                    AggressivePlayerStrategy *aggressivestrat = new AggressivePlayerStrategy(neutralplayer);
+                    neutralplayer->setStrategy(aggressivestrat);
+                }
             }
-
-            // Issue advance orders
-            cout << "\n" << p->getName() << "'s turn" << endl;
-            cout << "\nIssuing advance orders" << endl;
-            p->issueOrder("advance");
-
-            // Issue card orders
-            cout << "\nIssuing card orders" << endl;
-            p->issueOrder("card");
-
-            // Check if Neutral Player was attacked
-            if (p->getPlayerStrategy()->getNeutralAttack() != nullptr) {
-                cout << "\n Neutral player was attacked ! Now is aggressive >:( !" << endl;
-                Player *neutralplayer = p->getPlayerStrategy()->getNeutralAttack();
-                AggressivePlayerStrategy *aggressivestrat = new AggressivePlayerStrategy(neutralplayer);
-                neutralplayer->setStrategy(aggressivestrat);
-            }
+            if(checkForWinner()) {
+                cout << "Winner during IssueOrderPhase" <<endl;
+                break;}
         }
     }
-
     endIssueOrderPhase();
 }
 
@@ -292,14 +302,20 @@ void GameEngine::executeOrdersPhase() {
         // Loop will loop based on the playing order
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
+
             for(int i = 0; i < p->getOrder()->getOrderList().size(); i++) { // Loop through orders of player orderlist
                 if (equalsIgnoreCase(p->getOrder()->getOrderList().at(i)->getDescription(), "deploy")) {
                     p->getOrder()->getOrderList().at(i)->validate();
-                    p->getOrder()->getOrderList().at(i)->execute();
+
+                    if(!(p->getTerritoryList().empty())) {
+                        p->getOrder()->getOrderList().at(i)->execute();
+                    }
+
                     p->getOrder()->remove(i);
                     break;
-                }
+
             }
+        }
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
@@ -326,8 +342,9 @@ void GameEngine::executeOrdersPhase() {
         }
         for (int i = 0; i < NumberOfPlayers; i++) {
             Player *p = player_list.at(playerOrder.at(i));
-            if (p->getOrder()->getOrderList().empty())
-                playersWithoutOrders ++;
+            if (p->getOrder()->getOrderList().empty()) {
+                playersWithoutOrders++;
+                checkPlayers();}
         }
         if (playersWithoutOrders == NumberOfPlayers) {
             allOrdersDone = true;
@@ -336,6 +353,7 @@ void GameEngine::executeOrdersPhase() {
             playersWithoutOrders = 0;
         }
     }
+
     endexecuteOrdersPhase();
 }
 
