@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int PSmain() {
+int PlayerStrategymain() {
     // Create Map Loader
     MapLoader* loader;
     Map *mainmap = loader->load("../Orders/canada.map");
@@ -90,11 +90,12 @@ int PSmain() {
     }
 
     /****************************** Human *******************************/
-
+    cout<< "\n****************************** Human *******************************"<<endl;
+    // Demonstrate Deploy
     cout << endl;
     cout << "number of armies on territory " << player1->getTerritoryList().at(0)->getName() << " : " << player1->getTerritoryList().at(0)->getArmies() <<endl;
 
-    player1->issueOrder("deploy");
+    player1->issueOrder("deploy"); //New_Brunswick
 
     int g = 0;
     for(Order * o : player1->getOrder()->getOrderList()){
@@ -105,8 +106,9 @@ int PSmain() {
     }
     cout << "number of armies on territory " << player1->getTerritoryList().at(0)->getName() << " : " << player1->getTerritoryList().at(0)->getArmies() <<endl;
 
-    player1->issueOrder("advance");
-    g=0;
+    // Demonstrate Advance - Attack
+    player1->issueOrder("advance"); //New_Brunswick attacker, Prince_Edward_Island attacked
+    g = 0;
     for(Order * o : player1->getOrder()->getOrderList()){
         cout<< o->getDescription()<<endl;
         o->validate();
@@ -115,11 +117,26 @@ int PSmain() {
         g++;
     }
 
-    cout<< player1->getName() << "Players hand"<<endl;
-    for(Card * c : player1->getHand()->hand){
-        cout<<c->getType()<<endl;
+    // Demonstrate Advance - Move
+    player1->issueOrder("advance"); //New_Brunswick from Prince_Edward_Island
+    g = 0;
+    for(Order * o : player1->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player1->getOrder()->remove(g);
+        g++;
     }
+
+    // Demonstrate Card
+    cout<< player1->getName() << " players hand : ";
+    for(Card * c : player1->getHand()->hand){
+        cout<<c->getType()<<" | ";
+    }
+    cout << endl;
+
     player1->issueOrder("card");
+    g = 0;
     for(Order * o : player1->getOrder()->getOrderList()){
         cout<< o->getDescription()<<endl;
         o->validate();
@@ -129,12 +146,29 @@ int PSmain() {
     }
 
     /****************************** Aggressive *******************************/
+    cout<< "\n****************************** Aggressive *******************************"<<endl;
     player4->issueOrder("deploy");
-    player4->issueOrder("advance");
+    int l = 0;
+        for(Order * o : player4->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player4->getOrder()->remove(l);
+        l++;
+    }
 
+    player4->issueOrder("advance");
+    l = 0;
+    for(Order * o : player4->getOrder()->getOrderList()){
+        cout<< o->getDescription()<<endl;
+        o->validate();
+        o->execute();
+        player4->getOrder()->remove(l);
+        l++;
+    }
     /****************************** Benevolent *******************************/
 
-    cout<< "****************************** Benevolent *******************************"<<endl;
+    cout<< "\n****************************** Benevolent *******************************"<<endl;
     cout<< " before deploy"<<endl;
 /*Setting the number of armies for each territory from 0-n to make sure that there is a territory having 0 armies which will be the weakest terrirtory in this case
  * and tests if the strategy will issue a deploy order to deploy armies to this territory*/
@@ -209,12 +243,21 @@ int PSmain() {
     else  cout<<"the player doesn't have blockade or airlift so he's not allowed to play any other type of card"<<endl;
 
     /****************************** Neutral *******************************/
+    cout<< "\n****************************** Neutral *******************************"<<endl;
 //     show that neutral can turn into aggressive, test using the human
 //     Testing Neutral -> Aggressive
-
-//New_Brunswick to PEI
+    cout << player1->getPlayerStrategy()->getType() << " players territories : ";
+    for (Territory *t : player1->getTerritoryList()){
+        cout<< t->getName()<< " | ";
+    }
+    cout <<endl;
+    cout << player2->getPlayerStrategy()->getType() << " players territories : ";
+    for (Territory *t : player2->getTerritoryList()){
+        cout<< t->getName()<< " | ";
+    }
+    cout <<endl;
     cout << player2->getPlayerStrategy()->getType() << endl;
-    player1->issueOrder("advance");
+    player1->issueOrder("advance"); // attack the neutral player
     int index = 0;
     for (Order * o : player1->getOrder()->getOrderList()){
         o->validate();
@@ -225,7 +268,7 @@ int PSmain() {
     cout << player2->getPlayerStrategy()->getType() << endl;
 
     /****************************** Cheater *******************************/
-    cout<<"/****************************** Cheater *******************************/"<<endl;
+    cout<<"\n****************************** Cheater *******************************"<<endl;
 
     /* test for deploy*/
     cout<< " before deploy"<<endl;
