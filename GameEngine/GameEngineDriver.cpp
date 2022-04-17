@@ -46,9 +46,3 @@ int gameEngineMain() {
 
     return 0;
 }
-
-int main() {
-    gameEngineMain();
-
-    return 0;
-}
